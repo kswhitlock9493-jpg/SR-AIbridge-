@@ -1,7 +1,13 @@
-# SR-AIbridge-
+# Bridge Test
 
-Initial repository setup for Scrollstream Sovereign Testing.
+A minimal skeleton repo designed for sovereign Copilot testing.
 
----
+## Purpose
 
-This README initializes the repository and creates the `main` branch so that project files and structure can be pushed.
+- Observe Copilot's behavior with file relationships, structure, and override logic.
+- Test logic fill, comments, and structure augmentation.
+
+## Notes
+
+- Intended for frontend + logic experiments.
+- Add, edit, and observe Copilot suggestions.
