@@ -46,6 +46,7 @@ venv/
 # Frontend build
 dist/
 .cache/
+.parcel-cache/
 
 # OS
 .DS_Store
