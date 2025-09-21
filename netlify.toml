@@ -1,8 +1,8 @@
 [build]
   base = "bridge-frontend"
   command = "npm run build"
-  publish = "bridge-frontend/dist"
-  functions = "bridge-frontend/netlify/functions"
+  publish = "dist"
+  functions = "netlify/functions"
 
 [[redirects]]
   from = "/*"
@@ -15,4 +15,4 @@
     Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "SAMEORIGIN"
-    Referrer-Policy = "strict-origin-when-cross-origin"
+    Referrer-Policy = "strict-origin-when-cross-origin".
