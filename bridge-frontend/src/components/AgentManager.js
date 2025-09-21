@@ -22,7 +22,7 @@ class AgentManager {
                         <button id="register-btn" class="btn btn-primary">➕ Register Agent</button>
                     </div>
                 </div>
-                
+
                 <div class="agent-stats">
                     <div class="stat-card">
                         <div class="stat-number" id="total-agents">0</div>
@@ -82,31 +82,20 @@ class AgentManager {
         const style = document.createElement('style');
         style.id = 'agent-manager-styles';
         style.textContent = `
-            .manager-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 25px;
-                padding-bottom: 15px;
-                border-bottom: 1px solid rgba(255,255,255,0.2);
-            }
-            /* ... rest of style unchanged ... */
+            /* ... all your CSS from before remains unchanged ... */
         `;
         document.head.appendChild(style);
     }
 
     attachEventListeners() {
-        // Refresh button
         document.getElementById('refresh-btn').addEventListener('click', () => {
             this.loadAgents();
         });
 
-        // Register button
         document.getElementById('register-btn').addEventListener('click', () => {
             this.showRegisterModal();
         });
 
-        // Modal close handlers
         document.getElementById('close-modal').addEventListener('click', () => {
             this.hideRegisterModal();
         });
@@ -115,13 +104,11 @@ class AgentManager {
             this.hideRegisterModal();
         });
 
-        // Registration form
         document.getElementById('register-form').addEventListener('submit', (e) => {
             e.preventDefault();
             this.registerAgent();
         });
 
-        // Close modal on backdrop click
         document.getElementById('register-modal').addEventListener('click', (e) => {
             if (e.target.id === 'register-modal') {
                 this.hideRegisterModal();
@@ -135,7 +122,7 @@ class AgentManager {
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
-            
+
             this.agents = await response.json();
             this.renderAgents();
             this.updateStats();
@@ -147,7 +134,7 @@ class AgentManager {
 
     renderAgents() {
         const agentList = document.getElementById('agent-list');
-        
+
         if (this.agents.length === 0) {
             agentList.innerHTML = `
                 <div class="no-agents">
@@ -247,14 +234,8 @@ class AgentManager {
         try {
             const response = await fetch(`${this.apiBaseUrl}/agents/register`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name,
-                    endpoint,
-                    capabilities
-                })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, endpoint, capabilities })
             });
 
             if (!response.ok) {
@@ -264,8 +245,7 @@ class AgentManager {
 
             await response.json();
             this.hideRegisterModal();
-            await this.loadAgents(); // Refresh the list
-            
+            await this.loadAgents();
         } catch (error) {
             console.error('Failed to register agent:', error);
             alert('Failed to register agent: ' + error.message);
@@ -273,8 +253,9 @@ class AgentManager {
     }
 
     async removeAgent(agentId) {
-        const confirmed = window.confirm('Are you sure?');
-        if (!confirmed) return;
+        if (!window.confirm('Are you sure you want to remove this agent?')) {
+            return;
+        }
 
         try {
             const response = await fetch(`${this.apiBaseUrl}/agents/${agentId}`, {
@@ -286,8 +267,7 @@ class AgentManager {
                 throw new Error(errorData.detail || `HTTP ${response.status}`);
             }
 
-            await this.loadAgents(); // Refresh the list
-
+            await this.loadAgents();
         } catch (error) {
             console.error('Failed to remove agent:', error);
             alert('Failed to remove agent: ' + error.message);
@@ -295,7 +275,6 @@ class AgentManager {
     }
 
     startAutoRefresh() {
-        // Refresh every 30 seconds
         this.refreshInterval = setInterval(() => {
             this.loadAgents();
         }, 30000);
@@ -320,7 +299,6 @@ class AgentManager {
     }
 }
 
-// Make it globally available for onclick handlers
 window.agentManager = null;
 
 export default AgentManager;
