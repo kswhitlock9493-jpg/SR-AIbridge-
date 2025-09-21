@@ -1,7 +1,7 @@
 [build]
   base = "bridge-frontend"
   command = "npm run build"
-  publish = "build"
+  publish = "dist"
   functions = "netlify/functions"
 
 [[redirects]]
