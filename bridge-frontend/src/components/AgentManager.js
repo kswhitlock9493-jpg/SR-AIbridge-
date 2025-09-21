@@ -571,7 +571,7 @@ class AgentManager {
     }
 
     async removeAgent(agentId) {
-        if (!confirm('Are you sure you want to remove this agent?')) {
+        window.confirm('Are you sure?')
             return;
         }
 
