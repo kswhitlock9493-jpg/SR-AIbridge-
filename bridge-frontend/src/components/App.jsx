@@ -1,50 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
-import { getStatus } from '../api'; // keep as-is for backend later
-import './styles.css'; // keep styling separate for now
-
-// === Components (all inline for one-drop convenience) ===
-const Dashboard = () => (
-  <div className="placeholder">
-    <h2>📊 Dashboard</h2>
-    <p>Bridge overview and metrics coming soon.</p>
-  </div>
-);
-
-const CaptainsChat = () => (
-  <div className="placeholder">
-    <h2>💬 Captains Chat</h2>
-    <p>Command chat will be live when backend connects.</p>
-  </div>
-);
-
-const VaultLogs = () => (
-  <div className="placeholder">
-    <h2>📜 Vault Logs</h2>
-    <p>Logs and records for agents and missions.</p>
-  </div>
-);
-
-const MissionLog = () => (
-  <div className="placeholder">
-    <h2>🚀 Mission Log</h2>
-    <p>Live and historical mission details.</p>
-  </div>
-);
-
-const ArmadaMap = () => (
-  <div className="placeholder">
-    <h2>🗺️ Armada Map</h2>
-    <p>The fleet map will render here (interactive once backend is live).</p>
-  </div>
-);
-
-const CaptainToCaptain = () => (
-  <div className="placeholder">
-    <h2>⚔️ Captain-to-Captain Chat</h2>
-    <p>Direct channel for Captain communications (placeholder until Railway connects).</p>
-  </div>
-);
+import { getStatus } from '../api';
+import './styles.css';
+import Dashboard from './Dashboard';
+import CaptainsChat from './CaptainsChat';
+import VaultLogs from './VaultLogs';
+import MissionLog from './MissionLog';
+import ArmadaMap from './ArmadaMap';
+import CaptainToCaptain from './CaptainToCaptain';
 
 // === Main App ===
 const App = () => {
