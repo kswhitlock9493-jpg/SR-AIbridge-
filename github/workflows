@@ -1,1 +1,26 @@
-q
+name: LOC Stats
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  count-loc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install cloc
+        run: sudo apt-get install -y cloc
+
+      - name: Run cloc and save stats
+        run: cloc . --exclude-dir=node_modules,dist,build,.venv,.git,vault/exports > loc-report.txt
+
+      - name: Upload LOC report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: loc-report
+          path: loc-report.txt
