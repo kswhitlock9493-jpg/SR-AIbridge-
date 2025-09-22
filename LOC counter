@@ -1,0 +1,7 @@
+{ 
+  echo "PY  : $(find src rituals tests -type f -name '*.py' ! -path '*/node_modules/*' -print0 | xargs -0 cat | wc -l)"; 
+  echo "JSX : $(find src -type f \( -name '*.jsx' -o -name '*.js' -o -name '*.tsx' -o -name '*.ts' \) ! -path '*/node_modules/*' -print0 | xargs -0 cat | wc -l)";
+  echo "SH  : $(find . -type f -name '*.sh' -print0 | xargs -0 cat | wc -l)";
+  echo "YML : $(find . -type f -name '*.yml' -o -name '*.yaml' -print0 | xargs -0 cat | wc -l)";
+  echo "MD  : $(find . -type f -name '*.md' -print0 | xargs -0 cat | wc -l)";
+} | sed 's/^/  /'
