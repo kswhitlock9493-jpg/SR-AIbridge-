@@ -7,7 +7,7 @@ import VaultLogs from './VaultLogs';
 import MissionLog from './MissionLog';
 import ArmadaMap from './ArmadaMap';
 import CaptainToCaptain from './CaptainToCaptain';
-import { getStatus } from '../api';
+import { getStatus } from './api';
 import './styles.css';
 
 const App = () => {
