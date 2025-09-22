@@ -1,5 +1,6 @@
+<!-- LOC-START -->
+<!-- LOC-END -->
 with LOC Stats
-
 on:
   push:
     branches: [main]
