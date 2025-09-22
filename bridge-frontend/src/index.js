@@ -1,8 +1,10 @@
-import AgentManager from './components/AgentManager.js';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './components/App';
 
-// Initialize the agent manager
-document.addEventListener('DOMContentLoaded', () => {
-    const root = document.getElementById('root');
-    window.agentManager = new AgentManager(root);
-    window.agentManager.init();
-});
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
