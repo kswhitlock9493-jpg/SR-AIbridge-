@@ -1,0 +1,18 @@
+# Sovereign Bridge - Railway Configuration
+# This file tells Railway how to build and run the backend
+
+[build]
+# Install Python dependencies
+builder = "NIXPACKS"
+buildCommand = "pip install -r requirements.txt"
+
+[deploy]
+# Start your backend
+startCommand = "python main.py"
+
+[env]
+# Environment variables you’ll set inside Railway dashboard
+# Railway will replace these with secure values at runtime
+DATABASE_URL = ""
+JWT_SECRET = ""
+ADMIRAL_KEY = ""
