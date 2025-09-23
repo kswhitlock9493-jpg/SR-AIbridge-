@@ -59,12 +59,14 @@ async def startup():
         # Pre-seed armada_fleet if empty
         with engine.connect() as conn:
             result = conn.execute(armada_fleet.select())
-            if result.rowcount == 0:
+            rows = result.fetchall()
+            if len(rows) == 0:
                 conn.execute(armada_fleet.insert(), [
                     {"name": "Flagship Sovereign", "status": "online", "location": "Sector Alpha"},
                     {"name": "Frigate Horizon", "status": "offline", "location": "Sector Beta"},
                     {"name": "Scout Whisper", "status": "online", "location": "Sector Delta"},
                 ])
+                conn.commit()
 
 @app.on_event("shutdown")
 async def shutdown():
