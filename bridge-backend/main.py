@@ -373,6 +373,54 @@ async def get_status():
         "vault_logs": len(storage.vault_logs)
     }
 
+# --- Activity/Tasks Endpoints (for compatibility) ---
+@app.get("/activity")
+async def get_activity():
+    """Get recent activity (missions and logs combined)"""
+    activities = []
+    
+    # Add recent missions as activities
+    for mission in storage.missions[-5:]:  # Last 5 missions
+        activities.append({
+            "id": f"mission_{mission['id']}",
+            "type": "mission",
+            "title": mission["title"],
+            "description": mission["description"],
+            "status": mission["status"],
+            "timestamp": mission["created_at"]
+        })
+    
+    # Add recent vault logs as activities
+    for log in storage.vault_logs[-5:]:  # Last 5 logs
+        activities.append({
+            "id": f"log_{log['id']}",
+            "type": "log",
+            "title": f"{log['agent_name']}: {log['action']}",
+            "description": log["details"],
+            "status": log["log_level"],
+            "timestamp": log["timestamp"]
+        })
+    
+    # Sort by timestamp descending
+    activities.sort(key=lambda x: x["timestamp"], reverse=True)
+    return activities[:10]  # Return top 10
+
+@app.get("/tasks")
+async def get_tasks():
+    """Get tasks (alias for missions for compatibility)"""
+    return await list_missions()
+
+@app.post("/tasks")
+async def create_task(task_data: dict):
+    """Create a new task (alias for mission creation)"""
+    mission_create = MissionCreate(
+        title=task_data.get("title", "New Task"),
+        description=task_data.get("description", ""),
+        status="active",
+        priority=task_data.get("priority", "normal")
+    )
+    return await create_mission(mission_create)
+
 # --- Utility Endpoints ---
 @app.get("/reseed")
 async def reseed_data():
