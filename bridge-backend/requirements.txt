@@ -1,7 +1,4 @@
-FastAPI
-uvicorn
-pydantic
-sqlalchemy
-asyncpg
-databases
-python-dotenv
+FastAPI>=0.100.0
+uvicorn[standard]>=0.23.0
+pydantic>=2.0.0
+python-dotenv>=1.0.0
