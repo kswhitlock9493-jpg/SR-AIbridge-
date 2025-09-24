@@ -16,8 +16,10 @@ from typing import Dict, List, Any
 class SRAIBridgeSelfTest:
     """Comprehensive self-test suite for SR-AIbridge"""
     
-    def __init__(self, base_url: str = "http://localhost:8000"):
+    def __init__(self, base_url: str = "http://localhost:8000", timeout: int = 30, retries: int = 3):
         self.base_url = base_url.rstrip('/')
+        self.timeout = timeout
+        self.retries = retries
         self.results = {
             "start_time": datetime.utcnow().isoformat(),
             "tests": [],
@@ -26,6 +28,11 @@ class SRAIBridgeSelfTest:
                 "passed": 0,
                 "failed": 0,
                 "errors": 0
+            },
+            "config": {
+                "base_url": self.base_url,
+                "timeout": self.timeout,
+                "retries": self.retries
             }
         }
         
@@ -33,6 +40,33 @@ class SRAIBridgeSelfTest:
         """Log a message with timestamp"""
         timestamp = datetime.utcnow().strftime("%H:%M:%S")
         print(f"[{timestamp}] {level}: {message}")
+        
+    def make_request(self, method: str, url: str, **kwargs) -> requests.Response:
+        """Make a robust HTTP request with retries"""
+        kwargs.setdefault('timeout', self.timeout)
+        
+        last_exception = None
+        for attempt in range(self.retries):
+            try:
+                if method.upper() == 'GET':
+                    return requests.get(url, **kwargs)
+                elif method.upper() == 'POST':
+                    return requests.post(url, **kwargs)
+                elif method.upper() == 'DELETE':
+                    return requests.delete(url, **kwargs)
+                elif method.upper() == 'PATCH':
+                    return requests.patch(url, **kwargs)
+                else:
+                    raise ValueError(f"Unsupported HTTP method: {method}")
+            except Exception as e:
+                last_exception = e
+                if attempt < self.retries - 1:
+                    self.log(f"Request failed (attempt {attempt + 1}/{self.retries}): {e}", "WARN")
+                    time.sleep(2 ** attempt)  # Exponential backoff
+                else:
+                    self.log(f"Request failed after {self.retries} attempts: {e}", "ERROR")
+        
+        raise last_exception
         
     def test_result(self, name: str, passed: bool, details: Dict = None, error: str = None):
         """Record test result"""
@@ -63,7 +97,7 @@ class SRAIBridgeSelfTest:
         
         # Test /health
         try:
-            response = requests.get(f"{self.base_url}/health", timeout=10)
+            response = self.make_request('GET', f"{self.base_url}/health")
             if response.status_code == 200:
                 data = response.json()
                 self.test_result("health_endpoint", True, {"status": data.get("status")})
@@ -74,7 +108,7 @@ class SRAIBridgeSelfTest:
             
         # Test /status
         try:
-            response = requests.get(f"{self.base_url}/status", timeout=10)
+            response = self.make_request('GET', f"{self.base_url}/status")
             if response.status_code == 200:
                 data = response.json()
                 self.test_result("status_endpoint", True, {
@@ -88,7 +122,7 @@ class SRAIBridgeSelfTest:
             
         # Test root endpoint
         try:
-            response = requests.get(f"{self.base_url}/", timeout=10)
+            response = self.make_request('GET', f"{self.base_url}/")
             if response.status_code == 200:
                 data = response.json()
                 self.test_result("root_endpoint", True, {
@@ -106,7 +140,7 @@ class SRAIBridgeSelfTest:
         
         # Test guardian status
         try:
-            response = requests.get(f"{self.base_url}/guardian/status", timeout=10)
+            response = self.make_request('GET', f"{self.base_url}/guardian/status")
             if response.status_code == 200:
                 data = response.json()
                 self.test_result("guardian_status", True, {
@@ -120,7 +154,7 @@ class SRAIBridgeSelfTest:
             
         # Test guardian selftest
         try:
-            response = requests.post(f"{self.base_url}/guardian/selftest", timeout=30)
+            response = self.make_request('POST', f"{self.base_url}/guardian/selftest")
             if response.status_code == 200:
                 data = response.json()
                 self.test_result("guardian_selftest", True, {
@@ -134,7 +168,7 @@ class SRAIBridgeSelfTest:
             
         # Test guardian activate
         try:
-            response = requests.post(f"{self.base_url}/guardian/activate", timeout=30)
+            response = self.make_request('POST', f"{self.base_url}/guardian/activate")
             if response.status_code == 200:
                 data = response.json()
                 self.test_result("guardian_activate", True, {
@@ -312,24 +346,25 @@ class SRAIBridgeSelfTest:
         except Exception as e:
             self.test_result("reseed_endpoint", False, error=str(e))
             
-    async def run_all_tests(self):
+    async def run_all_tests(self, wait_ready_timeout: int = 60):
         """Run all test suites"""
         self.log("🚀 Starting SR-AIbridge comprehensive self-test...")
         
         # Wait for server to be ready
         self.log("⏳ Checking server availability...")
-        max_retries = 10
+        max_retries = wait_ready_timeout // 6  # Check every 6 seconds
         for i in range(max_retries):
             try:
-                response = requests.get(f"{self.base_url}/health", timeout=5)
+                response = self.make_request('GET', f"{self.base_url}/health")
                 if response.status_code == 200:
                     self.log("✅ Server is ready")
                     break
-            except Exception:
+            except Exception as e:
                 if i == max_retries - 1:
-                    self.log("❌ Server not available after retries")
+                    self.log(f"❌ Server not available after {wait_ready_timeout}s: {e}")
                     return
-                time.sleep(2)
+                self.log(f"⏳ Server not ready (attempt {i + 1}/{max_retries}), waiting 6s...")
+                time.sleep(6)
                 
         # Run test suites
         await self.test_health_endpoints()
@@ -384,12 +419,18 @@ async def main():
                        help="Base URL for the API (default: http://localhost:8000)")
     parser.add_argument("--json", action="store_true", 
                        help="Output results in JSON format")
+    parser.add_argument("--timeout", type=int, default=30,
+                       help="Request timeout in seconds (default: 30)")
+    parser.add_argument("--retries", type=int, default=3,
+                       help="Number of retries for failed requests (default: 3)")
+    parser.add_argument("--wait-ready", type=int, default=60,
+                       help="Maximum seconds to wait for server to be ready (default: 60)")
     
     args = parser.parse_args()
     
     # Run tests
-    test_runner = SRAIBridgeSelfTest(args.url)
-    await test_runner.run_all_tests()
+    test_runner = SRAIBridgeSelfTest(args.url, timeout=args.timeout, retries=args.retries)
+    await test_runner.run_all_tests(wait_ready_timeout=args.wait_ready)
     
     # Generate report
     if args.json:
