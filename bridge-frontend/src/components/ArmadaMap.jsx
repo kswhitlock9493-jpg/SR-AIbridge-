@@ -21,8 +21,8 @@ const ArmadaMap = () => {
     
     // Combine armada status and fleet data from bridge context
     const combined = {
-      fleet: fleetData && fleetData.length > 0 ? fleetData : realTimeFleet,
-      summary: armadaStatus || {},
+      fleet: armadaStatus?.fleet || fleetData || realTimeFleet,
+      summary: armadaStatus?.summary || {},
       last_updated: new Date().toISOString()
     };
     
@@ -80,7 +80,7 @@ const ArmadaMap = () => {
     );
   }
 
-  const { fleet = [], summary = {} } = fleetData;
+  const { fleet = [], summary = {} } = armadaStatus;
 
   return (
     <div className="armada-map">
