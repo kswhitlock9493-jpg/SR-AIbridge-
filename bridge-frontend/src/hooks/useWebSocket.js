@@ -23,6 +23,21 @@ export const useWebSocket = (onMessage = null) => {
     return baseUrl.replace(/^http/, 'ws') + '/ws';
   };
 
+  const send = useCallback((message) => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      try {
+        wsRef.current.send(JSON.stringify(message));
+        return true;
+      } catch (err) {
+        console.error('Failed to send WebSocket message:', err);
+        return false;
+      }
+    } else {
+      console.warn('WebSocket not connected, cannot send message:', message);
+      return false;
+    }
+  }, []);
+
   const connect = useCallback(() => {
     try {
       if (wsRef.current?.readyState === WebSocket.OPEN) {
@@ -91,7 +106,7 @@ export const useWebSocket = (onMessage = null) => {
       console.error('Failed to create WebSocket connection:', err);
       setError('Failed to create WebSocket connection');
     }
-  }, [onMessage]);
+  }, [onMessage, send]);
 
   const disconnect = useCallback(() => {
     if (reconnectTimeoutRef.current) {
@@ -105,21 +120,6 @@ export const useWebSocket = (onMessage = null) => {
     
     setConnected(false);
     setConnectionStats(null);
-  }, []);
-
-  const send = useCallback((message) => {
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
-      try {
-        wsRef.current.send(JSON.stringify(message));
-        return true;
-      } catch (err) {
-        console.error('Failed to send WebSocket message:', err);
-        return false;
-      }
-    } else {
-      console.warn('WebSocket not connected, cannot send message:', message);
-      return false;
-    }
   }, []);
 
   const subscribe = useCallback((channel) => {
