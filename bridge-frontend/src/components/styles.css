@@ -455,3 +455,176 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
+
+/* Real-time Features */
+.live-indicator {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: pulse 2s infinite;
+  border: 1px solid #fca5a5;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* WebSocket Connection Status */
+.status-value.connected {
+  color: #22c55e;
+  font-weight: bold;
+}
+
+.status-value.disconnected {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+/* Enhanced Log Entries */
+.log-entry.recent {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(22, 163, 74, 0.05) 100%);
+  border-left: 3px solid #22c55e;
+  animation: slideIn 0.5s ease-out;
+}
+
+.log-icon {
+  font-size: 1.1rem;
+  margin-right: 8px;
+}
+
+.logs-footer, .fleet-footer {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 12px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+/* Enhanced Fleet Cards */
+.ship-card.operational {
+  border-left: 3px solid #22c55e;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(22, 163, 74, 0.02) 100%);
+}
+
+.ship-card.non-operational {
+  border-left: 3px solid #ef4444;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(220, 38, 38, 0.02) 100%);
+}
+
+.ship-icon {
+  font-size: 1.2rem;
+  margin-right: 8px;
+}
+
+.status-icon {
+  font-size: 1rem;
+  margin-right: 4px;
+}
+
+.ship-title {
+  display: flex;
+  align-items: center;
+}
+
+.status-section {
+  display: flex;
+  align-items: center;
+}
+
+/* Fleet Summary Stats */
+.fleet-summary {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin: 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.summary-stats {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+.stat-item {
+  text-align: center;
+  flex: 1;
+}
+
+.stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #3b82f6;
+}
+
+.stat-item.online .stat-value {
+  color: #22c55e;
+}
+
+.stat-item.patrol .stat-value {
+  color: #06b6d4;
+}
+
+.stat-item.offline .stat-value {
+  color: #ef4444;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 4px;
+}
+
+/* Enhanced Placeholders */
+.placeholder-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 8px;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Real-time message indicators */
+.message.new {
+  animation: fadeInUp 0.5s ease-out;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);
+  border-left: 3px solid #3b82f6;
+}

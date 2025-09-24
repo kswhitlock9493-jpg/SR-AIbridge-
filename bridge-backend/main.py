@@ -1,5 +1,7 @@
 import os
-from fastapi import FastAPI, HTTPException
+import asyncio
+import logging
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
@@ -7,6 +9,12 @@ from datetime import datetime
 from dotenv import load_dotenv
 import json
 from rituals.manage_data import DataRituals
+from websocket_manager import websocket_manager
+from autonomous_scheduler import AutonomousScheduler
+
+# Setup logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Load env variables
 load_dotenv()
@@ -32,16 +40,21 @@ storage = InMemoryStorage()
 # Initialize rituals manager for data operations
 rituals = DataRituals(storage)
 
+# Initialize autonomous scheduler
+scheduler = AutonomousScheduler(storage, websocket_manager)
+
 app = FastAPI(
     title="SR-AIbridge Backend",
     version="1.0.0-inmemory",
     description="Drop-in in-memory backend for SR-AIbridge"
 )
 
-# ✅ Restrict to Netlify domain for CORS
+# CORS configuration for both production and development
 origins = [
     "https://bridge.netlify.app",
-    "https://sr-aibridge.netlify.app"
+    "https://sr-aibridge.netlify.app",
+    "http://localhost:3000",  # Development frontend
+    "http://127.0.0.1:3000"   # Alternative localhost
 ]
 
 app.add_middleware(
@@ -116,15 +129,21 @@ def seed_demo_data():
 # --- Startup / Shutdown ---
 @app.on_event("startup")
 async def startup():
-    """Initialize in-memory storage with demo data"""
+    """Initialize in-memory storage with demo data and start autonomous systems"""
     seed_demo_data()
     print("✅ SR-AIbridge Backend started with in-memory storage")
     print(f"📊 Seeded: {len(storage.agents)} agents, {len(storage.missions)} missions, {len(storage.vault_logs)} vault logs, {len(storage.captain_messages)} messages")
+    
+    # Start autonomous scheduler
+    await scheduler.start()
+    print("🤖 Autonomous scheduler activated")
 
 @app.on_event("shutdown")
 async def shutdown():
     """Cleanup on shutdown"""
     print("🔄 SR-AIbridge Backend shutting down...")
+    await scheduler.stop()
+    print("🤖 Autonomous scheduler stopped")
 
 # --- Captain-to-Captain Endpoints ---
 @app.get("/captains/messages", response_model=List[Message])
@@ -135,7 +154,7 @@ async def list_messages():
 
 @app.post("/captains/send")
 async def send_message(msg: Message):
-    """Send a captain message"""
+    """Send a captain message with WebSocket broadcast"""
     message_data = {
         "id": storage.get_next_id(),
         "from_": msg.from_,
@@ -144,6 +163,13 @@ async def send_message(msg: Message):
         "timestamp": msg.timestamp or datetime.utcnow()
     }
     storage.captain_messages.append(message_data)
+    
+    # Broadcast to WebSocket clients
+    await websocket_manager.broadcast({
+        "type": "chat_message",
+        "message": message_data
+    })
+    
     return {"ok": True, "stored": message_data}
 
 # --- Chat Endpoints (Alternative endpoint names) ---
@@ -249,11 +275,172 @@ async def add_doctrine(log_create: VaultLogCreate):
     """Add doctrine log (alias for vault log)"""
     return await add_vault_log(log_create)
 
+# --- WebSocket Endpoints ---
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    """WebSocket endpoint for real-time updates"""
+    client_id = None
+    try:
+        client_id = await websocket_manager.connect(websocket)
+        
+        while True:
+            # Receive messages from client
+            data = await websocket.receive_text()
+            try:
+                message = json.loads(data)
+                await websocket_manager.handle_message(client_id, message)
+            except json.JSONDecodeError:
+                await websocket_manager.send_personal_message(client_id, {
+                    "type": "error",
+                    "message": "Invalid JSON format"
+                })
+                
+    except WebSocketDisconnect:
+        logger.info(f"WebSocket client {client_id} disconnected")
+    except Exception as e:
+        logger.error(f"WebSocket error for client {client_id}: {e}")
+    finally:
+        if client_id:
+            websocket_manager.disconnect(client_id)
+
+@app.get("/ws/stats")
+async def get_websocket_stats():
+    """Get WebSocket connection statistics"""
+    return websocket_manager.get_stats()
+
+# --- Enhanced Armada Endpoints ---
+@app.post("/armada/order")
+async def issue_armada_order(order_data: dict):
+    """Issue commands to armada fleet"""
+    ship_id = order_data.get("ship_id")
+    command = order_data.get("command")
+    parameters = order_data.get("parameters", {})
+    
+    if not ship_id or not command:
+        raise HTTPException(status_code=400, detail="ship_id and command are required")
+    
+    # Find the ship
+    ship = None
+    for s in storage.armada_fleet:
+        if s.get("id") == ship_id:
+            ship = s
+            break
+    
+    if not ship:
+        raise HTTPException(status_code=404, detail="Ship not found")
+    
+    # Process command
+    result = await _process_armada_command(ship, command, parameters)
+    
+    # Broadcast fleet update
+    await websocket_manager.broadcast({
+        "type": "armada_order_executed",
+        "ship": ship,
+        "command": command,
+        "result": result
+    })
+    
+    return {"ok": True, "ship": ship, "command": command, "result": result}
+
+async def _process_armada_command(ship: dict, command: str, parameters: dict):
+    """Process armada command and update ship status"""
+    timestamp = datetime.utcnow()
+    ship["updated_at"] = timestamp
+    
+    if command == "move":
+        destination = parameters.get("destination")
+        if destination:
+            ship["location"] = destination
+            ship["status"] = "patrol"
+            
+            # Log the movement
+            await _add_autonomous_log(
+                "Fleet Command",
+                "ship_movement",
+                f"{ship['name']} ordered to move to {destination}",
+                "info"
+            )
+            
+            return f"Ship moved to {destination}"
+    
+    elif command == "status_change":
+        new_status = parameters.get("status")
+        if new_status in ["online", "offline", "maintenance", "patrol"]:
+            old_status = ship["status"]
+            ship["status"] = new_status
+            
+            # Log status change
+            await _add_autonomous_log(
+                "Fleet Command",
+                "status_change",
+                f"{ship['name']} status changed from {old_status} to {new_status}",
+                "info"
+            )
+            
+            return f"Status changed to {new_status}"
+    
+    elif command == "patrol":
+        sectors = parameters.get("sectors", ["Alpha", "Beta"])
+        ship["status"] = "patrol"
+        ship["patrol_sectors"] = sectors
+        
+        # Log patrol assignment
+        await _add_autonomous_log(
+            "Fleet Command",
+            "patrol_assignment",
+            f"{ship['name']} assigned to patrol sectors: {', '.join(sectors)}",
+            "info"
+        )
+        
+        return f"Patrol assigned to sectors: {', '.join(sectors)}"
+    
+    return "Command processed"
+
+async def _add_autonomous_log(agent_name: str, action: str, details: str, log_level: str):
+    """Add log entry from autonomous systems"""
+    log_entry = {
+        "id": storage.get_next_id(),
+        "agent_name": agent_name,
+        "action": action,
+        "details": details,
+        "timestamp": datetime.utcnow(),
+        "log_level": log_level
+    }
+    
+    storage.vault_logs.append(log_entry)
+    
+    # Broadcast log update
+    await websocket_manager.broadcast({
+        "type": "vault_log",
+        "log": log_entry
+    })
+
 # --- Armada Endpoints ---
 @app.get("/armada/status")
 async def get_armada():
-    """Get armada fleet status"""
-    return storage.armada_fleet
+    """Get enhanced armada fleet status with live data"""
+    enhanced_fleet = []
+    
+    for ship in storage.armada_fleet:
+        # Add calculated fields for enhanced status
+        enhanced_ship = ship.copy()
+        enhanced_ship["last_reported"] = ship.get("updated_at", datetime.utcnow()).isoformat() if ship.get("updated_at") else datetime.utcnow().isoformat()
+        enhanced_ship["operational"] = ship.get("status") in ["online", "patrol"]
+        enhanced_ship["patrol_sectors"] = ship.get("patrol_sectors", [])
+        
+        enhanced_fleet.append(enhanced_ship)
+    
+    return {
+        "fleet": enhanced_fleet,
+        "summary": {
+            "total_ships": len(storage.armada_fleet),
+            "online": len([s for s in storage.armada_fleet if s.get("status") == "online"]),
+            "patrol": len([s for s in storage.armada_fleet if s.get("status") == "patrol"]),
+            "offline": len([s for s in storage.armada_fleet if s.get("status") == "offline"]),
+            "maintenance": len([s for s in storage.armada_fleet if s.get("status") == "maintenance"]),
+            "last_updated": datetime.utcnow().isoformat()
+        }
+    }
 
 # --- Status Endpoint ---
 @app.get("/status")
@@ -352,8 +539,8 @@ async def root():
     """Root endpoint with API information"""
     return {
         "name": "SR-AIbridge Backend",
-        "version": "1.0.0-inmemory",
-        "description": "Drop-in in-memory backend for SR-AIbridge",
+        "version": "1.1.0-autonomous",
+        "description": "Fully autonomous SR-AIbridge with real-time WebSocket updates",
         "endpoints": {
             "status": "/status",
             "agents": "/agents",
@@ -361,6 +548,9 @@ async def root():
             "vault_logs": "/vault/logs",
             "captain_chat": "/captains/messages",
             "armada": "/armada/status",
+            "armada_orders": "/armada/order",
+            "websocket": "/ws",
+            "websocket_stats": "/ws/stats",
             "reseed": "/reseed",
             "rituals": {
                 "seed": "/rituals/seed",
@@ -368,7 +558,15 @@ async def root():
                 "reseed": "/rituals/reseed"
             }
         },
+        "features": {
+            "autonomous_scheduler": True,
+            "websocket_support": True,
+            "real_time_updates": True,
+            "npc_interactions": True,
+            "auto_mission_progression": True
+        },
         "storage": "in-memory",
         "rituals_manager": "enabled",
+        "autonomous_mode": "active",
         "ready": True
     }
