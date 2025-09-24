@@ -83,3 +83,68 @@ async def root():
             "in_memory_storage": True
         }
     }
+
+@router.get("/activity")
+async def get_activity():
+    """Get recent activity (missions and logs combined)"""
+    import sys
+    import os
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    
+    from ..main import storage
+    
+    activities = []
+    
+    # Add recent missions as activities
+    for mission in storage.missions[-5:]:  # Last 5 missions
+        activities.append({
+            "id": f"mission_{mission['id']}",
+            "type": "mission",
+            "title": mission["title"],
+            "description": mission["description"],
+            "status": mission["status"],
+            "timestamp": mission["created_at"]
+        })
+    
+    # Add recent vault logs as activities
+    for log in storage.vault_logs[-5:]:  # Last 5 logs
+        activities.append({
+            "id": f"log_{log['id']}",
+            "type": "log",
+            "title": f"{log['agent_name']}: {log['action']}",
+            "description": log["details"],
+            "status": log["log_level"],
+            "timestamp": log["timestamp"]
+        })
+    
+    # Sort by timestamp descending
+    activities.sort(key=lambda x: x["timestamp"], reverse=True)
+    return activities[:10]  # Return top 10
+
+@router.get("/reseed")
+async def reseed_data():
+    """Reseed demo data (useful for testing)"""
+    import sys
+    import os
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    
+    from ..main import rituals
+    
+    result = rituals.reseed()
+    # Return the traditional format for backward compatibility
+    return {
+        "ok": True,
+        "message": "Demo data reseeded successfully",
+        "counts": result["final_counts"]
+    }
+
+@router.get("/ws/stats")
+async def get_websocket_stats():
+    """Get WebSocket connection statistics"""
+    import sys
+    import os
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    
+    from ..main import websocket_manager
+    
+    return websocket_manager.get_stats()

@@ -15,7 +15,8 @@ from dotenv import load_dotenv
 import json
 
 # Import routes
-from .routes import health, daemon, guardian, missions, logs
+from .routes import health, daemon, missions, logs
+from .routes import guardian as guardian_routes
 
 # Import existing modules (these will be moved to services)
 import sys
@@ -200,7 +201,7 @@ guardian = GuardianDaemon(storage, websocket_manager)
 # Include routers
 app.include_router(health.router)
 app.include_router(daemon.router)
-app.include_router(guardian.router)
+app.include_router(guardian_routes.router)
 app.include_router(missions.router)
 app.include_router(logs.router)
 
