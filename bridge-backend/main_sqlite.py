@@ -44,6 +44,22 @@ async def lifespan(app: FastAPI):
         init_result = await init_database()
         if init_result["status"] == "success":
             logger.info("✅ Database initialized successfully")
+            
+            # Seed initial demo data
+            logger.info("🌱 Seeding initial demo data...")
+            from startup import seed_initial_data
+            seed_result = await seed_initial_data()
+            if seed_result["status"] == "success":
+                if seed_result.get("skipped"):
+                    logger.info("ℹ️ Demo data already exists, skipping seeding")
+                else:
+                    logger.info(f"✅ Successfully seeded: {', '.join(seed_result['seeded_items'])}")
+                    logger.info(f"📊 Admiral: {seed_result.get('admiral', 'Unknown')}")
+                    logger.info(f"🤖 Agents: {seed_result.get('agents_count', 0)}")
+                    logger.info(f"🎯 Missions: {seed_result.get('missions_count', 0)}")
+                    logger.info(f"🚢 Fleet Online: {seed_result.get('fleet_online', 0)}")
+            else:
+                logger.warning(f"⚠️ Seeding incomplete: {seed_result['message']}")
         else:
             logger.error(f"❌ Database initialization failed: {init_result['message']}")
         
@@ -112,6 +128,7 @@ async def root():
             "status": "/status",
             "agents": "/agents",
             "missions": "/missions",
+            "fleet": "/fleet",
             "vault_logs": "/vault/logs",
             "guardians": "/guardians"
         },
@@ -212,14 +229,27 @@ async def trigger_self_heal():
 
 @app.get("/status")
 async def get_status():
-    """Get overall system status"""
+    """Get overall system status with enhanced dashboard data"""
     try:
+        from startup import get_system_status
+        system_status = await get_system_status()
         db_health = await database_health()
         
         return {
             "service": "SR-AIbridge Backend",
             "version": "1.2.0-sqlite-first",
             "status": db_health["status"],
+            # Enhanced status data matching frontend expectations
+            "admiral": system_status["admiral"],
+            "agents_online": system_status["agents_online"],
+            "agentsOnline": system_status["agents_online"],  # Alternative naming for compatibility
+            "active_missions": system_status["active_missions"],
+            "activeMissions": system_status["active_missions"],  # Alternative naming for compatibility
+            "total_agents": system_status["total_agents"],
+            "total_missions": system_status["total_missions"],
+            "fleet_count": system_status["fleet_count"],
+            "vault_logs": system_status["vault_logs"],
+            "system_health": system_status["system_health"],
             "database": {
                 "type": DATABASE_TYPE,
                 "status": db_health["status"],
@@ -239,7 +269,18 @@ async def get_status():
             "service": "SR-AIbridge Backend",
             "version": "1.2.0-sqlite-first", 
             "status": "error",
-            "error": str(e),
+            "admiral": "Unknown",
+            "agents_online": 0,
+            "agentsOnline": 0,
+            "active_missions": 0,
+            "activeMissions": 0,
+            "total_agents": 0,
+            "total_missions": 0,
+            "fleet_count": 0,
+            "vault_logs": 0,
+            "system_health": "error",
+            "error": "Failed to retrieve system status",
+            "self_heal_available": True,
             "timestamp": datetime.utcnow().isoformat()
         }
 
@@ -494,6 +535,32 @@ async def get_system_metrics():
         return {
             "status": "error",
             "error": str(e),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
+# === Fleet Management ===
+@app.get("/fleet")
+async def get_fleet():
+    """Get fleet data with safe error handling"""
+    try:
+        from startup import get_fleet_data
+        fleet_data = get_fleet_data()
+        
+        return {
+            "status": "success",
+            "fleet": fleet_data,
+            "count": len(fleet_data),
+            "online": len([ship for ship in fleet_data if ship.get("status") == "online"]),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Get fleet error: {e}")
+        return {
+            "status": "error",
+            "error": "Failed to retrieve fleet data",
+            "fleet": [],
+            "count": 0,
+            "online": 0,
             "timestamp": datetime.utcnow().isoformat()
         }
 

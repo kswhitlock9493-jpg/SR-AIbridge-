@@ -343,6 +343,32 @@ class DatabaseManager:
         except Exception as e:
             logger.error(f"Error getting guardians: {e}")
             return []
+    
+    async def create_guardian(self, guardian_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create guardian with safe error handling"""
+        try:
+            async with self.get_session() as session:
+                guardian = Guardian(**guardian_data)
+                session.add(guardian)
+                await session.commit()
+                await session.refresh(guardian)
+                return {
+                    "status": "success",
+                    "message": "Guardian created successfully",
+                    "guardian": {
+                        "id": guardian.id,
+                        "name": guardian.name,
+                        "status": guardian.status,
+                        "health_score": guardian.health_score,
+                        "active": guardian.active
+                    }
+                }
+        except Exception as e:
+            logger.error(f"Error creating guardian: {e}")
+            return {
+                "status": "error",
+                "message": f"Failed to create guardian: {str(e)}"
+            }
 
 # Global database manager instance
 db_manager = DatabaseManager()
