@@ -53,8 +53,13 @@ app = FastAPI(
 origins = [
     "https://bridge.netlify.app",
     "https://sr-aibridge.netlify.app",
+    "https://*.netlify.app",  # Allow all Netlify subdomains
+    "https://*.onrender.com",  # Allow all Render subdomains
     "http://localhost:3000",  # Development frontend
-    "http://127.0.0.1:3000"   # Alternative localhost
+    "http://127.0.0.1:3000",   # Alternative localhost
+    "http://localhost:3001",  # Alternative development port
+    "https://localhost:3000",  # HTTPS development
+    "https://localhost:3001"   # HTTPS alternative development port
 ]
 
 app.add_middleware(
@@ -129,9 +134,24 @@ class GuardianDaemon:
         self.websocket_manager = websocket_manager
         self.active = False
         self.last_selftest = None
+        self.last_action = None
+        self.last_result = None
+        self.heartbeat = None
         self.selftest_status = "Unknown"  # "PASS", "FAIL", or "Unknown"
         self.selftest_task = None
         self.selftest_interval = 300  # 5 minutes in seconds
+        
+    def log_to_vault(self, level, message, details=""):
+        """Log Guardian events to shared VAULT_LOGS store"""
+        vault_log = {
+            "id": self.storage.get_next_id(),
+            "agent_name": "GuardianDaemon",
+            "action": message,
+            "details": details,
+            "timestamp": datetime.utcnow(),
+            "log_level": level
+        }
+        self.storage.vault_logs.append(vault_log)
         
     async def start(self):
         """Start Guardian daemon with continuous self-testing"""
@@ -139,7 +159,12 @@ class GuardianDaemon:
             return
             
         self.active = True
+        self.heartbeat = datetime.utcnow()
+        self.last_action = "startup"
+        self.last_result = "active"
+        
         logger.info("🛡️ Guardian daemon starting...")
+        self.log_to_vault("info", "startup", "Guardian daemon initialized and activated")
         
         # Run initial self-test
         await self.run_selftest()
@@ -165,18 +190,24 @@ class GuardianDaemon:
             try:
                 await asyncio.sleep(self.selftest_interval)
                 if self.active:  # Check again after sleep
+                    self.heartbeat = datetime.utcnow()  # Update heartbeat
+                    self.log_to_vault("info", "heartbeat", "Guardian daemon heartbeat - continuous monitoring active")
                     await self.run_selftest()
             except asyncio.CancelledError:
                 break
             except Exception as e:
                 logger.error(f"Guardian selftest error: {e}")
                 self.selftest_status = "FAIL"
+                self.last_result = "FAIL"
+                self.log_to_vault("error", "degraded", f"Guardian entered degraded state: {str(e)}")
                 
     async def run_selftest(self):
         """Run comprehensive self-test"""
         try:
             logger.info("🛡️ Guardian running self-test...")
+            self.heartbeat = datetime.utcnow()
             self.last_selftest = datetime.utcnow()
+            self.last_action = "selftest"
             
             # Test basic system components
             tests_passed = 0
@@ -219,10 +250,14 @@ class GuardianDaemon:
             # Determine overall status
             if tests_passed == total_tests:
                 self.selftest_status = "PASS"
+                self.last_result = "PASS"
                 logger.info(f"🛡️ Guardian self-test PASSED ({tests_passed}/{total_tests})")
+                self.log_to_vault("info", "selftest", f"Self-test completed successfully ({tests_passed}/{total_tests})")
             else:
                 self.selftest_status = "FAIL"
+                self.last_result = "FAIL"
                 logger.warning(f"🛡️ Guardian self-test FAILED ({tests_passed}/{total_tests})")
+                self.log_to_vault("warning", "selftest", f"Self-test failed ({tests_passed}/{total_tests})")
                 
             # Broadcast status update via WebSocket
             await self.websocket_manager.broadcast({
@@ -236,14 +271,44 @@ class GuardianDaemon:
         except Exception as e:
             logger.error(f"Guardian selftest critical error: {e}")
             self.selftest_status = "FAIL"
+            self.last_result = "FAIL"
             self.last_selftest = datetime.utcnow()
+            self.last_action = "selftest_error"
+            self.log_to_vault("error", "selftest_error", f"Critical selftest error: {str(e)}")
             
+            
+    async def activate(self):
+        """Manually activate Guardian with immediate self-test"""
+        logger.info("🛡️ Guardian manual activation requested")
+        self.heartbeat = datetime.utcnow()
+        self.last_action = "activate"
+        
+        if not self.active:
+            await self.start()
+            self.last_result = "activated_from_inactive"
+            self.log_to_vault("info", "activate", "Guardian manually activated from inactive state")
+        else:
+            # Run immediate self-test if already active
+            await self.run_selftest()
+            self.last_result = "reactivated"
+            self.log_to_vault("info", "activate", "Guardian manually reactivated - immediate selftest executed")
+        
+        return {
+            "success": True,
+            "message": "Guardian activated successfully",
+            "status": self.selftest_status,
+            "active": self.active
+        }
+
     def get_status(self):
         """Get current Guardian status"""
         return {
             "active": self.active,
             "status": self.selftest_status,
             "last_selftest": self.last_selftest.isoformat() if self.last_selftest else None,
+            "last_action": self.last_action,
+            "last_result": self.last_result,
+            "heartbeat": self.heartbeat.isoformat() if self.heartbeat else None,
             "next_selftest": (self.last_selftest + timedelta(seconds=self.selftest_interval)).isoformat() if self.last_selftest else None
         }
 
@@ -600,6 +665,31 @@ async def get_status():
 async def get_guardian_status():
     """Get Guardian daemon status for frontend polling"""
     return guardian.get_status()
+
+@app.post("/guardian/selftest")
+async def run_guardian_selftest():
+    """Manually trigger Guardian self-test"""
+    try:
+        await guardian.run_selftest()
+        return {
+            "success": True,
+            "message": "Self-test completed",
+            "status": guardian.selftest_status,
+            "last_selftest": guardian.last_selftest.isoformat() if guardian.last_selftest else None
+        }
+    except Exception as e:
+        logger.error(f"Guardian selftest endpoint error: {e}")
+        return HTTPException(status_code=500, detail=f"Self-test failed: {str(e)}")
+
+@app.post("/guardian/activate")
+async def activate_guardian():
+    """Manually activate Guardian daemon"""
+    try:
+        result = await guardian.activate()
+        return result
+    except Exception as e:
+        logger.error(f"Guardian activation error: {e}")
+        return HTTPException(status_code=500, detail=f"Activation failed: {str(e)}")
 
 # --- Activity/Tasks Endpoints (for compatibility) ---
 @app.get("/activity")

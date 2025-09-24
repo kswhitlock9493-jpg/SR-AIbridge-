@@ -495,7 +495,96 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  width: 100%;
+  flex: 1;
+}
+
+.guardian-banner {
+  padding: 12px 20px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.guardian-banner-heartbeat {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.guardian-banner-action {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.guardian-banner-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.guardian-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 120px;
+}
+
+.guardian-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.guardian-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.guardian-button-test:hover:not(:disabled) {
+  background: rgba(59, 130, 246, 0.3);
+  border-color: rgb(59, 130, 246);
+}
+
+.guardian-button-activate:hover:not(:disabled) {
+  background: rgba(34, 197, 94, 0.3);
+  border-color: rgb(34, 197, 94);
+}
+
+.guardian-banner-error {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  color: white;
+  padding: 8px 20px;
+  font-size: 0.85rem;
+  z-index: 99;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .guardian-banner-icon {
