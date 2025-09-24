@@ -1,23 +1,34 @@
 """
-SR-AIbridge In-Memory Backend Demo Seeder
+SR-AIbridge Dual-Mode Backend Demo Seeder
 
-This script demonstrates how to populate the in-memory backend with demo data
+This script demonstrates how to populate the backend with demo data
 by making HTTP requests to the running backend server.
+Works with both SQLite/Postgres database and in-memory modes.
 
 Usage:
     1. Start the backend: uvicorn main:app --reload
     2. Run this script: python seed.py
     3. Visit http://localhost:8000/status to verify seeded data
 
-The backend automatically seeds data on startup, but this script shows
-how you could add additional data programmatically.
+Environment Support:
+    - CI/CD (GitHub/Netlify): Uses SQLite by default
+    - Production (Render): Uses Postgres when DATABASE_URL is set
+    - Development: Configurable via .env file
+
+The backend automatically seeds basic data on startup, but this script 
+shows how you could add additional data programmatically.
 
 You can also import seed_demo_data() for use in other modules.
 """
 
 import asyncio
 import json
+import os
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Try to import aiohttp, install if missing
 try:
@@ -25,7 +36,8 @@ try:
 except ImportError:
     aiohttp = None
 
-API_BASE = "http://localhost:8000"
+# API base URL - configurable for different environments
+API_BASE = os.getenv("API_BASE_URL", "http://localhost:8000")
 
 
 def seed_demo_data():
@@ -34,6 +46,7 @@ def seed_demo_data():
     
     This function can be imported and used by other modules, such as the rituals manager.
     It runs the async seeding operation and returns the result.
+    Works with both database and in-memory storage modes.
     
     Returns:
         dict: Result of the seeding operation

@@ -12,6 +12,12 @@ from rituals.manage_data import DataRituals
 from websocket_manager import websocket_manager
 from autonomous_scheduler import AutonomousScheduler
 
+# Database imports for dual-mode support
+from databases import Database
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Text, DateTime, func
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -19,8 +25,79 @@ logger = logging.getLogger(__name__)
 # Load env variables
 load_dotenv()
 
-# In-memory storage
-class InMemoryStorage:
+# Database configuration based on environment
+DATABASE_TYPE = os.getenv("DATABASE_TYPE", "sqlite").lower()
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///bridge.db")
+
+# Ensure PostgreSQL URL format is correct for databases library
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+logger.info(f"🔧 Configuring {DATABASE_TYPE.upper()} database: {DATABASE_URL}")
+
+# Database setup
+database = None
+metadata = MetaData()
+Base = declarative_base()
+
+# Define tables for SQLite/Postgres mode
+agents_table = Table(
+    "agents", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("name", String(255), nullable=False),
+    Column("endpoint", String(255), nullable=False),
+    Column("capabilities", Text),  # JSON string
+    Column("status", String(50), default="online"),
+    Column("last_heartbeat", DateTime),
+    Column("created_at", DateTime, server_default=func.now())
+)
+
+missions_table = Table(
+    "missions", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("title", String(255), nullable=False),
+    Column("description", Text),
+    Column("status", String(50), default="active"),
+    Column("priority", String(50), default="normal"),
+    Column("assigned_agent_id", Integer),
+    Column("created_at", DateTime, server_default=func.now()),
+    Column("updated_at", DateTime, server_default=func.now(), onupdate=func.now())
+)
+
+vault_logs_table = Table(
+    "vault_logs", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("agent_name", String(255), nullable=False),
+    Column("action", String(255), nullable=False),
+    Column("details", Text, nullable=False),
+    Column("log_level", String(50), default="info"),
+    Column("timestamp", DateTime, server_default=func.now())
+)
+
+captain_messages_table = Table(
+    "captain_messages", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("from_", String(255), nullable=False),
+    Column("to", String(255), nullable=False),
+    Column("message", Text, nullable=False),
+    Column("timestamp", DateTime, server_default=func.now())
+)
+
+armada_fleet_table = Table(
+    "armada_fleet", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("name", String(255), nullable=False),
+    Column("status", String(50), default="online"),
+    Column("location", String(255), nullable=False),
+    Column("patrol_sectors", Text),  # JSON array as text
+    Column("updated_at", DateTime, server_default=func.now(), onupdate=func.now())
+)
+
+
+# Storage abstraction layer
+class StorageInterface:
+    """Abstract storage interface that works with both in-memory and database storage"""
+    
     def __init__(self):
         self.captain_messages: List[Dict] = []
         self.armada_fleet: List[Dict] = []
@@ -34,8 +111,41 @@ class InMemoryStorage:
         self.next_id += 1
         return current_id
 
-# Global storage instance
-storage = InMemoryStorage()
+
+class InMemoryStorage(StorageInterface):
+    """In-memory storage for CI/CD and development"""
+    pass
+
+
+class DatabaseStorage(StorageInterface):
+    """Database storage for production (SQLite/Postgres)"""
+    
+    def __init__(self, database_url: str):
+        super().__init__()
+        self.database_url = database_url
+        self.database = Database(database_url)
+        self.engine = create_engine(database_url)
+        
+    async def connect(self):
+        """Connect to database and create tables"""
+        await self.database.connect()
+        metadata.create_all(self.engine)
+        logger.info(f"✅ Database connected and tables created")
+        
+    async def disconnect(self):
+        """Disconnect from database"""
+        await self.database.disconnect()
+
+
+# Initialize storage based on environment
+if DATABASE_TYPE == "sqlite" or DATABASE_TYPE == "postgres":
+    logger.info(f"🗄️ Using {DATABASE_TYPE.upper()} database storage")
+    storage = DatabaseStorage(DATABASE_URL)
+    USE_DATABASE = True
+else:
+    logger.info("🧠 Using in-memory storage")
+    storage = InMemoryStorage()
+    USE_DATABASE = False
 
 # Initialize rituals manager for data operations
 rituals = DataRituals(storage)
@@ -45,18 +155,35 @@ scheduler = AutonomousScheduler(storage, websocket_manager)
 
 app = FastAPI(
     title="SR-AIbridge Backend",
-    version="1.0.0-inmemory",
-    description="Drop-in in-memory backend for SR-AIbridge"
+    version="1.1.0-dual-mode",
+    description="Dual-mode SR-AIbridge backend (SQLite/Postgres + In-memory)"
 )
 
-# CORS configuration for both production and development
+# Startup and shutdown events for database connections
+@app.on_event("startup")
+async def startup():
+    """Initialize database connection on startup"""
+    if USE_DATABASE and hasattr(storage, 'connect'):
+        await storage.connect()
+    logger.info("🚀 SR-AIbridge Backend Started!")
+
+@app.on_event("shutdown")
+async def shutdown():
+    """Close database connection on shutdown"""
+    if USE_DATABASE and hasattr(storage, 'disconnect'):
+        await storage.disconnect()
+    logger.info("🛑 SR-AIbridge Backend Shutdown!")
+
+# CORS configuration from environment variables
+allowed_origins = os.getenv("ALLOWED_ORIGINS", 
+    "http://localhost:3000,http://127.0.0.1:3000,https://bridge.netlify.app,https://sr-aibridge.netlify.app"
+).split(",")
+
+# Additional CORS origins for compatibility
 origins = [
-    "https://bridge.netlify.app",
-    "https://sr-aibridge.netlify.app",
+    *allowed_origins,
     "https://*.netlify.app",  # Allow all Netlify subdomains
     "https://*.onrender.com",  # Allow all Render subdomains
-    "http://localhost:3000",  # Development frontend
-    "http://127.0.0.1:3000",   # Alternative localhost
     "http://localhost:3001",  # Alternative development port
     "https://localhost:3000",  # HTTPS development
     "https://localhost:3001"   # HTTPS alternative development port
