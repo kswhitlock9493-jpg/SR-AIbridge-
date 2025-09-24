@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import { getStatus } from '../api';
+import { useWebSocket } from '../hooks/useWebSocket';
 import './styles.css';
 import Dashboard from './Dashboard';
 import CaptainsChat from './CaptainsChat';
@@ -21,6 +22,58 @@ const App = () => {
   const [connectionError, setConnectionError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [missionRefreshKey, setMissionRefreshKey] = useState(0);
+  const [realTimeData, setRealTimeData] = useState({
+    missions: [],
+    vaultLogs: [],
+    chatMessages: [],
+    fleetData: []
+  });
+
+  // Handle real-time WebSocket messages
+  const handleWebSocketMessage = useCallback((message) => {
+    console.log('📡 Real-time update:', message.type);
+    
+    switch (message.type) {
+      case 'mission_updated':
+        setRealTimeData(prev => ({
+          ...prev,
+          missions: [...prev.missions, message.mission]
+        }));
+        setMissionRefreshKey(prev => prev + 1);
+        break;
+        
+      case 'vault_log':
+        setRealTimeData(prev => ({
+          ...prev,
+          vaultLogs: [message.log, ...prev.vaultLogs.slice(0, 49)] // Keep last 50
+        }));
+        break;
+        
+      case 'chat_message':
+        setRealTimeData(prev => ({
+          ...prev,
+          chatMessages: [message.message, ...prev.chatMessages.slice(0, 49)]
+        }));
+        break;
+        
+      case 'fleet_updated':
+        setRealTimeData(prev => ({
+          ...prev,
+          fleetData: message.fleet
+        }));
+        break;
+        
+      case 'armada_order_executed':
+        console.log('🚢 Fleet order executed:', message.result);
+        break;
+        
+      default:
+        console.log('📦 Unhandled message type:', message.type);
+    }
+  }, []);
+
+  // Initialize WebSocket connection
+  const { connected: wsConnected, error: wsError } = useWebSocket(handleWebSocketMessage);
 
   // Handle mission dispatch to trigger instant refresh in MissionLog
   const handleMissionDispatch = (missionData) => {
@@ -75,13 +128,20 @@ const App = () => {
             <div className="status-item">🛰️ Agents Online: <span className="status-value">{status.agentsOnline}</span></div>
             <div className="status-item">📡 Active Missions: <span className="status-value">{status.activeMissions}</span></div>
             <div className="status-item">⚓ Admiral: <span className="status-value">{status.admiral}</span></div>
+            <div className="status-item">🔌 WebSocket: 
+              <span className={`status-value ${wsConnected ? 'connected' : 'disconnected'}`}>
+                {wsConnected ? '🟢 Live' : '🔴 Offline'}
+              </span>
+            </div>
           </header>
 
-          {connectionError && (
+          {(connectionError || wsError) && (
             <div className="error-banner">
               <span className="error-icon">⚠️</span>
-              <span className="error-message">{connectionError}</span>
-              <span className="error-info">Please check your internet connection and try refreshing the page.</span>
+              <span className="error-message">{connectionError || wsError}</span>
+              <span className="error-info">
+                {wsConnected ? 'REST API issue' : 'Real-time features may be limited'}
+              </span>
             </div>
           )}
 
@@ -94,14 +154,14 @@ const App = () => {
 
           <div className="main-content">
             <Routes>
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/" element={<Dashboard realTimeData={realTimeData} />} />
               <Route path="/controls" element={<MissionControls onMissionDispatch={handleMissionDispatch} />} />
               <Route path="/agents" element={<Agents />} />
-              <Route path="/chat" element={<CaptainsChat />} />
-              <Route path="/vault" element={<VaultLogs />} />
-              <Route path="/missions" element={<MissionLog refreshKey={missionRefreshKey} />} />
-              <Route path="/armada" element={<ArmadaMap />} />
-              <Route path="/captains" element={<CaptainToCaptain />} />
+              <Route path="/chat" element={<CaptainsChat realTimeMessages={realTimeData.chatMessages} />} />
+              <Route path="/vault" element={<VaultLogs realTimeLogs={realTimeData.vaultLogs} />} />
+              <Route path="/missions" element={<MissionLog refreshKey={missionRefreshKey} realTimeMissions={realTimeData.missions} />} />
+              <Route path="/armada" element={<ArmadaMap realTimeFleet={realTimeData.fleetData} />} />
+              <Route path="/captains" element={<CaptainToCaptain realTimeMessages={realTimeData.chatMessages} />} />
             </Routes>
           </div>
         </div>

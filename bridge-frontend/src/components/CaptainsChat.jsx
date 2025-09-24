@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { getCaptainMessages, sendCaptainMessage } from '../api';
 import { usePolling } from '../hooks/usePolling';
 
-const CaptainsChat = () => {
+const CaptainsChat = ({ realTimeMessages = [] }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const messagesEndRef = useRef(null);
@@ -12,8 +12,7 @@ const CaptainsChat = () => {
   };
 
   /**
-   * Optimized message fetching for chat functionality
-   * Handles message state management efficiently
+   * Enhanced message fetching with real-time integration
    */
   const fetchMessages = async () => {
     const data = await getCaptainMessages();
@@ -22,15 +21,33 @@ const CaptainsChat = () => {
   };
 
   /**
-   * Use 30-second polling for chat messages
-   * While chat might benefit from more frequent updates, 30 seconds provides
-   * a good balance between real-time feel and network efficiency.
-   * Manual refresh is available for immediate updates when needed.
+   * Merge real-time messages with fetched messages
+   */
+  useEffect(() => {
+    if (realTimeMessages.length > 0) {
+      setMessages(prevMessages => {
+        const existingIds = new Set(prevMessages.map(msg => msg.id));
+        const newMessages = realTimeMessages.filter(msg => !existingIds.has(msg.id));
+        
+        if (newMessages.length > 0) {
+          const combined = [...newMessages, ...prevMessages]
+            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+            .slice(0, 50); // Keep last 50 messages
+          
+          return combined;
+        }
+        return prevMessages;
+      });
+    }
+  }, [realTimeMessages]);
+
+  /**
+   * Reduced polling due to real-time updates
    */
   const { loading, error, refresh } = usePolling(fetchMessages, {
-    interval: 30000, // 30 seconds - balanced for chat monitoring with manual refresh option
+    interval: 90000, // 90 seconds - reduced due to real-time updates
     immediate: true,
-    debounceDelay: 100 // Shorter debounce for chat for more responsive feel
+    debounceDelay: 100
   });
 
   // Auto-scroll to bottom when messages update

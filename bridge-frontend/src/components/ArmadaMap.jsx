@@ -1,47 +1,77 @@
-import React, { useState } from 'react';
-import { getFleetData } from '../api';
+import React, { useState, useEffect } from 'react';
+import { getArmadaStatus } from '../api';
 import { usePolling } from '../hooks/usePolling';
 
-const ArmadaMap = () => {
-  const [fleet, setFleet] = useState([]);
+const ArmadaMap = ({ realTimeFleet = [] }) => {
+  const [fleetData, setFleetData] = useState({ fleet: [], summary: {} });
 
   /**
-   * Optimized fleet data fetching function
-   * Manages fleet data with proper error handling
+   * Enhanced fleet data fetching with full armada status
    */
   const fetchFleetData = async () => {
-    const data = await getFleetData();
-    setFleet(data);
+    const data = await getArmadaStatus();
+    setFleetData(data);
     return data;
   };
 
   /**
-   * Use 30-second polling for fleet status updates
-   * Fleet positions and status don't require high-frequency updates,
-   * making 30-second intervals optimal for network efficiency
+   * Merge real-time fleet updates
+   */
+  useEffect(() => {
+    if (realTimeFleet.length > 0) {
+      setFleetData(prevData => ({
+        ...prevData,
+        fleet: realTimeFleet,
+        summary: {
+          ...prevData.summary,
+          last_updated: new Date().toISOString()
+        }
+      }));
+    }
+  }, [realTimeFleet]);
+
+  /**
+   * Reduced polling frequency due to real-time updates
    */
   const { loading, error, refresh } = usePolling(fetchFleetData, {
-    interval: 30000, // 30 seconds - balanced refresh rate for fleet monitoring
+    interval: 90000, // 90 seconds - reduced due to real-time updates
     immediate: true,
     debounceDelay: 200
   });
 
-  // Utility function for fleet status visualization
+  // Utility functions for fleet visualization
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
       case 'online': return '#00ff00';
       case 'offline': return '#ff4444';
       case 'maintenance': return '#ffaa00';
-      case 'mission': return '#00aaff';
+      case 'patrol': return '#00aaff';
       default: return '#888';
     }
   };
 
-  if (loading) {
+  const getStatusIcon = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'online': return '🟢';
+      case 'offline': return '🔴';
+      case 'maintenance': return '🟡';
+      case 'patrol': return '🔵';
+      default: return '⚪';
+    }
+  };
+
+  const getShipIcon = (name) => {
+    if (name.toLowerCase().includes('flagship')) return '🚀';
+    if (name.toLowerCase().includes('frigate')) return '🛳️';
+    if (name.toLowerCase().includes('scout')) return '🛸';
+    return '⚓';
+  };
+
+  if (loading && fleetData.fleet.length === 0) {
     return (
       <div className="armada-map">
         <h2>🗺️ Armada Map</h2>
-        <div className="loading">Loading fleet data...</div>
+        <div className="loading">Connecting to fleet command...</div>
       </div>
     );
   }
@@ -50,60 +80,103 @@ const ArmadaMap = () => {
     return (
       <div className="armada-map">
         <h2>🗺️ Armada Map</h2>
-        <div className="error">Error loading fleet: {error}</div>
-        <button onClick={refresh} className="retry-button">Retry</button>
+        <div className="error">Error connecting to fleet: {error}</div>
+        <button onClick={refresh} className="retry-button">🔄 Reconnect</button>
       </div>
     );
   }
+
+  const { fleet = [], summary = {} } = fleetData;
 
   return (
     <div className="armada-map">
       <div className="header">
         <h2>🗺️ Armada Map</h2>
-        {/* Manual refresh for immediate fleet status updates */}
-        <button onClick={refresh} className="refresh-button">🔄 Refresh</button>
+        <div className="header-info">
+          <span className="live-indicator">🔴 LIVE</span>
+          <button onClick={refresh} className="refresh-button">🔄 Refresh</button>
+        </div>
       </div>
+      
+      {summary.total_ships && (
+        <div className="fleet-summary">
+          <div className="summary-stats">
+            <div className="stat-item">
+              <span className="stat-value">{summary.total_ships}</span>
+              <span className="stat-label">Total Ships</span>
+            </div>
+            <div className="stat-item online">
+              <span className="stat-value">{summary.online}</span>
+              <span className="stat-label">Online</span>
+            </div>
+            <div className="stat-item patrol">
+              <span className="stat-value">{summary.patrol}</span>
+              <span className="stat-label">Patrol</span>
+            </div>
+            <div className="stat-item offline">
+              <span className="stat-value">{summary.offline}</span>
+              <span className="stat-label">Offline</span>
+            </div>
+          </div>
+        </div>
+      )}
       
       <div className="fleet-container">
         {fleet.length === 0 ? (
-          <div className="no-fleet">No fleet data available</div>
+          <div className="no-fleet">
+            <div className="placeholder-icon">🚢</div>
+            <div>Waiting for fleet data...</div>
+            <div className="subtitle">Live fleet tracking is active</div>
+          </div>
         ) : (
           <div className="fleet-grid">
             {fleet.map((ship) => (
-              <div key={ship.id} className="ship-card">
+              <div 
+                key={ship.id} 
+                className={`ship-card ${ship.operational ? 'operational' : 'non-operational'}`}
+              >
                 <div className="ship-header">
-                  <h3 className="ship-name">{ship.name}</h3>
-                  <span 
-                    className="status-indicator" 
-                    style={{ color: getStatusColor(ship.status) }}
-                  >
-                    ● {ship.status?.toUpperCase()}
-                  </span>
+                  <div className="ship-title">
+                    <span className="ship-icon">{getShipIcon(ship.name)}</span>
+                    <h3 className="ship-name">{ship.name}</h3>
+                  </div>
+                  <div className="status-section">
+                    <span className="status-icon">{getStatusIcon(ship.status)}</span>
+                    <span 
+                      className="status-text" 
+                      style={{ color: getStatusColor(ship.status) }}
+                    >
+                      {ship.status?.toUpperCase()}
+                    </span>
+                  </div>
                 </div>
                 <div className="ship-details">
                   <div className="detail-row">
-                    <span className="label">Type:</span>
-                    <span className="value">{ship.type}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="label">Location:</span>
+                    <span className="label">📍 Location:</span>
                     <span className="value">{ship.location}</span>
                   </div>
-                  <div className="detail-row">
-                    <span className="label">Captain:</span>
-                    <span className="value">{ship.captain}</span>
-                  </div>
-                  {ship.mission && (
+                  {ship.patrol_sectors && ship.patrol_sectors.length > 0 && (
                     <div className="detail-row">
-                      <span className="label">Mission:</span>
-                      <span className="value">{ship.mission}</span>
+                      <span className="label">🎯 Patrol:</span>
+                      <span className="value">{ship.patrol_sectors.join(', ')}</span>
                     </div>
                   )}
+                  <div className="detail-row">
+                    <span className="label">📡 Last Report:</span>
+                    <span className="value">{new Date(ship.last_reported).toLocaleTimeString()}</span>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         )}
+      </div>
+      
+      <div className="fleet-footer">
+        <div className="status-info">
+          Last updated: {summary.last_updated ? new Date(summary.last_updated).toLocaleString() : 'Live'} | 
+          Real-time tracking: Active
+        </div>
       </div>
     </div>
   );

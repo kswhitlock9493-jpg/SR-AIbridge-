@@ -46,7 +46,10 @@ const Dashboard = () => {
   // Helper functions for data processing
   const getOnlineAgents = () => agents.filter(a => a.status === 'online').length;
   const getActiveMissions = () => missions.filter(m => m.status === 'active').length;
-  const getOnlineShips = () => fleet.filter(s => s.status === 'online').length;
+  const getOnlineShips = () => {
+    const fleetArray = fleet?.fleet || fleet || [];
+    return Array.isArray(fleetArray) ? fleetArray.filter(s => s.status === 'online').length : 0;
+  };
   const getRecentLogs = () => logs.slice(0, 5);
 
   if (loading) {
@@ -95,7 +98,7 @@ const Dashboard = () => {
             </div>
             <div className="status-item">
               <span className="label">Fleet Online:</span>
-              <span className="value online">{getOnlineShips()}/{fleet.length}</span>
+              <span className="value online">{getOnlineShips()}/{(fleet?.fleet || fleet || []).length}</span>
             </div>
           </div>
         </div>
@@ -134,7 +137,7 @@ const Dashboard = () => {
         <div className="dashboard-card fleet-status">
           <h3>🗺️ Fleet Status</h3>
           <div className="fleet-summary">
-            {fleet.slice(0, 4).map((ship) => (
+            {(fleet?.fleet || fleet || []).slice(0, 4).map((ship) => (
               <div key={ship.id} className="fleet-item">
                 <div className="ship-name">{ship.name}</div>
                 <div className="ship-details">

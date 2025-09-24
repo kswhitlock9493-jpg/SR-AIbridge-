@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { getMissions } from '../api';
 import { usePolling } from '../hooks/usePolling';
 
-const MissionLog = ({ refreshKey }) => {
+const MissionLog = ({ refreshKey, realTimeMissions = [] }) => {
   const [missions, setMissions] = useState([]);
 
   /**
-   * Optimized mission data fetching with proper state management
-   * Centralizes mission data handling for better maintainability
+   * Enhanced mission data fetching with real-time integration
    */
   const fetchMissions = async () => {
     const data = await getMissions();
@@ -16,12 +15,29 @@ const MissionLog = ({ refreshKey }) => {
   };
 
   /**
-   * Implement 30-second polling for mission updates
-   * Missions typically don't change as frequently as other data,
-   * so reduced polling frequency improves performance while maintaining freshness
+   * Merge real-time mission updates with API data
+   */
+  useEffect(() => {
+    if (realTimeMissions.length > 0) {
+      setMissions(prevMissions => {
+        const missionMap = new Map(prevMissions.map(m => [m.id, m]));
+        
+        // Update with real-time data
+        realTimeMissions.forEach(rtMission => {
+          missionMap.set(rtMission.id, { ...missionMap.get(rtMission.id), ...rtMission });
+        });
+        
+        return Array.from(missionMap.values())
+          .sort((a, b) => new Date(b.updated_at || b.created_at) - new Date(a.updated_at || a.created_at));
+      });
+    }
+  }, [realTimeMissions]);
+
+  /**
+   * Reduced polling frequency due to real-time updates
    */
   const { loading, error, refresh } = usePolling(fetchMissions, {
-    interval: 30000, // 30 seconds - appropriate for mission status monitoring
+    interval: 60000, // 60 seconds - reduced due to real-time updates
     immediate: true,
     debounceDelay: 200
   });

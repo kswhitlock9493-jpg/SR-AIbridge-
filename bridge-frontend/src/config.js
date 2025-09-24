@@ -1,6 +1,7 @@
 const config = {
-  // Use React environment variable in production, fallback to production backend for deployment
-  API_BASE_URL: process.env.REACT_APP_API_URL || "https://sr-aibridge.onrender.com"
+  // Use localhost for development, production backend for deployment
+  API_BASE_URL: process.env.REACT_APP_API_URL || 
+    (process.env.NODE_ENV === 'development' ? "http://localhost:8000" : "https://sr-aibridge.onrender.com")
 };
 
 export default config;
