@@ -12,6 +12,8 @@ const ArmadaMap = () => {
   } = useBridge();
   
   const [displayFleet, setDisplayFleet] = useState({ fleet: [], summary: {} });
+  const [refreshError, setRefreshError] = useState(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   /**
    * Update display fleet with real-time data
@@ -32,6 +34,24 @@ const ArmadaMap = () => {
       console.log('📡 Real-time fleet updates available:', realTimeFleet.length);
     }
   }, [armadaStatus, fleetData, realTimeData.fleetData]);
+
+  /**
+   * Enhanced refresh with error handling
+   */
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    setRefreshError(null);
+    
+    try {
+      await refreshData('armada');
+      setRefreshError(null);
+    } catch (err) {
+      console.error('Failed to refresh armada data:', err);
+      setRefreshError(err.message || 'Failed to refresh fleet data');
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   // Utility functions for fleet visualization
   const getStatusColor = (status) => {
@@ -65,32 +85,63 @@ const ArmadaMap = () => {
     return (
       <div className="armada-map">
         <h2>🗺️ Armada Map</h2>
-        <div className="loading">Connecting to fleet command...</div>
+        <div className="loading">
+          <div className="loading-spinner"></div>
+          Connecting to fleet command...
+        </div>
       </div>
     );
   }
 
-  if (error) {
+  if (error && displayFleet.fleet.length === 0) {
     return (
       <div className="armada-map">
         <h2>🗺️ Armada Map</h2>
-        <div className="error">Error connecting to fleet: {error}</div>
-        <button onClick={() => refreshData('armada')} className="retry-button">🔄 Reconnect</button>
+        <div className="error-state">
+          <div className="error-icon">⚠️</div>
+          <div className="error-message">Error connecting to fleet: {error}</div>
+          <div className="error-actions">
+            <button onClick={handleRefresh} className="retry-button" disabled={isRefreshing}>
+              {isRefreshing ? '⏳ Reconnecting...' : '🔄 Reconnect'}
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
 
-  const { fleet = [], summary = {} } = armadaStatus;
+  const { fleet = [], summary = {} } = displayFleet;
+  const hasRealTimeData = realTimeData.fleetData && realTimeData.fleetData.length > 0;
 
   return (
     <div className="armada-map">
       <div className="header">
         <h2>🗺️ Armada Map</h2>
         <div className="header-info">
-          <span className="live-indicator">🔴 LIVE</span>
-          <button onClick={() => refreshData('armada')} className="refresh-button">🔄 Refresh</button>
+          <span className={`live-indicator ${hasRealTimeData ? 'live' : 'polling'}`}>
+            {hasRealTimeData ? '🔴 LIVE' : '📡 POLLING'}
+          </span>
+          <button 
+            onClick={handleRefresh} 
+            className="refresh-button"
+            disabled={isRefreshing}
+            title="Refresh fleet data"
+          >
+            {isRefreshing ? '⏳' : '🔄'} Refresh
+          </button>
         </div>
       </div>
+      
+      {/* Display refresh error if any */}
+      {refreshError && (
+        <div className="refresh-error">
+          <span className="error-icon">⚠️</span>
+          <span className="error-message">{refreshError}</span>
+          <button onClick={handleRefresh} className="error-retry" disabled={isRefreshing}>
+            🔄 Retry
+          </button>
+        </div>
+      )}
       
       {summary.total_ships && (
         <div className="fleet-summary">
@@ -119,8 +170,10 @@ const ArmadaMap = () => {
         {fleet.length === 0 ? (
           <div className="no-fleet">
             <div className="placeholder-icon">🚢</div>
-            <div>Waiting for fleet data...</div>
-            <div className="subtitle">Live fleet tracking is active</div>
+            <div className="placeholder-title">Waiting for fleet data...</div>
+            <div className="placeholder-subtitle">
+              {hasRealTimeData ? 'Live fleet tracking is active' : 'Checking fleet status...'}
+            </div>
           </div>
         ) : (
           <div className="fleet-grid">
@@ -157,8 +210,21 @@ const ArmadaMap = () => {
                   )}
                   <div className="detail-row">
                     <span className="label">📡 Last Report:</span>
-                    <span className="value">{new Date(ship.last_reported).toLocaleTimeString()}</span>
+                    <span className="value">
+                      {ship.last_reported ? 
+                        new Date(ship.last_reported).toLocaleTimeString() : 
+                        'Unknown'
+                      }
+                    </span>
                   </div>
+                  {ship.operational !== undefined && (
+                    <div className="detail-row">
+                      <span className="label">⚙️ Operational:</span>
+                      <span className={`value ${ship.operational ? 'operational' : 'non-operational'}`}>
+                        {ship.operational ? '✅ Yes' : '❌ No'}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -168,8 +234,20 @@ const ArmadaMap = () => {
       
       <div className="fleet-footer">
         <div className="status-info">
-          Last updated: {summary.last_updated ? new Date(summary.last_updated).toLocaleString() : 'Live'} | 
-          Real-time tracking: Active
+          <span>
+            Last updated: {summary.last_updated ? 
+              new Date(summary.last_updated).toLocaleString() : 
+              'Live'
+            }
+          </span>
+          <span className="separator">|</span>
+          <span>
+            Real-time tracking: {hasRealTimeData ? 'Active' : 'Polling'}
+          </span>
+          <span className="separator">|</span>
+          <span>
+            Fleet count: {fleet.length}
+          </span>
         </div>
       </div>
     </div>

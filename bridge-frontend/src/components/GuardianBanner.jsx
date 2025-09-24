@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { getGuardianStatus, runGuardianSelftest, activateGuardian } from '../api';
+import { getGuardianStatus, runGuardianSelftest, activateGuardian, getSystemHealthFull } from '../api';
 
 /**
  * GuardianBanner - Always-visible notification bar showing Guardian PASS/FAIL/Unknown status
- * Polls the backend /guardian/status endpoint for live status updates every 5 seconds
+ * Polls the backend /guardian/status and /health/full endpoints for comprehensive system status
+ * Enhanced with full system health monitoring and database status
  */
 const GuardianBanner = () => {
   const [guardianStatus, setGuardianStatus] = useState({
@@ -16,6 +17,12 @@ const GuardianBanner = () => {
     next_selftest: null
   });
   
+  const [systemHealth, setSystemHealth] = useState({
+    status: 'unknown',
+    database_health: { status: 'unknown' },
+    components: {}
+  });
+  
   const [loading, setLoading] = useState({
     selftest: false,
     activate: false
@@ -23,25 +30,32 @@ const GuardianBanner = () => {
   
   const [error, setError] = useState(null);
 
-  // Poll Guardian status from backend every 5 seconds
+  // Poll Guardian status and system health from backend every 5 seconds
   useEffect(() => {
-    const fetchGuardianStatus = async () => {
+    const fetchStatus = async () => {
       try {
-        const data = await getGuardianStatus();
-        setGuardianStatus(data);
+        // Fetch both guardian status and system health
+        const [guardianData, healthData] = await Promise.all([
+          getGuardianStatus().catch(() => ({ status: 'Unknown', active: false })),
+          getSystemHealthFull().catch(() => ({ status: 'unknown', components: {}, database_health: { status: 'unknown' } }))
+        ]);
+        
+        setGuardianStatus(guardianData);
+        setSystemHealth(healthData);
         setError(null); // Clear any previous errors
       } catch (error) {
-        console.error('Guardian status fetch error:', error);
-        setError('Failed to fetch Guardian status');
+        console.error('Status fetch error:', error);
+        setError('Failed to fetch system status');
         setGuardianStatus(prev => ({ ...prev, status: 'Unknown', active: false }));
+        setSystemHealth(prev => ({ ...prev, status: 'unhealthy' }));
       }
     };
 
     // Initial fetch
-    fetchGuardianStatus();
+    fetchStatus();
 
     // Poll every 5 seconds for live updates
-    const interval = setInterval(fetchGuardianStatus, 5000);
+    const interval = setInterval(fetchStatus, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -54,8 +68,12 @@ const GuardianBanner = () => {
       const result = await runGuardianSelftest();
       console.log('Self-test result:', result);
       // Refresh status immediately after self-test
-      const updatedStatus = await getGuardianStatus();
-      setGuardianStatus(updatedStatus);
+      const [updatedGuardian, updatedHealth] = await Promise.all([
+        getGuardianStatus(),
+        getSystemHealthFull()
+      ]);
+      setGuardianStatus(updatedGuardian);
+      setSystemHealth(updatedHealth);
     } catch (error) {
       console.error('Self-test error:', error);
       setError('Failed to run self-test');
@@ -72,8 +90,12 @@ const GuardianBanner = () => {
       const result = await activateGuardian();
       console.log('Activation result:', result);
       // Refresh status immediately after activation
-      const updatedStatus = await getGuardianStatus();
-      setGuardianStatus(updatedStatus);
+      const [updatedGuardian, updatedHealth] = await Promise.all([
+        getGuardianStatus(),
+        getSystemHealthFull()
+      ]);
+      setGuardianStatus(updatedGuardian);
+      setSystemHealth(updatedHealth);
     } catch (error) {
       console.error('Activation error:', error);
       setError('Failed to activate Guardian');
@@ -86,14 +108,20 @@ const GuardianBanner = () => {
     switch (status) {
       case 'PASS': return '✅';
       case 'FAIL': return '❌';
+      case 'healthy': return '💚';
+      case 'degraded': return '⚠️';
+      case 'unhealthy': return '❌';
       default: return '❓';
     }
   };
 
   const getStatusClass = (status) => {
     switch (status) {
-      case 'PASS': return 'guardian-banner-pass';
-      case 'FAIL': return 'guardian-banner-fail';
+      case 'PASS':
+      case 'healthy': return 'guardian-banner-pass';
+      case 'FAIL':
+      case 'unhealthy': return 'guardian-banner-fail';
+      case 'degraded': return 'guardian-banner-degraded';
       default: return 'guardian-banner-unknown';
     }
   };
@@ -110,14 +138,24 @@ const GuardianBanner = () => {
     return `${diffHours}h ${diffMins % 60}m ago`;
   };
 
+  // Determine overall system status
+  const overallStatus = systemHealth.status || guardianStatus.status;
+  const dbStatus = systemHealth.database_health?.status || 'unknown';
+
   return (
-    <div className={`guardian-banner ${getStatusClass(guardianStatus.status)}`}>
+    <div className={`guardian-banner ${getStatusClass(overallStatus)}`}>
       <div className="guardian-banner-content">
         <span className="guardian-banner-icon">
           🛡️ {getStatusIcon(guardianStatus.status)}
         </span>
         <span className="guardian-banner-text">
           <strong>GUARDIAN:</strong> {guardianStatus.status}
+        </span>
+        <span className="guardian-banner-system">
+          <strong>SYS:</strong> {getStatusIcon(systemHealth.status)} {systemHealth.status?.toUpperCase()}
+        </span>
+        <span className="guardian-banner-database">
+          <strong>DB:</strong> {getStatusIcon(dbStatus)} {dbStatus?.toUpperCase()}
         </span>
         <span className="guardian-banner-timestamp">
           {guardianStatus.last_selftest ? (
@@ -147,6 +185,11 @@ const GuardianBanner = () => {
         {guardianStatus.active && (
           <span className="guardian-banner-active">
             🔄 Active
+          </span>
+        )}
+        {systemHealth.metrics?.using_async_db && (
+          <span className="guardian-banner-db-type">
+            📊 AsyncDB
           </span>
         )}
       </div>
