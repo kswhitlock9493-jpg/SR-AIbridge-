@@ -1,9 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getCaptainMessages, sendCaptainMessage } from '../api';
-import { usePolling } from '../hooks/usePolling';
+import { sendCaptainMessage } from '../api';
+import { useBridge } from '../hooks/useBridge';
 
-const CaptainsChat = ({ realTimeMessages = [] }) => {
-  const [messages, setMessages] = useState([]);
+const CaptainsChat = () => {
+  const { 
+    captainMessages: messages, 
+    realTimeData, 
+    loading, 
+    error, 
+    refreshData 
+  } = useBridge();
+  
   const [input, setInput] = useState('');
   const messagesEndRef = useRef(null);
 
@@ -12,48 +19,15 @@ const CaptainsChat = ({ realTimeMessages = [] }) => {
   };
 
   /**
-   * Enhanced message fetching with real-time integration
-   */
-  const fetchMessages = async () => {
-    const data = await getCaptainMessages();
-    setMessages(data);
-    return data;
-  };
-
-  /**
-   * Merge real-time messages with fetched messages
+   * Handle real-time message updates and scroll to bottom
    */
   useEffect(() => {
+    const realTimeMessages = realTimeData.chatMessages || [];
     if (realTimeMessages.length > 0) {
-      setMessages(prevMessages => {
-        const existingIds = new Set(prevMessages.map(msg => msg.id));
-        const newMessages = realTimeMessages.filter(msg => !existingIds.has(msg.id));
-        
-        if (newMessages.length > 0) {
-          const combined = [...newMessages, ...prevMessages]
-            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-            .slice(0, 50); // Keep last 50 messages
-          
-          return combined;
-        }
-        return prevMessages;
-      });
+      console.log('📡 Real-time chat messages available:', realTimeMessages.length);
     }
-  }, [realTimeMessages]);
-
-  /**
-   * Reduced polling due to real-time updates
-   */
-  const { loading, error, refresh } = usePolling(fetchMessages, {
-    interval: 90000, // 90 seconds - reduced due to real-time updates
-    immediate: true,
-    debounceDelay: 100
-  });
-
-  // Auto-scroll to bottom when messages update
-  useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, realTimeData.chatMessages]);
 
   /**
    * Handle message sending with optimized refresh
@@ -73,7 +47,7 @@ const CaptainsChat = ({ realTimeMessages = [] }) => {
       setInput('');
       
       // Refresh messages immediately after sending for instant update
-      await refresh();
+      await refreshData('messages');
     } catch (err) {
       console.error('Failed to send message:', err);
       // Error handling is managed by the polling hook
@@ -98,7 +72,7 @@ const CaptainsChat = ({ realTimeMessages = [] }) => {
       <div className="header">
         <h2>💬 Captains Chat</h2>
         {/* Manual refresh for immediate message updates */}
-        <button onClick={refresh} className="refresh-button">🔄 Refresh</button>
+        <button onClick={() => refreshData('messages')} className="refresh-button">🔄 Refresh</button>
       </div>
       
       {error && (

@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { getMissions, createMission, updateMissionStatus } from '../api';
-import { usePolling } from '../hooks/usePolling';
+import { createMission, updateMissionStatus } from '../api';
+import { useBridge } from '../hooks/useBridge';
 
-const MissionLog = ({ refreshKey, realTimeMissions = [] }) => {
-  const [missions, setMissions] = useState([]);
+const MissionLog = ({ refreshKey }) => {
+  const { 
+    missions, 
+    realTimeData, 
+    loading, 
+    error, 
+    refreshData 
+  } = useBridge();
+  
   const [filteredMissions, setFilteredMissions] = useState([]);
   const [filters, setFilters] = useState({
     status: 'all',
@@ -20,32 +27,15 @@ const MissionLog = ({ refreshKey, realTimeMissions = [] }) => {
   const [sortOrder, setSortOrder] = useState('desc');
 
   /**
-   * Enhanced mission data fetching with real-time integration
-   */
-  const fetchMissions = async () => {
-    const data = await getMissions();
-    setMissions(data);
-    return data;
-  };
-
-  /**
    * Merge real-time mission updates with API data
    */
   useEffect(() => {
+    const realTimeMissions = realTimeData.missions || [];
     if (realTimeMissions.length > 0) {
-      setMissions(prevMissions => {
-        const missionMap = new Map(prevMissions.map(m => [m.id, m]));
-        
-        // Update with real-time data
-        realTimeMissions.forEach(rtMission => {
-          missionMap.set(rtMission.id, { ...missionMap.get(rtMission.id), ...rtMission });
-        });
-        
-        return Array.from(missionMap.values())
-          .sort((a, b) => new Date(b.updated_at || b.created_at) - new Date(a.updated_at || a.created_at));
-      });
+      // Real-time updates are already managed by the bridge context
+      console.log('📡 Real-time mission updates available:', realTimeMissions.length);
     }
-  }, [realTimeMissions]);
+  }, [realTimeData.missions]);
 
   /**
    * Apply filters and sorting to missions
@@ -90,21 +80,12 @@ const MissionLog = ({ refreshKey, realTimeMissions = [] }) => {
     setFilteredMissions(filtered);
   }, [missions, filters, sortBy, sortOrder]);
 
-  /**
-   * Reduced polling frequency due to real-time updates
-   */
-  const { loading, error, refresh } = usePolling(fetchMissions, {
-    interval: 60000, // 60 seconds - reduced due to real-time updates
-    immediate: true,
-    debounceDelay: 200
-  });
-
   // Support instant refresh when new missions are dispatched via refreshKey prop
   useEffect(() => {
     if (refreshKey) {
-      refresh();
+      refreshData('missions');
     }
-  }, [refreshKey, refresh]);
+  }, [refreshKey, refreshData]);
 
   /**
    * Handle creating new mission
@@ -122,7 +103,7 @@ const MissionLog = ({ refreshKey, realTimeMissions = [] }) => {
       
       setNewMission({ title: '', description: '', priority: 'medium' });
       setShowCreateForm(false);
-      await refresh(); // Refresh missions list
+      await refreshData('missions'); // Refresh missions list
     } catch (err) {
       console.error('Failed to create mission:', err);
     }
@@ -134,7 +115,7 @@ const MissionLog = ({ refreshKey, realTimeMissions = [] }) => {
   const handleStatusUpdate = async (missionId, newStatus) => {
     try {
       await updateMissionStatus(missionId, newStatus);
-      await refresh(); // Refresh missions list
+      await refreshData('missions'); // Refresh missions list
     } catch (err) {
       console.error('Failed to update mission status:', err);
     }
@@ -193,7 +174,7 @@ const MissionLog = ({ refreshKey, realTimeMissions = [] }) => {
       <div className="mission-log">
         <h2>🚀 Mission Log</h2>
         <div className="error">Error loading missions: {error}</div>
-        <button onClick={refresh} className="retry-button">Retry</button>
+        <button onClick={() => refreshData('missions')} className="retry-button">Retry</button>
       </div>
     );
   }
@@ -207,7 +188,7 @@ const MissionLog = ({ refreshKey, realTimeMissions = [] }) => {
           <button onClick={() => setShowCreateForm(!showCreateForm)} className="create-button">
             ➕ New Mission
           </button>
-          <button onClick={refresh} className="refresh-button">🔄 Refresh</button>
+          <button onClick={() => refreshData('missions')} className="refresh-button">🔄 Refresh</button>
         </div>
       </div>
 

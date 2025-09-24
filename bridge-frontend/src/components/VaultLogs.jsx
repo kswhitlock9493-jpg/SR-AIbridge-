@@ -1,47 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { getVaultLogs } from '../api';
-import { usePolling } from '../hooks/usePolling';
+import { useBridge } from '../hooks/useBridge';
 
-const VaultLogs = ({ realTimeLogs = [] }) => {
-  const [logs, setLogs] = useState([]);
-
-  /**
-   * Enhanced data fetching that combines API data with real-time updates
-   */
-  const fetchLogs = async () => {
-    const data = await getVaultLogs();
-    setLogs(data);
-    return data;
-  };
+const VaultLogs = () => {
+  const { 
+    vaultLogs: logs, 
+    realTimeData, 
+    loading, 
+    error, 
+    refreshData 
+  } = useBridge();
+  
+  const [filteredLogs, setFilteredLogs] = useState([]);
 
   /**
-   * Merge real-time logs with fetched logs, avoiding duplicates
+   * Update filtered logs with real-time data
    */
   useEffect(() => {
+    const realTimeLogs = realTimeData.vaultLogs || [];
+    // Real-time updates are already managed by the bridge context
     if (realTimeLogs.length > 0) {
-      setLogs(prevLogs => {
-        const existingIds = new Set(prevLogs.map(log => log.id));
-        const newLogs = realTimeLogs.filter(log => !existingIds.has(log.id));
-        
-        // Combine and sort by timestamp (newest first)
-        const combined = [...newLogs, ...prevLogs]
-          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-          .slice(0, 100); // Keep only last 100 logs for performance
-        
-        return combined;
-      });
+      console.log('📡 Real-time vault logs available:', realTimeLogs.length);
     }
-  }, [realTimeLogs]);
-
-  /**
-   * Use reduced polling frequency since we have real-time updates
-   * Still poll periodically to ensure data consistency
-   */
-  const { loading, error, refresh } = usePolling(fetchLogs, {
-    interval: 60000, // 60 seconds - reduced frequency due to real-time updates
-    immediate: true,
-    debounceDelay: 200
-  });
+    
+    // Set filtered logs to all logs for now (can add filtering later)
+    setFilteredLogs(logs);
+  }, [logs, realTimeData.vaultLogs]);
 
   // Utility functions for log formatting
   const getLevelColor = (level) => {
@@ -71,7 +54,7 @@ const VaultLogs = ({ realTimeLogs = [] }) => {
     }
   };
 
-  if (loading && logs.length === 0) {
+  if (loading && filteredLogs.length === 0) {
     return (
       <div className="vault-logs">
         <h2>📜 Vault Logs</h2>
@@ -85,7 +68,7 @@ const VaultLogs = ({ realTimeLogs = [] }) => {
       <div className="vault-logs">
         <h2>📜 Vault Logs</h2>
         <div className="error">Error connecting to logs: {error}</div>
-        <button onClick={refresh} className="retry-button">🔄 Reconnect</button>
+        <button onClick={() => refreshData('vault')} className="retry-button">🔄 Reconnect</button>
       </div>
     );
   }
@@ -96,12 +79,12 @@ const VaultLogs = ({ realTimeLogs = [] }) => {
         <h2>📜 Vault Logs</h2>
         <div className="header-info">
           <span className="live-indicator">🔴 LIVE</span>
-          <button onClick={refresh} className="refresh-button">🔄 Refresh</button>
+          <button onClick={() => refreshData('vault')} className="refresh-button">🔄 Refresh</button>
         </div>
       </div>
       
       <div className="logs-container">
-        {logs.length === 0 ? (
+        {filteredLogs.length === 0 ? (
           <div className="no-logs">
             <div className="placeholder-icon">📡</div>
             <div>Waiting for vault logs...</div>
@@ -109,7 +92,7 @@ const VaultLogs = ({ realTimeLogs = [] }) => {
           </div>
         ) : (
           <div className="logs-list">
-            {logs.map((log, index) => (
+            {filteredLogs.map((log, index) => (
               <div 
                 key={`${log.id}-${index}`} 
                 className={`log-entry ${index < 3 ? 'recent' : ''}`}
@@ -135,7 +118,7 @@ const VaultLogs = ({ realTimeLogs = [] }) => {
       
       <div className="logs-footer">
         <div className="status-info">
-          Total logs: {logs.length} | Real-time updates: Active
+          Total logs: {filteredLogs.length} | Real-time updates: Active
         </div>
       </div>
     </div>
