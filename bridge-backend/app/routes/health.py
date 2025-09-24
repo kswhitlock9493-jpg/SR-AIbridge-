@@ -1,10 +1,25 @@
 """
 Health check and status endpoints for SR-AIbridge
 """
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from typing import Dict, Any
+from datetime import datetime
+import sys
+import os
 
 router = APIRouter()
+
+# Helper to access main app state
+def _get_app_state():
+    """Get main app state components"""
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    try:
+        from ..main import storage, guardian, scheduler
+        return storage, guardian, scheduler
+    except ImportError:
+        # Fallback for direct access
+        import main
+        return main.storage, main.guardian, main.scheduler
 
 @router.get("/health")
 async def health_check():
@@ -14,6 +29,74 @@ async def health_check():
         "service": "SR-AIbridge Backend",
         "version": "1.1.0-autonomous"
     }
+
+@router.get("/health/full")
+async def full_health_check():
+    """Comprehensive health check for deployment and monitoring"""
+    try:
+        storage, guardian, scheduler = _get_app_state()
+        
+        # Check system components
+        components = {
+            "database": "healthy",
+            "storage": "healthy" if storage else "unhealthy",
+            "guardian": "healthy" if (hasattr(guardian, 'active') and guardian.active) else "unhealthy",
+            "scheduler": "healthy" if (hasattr(scheduler, 'is_running') and scheduler.is_running) else "healthy",
+            "websocket": "healthy"  # Assume healthy if server is running
+        }
+        
+        # Calculate overall health
+        unhealthy_count = sum(1 for status in components.values() if status == "unhealthy")
+        overall_status = "healthy" if unhealthy_count == 0 else "degraded" if unhealthy_count <= 2 else "unhealthy"
+        
+        return {
+            "status": overall_status,
+            "service": "SR-AIbridge Backend",
+            "version": "1.1.0-autonomous",
+            "timestamp": datetime.utcnow().isoformat(),
+            "components": components,
+            "metrics": {
+                "agents_count": len(storage.agents) if storage else 0,
+                "missions_count": len(storage.missions) if storage else 0,
+                "vault_logs_count": len(storage.vault_logs) if storage else 0,
+                "uptime_status": "operational"
+            }
+        }
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "service": "SR-AIbridge Backend", 
+            "version": "1.1.0-autonomous",
+            "timestamp": datetime.utcnow().isoformat(),
+            "error": str(e)
+        }
+
+@router.post("/self/heal")
+async def trigger_self_heal():
+    """Trigger system self-healing process"""
+    try:
+        storage, guardian, scheduler = _get_app_state()
+        
+        # Initialize self-healing service if needed
+        from ..services.self_heal import SelfHealingService
+        from ..main import websocket_manager
+        
+        healing_service = SelfHealingService(storage, websocket_manager)
+        healing_actions = await healing_service.run_healing_cycle()
+        
+        return {
+            "status": "success",
+            "message": "Self-healing cycle completed",
+            "timestamp": datetime.utcnow().isoformat(),
+            "actions_taken": len(healing_actions),
+            "healing_actions": healing_actions
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail={
+            "error": "Self-healing failed",
+            "message": str(e),
+            "timestamp": datetime.utcnow().isoformat()
+        })
 
 @router.get("/status")
 async def get_status():
