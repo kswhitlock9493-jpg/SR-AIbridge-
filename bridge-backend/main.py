@@ -1,6 +1,7 @@
 import os
 import asyncio
 import logging
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -12,7 +13,7 @@ from rituals.manage_data import DataRituals
 from websocket_manager import websocket_manager
 from autonomous_scheduler import AutonomousScheduler
 
-# Database imports for dual-mode support
+# Database imports for dual-mode support (legacy imports kept for compatibility)
 from databases import Database
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Text, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
@@ -22,8 +23,9 @@ from sqlalchemy.orm import sessionmaker
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Load env variables
-load_dotenv()
+# Load env variables - look in parent directory for .env file
+load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
+load_dotenv()  # Also check current directory
 
 # Database configuration based on environment
 DATABASE_TYPE = os.getenv("DATABASE_TYPE", "sqlite").lower()
@@ -118,7 +120,7 @@ class InMemoryStorage(StorageInterface):
 
 
 class DatabaseStorage(StorageInterface):
-    """Database storage for production (SQLite/Postgres)"""
+    """Legacy database storage for production (SQLite/Postgres) - DEPRECATED"""
     
     def __init__(self, database_url: str):
         super().__init__()
@@ -137,10 +139,67 @@ class DatabaseStorage(StorageInterface):
         await self.database.disconnect()
 
 
+class AsyncDatabaseStorage(StorageInterface):
+    """Async database storage using SQLAlchemy AsyncSession - PREFERRED"""
+    
+    def __init__(self):
+        super().__init__()
+        # Import db module
+        from db import db_manager
+        self.db = db_manager
+        self._cache_refresh_interval = 30  # seconds
+        self._last_cache_update = 0
+        
+    async def connect(self):
+        """Connect to database and create tables"""
+        await self.db.initialize()
+        await self.refresh_cache()
+        logger.info("✅ Async database connected and cache initialized")
+        
+    async def disconnect(self):
+        """Disconnect from database"""
+        await self.db.close()
+        logger.info("🛑 Async database disconnected")
+    
+    async def refresh_cache(self):
+        """Refresh in-memory cache from database"""
+        try:
+            # Load all data from database into memory for compatibility
+            self.agents = await self.db.get_agents()
+            self.missions = await self.db.get_missions()
+            self.vault_logs = await self.db.get_vault_logs()
+            self.captain_messages = await self.db.get_captain_messages()
+            self.armada_fleet = await self.db.get_armada_fleet()
+            
+            # Update next_id based on max IDs
+            max_ids = []
+            if self.agents:
+                max_ids.append(max(agent.get('id', 0) for agent in self.agents))
+            if self.missions:
+                max_ids.append(max(mission.get('id', 0) for mission in self.missions))
+            if self.vault_logs:
+                max_ids.append(max(log.get('id', 0) for log in self.vault_logs))
+            if self.captain_messages:
+                max_ids.append(max(msg.get('id', 0) for msg in self.captain_messages))
+            if self.armada_fleet:
+                max_ids.append(max(fleet.get('id', 0) for fleet in self.armada_fleet))
+            
+            self.next_id = max(max_ids) + 1 if max_ids else 1
+            self._last_cache_update = __import__('time').time()
+            
+        except Exception as e:
+            logger.error(f"Failed to refresh cache: {e}")
+            # Keep using in-memory data as fallback
+    
+    async def health_check(self):
+        """Get database health status"""
+        return await self.db.health_check()
+
+
 # Initialize storage based on environment
 if DATABASE_TYPE == "sqlite" or DATABASE_TYPE == "postgres":
-    logger.info(f"🗄️ Using {DATABASE_TYPE.upper()} database storage")
-    storage = DatabaseStorage(DATABASE_URL)
+    logger.info(f"🗄️ Using {DATABASE_TYPE.upper()} async database storage")
+    storage = AsyncDatabaseStorage()
     USE_DATABASE = True
 else:
     logger.info("🧠 Using in-memory storage")
@@ -153,28 +212,71 @@ rituals = DataRituals(storage)
 # Initialize autonomous scheduler
 scheduler = AutonomousScheduler(storage, websocket_manager)
 
+from contextlib import asynccontextmanager
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Modern FastAPI lifespan handler for startup and shutdown"""
+    # Startup
+    logger.info("🚀 SR-AIbridge Backend Starting...")
+    
+    # Initialize database connection
+    if USE_DATABASE and hasattr(storage, 'connect'):
+        await storage.connect()
+    
+    # Initialize in-memory storage with demo data
+    seed_demo_data()
+    logger.info(f"📊 Seeded: {len(storage.agents)} agents, {len(storage.missions)} missions, {len(storage.vault_logs)} vault logs, {len(storage.captain_messages)} messages")
+    
+    # Start autonomous systems
+    try:
+        await scheduler.start()
+        logger.info("🤖 Autonomous scheduler activated")
+    except Exception as e:
+        logger.warning(f"Failed to start scheduler: {e}")
+    
+    try:
+        await guardian.start()
+        logger.info("🛡️ Guardian daemon activated")
+    except Exception as e:
+        logger.warning(f"Failed to start guardian: {e}")
+    
+    logger.info("✅ SR-AIbridge Backend Started!")
+    
+    yield
+    
+    # Shutdown
+    logger.info("🛑 SR-AIbridge Backend Shutting down...")
+    
+    # Stop autonomous systems
+    try:
+        await scheduler.stop()
+        logger.info("🤖 Autonomous scheduler stopped")
+    except Exception as e:
+        logger.warning(f"Failed to stop scheduler: {e}")
+    
+    try:
+        await guardian.stop()
+        logger.info("🛡️ Guardian daemon stopped")
+    except Exception as e:
+        logger.warning(f"Failed to stop guardian: {e}")
+    
+    # Close database connection
+    if USE_DATABASE and hasattr(storage, 'disconnect'):
+        await storage.disconnect()
+    
+    logger.info("✅ SR-AIbridge Backend Shutdown complete!")
+
+
 app = FastAPI(
     title="SR-AIbridge Backend",
     version="1.1.0-dual-mode",
-    description="Dual-mode SR-AIbridge backend (SQLite/Postgres + In-memory)"
+    description="Dual-mode SR-AIbridge backend with async SQLite/Postgres support",
+    lifespan=lifespan
 )
 
-# Startup and shutdown events for database connections
-@app.on_event("startup")
-async def startup():
-    """Initialize database connection on startup"""
-    if USE_DATABASE and hasattr(storage, 'connect'):
-        await storage.connect()
-    logger.info("🚀 SR-AIbridge Backend Started!")
-
-@app.on_event("shutdown")
-async def shutdown():
-    """Close database connection on shutdown"""
-    if USE_DATABASE and hasattr(storage, 'disconnect'):
-        await storage.disconnect()
-    logger.info("🛑 SR-AIbridge Backend Shutdown!")
-
-# CORS configuration from environment variables
+# CORS configuration from environment variables with Netlify+Render support
 allowed_origins = os.getenv("ALLOWED_ORIGINS", 
     "http://localhost:3000,http://127.0.0.1:3000,https://bridge.netlify.app,https://sr-aibridge.netlify.app"
 ).split(",")
@@ -186,15 +288,21 @@ origins = [
     "https://*.onrender.com",  # Allow all Render subdomains
     "http://localhost:3001",  # Alternative development port
     "https://localhost:3000",  # HTTPS development
-    "https://localhost:3001"   # HTTPS alternative development port
+    "https://localhost:3001",   # HTTPS alternative development port
+    "http://127.0.0.1:3001",  # IPv4 alternative
+    "https://127.0.0.1:3000",  # HTTPS IPv4
+    "https://127.0.0.1:3001"   # HTTPS IPv4 alternative
 ]
 
+# Enhanced CORS configuration for production deployment
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"] if os.getenv("CORS_ALLOW_ALL", "false").lower() == "true" else origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=3600,  # Cache preflight requests for 1 hour
 )
 
 # --- Models ---
@@ -447,31 +555,6 @@ def seed_demo_data():
     """Populate in-memory storage with demo data using rituals manager"""
     result = rituals.reseed()
     return result
-
-# --- Startup / Shutdown ---
-@app.on_event("startup")
-async def startup():
-    """Initialize in-memory storage with demo data and start autonomous systems"""
-    seed_demo_data()
-    print("✅ SR-AIbridge Backend started with in-memory storage")
-    print(f"📊 Seeded: {len(storage.agents)} agents, {len(storage.missions)} missions, {len(storage.vault_logs)} vault logs, {len(storage.captain_messages)} messages")
-    
-    # Start autonomous scheduler
-    await scheduler.start()
-    print("🤖 Autonomous scheduler activated")
-    
-    # Start Guardian daemon
-    await guardian.start()
-    print("🛡️ Guardian daemon activated")
-
-@app.on_event("shutdown")
-async def shutdown():
-    """Cleanup on shutdown"""
-    print("🔄 SR-AIbridge Backend shutting down...")
-    await scheduler.stop()
-    await guardian.stop()
-    print("🤖 Autonomous scheduler stopped")
-    print("🛡️ Guardian daemon stopped")
 
 # --- Captain-to-Captain Endpoints ---
 @app.get("/captains/messages", response_model=List[Message])
@@ -791,9 +874,20 @@ async def health_check():
 async def full_health_check():
     """Comprehensive health check for deployment and monitoring"""
     try:
+        # Get database health status
+        db_health = {"status": "healthy"}
+        if USE_DATABASE and hasattr(storage, 'health_check'):
+            try:
+                db_health = await storage.health_check()
+            except Exception as e:
+                db_health = {
+                    "status": "unhealthy",
+                    "error": str(e)
+                }
+        
         # Check system components
         components = {
-            "database": "healthy",
+            "database": db_health["status"],
             "storage": "healthy" if storage else "unhealthy",
             "guardian": "healthy" if (hasattr(guardian, 'active') and guardian.active) else "unhealthy",
             "scheduler": "healthy" if (hasattr(scheduler, 'is_running') and scheduler.is_running) else "healthy",
@@ -804,20 +898,34 @@ async def full_health_check():
         unhealthy_count = sum(1 for status in components.values() if status == "unhealthy")
         overall_status = "healthy" if unhealthy_count == 0 else "degraded" if unhealthy_count <= 2 else "unhealthy"
         
+        # Enhanced metrics
+        metrics = {
+            "agents_count": len(storage.agents) if storage else 0,
+            "missions_count": len(storage.missions) if storage else 0,
+            "vault_logs_count": len(storage.vault_logs) if storage else 0,
+            "captain_messages_count": len(storage.captain_messages) if storage else 0,
+            "armada_fleet_count": len(storage.armada_fleet) if storage else 0,
+            "uptime_status": "operational",
+            "database_type": DATABASE_TYPE,
+            "using_async_db": USE_DATABASE
+        }
+        
+        # Add database details if available
+        if db_health.get("database_type"):
+            metrics["db_connection_type"] = db_health["database_type"]
+            metrics["db_agent_count"] = db_health.get("agent_count", 0)
+        
         return {
             "status": overall_status,
             "service": "SR-AIbridge Backend",
             "version": "1.1.0-autonomous",
             "timestamp": datetime.utcnow().isoformat(),
             "components": components,
-            "metrics": {
-                "agents_count": len(storage.agents) if storage else 0,
-                "missions_count": len(storage.missions) if storage else 0,
-                "vault_logs_count": len(storage.vault_logs) if storage else 0,
-                "uptime_status": "operational"
-            }
+            "metrics": metrics,
+            "database_health": db_health
         }
     except Exception as e:
+        logger.error(f"Health check failed: {e}")
         return {
             "status": "unhealthy",
             "service": "SR-AIbridge Backend", 
