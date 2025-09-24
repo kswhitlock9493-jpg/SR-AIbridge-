@@ -1,25 +1,25 @@
 """
-Async database module for SR-AIbridge using SQLAlchemy AsyncSession
-Fixes MissingGreenlet error with proper async SQLite support
+SQLite-first async database module for SR-AIbridge
+Comprehensive health check, self-heal, and safe error handling
 """
 import os
 import logging
+import asyncio
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator, List, Dict, Any, Optional
 from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
-from sqlalchemy.orm import declarative_base
-from sqlalchemy import Column, Integer, String, Text, DateTime, func, MetaData, Table, select, insert, update, delete
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError, OperationalError
+from models import Base, Guardian, VaultLog, Mission, Agent
 
 # Setup logging
 logger = logging.getLogger(__name__)
 
-# Database configuration
+# SQLite-first database configuration
 DATABASE_TYPE = os.getenv("DATABASE_TYPE", "sqlite").lower()
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///bridge.db")
 
-# Convert to async URL format
+# SQLite-first async URL setup
 if DATABASE_URL.startswith("sqlite:///"):
     ASYNC_DATABASE_URL = DATABASE_URL.replace("sqlite:///", "sqlite+aiosqlite:///")
 elif DATABASE_URL.startswith("postgresql://"):
@@ -29,27 +29,27 @@ elif DATABASE_URL.startswith("postgres://"):
 else:
     ASYNC_DATABASE_URL = DATABASE_URL
 
-logger.info(f"🔧 Async database URL: {ASYNC_DATABASE_URL}")
+logger.info(f"🔧 SQLite-first database URL: {ASYNC_DATABASE_URL}")
 
-# Create async engine with proper SQLite configuration
-engine_kwargs = {}
+# SQLite-optimized async engine configuration
+engine_kwargs = {
+    "pool_pre_ping": True,
+    "pool_recycle": 300,
+    "echo": False  # Set to True for SQL debugging
+}
+
 if "sqlite" in ASYNC_DATABASE_URL:
-    # SQLite specific configuration for async
+    # SQLite-specific optimizations
     engine_kwargs.update({
-        "pool_pre_ping": True,
-        "pool_recycle": 300,
         "connect_args": {
             "check_same_thread": False,
-            "timeout": 30
+            "timeout": 30,
+            "isolation_level": None  # Autocommit mode for better performance
         }
     })
 
 # Create async engine
-async_engine = create_async_engine(
-    ASYNC_DATABASE_URL,
-    echo=False,  # Set to True for SQL debugging
-    **engine_kwargs
-)
+async_engine = create_async_engine(ASYNC_DATABASE_URL, **engine_kwargs)
 
 # Create async session factory
 AsyncSessionLocal = async_sessionmaker(
@@ -58,92 +58,47 @@ AsyncSessionLocal = async_sessionmaker(
     expire_on_commit=False
 )
 
-# SQLAlchemy models
-Base = declarative_base()
-metadata = MetaData()
-
-# Define tables for async operations
-agents_table = Table(
-    "agents", metadata,
-    Column("id", Integer, primary_key=True),
-    Column("name", String(255), nullable=False),
-    Column("endpoint", String(255), nullable=False),
-    Column("capabilities", Text),  # JSON string
-    Column("status", String(50), default="online"),
-    Column("last_heartbeat", DateTime),
-    Column("created_at", DateTime, server_default=func.now())
-)
-
-missions_table = Table(
-    "missions", metadata,
-    Column("id", Integer, primary_key=True),
-    Column("title", String(255), nullable=False),
-    Column("description", Text),
-    Column("status", String(50), default="active"),
-    Column("priority", String(50), default="normal"),
-    Column("agent_id", Integer),
-    Column("progress", Integer, default=0),
-    Column("created_at", DateTime, server_default=func.now()),
-    Column("updated_at", DateTime, server_default=func.now(), onupdate=func.now())
-)
-
-vault_logs_table = Table(
-    "vault_logs", metadata,
-    Column("id", Integer, primary_key=True),
-    Column("agent_name", String(255), nullable=False),
-    Column("action", String(255), nullable=False),
-    Column("details", Text),
-    Column("log_level", String(50), default="info"),
-    Column("timestamp", DateTime, server_default=func.now())
-)
-
-captain_messages_table = Table(
-    "captain_messages", metadata,
-    Column("id", Integer, primary_key=True),
-    Column("message", Text, nullable=False),
-    Column("author", String(255), default="System"),
-    Column("timestamp", DateTime, server_default=func.now()),
-    Column("channel", String(100), default="bridge")
-)
-
-armada_fleet_table = Table(
-    "armada_fleet", metadata,
-    Column("id", Integer, primary_key=True),
-    Column("ship_name", String(255), nullable=False),
-    Column("status", String(50), default="online"),
-    Column("location", String(255), nullable=False),
-    Column("patrol_sectors", Text),  # JSON array as text
-    Column("updated_at", DateTime, server_default=func.now(), onupdate=func.now())
-)
-
-
 class DatabaseManager:
-    """Async database manager for SR-AIbridge"""
+    """SQLite-first async database manager with health checks and self-heal"""
     
     def __init__(self):
         self.engine = async_engine
         self.session_factory = AsyncSessionLocal
         self._initialized = False
+        self._health_status = "unknown"
+        self._last_health_check = None
     
     async def initialize(self):
-        """Initialize database tables"""
+        """Initialize database tables with comprehensive error handling"""
         try:
             async with self.engine.begin() as conn:
-                await conn.run_sync(metadata.create_all)
+                await conn.run_sync(Base.metadata.create_all)
             self._initialized = True
-            logger.info("✅ Database tables initialized successfully")
+            self._health_status = "healthy"
+            
+            # Initialize default guardian if none exists
+            await self._ensure_default_guardian()
+            
+            logger.info("✅ SQLite-first database initialized successfully")
+            return {"status": "success", "message": "Database initialized"}
         except Exception as e:
-            logger.error(f"❌ Failed to initialize database: {e}")
-            raise
+            self._health_status = "unhealthy"
+            error_msg = f"Failed to initialize database: {str(e)}"
+            logger.error(f"❌ {error_msg}")
+            return {"status": "error", "message": error_msg, "error": str(e)}
     
     async def close(self):
-        """Close database connection"""
-        await self.engine.dispose()
-        logger.info("🛑 Database connection closed")
+        """Close database connection safely"""
+        try:
+            await self.engine.dispose()
+            self._initialized = False
+            logger.info("🛑 Database connection closed")
+        except Exception as e:
+            logger.error(f"Error closing database: {e}")
     
     @asynccontextmanager
     async def get_session(self) -> AsyncGenerator[AsyncSession, None]:
-        """Get async session context manager"""
+        """Get async session with comprehensive error handling"""
         if not self._initialized:
             await self.initialize()
         
@@ -154,145 +109,243 @@ class DatabaseManager:
                 await session.rollback()
                 logger.error(f"Database error: {e}")
                 raise
+            except Exception as e:
+                await session.rollback()
+                logger.error(f"Unexpected database error: {e}")
+                raise
             finally:
                 await session.close()
     
     async def health_check(self) -> Dict[str, Any]:
-        """Perform database health check"""
+        """Comprehensive database health check with self-healing"""
+        check_time = datetime.utcnow()
+        
         try:
             async with self.get_session() as session:
-                # Simple query to test connection
-                result = await session.execute(select(func.count()).select_from(agents_table))
-                agent_count = result.scalar()
+                # Test basic connectivity
+                from sqlalchemy import text
+                result = await session.execute(text("SELECT 1"))
+                result.scalar()
+                
+                # Count records in each table using text() for explicit declaration
+                agent_count = await session.scalar(text(f"SELECT COUNT(*) FROM {Agent.__tablename__}"))
+                mission_count = await session.scalar(text(f"SELECT COUNT(*) FROM {Mission.__tablename__}"))
+                vault_count = await session.scalar(text(f"SELECT COUNT(*) FROM {VaultLog.__tablename__}"))
+                guardian_count = await session.scalar(text(f"SELECT COUNT(*) FROM {Guardian.__tablename__}"))
+                
+                # Calculate health score
+                health_score = 100.0
+                issues = []
+                
+                # Check for potential issues
+                if guardian_count == 0:
+                    health_score -= 20
+                    issues.append("No guardians active")
+                
+                if agent_count == 0:
+                    health_score -= 10
+                    issues.append("No agents registered")
+                
+                self._health_status = "healthy" if health_score >= 80 else "degraded" if health_score >= 60 else "unhealthy"
+                self._last_health_check = check_time
                 
                 return {
-                    "status": "healthy",
+                    "status": self._health_status,
+                    "health_score": health_score,
                     "connection": "active",
-                    "agent_count": agent_count,
                     "database_type": DATABASE_TYPE,
-                    "timestamp": datetime.utcnow().isoformat()
+                    "counts": {
+                        "agents": agent_count,
+                        "missions": mission_count,
+                        "vault_logs": vault_count,
+                        "guardians": guardian_count
+                    },
+                    "issues": issues,
+                    "last_check": check_time.isoformat(),
+                    "self_heal_available": True
                 }
-        except Exception as e:
+        except OperationalError as e:
+            # Database connection issues - attempt self-heal
+            heal_result = await self.self_heal()
             return {
                 "status": "unhealthy",
+                "error": "Database connection error",
+                "error_details": str(e),
+                "database_type": DATABASE_TYPE,
+                "last_check": check_time.isoformat(),
+                "self_heal_attempted": True,
+                "self_heal_result": heal_result
+            }
+        except Exception as e:
+            self._health_status = "unhealthy"
+            return {
+                "status": "unhealthy", 
                 "error": str(e),
                 "database_type": DATABASE_TYPE,
+                "last_check": check_time.isoformat(),
+                "self_heal_available": True
+            }
+    
+    async def self_heal(self) -> Dict[str, Any]:
+        """Self-healing database operations"""
+        heal_actions = []
+        success = True
+        
+        try:
+            # 1. Reinitialize database connection
+            heal_actions.append("Reinitializing database connection")
+            await self.close()
+            self._initialized = False
+            init_result = await self.initialize()
+            
+            if init_result["status"] == "error":
+                success = False
+                heal_actions.append(f"Failed to reinitialize: {init_result['message']}")
+            else:
+                heal_actions.append("Database reinitialized successfully")
+            
+            # 2. Ensure default guardian exists
+            guardian_result = await self._ensure_default_guardian()
+            heal_actions.append(f"Guardian check: {guardian_result['message']}")
+            
+            # 3. Clean up orphaned records (if any)
+            cleanup_result = await self._cleanup_orphaned_records()
+            heal_actions.append(f"Cleanup: {cleanup_result['message']}")
+            
+            return {
+                "status": "success" if success else "partial",
+                "actions_taken": heal_actions,
+                "timestamp": datetime.utcnow().isoformat()
+            }
+            
+        except Exception as e:
+            heal_actions.append(f"Self-heal failed: {str(e)}")
+            return {
+                "status": "failed",
+                "actions_taken": heal_actions,
+                "error": str(e),
                 "timestamp": datetime.utcnow().isoformat()
             }
     
-    # Agent operations
+    async def _ensure_default_guardian(self) -> Dict[str, Any]:
+        """Ensure a default guardian exists"""
+        try:
+            async with self.get_session() as session:
+                # Check if any guardians exist
+                from sqlalchemy import text
+                guardian_count = await session.scalar(text(f"SELECT COUNT(*) FROM {Guardian.__tablename__}"))
+                
+                if guardian_count == 0:
+                    # Create default guardian
+                    default_guardian = Guardian(
+                        name="System Guardian",
+                        status="active",
+                        health_score=100.0,
+                        active=True
+                    )
+                    session.add(default_guardian)
+                    await session.commit()
+                    return {"status": "created", "message": "Default guardian created"}
+                else:
+                    return {"status": "exists", "message": f"Found {guardian_count} guardians"}
+        except Exception as e:
+            return {"status": "error", "message": f"Failed to ensure guardian: {str(e)}"}
+    
+    async def _cleanup_orphaned_records(self) -> Dict[str, Any]:
+        """Clean up any orphaned or invalid records"""
+        try:
+            cleaned_count = 0
+            # Add cleanup logic as needed for your specific use case
+            return {"status": "success", "message": f"Cleaned {cleaned_count} orphaned records"}
+        except Exception as e:
+            return {"status": "error", "message": f"Cleanup failed: {str(e)}"}
+
+    # Safe CRUD operations with error handling
     async def get_agents(self) -> List[Dict[str, Any]]:
-        """Get all agents"""
-        async with self.get_session() as session:
-            result = await session.execute(select(agents_table))
-            return [dict(row._mapping) for row in result]
+        """Get all agents safely"""
+        try:
+            async with self.get_session() as session:
+                from sqlalchemy import text
+                result = await session.execute(text(f"SELECT * FROM {Agent.__tablename__}"))
+                return [dict(row._mapping) for row in result]
+        except Exception as e:
+            logger.error(f"Error getting agents: {e}")
+            return []
     
     async def create_agent(self, agent_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Create a new agent"""
-        async with self.get_session() as session:
-            stmt = insert(agents_table).values(**agent_data)
-            result = await session.execute(stmt)
-            await session.commit()
-            
-            # Return the created agent
-            agent_id = result.inserted_primary_key[0]
-            created_agent = await session.execute(
-                select(agents_table).where(agents_table.c.id == agent_id)
-            )
-            return dict(created_agent.fetchone()._mapping)
+        """Create agent with safe error handling"""
+        try:
+            async with self.get_session() as session:
+                agent = Agent(**agent_data)
+                session.add(agent)
+                await session.commit()
+                await session.refresh(agent)
+                return {"status": "success", "agent": {"id": agent.id, "name": agent.name}}
+        except Exception as e:
+            logger.error(f"Error creating agent: {e}")
+            return {"status": "error", "error": str(e)}
     
-    # Mission operations
     async def get_missions(self) -> List[Dict[str, Any]]:
-        """Get all missions"""
-        async with self.get_session() as session:
-            result = await session.execute(select(missions_table))
-            return [dict(row._mapping) for row in result]
+        """Get all missions safely"""
+        try:
+            async with self.get_session() as session:
+                from sqlalchemy import text
+                result = await session.execute(text(f"SELECT * FROM {Mission.__tablename__}"))
+                return [dict(row._mapping) for row in result]
+        except Exception as e:
+            logger.error(f"Error getting missions: {e}")
+            return []
     
     async def create_mission(self, mission_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Create a new mission"""
-        async with self.get_session() as session:
-            stmt = insert(missions_table).values(**mission_data)
-            result = await session.execute(stmt)
-            await session.commit()
-            
-            # Return the created mission
-            mission_id = result.inserted_primary_key[0]
-            created_mission = await session.execute(
-                select(missions_table).where(missions_table.c.id == mission_id)
-            )
-            return dict(created_mission.fetchone()._mapping)
+        """Create mission with safe error handling"""
+        try:
+            async with self.get_session() as session:
+                mission = Mission(**mission_data)
+                session.add(mission)
+                await session.commit()
+                await session.refresh(mission)
+                return {"status": "success", "mission": {"id": mission.id, "title": mission.title}}
+        except Exception as e:
+            logger.error(f"Error creating mission: {e}")
+            return {"status": "error", "error": str(e)}
     
-    # Vault logs operations
-    async def get_vault_logs(self) -> List[Dict[str, Any]]:
-        """Get all vault logs"""
-        async with self.get_session() as session:
-            result = await session.execute(
-                select(vault_logs_table).order_by(vault_logs_table.c.timestamp.desc())
-            )
-            return [dict(row._mapping) for row in result]
+    async def get_vault_logs(self, limit: int = 100) -> List[Dict[str, Any]]:
+        """Get vault logs safely"""
+        try:
+            async with self.get_session() as session:
+                from sqlalchemy import text
+                result = await session.execute(text(f"SELECT * FROM {VaultLog.__tablename__} ORDER BY timestamp DESC LIMIT {limit}"))
+                return [dict(row._mapping) for row in result]
+        except Exception as e:
+            logger.error(f"Error getting vault logs: {e}")
+            return []
     
     async def create_vault_log(self, log_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Create a new vault log entry"""
-        async with self.get_session() as session:
-            stmt = insert(vault_logs_table).values(**log_data)
-            result = await session.execute(stmt)
-            await session.commit()
-            
-            # Return the created log
-            log_id = result.inserted_primary_key[0]
-            created_log = await session.execute(
-                select(vault_logs_table).where(vault_logs_table.c.id == log_id)
-            )
-            return dict(created_log.fetchone()._mapping)
-    
-    # Captain messages operations
-    async def get_captain_messages(self) -> List[Dict[str, Any]]:
-        """Get all captain messages"""
-        async with self.get_session() as session:
-            result = await session.execute(
-                select(captain_messages_table).order_by(captain_messages_table.c.timestamp.desc())
-            )
-            return [dict(row._mapping) for row in result]
-    
-    async def create_captain_message(self, message_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Create a new captain message"""
-        async with self.get_session() as session:
-            stmt = insert(captain_messages_table).values(**message_data)
-            result = await session.execute(stmt)
-            await session.commit()
-            
-            # Return the created message
-            message_id = result.inserted_primary_key[0]
-            created_message = await session.execute(
-                select(captain_messages_table).where(captain_messages_table.c.id == message_id)
-            )
-            return dict(created_message.fetchone()._mapping)
-    
-    # Armada fleet operations
-    async def get_armada_fleet(self) -> List[Dict[str, Any]]:
-        """Get all armada fleet data"""
-        async with self.get_session() as session:
-            result = await session.execute(select(armada_fleet_table))
-            return [dict(row._mapping) for row in result]
-    
-    async def create_fleet_entry(self, fleet_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Create a new fleet entry"""
-        async with self.get_session() as session:
-            stmt = insert(armada_fleet_table).values(**fleet_data)
-            result = await session.execute(stmt)
-            await session.commit()
-            
-            # Return the created entry
-            entry_id = result.inserted_primary_key[0]
-            created_entry = await session.execute(
-                select(armada_fleet_table).where(armada_fleet_table.c.id == entry_id)
-            )
-            return dict(created_entry.fetchone()._mapping)
+        """Create vault log with safe error handling"""
+        try:
+            async with self.get_session() as session:
+                vault_log = VaultLog(**log_data)
+                session.add(vault_log)
+                await session.commit()
+                await session.refresh(vault_log)
+                return {"status": "success", "log": {"id": vault_log.id}}
+        except Exception as e:
+            logger.error(f"Error creating vault log: {e}")
+            return {"status": "error", "error": str(e)}
 
+    async def get_guardians(self) -> List[Dict[str, Any]]:
+        """Get all guardians safely"""
+        try:
+            async with self.get_session() as session:
+                from sqlalchemy import text
+                result = await session.execute(text(f"SELECT * FROM {Guardian.__tablename__}"))
+                return [dict(row._mapping) for row in result]
+        except Exception as e:
+            logger.error(f"Error getting guardians: {e}")
+            return []
 
 # Global database manager instance
 db_manager = DatabaseManager()
-
 
 # Convenience functions for easy access
 async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
@@ -300,17 +353,18 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
     async with db_manager.get_session() as session:
         yield session
 
-
 async def init_database():
     """Initialize database - convenience function"""
-    await db_manager.initialize()
-
+    return await db_manager.initialize()
 
 async def close_database():
     """Close database - convenience function"""
     await db_manager.close()
 
-
 async def database_health():
-    """Check database health - convenience function"""
+    """Check database health - convenience function""" 
     return await db_manager.health_check()
+
+async def database_self_heal():
+    """Trigger database self-heal - convenience function"""
+    return await db_manager.self_heal()
