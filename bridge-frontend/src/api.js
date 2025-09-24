@@ -162,9 +162,8 @@ export async function getArmadaStatus() {
 }
 
 export async function getFleetData() {
-  // Fleet data is included in armada status
-  const armadaData = await apiClient.get('/armada/status');
-  return armadaData.fleet || [];
+  // Updated to use the new /fleet endpoint
+  return apiClient.get('/fleet');
 }
 
 // === Activity ===
@@ -197,7 +196,8 @@ export async function reseedDemoData() {
 
 // === Error Recovery ===
 export async function runSelfTest() {
-  return apiClient.post('/system/self-test');
+  // Updated to call /health/full for comprehensive system checks
+  return apiClient.get('/health/full');
 }
 
 export async function runSelfRepair() {

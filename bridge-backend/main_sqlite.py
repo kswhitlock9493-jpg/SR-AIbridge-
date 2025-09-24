@@ -44,6 +44,22 @@ async def lifespan(app: FastAPI):
         init_result = await init_database()
         if init_result["status"] == "success":
             logger.info("✅ Database initialized successfully")
+            
+            # Seed initial demo data
+            logger.info("🌱 Seeding initial demo data...")
+            from startup import seed_initial_data
+            seed_result = await seed_initial_data()
+            if seed_result["status"] == "success":
+                if seed_result.get("skipped"):
+                    logger.info("ℹ️ Demo data already exists, skipping seeding")
+                else:
+                    logger.info(f"✅ Successfully seeded: {', '.join(seed_result['seeded_items'])}")
+                    logger.info(f"📊 Admiral: {seed_result.get('admiral', 'Unknown')}")
+                    logger.info(f"🤖 Agents: {seed_result.get('agents_count', 0)}")
+                    logger.info(f"🎯 Missions: {seed_result.get('missions_count', 0)}")
+                    logger.info(f"🚢 Fleet Online: {seed_result.get('fleet_online', 0)}")
+            else:
+                logger.warning(f"⚠️ Seeding incomplete: {seed_result['message']}")
         else:
             logger.error(f"❌ Database initialization failed: {init_result['message']}")
         
@@ -112,6 +128,7 @@ async def root():
             "status": "/status",
             "agents": "/agents",
             "missions": "/missions",
+            "fleet": "/fleet",
             "vault_logs": "/vault/logs",
             "guardians": "/guardians"
         },
@@ -212,14 +229,27 @@ async def trigger_self_heal():
 
 @app.get("/status")
 async def get_status():
-    """Get overall system status"""
+    """Get overall system status with enhanced dashboard data"""
     try:
+        from startup import get_system_status
+        system_status = await get_system_status()
         db_health = await database_health()
         
         return {
             "service": "SR-AIbridge Backend",
             "version": "1.2.0-sqlite-first",
             "status": db_health["status"],
+            # Enhanced status data matching frontend expectations
+            "admiral": system_status["admiral"],
+            "agents_online": system_status["agents_online"],
+            "agentsOnline": system_status["agents_online"],  # Alternative naming for compatibility
+            "active_missions": system_status["active_missions"],
+            "activeMissions": system_status["active_missions"],  # Alternative naming for compatibility
+            "total_agents": system_status["total_agents"],
+            "total_missions": system_status["total_missions"],
+            "fleet_count": system_status["fleet_count"],
+            "vault_logs": system_status["vault_logs"],
+            "system_health": system_status["system_health"],
             "database": {
                 "type": DATABASE_TYPE,
                 "status": db_health["status"],
@@ -239,7 +269,18 @@ async def get_status():
             "service": "SR-AIbridge Backend",
             "version": "1.2.0-sqlite-first", 
             "status": "error",
-            "error": str(e),
+            "admiral": "Unknown",
+            "agents_online": 0,
+            "agentsOnline": 0,
+            "active_missions": 0,
+            "activeMissions": 0,
+            "total_agents": 0,
+            "total_missions": 0,
+            "fleet_count": 0,
+            "vault_logs": 0,
+            "system_health": "error",
+            "error": "Failed to retrieve system status",
+            "self_heal_available": True,
             "timestamp": datetime.utcnow().isoformat()
         }
 
@@ -494,6 +535,139 @@ async def get_system_metrics():
         return {
             "status": "error",
             "error": str(e),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
+# === Fleet Management ===
+@app.get("/fleet")
+async def get_fleet():
+    """Get fleet data with safe error handling"""
+    try:
+        from startup import get_fleet_data
+        fleet_data = get_fleet_data()
+        
+        return {
+            "status": "success",
+            "fleet": fleet_data,
+            "count": len(fleet_data),
+            "online": len([ship for ship in fleet_data if ship.get("status") == "online"]),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Get fleet error: {e}")
+        return {
+            "status": "error",
+            "error": "Failed to retrieve fleet data",
+            "fleet": [],
+            "count": 0,
+            "online": 0,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
+# === Captain Messages ===
+@app.get("/captains/messages")
+async def get_captain_messages():
+    """Get captain messages - placeholder endpoint for frontend compatibility"""
+    try:
+        # Return empty array for now - can be enhanced later
+        return {
+            "status": "success",
+            "messages": [],
+            "count": 0,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Get captain messages error: {e}")
+        return {
+            "status": "error",
+            "error": "Failed to retrieve captain messages",
+            "messages": [],
+            "count": 0,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
+@app.post("/captains/send") 
+async def send_captain_message(message: dict):
+    """Send captain message - placeholder endpoint for frontend compatibility"""
+    try:
+        # Return success response for now - can be enhanced later
+        return {
+            "status": "success",
+            "message": "Message sent successfully",
+            "stored": message,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Send captain message error: {e}")
+        return {
+            "status": "error",
+            "error": "Failed to send captain message",
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
+# === Activity Feed ===
+@app.get("/activity")
+async def get_activity():
+    """Get activity feed - use vault logs as activity"""
+    try:
+        # Use vault logs as activity feed
+        logs = await db_manager.get_vault_logs(limit=20)
+        
+        # Transform vault logs to activity format
+        activities = []
+        for log in logs:
+            activities.append({
+                "id": log.get("id"),
+                "type": "log_entry",
+                "agent": log.get("agent_name"),
+                "action": log.get("action"),
+                "details": log.get("details"),
+                "timestamp": log.get("timestamp"),
+                "level": log.get("log_level", "info")
+            })
+        
+        return {
+            "status": "success",
+            "activities": activities,
+            "count": len(activities),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Get activity error: {e}")
+        return {
+            "status": "error",
+            "error": "Failed to retrieve activity",
+            "activities": [],
+            "count": 0,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
+# === Armada Status ===
+@app.get("/armada/status")
+async def get_armada_status():
+    """Get armada status - placeholder endpoint for frontend compatibility"""
+    try:
+        from startup import get_fleet_data, get_system_status
+        fleet_data = get_fleet_data()
+        system_status = await get_system_status()
+        
+        return {
+            "status": "success",
+            "fleet": fleet_data,
+            "admiral": system_status["admiral"],
+            "ships_online": len([ship for ship in fleet_data if ship.get("status") == "online"]),
+            "total_ships": len(fleet_data),
+            "operational_status": "nominal",
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Get armada status error: {e}")
+        return {
+            "status": "error",
+            "error": "Failed to retrieve armada status",
+            "fleet": [],
+            "ships_online": 0,
+            "total_ships": 0,
             "timestamp": datetime.utcnow().isoformat()
         }
 

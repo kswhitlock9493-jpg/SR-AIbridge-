@@ -48,7 +48,11 @@ class Mission(Base):
     status = Column(String(50), nullable=False, default="active")
     priority = Column(String(50), nullable=False, default="normal")
     agent_id = Column(Integer, nullable=True)
+    assigned_agents = Column(Text, nullable=True)  # JSON string for multiple agents
     progress = Column(Integer, default=0)
+    start_time = Column(DateTime, nullable=True)
+    estimated_completion = Column(DateTime, nullable=True)
+    objectives = Column(Text, nullable=True)  # JSON string for objectives list
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
@@ -58,10 +62,13 @@ class Agent(Base):
     
     id = Column(Integer, primary_key=True)
     name = Column(String(255), nullable=False)
-    endpoint = Column(String(255), nullable=False)
+    endpoint = Column(String(255), nullable=True)  # Made optional for seeded agents
     capabilities = Column(Text, nullable=True)  # JSON string
     status = Column(String(50), default="online")
     last_heartbeat = Column(DateTime, nullable=True)
+    last_seen = Column(DateTime, nullable=True)  # Alternative to heartbeat
+    health_score = Column(Float, default=100.0)
+    location = Column(String(255), nullable=True)  # Agent location
     created_at = Column(DateTime, server_default=func.now())
 
 # Pydantic models for API
