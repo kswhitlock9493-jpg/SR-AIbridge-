@@ -399,3 +399,59 @@
 .no-logs, .no-missions {
   font-style: italic;
 }
+
+/* Error and Loading Banners */
+.error-banner {
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+.error-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.error-message {
+  font-weight: 600;
+  flex-grow: 1;
+}
+
+.error-info {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-style: italic;
+}
+
+.loading-banner {
+  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+  border: 1px solid #3b82f6;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.loading-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  animation: pulse 2s infinite;
+}
+
+.loading-message {
+  font-weight: 500;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

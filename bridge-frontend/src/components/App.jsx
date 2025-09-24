@@ -16,18 +16,25 @@ const App = () => {
     activeMissions: 0,
     admiral: "Logged Out"
   });
+  const [connectionError, setConnectionError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchStatus() {
       try {
+        setIsLoading(true);
         const data = await getStatus();
         setStatus({
           agentsOnline: data.agents_online ?? 0,
           activeMissions: data.active_missions ?? 0,
           admiral: data.admiral ?? "Unknown"
         });
+        setConnectionError(null);
       } catch (err) {
         console.error("Status fetch failed:", err);
+        setConnectionError(`Failed to connect to backend: ${err.message}`);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -59,6 +66,21 @@ const App = () => {
             <div className="status-item">📡 Active Missions: <span className="status-value">{status.activeMissions}</span></div>
             <div className="status-item">⚓ Admiral: <span className="status-value">{status.admiral}</span></div>
           </header>
+
+          {connectionError && (
+            <div className="error-banner">
+              <span className="error-icon">⚠️</span>
+              <span className="error-message">{connectionError}</span>
+              <span className="error-info">Please check your internet connection and try refreshing the page.</span>
+            </div>
+          )}
+
+          {isLoading && !connectionError && (
+            <div className="loading-banner">
+              <span className="loading-icon">⏳</span>
+              <span className="loading-message">Connecting to Agent Manager...</span>
+            </div>
+          )}
 
           <div className="main-content">
             <Routes>

@@ -1,6 +1,6 @@
 const config = {
-  // Use Netlify environment variable in production, fallback to localhost for dev
-  API_BASE_URL: import.meta.env.VITE_API_URL || "http://localhost:8000"
+  // Use React environment variable in production, fallback to production backend for deployment
+  API_BASE_URL: process.env.REACT_APP_API_URL || "https://sr-aibridge.onrender.com"
 };
 
 export default config;
