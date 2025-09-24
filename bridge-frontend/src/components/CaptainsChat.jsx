@@ -39,6 +39,8 @@ const CaptainsChat = () => {
 
     try {
       const messageData = {
+        from_: "Bridge Command",
+        to: "Fleet",
         message: input.trim(),
         timestamp: new Date().toISOString()
       };

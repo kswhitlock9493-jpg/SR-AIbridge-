@@ -162,7 +162,9 @@ export async function getArmadaStatus() {
 }
 
 export async function getFleetData() {
-  return apiClient.get('/armada/fleet');
+  // Fleet data is included in armada status
+  const armadaData = await apiClient.get('/armada/status');
+  return armadaData.fleet || [];
 }
 
 // === Activity ===
