@@ -644,6 +644,16 @@ async def get_armada():
     }
 
 # --- Status Endpoint ---
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for deployment monitoring"""
+    return {
+        "status": "healthy",
+        "service": "SR-AIbridge Backend",
+        "version": "1.1.0-autonomous",
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
 @app.get("/status")
 async def get_status():
     """Get overall system status"""
