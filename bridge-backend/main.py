@@ -906,10 +906,14 @@ async def ritual_reseed():
 @app.get("/")
 async def root():
     """Root endpoint with API information"""
+    # Determine storage type for display
+    storage_type = "database" if USE_DATABASE else "in-memory"
+    storage_details = f"{DATABASE_TYPE.upper()}" if USE_DATABASE else "memory"
+    
     return {
         "name": "SR-AIbridge Backend",
-        "version": "1.1.0-autonomous",
-        "description": "Fully autonomous SR-AIbridge with real-time WebSocket updates",
+        "version": "1.1.0-dual-mode",
+        "description": f"Dual-mode SR-AIbridge backend ({storage_details} storage)",
         "endpoints": {
             "status": "/status",
             "guardian": "/guardian/status",
@@ -929,6 +933,8 @@ async def root():
             }
         },
         "features": {
+            "dual_mode_storage": True,
+            "database_toggle": True,
             "autonomous_scheduler": True,
             "guardian_daemon": True,
             "continuous_selftest": True,
@@ -937,7 +943,15 @@ async def root():
             "npc_interactions": True,
             "auto_mission_progression": True
         },
-        "storage": "in-memory",
+        "storage": {
+            "type": storage_type,
+            "engine": storage_details,
+            "database_url": DATABASE_URL if USE_DATABASE and not DATABASE_URL.startswith("sqlite") else "local"
+        },
+        "environment": {
+            "database_type": DATABASE_TYPE,
+            "use_database": USE_DATABASE
+        },
         "rituals_manager": "enabled",
         "autonomous_mode": "active",
         "ready": True
