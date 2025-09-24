@@ -12,6 +12,7 @@ import CaptainToCaptain from './CaptainToCaptain';
 import MissionControls from './MissionControls';
 import Agents from './Agents';
 import AutonomyDaemon from '../daemon/AutonomyDaemon';
+import GuardianBanner from './GuardianBanner';
 
 // === Main App ===
 const App = () => {
@@ -138,6 +139,9 @@ const App = () => {
         </aside>
 
         <div className="main-panel">
+          {/* Guardian Banner - Always visible status */}
+          <GuardianBanner />
+          
           <header className="status-bar">
             <div className="status-item">🛰️ Agents Online: <span className="status-value">{status.agentsOnline}</span></div>
             <div className="status-item">📡 Active Missions: <span className="status-value">{status.activeMissions}</span></div>
