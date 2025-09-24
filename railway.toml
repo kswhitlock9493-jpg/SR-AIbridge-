@@ -1,18 +1,28 @@
-# Sovereign Bridge - Railway Configuration
-# This file tells Railway how to build and run the backend
+# SR-AIbridge - Railway Backend Configuration
+# Updated for autonomous backend deployment
 
 [build]
-# Install Python dependencies
+# Use nixpacks for automatic Python detection
 builder = "NIXPACKS"
-buildCommand = "pip install -r requirements.txt"
+# Install dependencies from the backend directory
+buildCommand = "cd bridge-backend && pip install -r requirements.txt"
 
 [deploy]
-# Start your backend
-startCommand = "python main.py"
+# Start the FastAPI backend with uvicorn
+startCommand = "cd bridge-backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
+# Health check endpoint
+healthcheckPath = "/"
+# Restart policy
+restartPolicyType = "ON_FAILURE"
 
 [env]
-# Environment variables you’ll set inside Railway dashboard
-# Railway will replace these with secure values at runtime
-DATABASE_URL = ""
-JWT_SECRET = ""
-ADMIRAL_KEY = ""
+# Environment variables for Railway deployment
+# Railway will provide PORT automatically
+PYTHON_VERSION = "3.12"
+ENVIRONMENT = "production"
+
+# Optional: Uncomment for database version
+# DATABASE_URL = "${{ Postgres.DATABASE_URL }}"
+
+# Optional: Custom CORS origins
+# CORS_ORIGINS = "https://your-app.netlify.app,https://your-domain.com"
