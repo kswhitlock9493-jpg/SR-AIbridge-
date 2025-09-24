@@ -1,7 +1,7 @@
 const config = {
   // Use localhost for development, production backend for deployment
   API_BASE_URL: process.env.REACT_APP_API_URL || 
-    (process.env.NODE_ENV === 'development' ? "http://localhost:8000" : "https://sr-aibridge.onrender.com")
+    (process.env.NODE_ENV === 'development' ? "http://localhost:8000" : "https://sr-aibridge-backend.onrender.com")
 };
 
 export default config;
