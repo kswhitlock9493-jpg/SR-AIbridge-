@@ -1,3 +1,132 @@
+/* SR-AIbridge App Root Styles */
+.sr-aibridge-app {
+  min-height: 100vh;
+  background: #0d1117;
+  color: #fff;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* App Header */
+.app-header {
+  background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #30363d;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.app-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.title-icon {
+  font-size: 2rem;
+}
+
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-indicator.online {
+  background: #00ff00;
+  box-shadow: 0 0 6px #00ff00;
+}
+
+/* Navigation Tabs */
+.app-navigation {
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+  padding: 0 2rem;
+}
+
+.nav-tabs {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 0.5rem;
+}
+
+.nav-tab {
+  background: none;
+  border: none;
+  color: #8b949e;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-tab:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-tab.active {
+  color: #fff;
+  border-bottom-color: #2a5298;
+  background: rgba(42, 82, 152, 0.1);
+}
+
+/* Main Content */
+.app-content {
+  flex: 1;
+  padding: 2rem;
+  overflow: auto;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Footer */
+.app-footer {
+  background: #161b22;
+  border-top: 1px solid #30363d;
+  padding: 1rem 2rem;
+  margin-top: auto;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-size: 0.8rem;
+  color: #8b949e;
+}
+
+.footer-status {
+  color: #00ff00;
+}
+
 .bridge-layout {
   display: flex;
   min-height: 100vh;
