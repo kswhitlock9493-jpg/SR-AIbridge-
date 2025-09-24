@@ -113,3 +113,50 @@ export async function addVaultLog(log) {
   }
   return await response.json();
 }
+
+// Additional API endpoints for enhanced functionality
+export async function assignAgentToMission(missionId, agentId) {
+  const response = await fetch(`${API_BASE_URL}/missions/${missionId}/assign`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ agent_id: agentId }),
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+  return await response.json();
+}
+
+export async function updateMissionStatus(missionId, status) {
+  const response = await fetch(`${API_BASE_URL}/missions/${missionId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ status }),
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+  return await response.json();
+}
+
+export async function removeAgent(agentId) {
+  const response = await fetch(`${API_BASE_URL}/agents/${agentId}`, {
+    method: 'DELETE',
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+  return await response.json();
+}
+
+export async function getFleetData() {
+  const response = await fetch(`${API_BASE_URL}/armada/fleet`);
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+  return await response.json();
+}

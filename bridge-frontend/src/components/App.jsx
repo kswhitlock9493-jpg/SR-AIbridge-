@@ -8,6 +8,8 @@ import VaultLogs from './VaultLogs';
 import MissionLog from './MissionLog';
 import ArmadaMap from './ArmadaMap';
 import CaptainToCaptain from './CaptainToCaptain';
+import MissionControls from './MissionControls';
+import Agents from './Agents';
 
 // === Main App ===
 const App = () => {
@@ -18,6 +20,12 @@ const App = () => {
   });
   const [connectionError, setConnectionError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [missionRefreshKey, setMissionRefreshKey] = useState(0);
+
+  // Handle mission dispatch to trigger instant refresh in MissionLog
+  const handleMissionDispatch = (missionData) => {
+    setMissionRefreshKey(prev => prev + 1);
+  };
 
   useEffect(() => {
     async function fetchStatus() {
@@ -51,6 +59,8 @@ const App = () => {
           <nav>
             <ul>
               <li><NavLink to="/" end className="nav-link">📊 Dashboard</NavLink></li>
+              <li><NavLink to="/controls" className="nav-link">🎯 Mission Controls</NavLink></li>
+              <li><NavLink to="/agents" className="nav-link">🤖 Agents</NavLink></li>
               <li><NavLink to="/chat" className="nav-link">💬 Captains Chat</NavLink></li>
               <li><NavLink to="/vault" className="nav-link">📜 Vault Logs</NavLink></li>
               <li><NavLink to="/missions" className="nav-link">🚀 Mission Log</NavLink></li>
@@ -85,9 +95,11 @@ const App = () => {
           <div className="main-content">
             <Routes>
               <Route path="/" element={<Dashboard />} />
+              <Route path="/controls" element={<MissionControls onMissionDispatch={handleMissionDispatch} />} />
+              <Route path="/agents" element={<Agents />} />
               <Route path="/chat" element={<CaptainsChat />} />
               <Route path="/vault" element={<VaultLogs />} />
-              <Route path="/missions" element={<MissionLog />} />
+              <Route path="/missions" element={<MissionLog refreshKey={missionRefreshKey} />} />
               <Route path="/armada" element={<ArmadaMap />} />
               <Route path="/captains" element={<CaptainToCaptain />} />
             </Routes>

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getMissions } from '../api';
 import { usePolling } from '../hooks/usePolling';
 
-const MissionLog = () => {
+const MissionLog = ({ refreshKey }) => {
   const [missions, setMissions] = useState([]);
 
   /**
@@ -25,6 +25,13 @@ const MissionLog = () => {
     immediate: true,
     debounceDelay: 200
   });
+
+  // Support instant refresh when new missions are dispatched via refreshKey prop
+  useEffect(() => {
+    if (refreshKey) {
+      refresh();
+    }
+  }, [refreshKey, refresh]);
 
   // Utility functions for mission data formatting
   const getStatusColor = (status) => {

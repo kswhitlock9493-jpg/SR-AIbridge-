@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getArmadaStatus } from '../api';
+import { getFleetData } from '../api';
 import { usePolling } from '../hooks/usePolling';
 
 const ArmadaMap = () => {
@@ -7,10 +7,10 @@ const ArmadaMap = () => {
 
   /**
    * Optimized fleet data fetching function
-   * Manages armada status data with proper error handling
+   * Manages fleet data with proper error handling
    */
   const fetchFleetData = async () => {
-    const data = await getArmadaStatus();
+    const data = await getFleetData();
     setFleet(data);
     return data;
   };

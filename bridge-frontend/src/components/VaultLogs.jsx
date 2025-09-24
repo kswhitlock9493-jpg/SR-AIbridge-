@@ -16,12 +16,12 @@ const VaultLogs = () => {
   };
 
   /**
-   * Use optimized polling with 30-second intervals for vault logs
-   * Reduces network load while maintaining reasonable data freshness
+   * Use optimized polling with 10-second intervals for vault logs  
+   * Vault logs require more frequent updates to show live activity
    * Includes debounced loading states for smoother UX
    */
   const { loading, error, refresh } = usePolling(fetchLogs, {
-    interval: 30000, // 30 seconds - optimized interval for log monitoring
+    interval: 10000, // 10 seconds - high frequency for live log monitoring
     immediate: true,
     debounceDelay: 200
   });
