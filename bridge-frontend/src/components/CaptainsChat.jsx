@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getCaptainMessages, sendCaptainMessage } from '../api';
 
 const CaptainsChat = () => {
@@ -6,12 +6,21 @@ const CaptainsChat = () => {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     fetchMessages();
-    const interval = setInterval(fetchMessages, 10000); // Refresh every 10 seconds
+    const interval = setInterval(fetchMessages, 5000); // Refresh every 5 seconds
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const fetchMessages = async () => {
     try {
@@ -40,7 +49,7 @@ const CaptainsChat = () => {
       await sendCaptainMessage(messageData);
       setInput('');
       
-      // Refresh messages after sending
+      // Refresh messages after sending (instant update)
       await fetchMessages();
     } catch (err) {
       setError(err.message);
@@ -86,6 +95,7 @@ const CaptainsChat = () => {
                 <div className="message-content">{msg.message}</div>
               </div>
             ))}
+            <div ref={messagesEndRef} />
           </div>
         )}
       </div>

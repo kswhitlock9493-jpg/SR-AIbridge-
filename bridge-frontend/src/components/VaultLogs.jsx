@@ -8,7 +8,7 @@ const VaultLogs = () => {
 
   useEffect(() => {
     fetchLogs();
-    const interval = setInterval(fetchLogs, 30000); // Refresh every 30 seconds
+    const interval = setInterval(fetchLogs, 5000); // Refresh every 5 seconds
     return () => clearInterval(interval);
   }, []);
 
