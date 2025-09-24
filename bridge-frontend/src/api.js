@@ -2,161 +2,209 @@ import config from './config';
 
 const API_BASE_URL = config.API_BASE_URL;
 
-export async function getStatus() {
-  const response = await fetch(`${API_BASE_URL}/status`);
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
+// Enhanced API client with retry logic and robust error handling
+class APIClient {
+  constructor(baseURL, options = {}) {
+    this.baseURL = baseURL;
+    this.defaultTimeout = options.timeout || 10000;
+    this.maxRetries = options.maxRetries || 3;
+    this.baseRetryDelay = options.baseRetryDelay || 1000;
   }
-  return await response.json();
-}
 
-export async function getAgents() {
-  const response = await fetch(`${API_BASE_URL}/agents`);
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-  return await response.json();
-}
+  async request(endpoint, options = {}) {
+    const {
+      method = 'GET',
+      headers = {},
+      body,
+      timeout = this.defaultTimeout,
+      retries = this.maxRetries
+    } = options;
 
-export async function getMissions() {
-  const response = await fetch(`${API_BASE_URL}/missions`);
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-  return await response.json();
-}
-
-export async function getVaultLogs() {
-  const response = await fetch(`${API_BASE_URL}/vault/logs`);
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-  return await response.json();
-}
-
-export async function getCaptainMessages() {
-  const response = await fetch(`${API_BASE_URL}/captains/messages`);
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-  return await response.json();
-}
-
-export async function sendCaptainMessage(message) {
-  const response = await fetch(`${API_BASE_URL}/captains/send`, {
-    method: 'POST',
-    headers: {
+    const url = `${this.baseURL}${endpoint}`;
+    const requestHeaders = {
       'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(message),
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
+      ...headers
+    };
+
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+        const response = await fetch(url, {
+          method,
+          headers: requestHeaders,
+          body: body ? JSON.stringify(body) : undefined,
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          // Don't retry client errors (4xx)
+          if (response.status >= 400 && response.status < 500) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+          
+          // Retry server errors (5xx) and network errors
+          if (attempt === retries) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+          
+          // Wait before retrying with exponential backoff
+          await this.sleep(this.baseRetryDelay * Math.pow(2, attempt));
+          continue;
+        }
+
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          return await response.json();
+        }
+        
+        return await response.text();
+
+      } catch (error) {
+        if (error.name === 'AbortError') {
+          if (attempt === retries) {
+            throw new Error(`Request timeout after ${timeout}ms`);
+          }
+        } else if (attempt === retries) {
+          throw new Error(`Network error: ${error.message}`);
+        }
+
+        // Wait before retrying with exponential backoff
+        await this.sleep(this.baseRetryDelay * Math.pow(2, attempt));
+      }
+    }
   }
-  return await response.json();
+
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  // HTTP method helpers
+  async get(endpoint, options = {}) {
+    return this.request(endpoint, { ...options, method: 'GET' });
+  }
+
+  async post(endpoint, data, options = {}) {
+    return this.request(endpoint, { ...options, method: 'POST', body: data });
+  }
+
+  async patch(endpoint, data, options = {}) {
+    return this.request(endpoint, { ...options, method: 'PATCH', body: data });
+  }
+
+  async delete(endpoint, options = {}) {
+    return this.request(endpoint, { ...options, method: 'DELETE' });
+  }
 }
 
-export async function getArmadaStatus() {
-  const response = await fetch(`${API_BASE_URL}/armada/status`);
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-  return await response.json();
+// Create API client instance
+const apiClient = new APIClient(API_BASE_URL);
+
+// === Core Status ===
+export async function getStatus() {
+  return apiClient.get('/status');
 }
 
-export async function getActivity() {
-  const response = await fetch(`${API_BASE_URL}/activity`);
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-  return await response.json();
+// === Agents ===
+export async function getAgents() {
+  return apiClient.get('/agents');
 }
 
 export async function createAgent(agent) {
-  const response = await fetch(`${API_BASE_URL}/agents`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(agent),
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-  return await response.json();
-}
-
-export async function createMission(mission) {
-  const response = await fetch(`${API_BASE_URL}/missions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(mission),
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-  return await response.json();
-}
-
-export async function addVaultLog(log) {
-  const response = await fetch(`${API_BASE_URL}/vault/logs`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(log),
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-  return await response.json();
-}
-
-// Additional API endpoints for enhanced functionality
-export async function assignAgentToMission(missionId, agentId) {
-  const response = await fetch(`${API_BASE_URL}/missions/${missionId}/assign`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ agent_id: agentId }),
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-  return await response.json();
-}
-
-export async function updateMissionStatus(missionId, status) {
-  const response = await fetch(`${API_BASE_URL}/missions/${missionId}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ status }),
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-  return await response.json();
+  return apiClient.post('/agents', agent);
 }
 
 export async function removeAgent(agentId) {
-  const response = await fetch(`${API_BASE_URL}/agents/${agentId}`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-  return await response.json();
+  return apiClient.delete(`/agents/${agentId}`);
+}
+
+// === Missions ===
+export async function getMissions() {
+  return apiClient.get('/missions');
+}
+
+export async function createMission(mission) {
+  return apiClient.post('/missions', mission);
+}
+
+export async function assignAgentToMission(missionId, agentId) {
+  return apiClient.post(`/missions/${missionId}/assign`, { agent_id: agentId });
+}
+
+export async function updateMissionStatus(missionId, status) {
+  return apiClient.patch(`/missions/${missionId}`, { status });
+}
+
+// === Vault Logs / Doctrine ===
+export async function getVaultLogs() {
+  return apiClient.get('/vault/logs');
+}
+
+export async function addVaultLog(log) {
+  return apiClient.post('/vault/logs', log);
+}
+
+// === Captain-to-Captain Chat ===
+export async function getCaptainMessages() {
+  return apiClient.get('/captains/messages');
+}
+
+export async function sendCaptainMessage(message) {
+  return apiClient.post('/captains/send', message);
+}
+
+// === Armada/Fleet ===
+export async function getArmadaStatus() {
+  return apiClient.get('/armada/status');
 }
 
 export async function getFleetData() {
-  const response = await fetch(`${API_BASE_URL}/armada/fleet`);
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-  return await response.json();
+  return apiClient.get('/armada/fleet');
 }
+
+// === Activity ===
+export async function getActivity() {
+  return apiClient.get('/activity');
+}
+
+// === Additional Endpoints ===
+export async function getLogs() {
+  return apiClient.get('/logs');
+}
+
+export async function getSystemHealth() {
+  return apiClient.get('/health');
+}
+
+// === Utilities ===
+export async function reseedDemoData() {
+  return apiClient.post('/reseed');
+}
+
+// === Error Recovery ===
+export async function runSelfTest() {
+  return apiClient.post('/system/self-test');
+}
+
+export async function runSelfRepair() {
+  return apiClient.post('/system/self-repair');
+}
+
+export async function getSystemMetrics() {
+  return apiClient.get('/system/metrics');
+}
+
+// === Chat Integration ===
+export async function getChatMessages() {
+  return apiClient.get('/chat/messages');
+}
+
+export async function postChatMessage(author, message) {
+  return apiClient.post('/chat/messages', { author, message });
+}
+
+// Export the API client for advanced usage
+export { apiClient };
