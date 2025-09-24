@@ -1,31 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { getArmadaStatus } from '../api';
+import { usePolling } from '../hooks/usePolling';
 
 const ArmadaMap = () => {
   const [fleet, setFleet] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchFleetData();
-    const interval = setInterval(fetchFleetData, 5000); // Refresh every 5 seconds
-    return () => clearInterval(interval);
-  }, []);
-
+  /**
+   * Optimized fleet data fetching function
+   * Manages armada status data with proper error handling
+   */
   const fetchFleetData = async () => {
-    try {
-      setLoading(true);
-      const data = await getArmadaStatus();
-      setFleet(data);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-      console.error('Failed to fetch fleet data:', err);
-    } finally {
-      setLoading(false);
-    }
+    const data = await getArmadaStatus();
+    setFleet(data);
+    return data;
   };
 
+  /**
+   * Use 30-second polling for fleet status updates
+   * Fleet positions and status don't require high-frequency updates,
+   * making 30-second intervals optimal for network efficiency
+   */
+  const { loading, error, refresh } = usePolling(fetchFleetData, {
+    interval: 30000, // 30 seconds - balanced refresh rate for fleet monitoring
+    immediate: true,
+    debounceDelay: 200
+  });
+
+  // Utility function for fleet status visualization
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
       case 'online': return '#00ff00';
@@ -50,7 +51,7 @@ const ArmadaMap = () => {
       <div className="armada-map">
         <h2>🗺️ Armada Map</h2>
         <div className="error">Error loading fleet: {error}</div>
-        <button onClick={fetchFleetData} className="retry-button">Retry</button>
+        <button onClick={refresh} className="retry-button">Retry</button>
       </div>
     );
   }
@@ -59,7 +60,8 @@ const ArmadaMap = () => {
     <div className="armada-map">
       <div className="header">
         <h2>🗺️ Armada Map</h2>
-        <button onClick={fetchFleetData} className="refresh-button">🔄 Refresh</button>
+        {/* Manual refresh for immediate fleet status updates */}
+        <button onClick={refresh} className="refresh-button">🔄 Refresh</button>
       </div>
       
       <div className="fleet-container">

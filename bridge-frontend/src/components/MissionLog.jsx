@@ -1,31 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { getMissions } from '../api';
+import { usePolling } from '../hooks/usePolling';
 
 const MissionLog = () => {
   const [missions, setMissions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchMissions();
-    const interval = setInterval(fetchMissions, 5000); // Refresh every 5 seconds
-    return () => clearInterval(interval);
-  }, []);
-
+  /**
+   * Optimized mission data fetching with proper state management
+   * Centralizes mission data handling for better maintainability
+   */
   const fetchMissions = async () => {
-    try {
-      setLoading(true);
-      const data = await getMissions();
-      setMissions(data);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-      console.error('Failed to fetch missions:', err);
-    } finally {
-      setLoading(false);
-    }
+    const data = await getMissions();
+    setMissions(data);
+    return data;
   };
 
+  /**
+   * Implement 30-second polling for mission updates
+   * Missions typically don't change as frequently as other data,
+   * so reduced polling frequency improves performance while maintaining freshness
+   */
+  const { loading, error, refresh } = usePolling(fetchMissions, {
+    interval: 30000, // 30 seconds - appropriate for mission status monitoring
+    immediate: true,
+    debounceDelay: 200
+  });
+
+  // Utility functions for mission data formatting
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
       case 'active': return '#00ff00';
@@ -63,7 +64,7 @@ const MissionLog = () => {
       <div className="mission-log">
         <h2>🚀 Mission Log</h2>
         <div className="error">Error loading missions: {error}</div>
-        <button onClick={fetchMissions} className="retry-button">Retry</button>
+        <button onClick={refresh} className="retry-button">Retry</button>
       </div>
     );
   }
@@ -72,7 +73,8 @@ const MissionLog = () => {
     <div className="mission-log">
       <div className="header">
         <h2>🚀 Mission Log</h2>
-        <button onClick={fetchMissions} className="refresh-button">🔄 Refresh</button>
+        {/* Manual refresh for immediate mission status updates */}
+        <button onClick={refresh} className="refresh-button">🔄 Refresh</button>
       </div>
       
       <div className="missions-container">

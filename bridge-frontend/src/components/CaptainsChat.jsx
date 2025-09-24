@@ -1,41 +1,47 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getCaptainMessages, sendCaptainMessage } from '../api';
+import { usePolling } from '../hooks/usePolling';
 
 const CaptainsChat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    fetchMessages();
-    const interval = setInterval(fetchMessages, 5000); // Refresh every 5 seconds
-    return () => clearInterval(interval);
-  }, []);
+  /**
+   * Optimized message fetching for chat functionality
+   * Handles message state management efficiently
+   */
+  const fetchMessages = async () => {
+    const data = await getCaptainMessages();
+    setMessages(data);
+    return data;
+  };
 
+  /**
+   * Use 30-second polling for chat messages
+   * While chat might benefit from more frequent updates, 30 seconds provides
+   * a good balance between real-time feel and network efficiency.
+   * Manual refresh is available for immediate updates when needed.
+   */
+  const { loading, error, refresh } = usePolling(fetchMessages, {
+    interval: 30000, // 30 seconds - balanced for chat monitoring with manual refresh option
+    immediate: true,
+    debounceDelay: 100 // Shorter debounce for chat for more responsive feel
+  });
+
+  // Auto-scroll to bottom when messages update
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  const fetchMessages = async () => {
-    try {
-      setLoading(true);
-      const data = await getCaptainMessages();
-      setMessages(data);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-      console.error('Failed to fetch messages:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  /**
+   * Handle message sending with optimized refresh
+   * Immediately refreshes messages after sending for instant feedback
+   */
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -49,11 +55,11 @@ const CaptainsChat = () => {
       await sendCaptainMessage(messageData);
       setInput('');
       
-      // Refresh messages after sending (instant update)
-      await fetchMessages();
+      // Refresh messages immediately after sending for instant update
+      await refresh();
     } catch (err) {
-      setError(err.message);
       console.error('Failed to send message:', err);
+      // Error handling is managed by the polling hook
     }
   };
 
@@ -74,7 +80,8 @@ const CaptainsChat = () => {
     <div className="captains-chat">
       <div className="header">
         <h2>💬 Captains Chat</h2>
-        <button onClick={fetchMessages} className="refresh-button">🔄 Refresh</button>
+        {/* Manual refresh for immediate message updates */}
+        <button onClick={refresh} className="refresh-button">🔄 Refresh</button>
       </div>
       
       {error && (

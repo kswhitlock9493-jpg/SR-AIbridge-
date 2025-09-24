@@ -1,31 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { getVaultLogs } from '../api';
+import { usePolling } from '../hooks/usePolling';
 
 const VaultLogs = () => {
   const [logs, setLogs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchLogs();
-    const interval = setInterval(fetchLogs, 5000); // Refresh every 5 seconds
-    return () => clearInterval(interval);
-  }, []);
-
+  /**
+   * Optimized data fetching function for vault logs
+   * Implements efficient state management for log data
+   */
   const fetchLogs = async () => {
-    try {
-      setLoading(true);
-      const data = await getVaultLogs();
-      setLogs(data);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-      console.error('Failed to fetch vault logs:', err);
-    } finally {
-      setLoading(false);
-    }
+    const data = await getVaultLogs();
+    setLogs(data);
+    return data;
   };
 
+  /**
+   * Use optimized polling with 30-second intervals for vault logs
+   * Reduces network load while maintaining reasonable data freshness
+   * Includes debounced loading states for smoother UX
+   */
+  const { loading, error, refresh } = usePolling(fetchLogs, {
+    interval: 30000, // 30 seconds - optimized interval for log monitoring
+    immediate: true,
+    debounceDelay: 200
+  });
+
+  // Utility functions for log formatting
   const getLevelColor = (level) => {
     switch (level?.toLowerCase()) {
       case 'error': return '#ff4444';
@@ -53,7 +54,7 @@ const VaultLogs = () => {
       <div className="vault-logs">
         <h2>📜 Vault Logs</h2>
         <div className="error">Error loading logs: {error}</div>
-        <button onClick={fetchLogs} className="retry-button">Retry</button>
+        <button onClick={refresh} className="retry-button">Retry</button>
       </div>
     );
   }
@@ -62,7 +63,8 @@ const VaultLogs = () => {
     <div className="vault-logs">
       <div className="header">
         <h2>📜 Vault Logs</h2>
-        <button onClick={fetchLogs} className="refresh-button">🔄 Refresh</button>
+        {/* Manual refresh button for immediate log updates when needed */}
+        <button onClick={refresh} className="refresh-button">🔄 Refresh</button>
       </div>
       
       <div className="logs-container">
