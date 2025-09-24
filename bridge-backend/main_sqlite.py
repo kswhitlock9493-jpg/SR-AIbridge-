@@ -564,6 +564,113 @@ async def get_fleet():
             "timestamp": datetime.utcnow().isoformat()
         }
 
+# === Captain Messages ===
+@app.get("/captains/messages")
+async def get_captain_messages():
+    """Get captain messages - placeholder endpoint for frontend compatibility"""
+    try:
+        # Return empty array for now - can be enhanced later
+        return {
+            "status": "success",
+            "messages": [],
+            "count": 0,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Get captain messages error: {e}")
+        return {
+            "status": "error",
+            "error": "Failed to retrieve captain messages",
+            "messages": [],
+            "count": 0,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
+@app.post("/captains/send") 
+async def send_captain_message(message: dict):
+    """Send captain message - placeholder endpoint for frontend compatibility"""
+    try:
+        # Return success response for now - can be enhanced later
+        return {
+            "status": "success",
+            "message": "Message sent successfully",
+            "stored": message,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Send captain message error: {e}")
+        return {
+            "status": "error",
+            "error": "Failed to send captain message",
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
+# === Activity Feed ===
+@app.get("/activity")
+async def get_activity():
+    """Get activity feed - use vault logs as activity"""
+    try:
+        # Use vault logs as activity feed
+        logs = await db_manager.get_vault_logs(limit=20)
+        
+        # Transform vault logs to activity format
+        activities = []
+        for log in logs:
+            activities.append({
+                "id": log.get("id"),
+                "type": "log_entry",
+                "agent": log.get("agent_name"),
+                "action": log.get("action"),
+                "details": log.get("details"),
+                "timestamp": log.get("timestamp"),
+                "level": log.get("log_level", "info")
+            })
+        
+        return {
+            "status": "success",
+            "activities": activities,
+            "count": len(activities),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Get activity error: {e}")
+        return {
+            "status": "error",
+            "error": "Failed to retrieve activity",
+            "activities": [],
+            "count": 0,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
+# === Armada Status ===
+@app.get("/armada/status")
+async def get_armada_status():
+    """Get armada status - placeholder endpoint for frontend compatibility"""
+    try:
+        from startup import get_fleet_data, get_system_status
+        fleet_data = get_fleet_data()
+        system_status = await get_system_status()
+        
+        return {
+            "status": "success",
+            "fleet": fleet_data,
+            "admiral": system_status["admiral"],
+            "ships_online": len([ship for ship in fleet_data if ship.get("status") == "online"]),
+            "total_ships": len(fleet_data),
+            "operational_status": "nominal",
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Get armada status error: {e}")
+        return {
+            "status": "error",
+            "error": "Failed to retrieve armada status",
+            "fleet": [],
+            "ships_online": 0,
+            "total_ships": 0,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(

@@ -8,19 +8,56 @@ const Dashboard = () => {
     missions, 
     vaultLogs: logs, 
     fleetData: fleet, 
+    activity,
     loading, 
     error, 
-    refreshData 
+    refreshData,
+    fetchSystemHealth,
+    systemHealth
   } = useBridge();
 
-  // Helper functions for data processing
-  const getOnlineAgents = () => agents.filter(a => a.status === 'online').length;
-  const getActiveMissions = () => missions.filter(m => m.status === 'active').length;
+  // Helper functions for data processing with fallback handling
+  const getOnlineAgents = () => {
+    if (!Array.isArray(agents) || agents.length === 0) return 0;
+    return agents.filter(a => a.status === 'online').length;
+  };
+  
+  const getActiveMissions = () => {
+    if (!Array.isArray(missions) || missions.length === 0) return 0;
+    return missions.filter(m => m.status === 'active').length;
+  };
+  
   const getOnlineShips = () => {
     const fleetArray = fleet?.fleet || fleet || [];
-    return Array.isArray(fleetArray) ? fleetArray.filter(s => s.status === 'online').length : 0;
+    if (!Array.isArray(fleetArray) || fleetArray.length === 0) return 0;
+    return fleetArray.filter(s => s.status === 'online').length;
   };
-  const getRecentLogs = () => logs.slice(0, 5);
+  
+  const getFleetTotal = () => {
+    const fleetArray = fleet?.fleet || fleet || [];
+    return Array.isArray(fleetArray) ? fleetArray.length : 0;
+  };
+  
+  const getRecentLogs = () => {
+    // Use activity data if available, fallback to vault logs
+    const activityData = activity && Array.isArray(activity) ? activity : [];
+    const logsData = logs && Array.isArray(logs) ? logs : [];
+    
+    if (activityData.length > 0) {
+      return activityData.slice(0, 5);
+    }
+    return logsData.slice(0, 5);
+  };
+
+  // Handle System Self-Test
+  const handleSystemSelfTest = async () => {
+    try {
+      await fetchSystemHealth();
+      // Show self-test results in system health state
+    } catch (err) {
+      console.error('Self-test failed:', err);
+    }
+  };
 
   if (loading) {
     return (
@@ -56,20 +93,50 @@ const Dashboard = () => {
           <div className="status-grid">
             <div className="status-item">
               <span className="label">Admiral:</span>
-              <span className="value">{status.admiral}</span>
+              <span className="value">{status.admiral || "No Admiral"}</span>
             </div>
             <div className="status-item">
               <span className="label">Agents Online:</span>
-              <span className="value online">{getOnlineAgents()}/{agents.length}</span>
+              <span className="value online">
+                {getOnlineAgents()}/{Array.isArray(agents) ? agents.length : 0}
+                {agents.length === 0 && <span className="placeholder"> (No agents)</span>}
+              </span>
             </div>
             <div className="status-item">
               <span className="label">Active Missions:</span>
-              <span className="value active">{getActiveMissions()}</span>
+              <span className="value active">
+                {getActiveMissions()}
+                {missions.length === 0 && <span className="placeholder"> (No missions)</span>}
+              </span>
             </div>
             <div className="status-item">
               <span className="label">Fleet Online:</span>
-              <span className="value online">{getOnlineShips()}/{(fleet?.fleet || fleet || []).length}</span>
+              <span className="value online">
+                {getOnlineShips()}/{getFleetTotal()}
+                {getFleetTotal() === 0 && <span className="placeholder"> (No fleet data)</span>}
+              </span>
             </div>
+          </div>
+          
+          {/* System Self-Test Button */}
+          <div className="self-test-section">
+            <button onClick={handleSystemSelfTest} className="self-test-button">
+              🔍 Run Self-Test
+            </button>
+            {systemHealth && (
+              <div className={`system-health-status ${systemHealth.status}`}>
+                Status: {systemHealth.status}
+                {systemHealth.components && (
+                  <div className="health-components">
+                    {Object.entries(systemHealth.components).map(([component, data]) => (
+                      <div key={component} className={`component-status ${data.status}`}>
+                        {component}: {data.status}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -77,13 +144,19 @@ const Dashboard = () => {
         <div className="dashboard-card recent-activity">
           <h3>⚡ Recent Activity</h3>
           <div className="activity-list">
-            {getRecentLogs().map((log) => (
-              <div key={log.id} className="activity-item">
-                <span className="agent">{log.agent_name}:</span>
-                <span className="action">{log.action}</span>
-                <span className="time">{new Date(log.timestamp).toLocaleTimeString()}</span>
+            {getRecentLogs().length > 0 ? (
+              getRecentLogs().map((item) => (
+                <div key={item.id} className="activity-item">
+                  <span className="agent">{item.agent_name || item.agent}:</span>
+                  <span className="action">{item.action}</span>
+                  <span className="time">{new Date(item.timestamp).toLocaleTimeString()}</span>
+                </div>
+              ))
+            ) : (
+              <div className="no-data">
+                <span className="placeholder-text">No recent activity available</span>
               </div>
-            ))}
+            )}
           </div>
         </div>
 

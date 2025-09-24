@@ -7,7 +7,8 @@ import {
   getCaptainMessages,
   getArmadaStatus,
   getFleetData,
-  getActivity 
+  getActivity,
+  getSystemHealthFull
 } from '../api';
 import { useWebSocket } from './useWebSocket';
 
@@ -54,6 +55,7 @@ export const BridgeProvider = ({ children }) => {
   // Guardian/System states
   const [systemAlerts, setSystemAlerts] = useState([]);
   const [guardianActive, setGuardianActive] = useState(false);
+  const [systemHealth, setSystemHealth] = useState(null);
 
   /**
    * Handle WebSocket messages for real-time updates
@@ -143,30 +145,57 @@ export const BridgeProvider = ({ children }) => {
         fleetDataResponse,
         activityData
       ] = await Promise.all([
-        getStatus().catch(() => ({ agentsOnline: 0, activeMissions: 0, admiral: "Unknown" })),
-        getAgents().catch(() => []),
-        getMissions().catch(() => []),
+        getStatus().catch(() => ({ 
+          admiral: "Unknown", 
+          agents_online: 0, 
+          agentsOnline: 0, 
+          active_missions: 0, 
+          activeMissions: 0,
+          fleet_count: 0,
+          vault_logs: 0
+        })),
+        getAgents().catch(() => ({ agents: [], count: 0 })),
+        getMissions().catch(() => ({ missions: [], count: 0 })),
         getVaultLogs().catch(() => []),
         getCaptainMessages().catch(() => []),
         getArmadaStatus().catch(() => ({})),
-        getFleetData().catch(() => []),
+        getFleetData().catch(() => ({ fleet: [], count: 0, online: 0 })),
         getActivity().catch(() => [])
       ]);
 
+      // Update status with new enhanced data structure
       setStatus(prev => ({
         ...prev,
         agentsOnline: statusData.agents_online ?? statusData.agentsOnline ?? 0,
         activeMissions: statusData.active_missions ?? statusData.activeMissions ?? 0,
-        admiral: statusData.admiral ?? "Unknown"
+        admiral: statusData.admiral ?? "Unknown",
+        systemHealth: statusData.system_health ?? statusData.systemHealth ?? 'unknown'
       }));
       
-      setAgents(agentsData);
-      setMissions(missionsData);
-      setVaultLogs(vaultLogsData);
-      setCaptainMessages(messagesData);
-      setArmadaStatus(armadaData);
-      setFleetData(fleetDataResponse);
-      setActivity(activityData);
+      // Handle agents data structure (check if wrapped in response object)
+      const agents = agentsData.agents || agentsData || [];
+      setAgents(Array.isArray(agents) ? agents : []);
+      
+      // Handle missions data structure
+      const missions = missionsData.missions || missionsData || [];
+      setMissions(Array.isArray(missions) ? missions : []);
+      
+      // Handle vault logs
+      setVaultLogs(Array.isArray(vaultLogsData) ? vaultLogsData : []);
+      
+      // Handle messages
+      setCaptainMessages(Array.isArray(messagesData) ? messagesData : []);
+      
+      // Handle armada status
+      setArmadaStatus(armadaData || {});
+      
+      // Handle fleet data structure
+      const fleetData = fleetDataResponse.fleet || fleetDataResponse || [];
+      setFleetData(Array.isArray(fleetData) ? fleetData : []);
+      
+      // Handle activity data structure
+      const activities = activityData.activities || activityData || [];
+      setActivity(Array.isArray(activities) ? activities : []);
       
     } catch (err) {
       console.error('Bridge data fetch failed:', err);
@@ -238,6 +267,26 @@ export const BridgeProvider = ({ children }) => {
   }, []);
 
   /**
+   * Fetch system health from /health/full endpoint
+   */
+  const fetchSystemHealth = useCallback(async () => {
+    try {
+      const healthData = await getSystemHealthFull();
+      setSystemHealth(healthData);
+      return healthData;
+    } catch (err) {
+      console.error('Failed to fetch system health:', err);
+      setSystemHealth({
+        status: 'error',
+        error: err.message || 'Failed to fetch system health',
+        components: {},
+        self_heal_available: false
+      });
+      return null;
+    }
+  }, []);
+
+  /**
    * Send WebSocket message
    */
   const sendMessage = useCallback((message) => {
@@ -282,10 +331,12 @@ export const BridgeProvider = ({ children }) => {
     // System states
     systemAlerts,
     guardianActive,
+    systemHealth,
     
     // Actions
     refreshData,
     fetchAllData,
+    fetchSystemHealth,
     handleSystemAlert,
     handleGuardianActivate,
     sendMessage,
