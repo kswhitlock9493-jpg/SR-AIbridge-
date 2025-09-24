@@ -11,14 +11,45 @@ Usage:
 
 The backend automatically seeds data on startup, but this script shows
 how you could add additional data programmatically.
+
+You can also import seed_demo_data() for use in other modules.
 """
 
 import asyncio
-import aiohttp
 import json
 from datetime import datetime
 
+# Try to import aiohttp, install if missing
+try:
+    import aiohttp
+except ImportError:
+    aiohttp = None
+
 API_BASE = "http://localhost:8000"
+
+
+def seed_demo_data():
+    """
+    Exposed function for seeding demo data.
+    
+    This function can be imported and used by other modules, such as the rituals manager.
+    It runs the async seeding operation and returns the result.
+    
+    Returns:
+        dict: Result of the seeding operation
+    """
+    if aiohttp is None:
+        return {
+            "ok": False, 
+            "message": "aiohttp not available. Run 'pip install aiohttp' or use the rituals manager instead."
+        }
+    
+    try:
+        result = asyncio.run(test_and_seed_data())
+        return {"ok": True, "message": "Seeding completed via HTTP API", "details": result}
+    except Exception as e:
+        return {"ok": False, "message": f"Seeding failed: {str(e)}"}
+
 
 async def test_and_seed_data():
     """Test the API endpoints and add some additional demo data"""
@@ -162,10 +193,13 @@ if __name__ == "__main__":
     print("Installing aiohttp if needed...")
     import subprocess
     import sys
-    try:
-        import aiohttp
-    except ImportError:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "aiohttp"])
-        import aiohttp
+    if aiohttp is None:
+        try:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "aiohttp"])
+            import aiohttp
+            print("✅ aiohttp installed successfully")
+        except Exception as e:
+            print(f"❌ Failed to install aiohttp: {e}")
+            exit(1)
     
     asyncio.run(test_and_seed_data())
