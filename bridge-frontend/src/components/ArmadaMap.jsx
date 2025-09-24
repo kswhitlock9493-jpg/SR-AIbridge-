@@ -1,43 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { getArmadaStatus } from '../api';
-import { usePolling } from '../hooks/usePolling';
+import { useBridge } from '../hooks/useBridge';
 
-const ArmadaMap = ({ realTimeFleet = [] }) => {
-  const [fleetData, setFleetData] = useState({ fleet: [], summary: {} });
+const ArmadaMap = () => {
+  const { 
+    armadaStatus, 
+    fleetData, 
+    realTimeData, 
+    loading, 
+    error, 
+    refreshData 
+  } = useBridge();
+  
+  const [displayFleet, setDisplayFleet] = useState({ fleet: [], summary: {} });
 
   /**
-   * Enhanced fleet data fetching with full armada status
-   */
-  const fetchFleetData = async () => {
-    const data = await getArmadaStatus();
-    setFleetData(data);
-    return data;
-  };
-
-  /**
-   * Merge real-time fleet updates
+   * Update display fleet with real-time data
    */
   useEffect(() => {
+    const realTimeFleet = realTimeData.fleetData || [];
+    
+    // Combine armada status and fleet data from bridge context
+    const combined = {
+      fleet: fleetData && fleetData.length > 0 ? fleetData : realTimeFleet,
+      summary: armadaStatus || {},
+      last_updated: new Date().toISOString()
+    };
+    
+    setDisplayFleet(combined);
+    
     if (realTimeFleet.length > 0) {
-      setFleetData(prevData => ({
-        ...prevData,
-        fleet: realTimeFleet,
-        summary: {
-          ...prevData.summary,
-          last_updated: new Date().toISOString()
-        }
-      }));
+      console.log('📡 Real-time fleet updates available:', realTimeFleet.length);
     }
-  }, [realTimeFleet]);
-
-  /**
-   * Reduced polling frequency due to real-time updates
-   */
-  const { loading, error, refresh } = usePolling(fetchFleetData, {
-    interval: 90000, // 90 seconds - reduced due to real-time updates
-    immediate: true,
-    debounceDelay: 200
-  });
+  }, [armadaStatus, fleetData, realTimeData.fleetData]);
 
   // Utility functions for fleet visualization
   const getStatusColor = (status) => {
@@ -67,7 +61,7 @@ const ArmadaMap = ({ realTimeFleet = [] }) => {
     return '⚓';
   };
 
-  if (loading && fleetData.fleet.length === 0) {
+  if (loading && displayFleet.fleet.length === 0) {
     return (
       <div className="armada-map">
         <h2>🗺️ Armada Map</h2>
@@ -81,7 +75,7 @@ const ArmadaMap = ({ realTimeFleet = [] }) => {
       <div className="armada-map">
         <h2>🗺️ Armada Map</h2>
         <div className="error">Error connecting to fleet: {error}</div>
-        <button onClick={refresh} className="retry-button">🔄 Reconnect</button>
+        <button onClick={() => refreshData('armada')} className="retry-button">🔄 Reconnect</button>
       </div>
     );
   }
@@ -94,7 +88,7 @@ const ArmadaMap = ({ realTimeFleet = [] }) => {
         <h2>🗺️ Armada Map</h2>
         <div className="header-info">
           <span className="live-indicator">🔴 LIVE</span>
-          <button onClick={refresh} className="refresh-button">🔄 Refresh</button>
+          <button onClick={() => refreshData('armada')} className="refresh-button">🔄 Refresh</button>
         </div>
       </div>
       

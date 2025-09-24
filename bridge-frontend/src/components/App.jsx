@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
-import { getStatus } from '../api';
-import { useWebSocket } from '../hooks/useWebSocket';
+import { BridgeProvider, useBridge } from '../hooks/useBridge';
 import './styles.css';
 import Dashboard from './Dashboard';
 import CaptainsChat from './CaptainsChat';
@@ -12,111 +11,29 @@ import CaptainToCaptain from './CaptainToCaptain';
 import MissionControls from './MissionControls';
 import Agents from './Agents';
 import AutonomyDaemon from '../daemon/AutonomyDaemon';
+import DaemonGuardian from './DaemonGuardian';
 import GuardianBanner from './GuardianBanner';
 
-// === Main App ===
-const App = () => {
-  const [status, setStatus] = useState({
-    agentsOnline: 0,
-    activeMissions: 0,
-    admiral: "Logged Out"
-  });
-  const [connectionError, setConnectionError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+// === Bridge App Component ===
+const BridgeApp = () => {
+  const { 
+    status, 
+    loading: isLoading, 
+    error: connectionError, 
+    connected: wsConnected, 
+    wsError,
+    systemAlerts, 
+    guardianActive,
+    handleSystemAlert,
+    handleGuardianActivate
+  } = useBridge();
+
   const [missionRefreshKey, setMissionRefreshKey] = useState(0);
-  const [realTimeData, setRealTimeData] = useState({
-    missions: [],
-    vaultLogs: [],
-    chatMessages: [],
-    fleetData: []
-  });
-  const [systemAlerts, setSystemAlerts] = useState([]);
-  const [guardianActive, setGuardianActive] = useState(false);
-
-  // Handle real-time WebSocket messages
-  const handleWebSocketMessage = useCallback((message) => {
-    console.log('📡 Real-time update:', message.type);
-    
-    switch (message.type) {
-      case 'mission_updated':
-        setRealTimeData(prev => ({
-          ...prev,
-          missions: [...prev.missions, message.mission]
-        }));
-        setMissionRefreshKey(prev => prev + 1);
-        break;
-        
-      case 'vault_log':
-        setRealTimeData(prev => ({
-          ...prev,
-          vaultLogs: [message.log, ...prev.vaultLogs.slice(0, 49)] // Keep last 50
-        }));
-        break;
-        
-      case 'chat_message':
-        setRealTimeData(prev => ({
-          ...prev,
-          chatMessages: [message.message, ...prev.chatMessages.slice(0, 49)]
-        }));
-        break;
-        
-      case 'fleet_updated':
-        setRealTimeData(prev => ({
-          ...prev,
-          fleetData: message.fleet
-        }));
-        break;
-        
-      case 'armada_order_executed':
-        console.log('🚢 Fleet order executed:', message.result);
-        break;
-        
-      default:
-        console.log('📦 Unhandled message type:', message.type);
-    }
-  }, []);
-
-  // Initialize WebSocket connection
-  const { connected: wsConnected, error: wsError } = useWebSocket(handleWebSocketMessage);
 
   // Handle mission dispatch to trigger instant refresh in MissionLog
-  const handleMissionDispatch = (missionData) => {
+  const handleMissionDispatch = useCallback((missionData) => {
     setMissionRefreshKey(prev => prev + 1);
-  };
-
-  // Handle system alerts from AutonomyDaemon
-  const handleSystemAlert = useCallback((alerts) => {
-    setSystemAlerts(alerts);
-  }, []);
-
-  // Handle Guardian Mode activation
-  const handleGuardianActivate = useCallback((reason) => {
-    setGuardianActive(true);
-    console.log('🛡️ Guardian Mode activated:', reason);
-  }, []);
-
-  useEffect(() => {
-    async function fetchStatus() {
-      try {
-        setIsLoading(true);
-        const data = await getStatus();
-        setStatus({
-          agentsOnline: data.agents_online ?? 0,
-          activeMissions: data.active_missions ?? 0,
-          admiral: data.admiral ?? "Unknown"
-        });
-        setConnectionError(null);
-      } catch (err) {
-        console.error("Status fetch failed:", err);
-        setConnectionError(`Failed to connect to backend: ${err.message}`);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchStatus();
-    const interval = setInterval(fetchStatus, 30000);
-    return () => clearInterval(interval);
+    console.log('🚀 Mission dispatched, refreshing mission log');
   }, []);
 
   return (
@@ -186,20 +103,35 @@ const App = () => {
               onGuardianActivate={handleGuardianActivate}
             />
             
+            {/* DaemonGuardian - Enhanced monitoring with unified state */}
+            <DaemonGuardian 
+              onSystemAlert={handleSystemAlert}
+              onGuardianActivate={handleGuardianActivate}
+            />
+            
             <Routes>
-              <Route path="/" element={<Dashboard realTimeData={realTimeData} />} />
+              <Route path="/" element={<Dashboard />} />
               <Route path="/controls" element={<MissionControls onMissionDispatch={handleMissionDispatch} />} />
               <Route path="/agents" element={<Agents />} />
-              <Route path="/chat" element={<CaptainsChat realTimeMessages={realTimeData.chatMessages} />} />
-              <Route path="/vault" element={<VaultLogs realTimeLogs={realTimeData.vaultLogs} />} />
-              <Route path="/missions" element={<MissionLog refreshKey={missionRefreshKey} realTimeMissions={realTimeData.missions} />} />
-              <Route path="/armada" element={<ArmadaMap realTimeFleet={realTimeData.fleetData} />} />
-              <Route path="/captains" element={<CaptainToCaptain realTimeMessages={realTimeData.chatMessages} />} />
+              <Route path="/chat" element={<CaptainsChat />} />
+              <Route path="/vault" element={<VaultLogs />} />
+              <Route path="/missions" element={<MissionLog refreshKey={missionRefreshKey} />} />
+              <Route path="/armada" element={<ArmadaMap />} />
+              <Route path="/captains" element={<CaptainToCaptain />} />
             </Routes>
           </div>
         </div>
       </div>
     </Router>
+  );
+};
+
+// === Main App Wrapper with Bridge Provider ===
+const App = () => {
+  return (
+    <BridgeProvider>
+      <BridgeApp />
+    </BridgeProvider>
   );
 };
 

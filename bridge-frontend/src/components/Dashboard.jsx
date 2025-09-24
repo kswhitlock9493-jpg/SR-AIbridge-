@@ -1,47 +1,17 @@
-import React, { useState } from 'react';
-import { getStatus, getAgents, getMissions, getVaultLogs, getArmadaStatus } from '../api';
-import { usePolling } from '../hooks/usePolling';
+import React from 'react';
+import { useBridge } from '../hooks/useBridge';
 
 const Dashboard = () => {
-  const [status, setStatus] = useState({});
-  const [agents, setAgents] = useState([]);
-  const [missions, setMissions] = useState([]);
-  const [logs, setLogs] = useState([]);
-  const [fleet, setFleet] = useState([]);
-
-  /**
-   * Optimized data fetching function for dashboard
-   * Fetches all required data in parallel for better performance
-   * Implements proper error handling and state management
-   */
-  const fetchAllData = async () => {
-    const [statusData, agentsData, missionsData, logsData, fleetData] = await Promise.all([
-      getStatus(),
-      getAgents(),
-      getMissions(),
-      getVaultLogs(),
-      getArmadaStatus()
-    ]);
-    
-    setStatus(statusData);
-    setAgents(agentsData);
-    setMissions(missionsData);
-    setLogs(logsData);
-    setFleet(fleetData);
-    
-    return { statusData, agentsData, missionsData, logsData, fleetData };
-  };
-
-  /**
-   * Use optimized polling hook with 30-second intervals
-   * Provides debounced loading states and manual refresh capability
-   * Reduces network load compared to previous 5-second polling
-   */
-  const { loading, error, refresh } = usePolling(fetchAllData, {
-    interval: 30000, // 30 seconds - optimized for reduced network load
-    immediate: true,
-    debounceDelay: 200 // Prevent loading state flicker for fast responses
-  });
+  const { 
+    status, 
+    agents, 
+    missions, 
+    vaultLogs: logs, 
+    fleetData: fleet, 
+    loading, 
+    error, 
+    refreshData 
+  } = useBridge();
 
   // Helper functions for data processing
   const getOnlineAgents = () => agents.filter(a => a.status === 'online').length;
@@ -66,7 +36,7 @@ const Dashboard = () => {
       <div className="dashboard">
         <h2>📊 Dashboard</h2>
         <div className="error">Error loading dashboard: {error}</div>
-        <button onClick={refresh} className="retry-button">Retry</button>
+        <button onClick={() => refreshData()} className="retry-button">Retry</button>
       </div>
     );
   }
@@ -76,7 +46,7 @@ const Dashboard = () => {
       <div className="header">
         <h2>📊 Bridge Dashboard</h2>
         {/* Manual refresh button for user-initiated updates */}
-        <button onClick={refresh} className="refresh-button">🔄 Refresh</button>
+        <button onClick={() => refreshData()} className="refresh-button">🔄 Refresh</button>
       </div>
 
       <div className="dashboard-grid">
