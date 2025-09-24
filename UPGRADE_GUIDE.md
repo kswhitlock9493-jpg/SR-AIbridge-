@@ -21,6 +21,8 @@ SR-AIbridge now operates in **fully autonomous mode** with the following capabil
 
 ## Deployment Options
 
+> **🚀 New in v1.1.0**: Automated CI/CD pipeline with health monitoring available for all deployment options! See [CI/CD & Monitoring](#cicd--monitoring) section below.
+
 ### Option 1: Quick Start (In-Memory Demo)
 
 **Perfect for**: Development, testing, demonstrations, proof-of-concept
@@ -369,6 +371,135 @@ asyncio.run(migrate_data())
 - **Rolling Updates**: Deploy new versions without downtime
 - **Horizontal Scaling**: Add multiple backend instances
 - **Load Balancing**: Distribute traffic across instances
+
+## CI/CD & Monitoring
+
+### Automated Deployment Pipeline
+
+SR-AIbridge includes a comprehensive CI/CD infrastructure with GitHub Actions:
+
+#### 🚀 Deployment Workflow (`.github/workflows/deploy.yml`)
+
+**Automatic Features:**
+- **Frontend Build & Deploy**: Automatically builds React app and deploys to Netlify
+- **Backend Validation**: Validates Python code and triggers Render deployment  
+- **Build Verification**: Tests complete build process before deployment
+- **Pull Request Testing**: Validates changes before merging
+
+**Setup Requirements:**
+```bash
+# Required GitHub Secrets (optional but recommended)
+NETLIFY_AUTH_TOKEN=your_netlify_token
+NETLIFY_SITE_ID=your_netlify_site_id
+
+# Optional: Custom deployment URLs
+BACKEND_URL=https://your-backend.onrender.com
+FRONTEND_URL=https://your-frontend.netlify.app
+RENDER_DEPLOY_HOOK=https://api.render.com/deploy/your-hook
+```
+
+#### 🧪 Health Monitoring Workflow (`.github/workflows/self-test.yml`)
+
+**Comprehensive Testing:**
+- **Post-Deployment Health Checks**: Runs automatically after successful deployments
+- **Scheduled Monitoring**: Health checks every 4 hours to ensure ongoing reliability
+- **Manual Testing**: Trigger health checks anytime with custom parameters
+- **Detailed Reporting**: JSON artifacts with test results and performance metrics
+
+**Monitoring Coverage:**
+- ✅ API endpoint health (`/health`, `/status`, `/`)
+- ✅ Guardian daemon functionality  
+- ✅ Agent management operations
+- ✅ Mission/task system
+- ✅ WebSocket connectivity
+- ✅ Vault logs and doctrine endpoints
+- ✅ System utility functions
+
+#### Enhanced Self-Test Script
+
+The `bridge-backend/self_test.py` script has been enhanced for production monitoring:
+
+```bash
+# Production health check
+python3 self_test.py --url https://your-backend.onrender.com --json
+
+# Advanced CI/CD usage
+python3 self_test.py \
+  --url $BACKEND_URL \
+  --timeout 45 \
+  --retries 5 \
+  --wait-ready 120 \
+  --json > health_report.json
+
+# Local development testing  
+python3 self_test.py --timeout 10 --wait-ready 30
+```
+
+**New Features:**
+- **Configurable Timeouts**: Adjust for slow networks or cold starts
+- **Retry Logic**: Exponential backoff for transient failures
+- **Production URLs**: Built-in support for HTTPS endpoints
+- **JSON Output**: Machine-readable results for automation
+- **Wait-for-Ready**: Intelligent backend readiness detection
+
+#### Manual Health Monitoring
+
+**Using GitHub Actions UI:**
+
+1. Navigate to your repository's **Actions** tab
+2. Select **"Self-Test SR-AIbridge"** workflow
+3. Click **"Run workflow"** 
+4. Optionally specify custom backend URL
+5. Review detailed results in workflow summary
+
+**Direct Script Usage:**
+
+```bash
+# Clone repository locally
+git clone https://github.com/your-username/SR-AIbridge.git
+cd SR-AIbridge/bridge-backend
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run health check against your deployment
+python3 self_test.py --url https://your-backend.onrender.com
+```
+
+#### Monitoring Dashboard
+
+**GitHub Actions provides:**
+- ✅ Workflow success/failure history
+- ✅ Detailed step-by-step logs
+- ✅ Performance metrics and trends
+- ✅ Downloadable test artifacts (JSON reports)
+- ✅ Email notifications for failures
+
+**Available Metrics:**
+- Response times for all endpoints
+- Success rates over time
+- Error patterns and frequencies  
+- WebSocket connection statistics
+- Guardian daemon health status
+
+#### Troubleshooting CI/CD
+
+**Common Issues:**
+
+**Issue**: Deployment workflow fails on Netlify
+**Solution**: Check `NETLIFY_AUTH_TOKEN` and `NETLIFY_SITE_ID` secrets
+
+**Issue**: Backend health tests timeout
+**Solution**: Increase `--wait-ready` parameter or check backend startup time
+
+**Issue**: Self-test script fails locally
+**Solution**: Verify backend URL and network connectivity
+
+**Integration with Deployment Options:**
+
+- **In-Memory Demo**: Full CI/CD support with zero additional configuration
+- **Database Production**: Enhanced monitoring for database connectivity and performance
+- **Container Deployment**: Docker-compatible health checks and deployment validation
 
 ---
 
