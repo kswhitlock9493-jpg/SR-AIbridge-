@@ -197,6 +197,11 @@ export async function getSystemMetrics() {
   return apiClient.get('/system/metrics');
 }
 
+// === Guardian System ===
+export async function getGuardianStatus() {
+  return apiClient.get('/guardian/status');
+}
+
 // === Chat Integration ===
 export async function getChatMessages() {
   return apiClient.get('/chat/messages');
