@@ -181,6 +181,10 @@ export async function getSystemHealth() {
   return apiClient.get('/health');
 }
 
+export async function getSystemHealthFull() {
+  return apiClient.get('/health/full');
+}
+
 // === Utilities ===
 export async function reseedDemoData() {
   return apiClient.post('/reseed');
