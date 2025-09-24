@@ -1,16 +1,23 @@
 # SR-AIbridge
 
-A tactical command and control system for AI agent coordination with a beautiful space-themed interface.
+A tactical command and control system for AI agent coordination with comprehensive health monitoring and self-healing capabilities.
 
-## 🚀 Quick Start (In-Memory Backend)
+## 🛡️ NEW: SQLite-first Backend with Full Health Monitoring
 
-The fastest way to get SR-AIbridge running with zero configuration:
+SR-AIbridge now includes a production-ready SQLite-first backend with:
+- **🔍 Comprehensive Health Checks**: Real-time system monitoring
+- **🔧 Self-Healing**: Automatic recovery from common issues
+- **📊 Live Health Dashboard**: Visual system status monitoring
+- **⚡ Safe Error Handling**: Structured error responses, no exposed exceptions
+- **🚀 Zero-Config Deployment**: Works out of the box with SQLite
+
+## 🚀 Quick Start (SQLite-first Backend)
 
 ### Backend Setup
 ```bash
 cd bridge-backend
 pip install -r requirements.txt
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+python main_sqlite.py
 ```
 
 ### Frontend Setup
@@ -23,15 +30,33 @@ npm start
 Visit:
 - 🌐 **Frontend**: http://localhost:3000
 - 📊 **API Docs**: http://localhost:8000/docs
-- 🔌 **API Status**: http://localhost:8000/status
+- 🔌 **Health Check**: http://localhost:8000/health
+- 🛡️ **Full Health**: http://localhost:8000/health/full
 
-## ✨ Features
+## ✨ New Health Monitoring Features
 
-### 🎯 Drop-in In-Memory Backend
-- **Zero Configuration**: No database setup required
-- **Instant Demo Data**: Auto-seeds with realistic space operations data
-- **Full API**: All endpoints working out of the box
-- **Zero Firewall Issues**: Pure in-memory storage, no external connections
+### 🔍 Health Check Endpoints
+- `GET /health` - Basic health for load balancers  
+- `GET /health/full` - Comprehensive system health
+- `POST /health/self-heal` - Trigger automatic recovery
+- `GET /system/metrics` - Performance metrics
+
+### 🛡️ SystemSelfTest Component
+The frontend now includes a live health monitoring dashboard:
+- **Auto-refresh**: Updates every 30 seconds
+- **Visual Status**: Color-coded health indicators  
+- **Self-Test**: Manual system validation
+- **Self-Repair**: One-click recovery
+- **Metrics Display**: Database counts and health scores
+
+### 🔧 Self-Healing Capabilities
+- Database connection recovery
+- Guardian system maintenance  
+- Orphaned record cleanup
+- Configuration validation
+- Automatic table creation
+
+## 🎯 Classic Features
 
 ### 📊 Real-Time Dashboard
 - System status overview (agents online, active missions, fleet status)
@@ -69,25 +94,36 @@ Visit:
 
 ## 🛠️ API Endpoints
 
-The backend provides a comprehensive REST API:
+The backend provides a comprehensive REST API with full health monitoring:
+
+### Health & Monitoring
+- `GET /health` - Basic health check for load balancers
+- `GET /health/full` - Comprehensive system health
+- `POST /health/self-heal` - Trigger automatic recovery
+- `GET /system/metrics` - Performance metrics and counts
+- `POST /system/self-test` - Run comprehensive system test
 
 ### Core Endpoints
 - `GET /status` - System status overview
 - `GET /` - API information and health check
 
 ### Agent Management  
-- `GET /agents` - List all agents
+- `GET /agents` - List all agents (with safe error handling)
 - `POST /agents` - Register new agent
 - `DELETE /agents/{id}` - Remove agent
 
 ### Mission Control
-- `GET /missions` - List all missions
+- `GET /missions` - List all missions (with safe error handling)
 - `POST /missions` - Create new mission
 
 ### Vault Logs
-- `GET /vault/logs` - Get vault logs
+- `GET /vault/logs` - Get vault logs (with pagination)
 - `POST /vault/logs` - Add vault log entry
 - `GET /doctrine` - Alias for vault logs
+
+### Guardian System
+- `GET /guardians` - List all guardians
+- `GET /guardian/status` - Guardian system status
 
 ### Communication
 - `GET /captains/messages` - Get captain messages
@@ -101,6 +137,8 @@ The backend provides a comprehensive REST API:
 ### Utilities
 - `GET /activity` - Recent combined activity
 - `GET /reseed` - Regenerate demo data
+
+All endpoints include comprehensive error handling and return safe, structured JSON responses.
 
 ## 🎮 Demo & Testing
 
@@ -125,77 +163,85 @@ Visit http://localhost:8000/docs for:
 
 ## 🏗️ Architecture
 
-### In-Memory Storage
+### SQLite-first Database
 ```python
-class InMemoryStorage:
-    - captain_messages: List[Dict]
-    - armada_fleet: List[Dict] 
-    - agents: List[Dict]
-    - missions: List[Dict]
-    - vault_logs: List[Dict]
+# Modern async SQLAlchemy models
+class Guardian(Base):
+    - Health monitoring system
+    - Self-test capabilities
+    - Autonomous recovery
+
+class VaultLog(Base):
+    - Activity logging
+    - Agent actions
+    - System events
+
+class Mission(Base):
+    - Mission tracking
+    - Progress monitoring  
+    - Agent assignment
 ```
 
 ### Frontend Components
 - **Dashboard.jsx** - Main overview with real-time data
+- **SystemSelfTest.jsx** - Live health monitoring dashboard
 - **VaultLogs.jsx** - Activity and log display
 - **MissionLog.jsx** - Mission tracking interface
 - **App.jsx** - Main application shell with navigation
 
 ### Backend Framework
 - **FastAPI** - Modern, fast Python web framework
+- **SQLAlchemy Async** - Modern async database toolkit
+- **SQLite/PostgreSQL** - Database options for any scale
 - **Pydantic** - Data validation and serialization
 - **Uvicorn** - ASGI server for production deployment
 
-## 🔄 Easy Database Upgrade Path
+## 🚢 Deployment (Production Ready)
 
-The in-memory backend maintains the same API structure as a full database implementation:
+### Render (Backend) + Netlify (Frontend)
+The recommended production deployment uses the included configuration files:
 
-1. **Replace Storage Class**: Swap `InMemoryStorage` with database models
-2. **Update Dependencies**: Add SQLAlchemy, databases, etc.
-3. **Maintain API Contract**: All endpoints remain the same
-4. **Zero Frontend Changes**: No frontend modifications needed
+**Backend (Render)**:
+1. Connect repository to Render
+2. Uses `render.yaml` (already configured)
+3. Automatic SQLite database setup
+4. Health check monitoring
+5. Environment variables pre-configured
 
-Example upgrade path:
+**Frontend (Netlify)**:
+1. Connect repository to Netlify  
+2. Uses `netlify.toml` (already configured)
+3. Security headers included
+4. CORS properly configured
+5. Build optimization enabled
+
+### Alternative Deployments
+
+**Development**:
 ```bash
-# Current: In-memory
-pip install fastapi uvicorn pydantic python-dotenv
-
-# Future: Database-backed  
-pip install fastapi uvicorn pydantic sqlalchemy databases asyncpg python-dotenv
-```
-
-## 🚢 Deployment Options
-
-### Development
-```bash
-# Backend
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-
-# Frontend  
-npm start
-```
-
-### Production
-```bash
-# Backend
-uvicorn main:app --host 0.0.0.0 --port 8000
+# SQLite-first backend
+cd bridge-backend && python main_sqlite.py
 
 # Frontend
-npm run build
-# Serve build/ directory with nginx/apache
+cd bridge-frontend && npm start
 ```
 
-### Container Deployment
+**Container Deployment**:
 ```dockerfile
 # Backend Dockerfile
 FROM python:3.12-slim
 COPY bridge-backend/ /app
 WORKDIR /app
 RUN pip install -r requirements.txt
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main_sqlite:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
-## 🔄 CI/CD & Automated Testing
+**Scaling to PostgreSQL**:
+- Update `DATABASE_TYPE=postgres` in environment
+- Uncomment database section in `render.yaml`
+- No code changes needed - same API
+
+## 🔄 CI/CD & Health Monitoring
 
 SR-AIbridge includes a comprehensive CI/CD pipeline with automated health monitoring:
 
