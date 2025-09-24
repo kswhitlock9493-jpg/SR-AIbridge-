@@ -176,7 +176,7 @@ export async function getLogs() {
 }
 
 export async function getSystemHealth() {
-  return apiClient.get('/health');
+  return apiClient.get('/status');
 }
 
 // === Utilities ===
@@ -194,7 +194,7 @@ export async function runSelfRepair() {
 }
 
 export async function getSystemMetrics() {
-  return apiClient.get('/system/metrics');
+  return apiClient.get('/ws/stats');
 }
 
 // === Guardian System ===

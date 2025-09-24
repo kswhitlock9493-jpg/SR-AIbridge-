@@ -70,25 +70,33 @@ const AutonomyDaemon = ({ onSystemAlert, onGuardianActivate }) => {
         getSystemMetrics().catch(() => ({ cpu: 0, memory: 0, connections: 0 }))
       ]);
 
-      const isHealthy = healthData.status === 'healthy';
+      // Adapt /status endpoint response to health check format
+      const isHealthy = healthData.agents_online !== undefined && healthData.admiral !== undefined;
+      const derivedStatus = isHealthy ? 'healthy' : 'degraded';
       const hasErrors = healthData.errors && healthData.errors.length > 0;
 
       setDaemonStatus(prev => ({
         ...prev,
-        health: healthData.status || 'unknown',
-        metrics: metricsData,
+        health: derivedStatus,
+        metrics: {
+          ...metricsData,
+          agents_online: healthData.agents_online || 0,
+          active_missions: healthData.active_missions || 0,
+          total_agents: healthData.total_agents || 0
+        },
         alerts: hasErrors ? healthData.errors : []
       }));
 
       if (!isHealthy) {
         logActivity('warning', 'System health degraded', {
-          status: healthData.status,
+          status: derivedStatus,
           errors: healthData.errors
         });
       } else {
         logActivity('info', 'System health check passed', {
-          status: healthData.status,
-          metrics: metricsData
+          status: derivedStatus,
+          agents_online: healthData.agents_online,
+          active_missions: healthData.active_missions
         });
       }
 
