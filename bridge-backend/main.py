@@ -13,12 +13,6 @@ from rituals.manage_data import DataRituals
 from websocket_manager import websocket_manager
 from autonomous_scheduler import AutonomousScheduler
 
-# Database imports for dual-mode support (legacy imports kept for compatibility)
-from databases import Database
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Text, DateTime, func
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -31,70 +25,7 @@ load_dotenv()  # Also check current directory
 DATABASE_TYPE = os.getenv("DATABASE_TYPE", "sqlite").lower()
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///bridge.db")
 
-# Ensure PostgreSQL URL format is correct for databases library
-if DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
-
 logger.info(f"🔧 Configuring {DATABASE_TYPE.upper()} database: {DATABASE_URL}")
-
-# Database setup
-database = None
-metadata = MetaData()
-Base = declarative_base()
-
-# Define tables for SQLite/Postgres mode
-agents_table = Table(
-    "agents", metadata,
-    Column("id", Integer, primary_key=True),
-    Column("name", String(255), nullable=False),
-    Column("endpoint", String(255), nullable=False),
-    Column("capabilities", Text),  # JSON string
-    Column("status", String(50), default="online"),
-    Column("last_heartbeat", DateTime),
-    Column("created_at", DateTime, server_default=func.now())
-)
-
-missions_table = Table(
-    "missions", metadata,
-    Column("id", Integer, primary_key=True),
-    Column("title", String(255), nullable=False),
-    Column("description", Text),
-    Column("status", String(50), default="active"),
-    Column("priority", String(50), default="normal"),
-    Column("assigned_agent_id", Integer),
-    Column("created_at", DateTime, server_default=func.now()),
-    Column("updated_at", DateTime, server_default=func.now(), onupdate=func.now())
-)
-
-vault_logs_table = Table(
-    "vault_logs", metadata,
-    Column("id", Integer, primary_key=True),
-    Column("agent_name", String(255), nullable=False),
-    Column("action", String(255), nullable=False),
-    Column("details", Text, nullable=False),
-    Column("log_level", String(50), default="info"),
-    Column("timestamp", DateTime, server_default=func.now())
-)
-
-captain_messages_table = Table(
-    "captain_messages", metadata,
-    Column("id", Integer, primary_key=True),
-    Column("from_", String(255), nullable=False),
-    Column("to", String(255), nullable=False),
-    Column("message", Text, nullable=False),
-    Column("timestamp", DateTime, server_default=func.now())
-)
-
-armada_fleet_table = Table(
-    "armada_fleet", metadata,
-    Column("id", Integer, primary_key=True),
-    Column("name", String(255), nullable=False),
-    Column("status", String(50), default="online"),
-    Column("location", String(255), nullable=False),
-    Column("patrol_sectors", Text),  # JSON array as text
-    Column("updated_at", DateTime, server_default=func.now(), onupdate=func.now())
-)
-
 
 # Storage abstraction layer
 class StorageInterface:
@@ -118,25 +49,6 @@ class InMemoryStorage(StorageInterface):
     """In-memory storage for CI/CD and development"""
     pass
 
-
-class DatabaseStorage(StorageInterface):
-    """Legacy database storage for production (SQLite/Postgres) - DEPRECATED"""
-    
-    def __init__(self, database_url: str):
-        super().__init__()
-        self.database_url = database_url
-        self.database = Database(database_url)
-        self.engine = create_engine(database_url)
-        
-    async def connect(self):
-        """Connect to database and create tables"""
-        await self.database.connect()
-        metadata.create_all(self.engine)
-        logger.info(f"✅ Database connected and tables created")
-        
-    async def disconnect(self):
-        """Disconnect from database"""
-        await self.database.disconnect()
 
 
 class AsyncDatabaseStorage(StorageInterface):
@@ -168,8 +80,10 @@ class AsyncDatabaseStorage(StorageInterface):
             self.agents = await self.db.get_agents()
             self.missions = await self.db.get_missions()
             self.vault_logs = await self.db.get_vault_logs()
-            self.captain_messages = await self.db.get_captain_messages()
-            self.armada_fleet = await self.db.get_armada_fleet()
+            
+            # Initialize captain_messages and armada_fleet as empty since they're not implemented yet
+            self.captain_messages = []
+            self.armada_fleet = []
             
             # Update next_id based on max IDs
             max_ids = []
@@ -179,10 +93,6 @@ class AsyncDatabaseStorage(StorageInterface):
                 max_ids.append(max(mission.get('id', 0) for mission in self.missions))
             if self.vault_logs:
                 max_ids.append(max(log.get('id', 0) for log in self.vault_logs))
-            if self.captain_messages:
-                max_ids.append(max(msg.get('id', 0) for msg in self.captain_messages))
-            if self.armada_fleet:
-                max_ids.append(max(fleet.get('id', 0) for fleet in self.armada_fleet))
             
             self.next_id = max(max_ids) + 1 if max_ids else 1
             self._last_cache_update = __import__('time').time()
