@@ -11,6 +11,7 @@ import ArmadaMap from './ArmadaMap';
 import CaptainToCaptain from './CaptainToCaptain';
 import MissionControls from './MissionControls';
 import Agents from './Agents';
+import AutonomyDaemon from '../daemon/AutonomyDaemon';
 
 // === Main App ===
 const App = () => {
@@ -28,6 +29,8 @@ const App = () => {
     chatMessages: [],
     fleetData: []
   });
+  const [systemAlerts, setSystemAlerts] = useState([]);
+  const [guardianActive, setGuardianActive] = useState(false);
 
   // Handle real-time WebSocket messages
   const handleWebSocketMessage = useCallback((message) => {
@@ -79,6 +82,17 @@ const App = () => {
   const handleMissionDispatch = (missionData) => {
     setMissionRefreshKey(prev => prev + 1);
   };
+
+  // Handle system alerts from AutonomyDaemon
+  const handleSystemAlert = useCallback((alerts) => {
+    setSystemAlerts(alerts);
+  }, []);
+
+  // Handle Guardian Mode activation
+  const handleGuardianActivate = useCallback((reason) => {
+    setGuardianActive(true);
+    console.log('🛡️ Guardian Mode activated:', reason);
+  }, []);
 
   useEffect(() => {
     async function fetchStatus() {
@@ -135,13 +149,22 @@ const App = () => {
             </div>
           </header>
 
-          {(connectionError || wsError) && (
+          {(connectionError || wsError || systemAlerts.length > 0) && (
             <div className="error-banner">
               <span className="error-icon">⚠️</span>
-              <span className="error-message">{connectionError || wsError}</span>
+              <span className="error-message">
+                {connectionError || wsError || `System alerts: ${systemAlerts.join(', ')}`}
+              </span>
               <span className="error-info">
                 {wsConnected ? 'REST API issue' : 'Real-time features may be limited'}
               </span>
+            </div>
+          )}
+
+          {guardianActive && (
+            <div className="guardian-system-banner">
+              <span className="guardian-icon">🛡️</span>
+              <span className="guardian-message">GUARDIAN DEFENSE PROTOCOLS ACTIVE</span>
             </div>
           )}
 
@@ -153,6 +176,12 @@ const App = () => {
           )}
 
           <div className="main-content">
+            {/* Autonomy Daemon - Global System Monitor */}
+            <AutonomyDaemon 
+              onSystemAlert={handleSystemAlert}
+              onGuardianActivate={handleGuardianActivate}
+            />
+            
             <Routes>
               <Route path="/" element={<Dashboard realTimeData={realTimeData} />} />
               <Route path="/controls" element={<MissionControls onMissionDispatch={handleMissionDispatch} />} />
