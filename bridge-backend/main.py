@@ -1,5 +1,6 @@
 import os
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 from datetime import datetime
@@ -31,7 +32,24 @@ storage = InMemoryStorage()
 # Initialize rituals manager for data operations
 rituals = DataRituals(storage)
 
-app = FastAPI(title="SR-AIbridge Backend")
+app = FastAPI(
+    title="SR-AIbridge Backend",
+    version="1.0.0-inmemory",
+    description="Drop-in in-memory backend for SR-AIbridge"
+)
+
+# ✅ Restrict to Netlify domain for CORS
+origins = [
+    "https://bridge.netlify.app"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # --- Models ---
 class Message(BaseModel):
