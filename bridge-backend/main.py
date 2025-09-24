@@ -5,6 +5,7 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime
 from dotenv import load_dotenv
 import json
+from rituals.manage_data import DataRituals
 
 # Load env variables
 load_dotenv()
@@ -26,6 +27,9 @@ class InMemoryStorage:
 
 # Global storage instance
 storage = InMemoryStorage()
+
+# Initialize rituals manager for data operations
+rituals = DataRituals(storage)
 
 app = FastAPI(title="SR-AIbridge Backend")
 
@@ -86,133 +90,9 @@ class VaultLogCreate(BaseModel):
 
 # --- Seed Data Function ---
 def seed_demo_data():
-    """Populate in-memory storage with demo data"""
-    # Clear existing data
-    storage.captain_messages.clear()
-    storage.armada_fleet.clear()
-    storage.agents.clear()
-    storage.missions.clear()
-    storage.vault_logs.clear()
-    storage.next_id = 1
-    
-    # Seed armada fleet
-    fleet_data = [
-        {"id": storage.get_next_id(), "name": "Flagship Sovereign", "status": "online", "location": "Sector Alpha"},
-        {"id": storage.get_next_id(), "name": "Frigate Horizon", "status": "offline", "location": "Sector Beta"},
-        {"id": storage.get_next_id(), "name": "Scout Whisper", "status": "online", "location": "Sector Delta"},
-        {"id": storage.get_next_id(), "name": "SR-Vanguard", "status": "online", "location": "Outer Rim"},
-        {"id": storage.get_next_id(), "name": "SR-Oracle", "status": "online", "location": "Deep Space Node"},
-    ]
-    storage.armada_fleet.extend(fleet_data)
-    
-    # Seed agents
-    agents_data = [
-        {
-            "id": storage.get_next_id(),
-            "name": "Agent Alpha",
-            "endpoint": "http://agent-alpha:8001",
-            "capabilities": [
-                {"name": "reconnaissance", "version": "2.1", "description": "Advanced scouting operations"},
-                {"name": "communication", "version": "1.5", "description": "Secure communications relay"}
-            ],
-            "status": "online",
-            "last_heartbeat": datetime.utcnow(),
-            "created_at": datetime.utcnow()
-        },
-        {
-            "id": storage.get_next_id(),
-            "name": "Agent Beta",
-            "endpoint": "http://agent-beta:8002",
-            "capabilities": [
-                {"name": "analysis", "version": "3.0", "description": "Data analysis and pattern recognition"},
-                {"name": "threat-detection", "version": "1.8", "description": "Security threat identification"}
-            ],
-            "status": "online",
-            "last_heartbeat": datetime.utcnow(),
-            "created_at": datetime.utcnow()
-        }
-    ]
-    storage.agents.extend(agents_data)
-    
-    # Seed missions
-    missions_data = [
-        {
-            "id": storage.get_next_id(),
-            "title": "Deep Space Reconnaissance",
-            "description": "Survey unknown sectors for potential threats and resources",
-            "status": "active",
-            "priority": "high",
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow()
-        },
-        {
-            "id": storage.get_next_id(),
-            "title": "Communication Array Setup",
-            "description": "Establish secure communication relays in outer rim",
-            "status": "completed",
-            "priority": "normal",
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow()
-        },
-        {
-            "id": storage.get_next_id(),
-            "title": "Defensive Perimeter Analysis",
-            "description": "Assess current defensive capabilities and recommend improvements",
-            "status": "planning",
-            "priority": "medium",
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow()
-        }
-    ]
-    storage.missions.extend(missions_data)
-    
-    # Seed vault logs
-    vault_logs_data = [
-        {
-            "id": storage.get_next_id(),
-            "agent_name": "Agent Alpha",
-            "action": "mission_start",
-            "details": "Initiated reconnaissance mission in Sector Gamma",
-            "timestamp": datetime.utcnow(),
-            "log_level": "info"
-        },
-        {
-            "id": storage.get_next_id(),
-            "agent_name": "Agent Beta",
-            "action": "data_analysis",
-            "details": "Completed threat assessment for outer rim sectors",
-            "timestamp": datetime.utcnow(),
-            "log_level": "info"
-        },
-        {
-            "id": storage.get_next_id(),
-            "agent_name": "System",
-            "action": "alert",
-            "details": "Unknown vessel detected at coordinates 127.45, 89.12",
-            "timestamp": datetime.utcnow(),
-            "log_level": "warning"
-        }
-    ]
-    storage.vault_logs.extend(vault_logs_data)
-    
-    # Seed captain messages
-    captain_messages_data = [
-        {
-            "id": storage.get_next_id(),
-            "from_": "Admiral Kyle",
-            "to": "Captain Torres",
-            "message": "Status report on outer rim patrol?",
-            "timestamp": datetime.utcnow()
-        },
-        {
-            "id": storage.get_next_id(),
-            "from_": "Captain Torres",
-            "to": "Admiral Kyle",
-            "message": "All clear in sectors 7-12. Proceeding to deep space checkpoint.",
-            "timestamp": datetime.utcnow()
-        }
-    ]
-    storage.captain_messages.extend(captain_messages_data)
+    """Populate in-memory storage with demo data using rituals manager"""
+    result = rituals.reseed()
+    return result
 
 # --- Startup / Shutdown ---
 @app.on_event("startup")
@@ -425,18 +305,28 @@ async def create_task(task_data: dict):
 @app.get("/reseed")
 async def reseed_data():
     """Reseed demo data (useful for testing)"""
-    seed_demo_data()
+    result = rituals.reseed()
+    # Return the traditional format for backward compatibility
     return {
         "ok": True,
         "message": "Demo data reseeded successfully",
-        "counts": {
-            "agents": len(storage.agents),
-            "missions": len(storage.missions),
-            "vault_logs": len(storage.vault_logs),
-            "captain_messages": len(storage.captain_messages),
-            "armada_fleet": len(storage.armada_fleet)
-        }
+        "counts": result["final_counts"]
     }
+
+@app.get("/rituals/seed")
+async def ritual_seed():
+    """Seed demo data without clearing existing data"""
+    return rituals.seed()
+
+@app.get("/rituals/cleanup")
+async def ritual_cleanup():
+    """Clean up all data from storage"""
+    return rituals.cleanup()
+
+@app.get("/rituals/reseed")
+async def ritual_reseed():
+    """Clean up and reseed with fresh demo data"""
+    return rituals.reseed()
 
 @app.get("/")
 async def root():
@@ -452,8 +342,14 @@ async def root():
             "vault_logs": "/vault/logs",
             "captain_chat": "/captains/messages",
             "armada": "/armada/status",
-            "reseed": "/reseed"
+            "reseed": "/reseed",
+            "rituals": {
+                "seed": "/rituals/seed",
+                "cleanup": "/rituals/cleanup", 
+                "reseed": "/rituals/reseed"
+            }
         },
         "storage": "in-memory",
+        "rituals_manager": "enabled",
         "ready": True
     }
