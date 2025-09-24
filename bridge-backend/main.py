@@ -40,7 +40,8 @@ app = FastAPI(
 
 # ✅ Restrict to Netlify domain for CORS
 origins = [
-    "https://bridge.netlify.app"
+    "https://bridge.netlify.app",
+    "https://sr-aibridge.netlify.app"
 ]
 
 app.add_middleware(
