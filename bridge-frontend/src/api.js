@@ -202,6 +202,14 @@ export async function getGuardianStatus() {
   return apiClient.get('/guardian/status');
 }
 
+export async function runGuardianSelftest() {
+  return apiClient.post('/guardian/selftest');
+}
+
+export async function activateGuardian() {
+  return apiClient.post('/guardian/activate');
+}
+
 // === Chat Integration ===
 export async function getChatMessages() {
   return apiClient.get('/chat/messages');
