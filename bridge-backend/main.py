@@ -52,14 +52,15 @@ app = FastAPI(
 # CORS configuration for both production and development
 origins = [
     "https://bridge.netlify.app",
-    "https://sr-aibridge.netlify.app",
+    "https://sr-aibridge.netlify.app", 
     "https://*.netlify.app",  # Allow all Netlify subdomains
     "https://*.onrender.com",  # Allow all Render subdomains
     "http://localhost:3000",  # Development frontend
     "http://127.0.0.1:3000",   # Alternative localhost
     "http://localhost:3001",  # Alternative development port
     "https://localhost:3000",  # HTTPS development
-    "https://localhost:3001"   # HTTPS alternative development port
+    "https://localhost:3001",   # HTTPS alternative development port
+    "*"  # Allow all origins for debugging (as requested)
 ]
 
 app.add_middleware(
