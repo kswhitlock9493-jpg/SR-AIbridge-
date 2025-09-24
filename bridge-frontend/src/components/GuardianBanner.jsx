@@ -12,7 +12,6 @@ const GuardianBanner = () => {
     last_selftest: null,
     next_selftest: null
   });
-  const [lastUpdated, setLastUpdated] = useState(null);
 
   // Poll Guardian status from backend
   useEffect(() => {
@@ -20,11 +19,9 @@ const GuardianBanner = () => {
       try {
         const data = await getGuardianStatus();
         setGuardianStatus(data);
-        setLastUpdated(new Date());
       } catch (error) {
         console.error('Guardian status fetch error:', error);
         setGuardianStatus(prev => ({ ...prev, status: 'Unknown', active: false }));
-        setLastUpdated(new Date());
       }
     };
 
@@ -51,11 +48,6 @@ const GuardianBanner = () => {
       case 'FAIL': return 'guardian-banner-fail';
       default: return 'guardian-banner-unknown';
     }
-  };
-
-  const formatTimestamp = (timestamp) => {
-    if (!timestamp) return 'Never';
-    return new Date(timestamp).toLocaleString();
   };
 
   const getTimeSince = (timestamp) => {
