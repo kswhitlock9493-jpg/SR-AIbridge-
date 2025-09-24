@@ -1,10 +1,12 @@
 import React from 'react';
+import CaptainsChat from './CaptainsChat';
 
-const CaptainToCaptain = () => (
-  <div className="placeholder">
-    <h2>⚔️ Captain-to-Captain Chat</h2>
-    <p>Direct channel for Captain communications (placeholder until Railway connects).</p>
-  </div>
-);
+const CaptainToCaptain = () => {
+  return (
+    <div className="captain-to-captain">
+      <CaptainsChat />
+    </div>
+  );
+};
 
 export default CaptainToCaptain;
