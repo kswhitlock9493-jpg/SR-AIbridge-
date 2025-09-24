@@ -3,7 +3,7 @@ services:
     name: sr-aibridge-backend
     env: python
     buildCommand: "cd bridge-backend && pip install -r requirements.txt"
-    startCommand: "cd bridge-backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
+    startCommand: "cd bridge-backend && uvicorn main_sqlite:app --host 0.0.0.0 --port $PORT"
     healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
@@ -12,14 +12,29 @@ services:
         value: 8000
       - key: ENVIRONMENT
         value: production
-    # Uncomment and configure for database version:
-    # - key: DATABASE_URL
-    #   fromDatabase:
-    #     name: sr-aibridge-db
-    #     property: connectionString
+      - key: DATABASE_TYPE
+        value: sqlite
+      - key: DATABASE_URL
+        value: sqlite:///bridge.db
+      - key: CORS_ALLOW_ALL
+        value: false
+      - key: ALLOWED_ORIGINS
+        value: https://bridge.netlify.app,https://sr-aibridge.netlify.app
 
-# Uncomment for database version:
+# SQLite-first deployment - no external database needed
+# Data persists in the container filesystem
+# For production PostgreSQL, uncomment below and update main_sqlite.py:
+# 
 # databases:
 #   - name: sr-aibridge-db
 #     databaseName: sr_aibridge
 #     user: sr_aibridge_user
+#     region: oregon
+#
+# Then add to envVars:
+# - key: DATABASE_TYPE
+#   value: postgres
+# - key: DATABASE_URL
+#   fromDatabase:
+#     name: sr-aibridge-db
+#     property: connectionString

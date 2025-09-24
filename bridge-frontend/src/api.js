@@ -185,6 +185,11 @@ export async function getSystemHealthFull() {
   return apiClient.get('/health/full');
 }
 
+// === System Health & Self-Heal (Enhanced) ===
+export async function triggerSystemSelfHeal() {
+  return apiClient.post('/health/self-heal');
+}
+
 // === Utilities ===
 export async function reseedDemoData() {
   return apiClient.post('/reseed');
@@ -196,7 +201,7 @@ export async function runSelfTest() {
 }
 
 export async function runSelfRepair() {
-  return apiClient.post('/system/self-repair');
+  return apiClient.post('/health/self-heal');  // Updated to use the correct endpoint
 }
 
 export async function getSystemMetrics() {
