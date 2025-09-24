@@ -1,0 +1,124 @@
+---
+name: Deploy SR-AIbridge
+
+"on":
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # Frontend deployment to Netlify
+  deploy-frontend:
+    name: Deploy Frontend to Netlify
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: bridge-frontend/package-lock.json
+
+      - name: Install dependencies
+        run: cd bridge-frontend && npm ci
+
+      - name: Build frontend
+        run: cd bridge-frontend && npm run build
+        env:
+          CI: false
+          REACT_APP_API_URL: >-
+            ${{ secrets.BACKEND_URL ||
+            'https://sr-aibridge-backend.onrender.com' }}
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3.0
+        with:
+          publish-dir: './bridge-frontend/build'
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+          enable-pull-request-comment: true
+          enable-commit-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 10
+
+  # Backend deployment to Render (webhook-based)
+  deploy-backend:
+    name: Trigger Backend Deployment
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate backend configuration
+        run: |
+          echo "Validating backend setup..."
+          cd bridge-backend
+          python3 -m py_compile main.py
+          python3 -m py_compile self_test.py
+          echo "✅ Backend Python files validated"
+
+      - name: Trigger Render deployment
+        run: |
+          if [ -n "${{ secrets.RENDER_DEPLOY_HOOK }}" ]; then
+            echo "Triggering Render deployment..."
+            curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+            echo "✅ Render deployment triggered"
+          else
+            echo "⚠️ RENDER_DEPLOY_HOOK not configured - skipping deployment"
+            echo "Note: Render will auto-deploy on push to main branch"
+          fi
+
+  # Build verification job
+  verify-build:
+    name: Verify Complete Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: bridge-frontend/package-lock.json
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install frontend dependencies
+        run: cd bridge-frontend && npm ci
+
+      - name: Install backend dependencies
+        run: cd bridge-backend && pip install -r requirements.txt
+
+      - name: Test frontend build
+        run: cd bridge-frontend && npm run build
+        env:
+          CI: false
+
+      - name: Test backend syntax
+        run: |
+          cd bridge-backend
+          python3 -m py_compile main.py
+          python3 -m py_compile self_test.py
+          python3 -c "import main; print('✅ Backend imports successfully')"
+
+      - name: Verify self-test script
+        run: |
+          cd bridge-backend
+          python3 self_test.py --help
+          echo "✅ Self-test script is executable"

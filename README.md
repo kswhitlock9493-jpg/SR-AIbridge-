@@ -195,6 +195,66 @@ RUN pip install -r requirements.txt
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
+## 🔄 CI/CD & Automated Testing
+
+SR-AIbridge includes a comprehensive CI/CD pipeline with automated health monitoring:
+
+### GitHub Actions Workflows
+
+**🚀 Deployment Pipeline** (`.github/workflows/deploy.yml`)
+- Automatic deployment to Netlify (frontend) and Render (backend)
+- Build verification and syntax validation
+- Triggered on push to main branch and pull requests
+
+**🧪 Health Monitoring** (`.github/workflows/self-test.yml`)  
+- Comprehensive backend health checks after deployment
+- Scheduled monitoring every 4 hours
+- Manual testing with configurable parameters
+- Detailed reporting with JSON artifacts
+
+### Enhanced Self-Test Script
+
+The `bridge-backend/self_test.py` script provides production-ready health monitoring:
+
+```bash
+# Quick production health check
+python3 self_test.py --url https://your-backend.onrender.com
+
+# CI/CD optimized with custom settings
+python3 self_test.py --url $BACKEND_URL --json --timeout 45 --retries 5
+
+# Local development testing
+python3 self_test.py --timeout 10 --wait-ready 30
+```
+
+**Features:**
+- ✅ Configurable timeouts and retry logic
+- ✅ Robust error handling with exponential backoff  
+- ✅ JSON output for automated processing
+- ✅ Comprehensive endpoint testing (Health, Guardian, Agents, Missions, WebSocket)
+- ✅ Production URL support with wait-for-ready logic
+
+### Setup Instructions
+
+1. **Configure GitHub Secrets** (optional):
+   ```
+   NETLIFY_AUTH_TOKEN=your_token
+   NETLIFY_SITE_ID=your_site_id  
+   BACKEND_URL=https://your-backend.onrender.com
+   FRONTEND_URL=https://your-frontend.netlify.app
+   ```
+
+2. **Manual Health Check**:
+   - Go to Actions → "Self-Test SR-AIbridge" → Run workflow
+   - View detailed results and download test artifacts
+
+3. **Monitor Deployments**:
+   - Automatic deployment on main branch push
+   - Health tests run automatically after deployment
+   - Scheduled monitoring ensures ongoing reliability
+
+See [`.github/README.md`](.github/README.md) for complete CI/CD documentation.
+
 ## 🎨 Customization
 
 ### Adding New Data Types
