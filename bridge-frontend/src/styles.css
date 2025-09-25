@@ -649,6 +649,17 @@
 }
 
 @media (max-width: 768px) {
+  /* Fix main content area to use full width on mobile */
+  .app-content {
+    padding: 1rem;
+  }
+  
+  .content-wrapper {
+    max-width: none;
+    margin: 0;
+    width: 100%;
+  }
+  
   .command-grid {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(3, auto);
