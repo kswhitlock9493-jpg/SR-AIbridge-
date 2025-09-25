@@ -103,10 +103,14 @@ class DataSeeder:
                 "vault_logs": len(logs)
             }
             
-            has_data = any(count > 0 for count in counts.values())
+            # Only consider data exists if we have agents, missions, or vault logs
+            # (Guardian is created automatically during db init, so ignore it)
+            has_demo_data = (counts["agents"] > 0 or 
+                           counts["missions"] > 0 or 
+                           counts["vault_logs"] > 0)
             
             return {
-                "has_data": has_data,
+                "has_data": has_demo_data,
                 "counts": counts
             }
         except Exception as e:
