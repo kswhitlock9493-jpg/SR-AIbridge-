@@ -757,10 +757,11 @@ async def handle_federation_heartbeat(heartbeat_data: Dict[str, Any]):
     """Handle incoming federation heartbeat"""
     try:
         response = await federation_client.handle_heartbeat(heartbeat_data)
-        return response
+        # Return only safe, controlled response
+        return {"status": "ok", "message": "Heartbeat processed successfully"}
     except Exception as e:
         logger.error(f"Federation heartbeat error: {e}")
-        return safe_error_response("Failed to handle heartbeat")
+        return safe_error_response("federation_heartbeat_error", "Failed to handle heartbeat")
 
 
 @app.post("/bridge-core/federation/task")
@@ -768,10 +769,11 @@ async def handle_federation_task(task_data: Dict[str, Any]):
     """Handle incoming federation task"""
     try:
         response = await federation_client.handle_incoming_task(task_data)
-        return response
+        # Return only safe, controlled response
+        return {"status": "processed", "message": "Task handled successfully"}
     except Exception as e:
         logger.error(f"Federation task error: {e}")
-        return safe_error_response("Failed to handle federation task")
+        return safe_error_response("federation_task_error", "Failed to handle federation task")
 
 
 @app.get("/bridge-core/registry/payloads")
