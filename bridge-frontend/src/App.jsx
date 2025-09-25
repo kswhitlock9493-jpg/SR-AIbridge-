@@ -22,7 +22,8 @@ const App = () => {
   return (
     <Router>
       <div className="sr-aibridge-app">
-        <header className="app-header">
+        {/* Desktop Header - shown only on desktop */}
+        <header className="app-header desktop-only">
           <div className="header-content">
             <h1 className="app-title">
               <span className="title-icon">🌉</span>
@@ -35,7 +36,8 @@ const App = () => {
           </div>
         </header>
 
-        <nav className="app-navigation">
+        {/* Desktop Navigation - shown only on desktop */}
+        <nav className="app-navigation desktop-only">
           <div className="nav-tabs">
             {navigationItems.map(item => (
               <NavLink
@@ -49,7 +51,54 @@ const App = () => {
           </div>
         </nav>
 
-        <main className="app-content">
+        {/* Mobile Layout Container */}
+        <div className="mobile-layout">
+          {/* Mobile Sidebar Navigation */}
+          <aside className="mobile-sidebar">
+            <div className="mobile-header">
+              <h1 className="mobile-title">
+                <span className="title-icon">🌉</span>
+                SR-AIbridge
+              </h1>
+              <div className="connection-status">
+                <span className="status-indicator online">●</span>
+                <span className="status-text">Connected</span>
+              </div>
+            </div>
+            <nav className="sidebar-nav">
+              <ul className="nav-list">
+                {navigationItems.map(item => (
+                  <li key={item.path}>
+                    <NavLink
+                      to={item.path}
+                      className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                    >
+                      {item.label}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
+
+          {/* Main Content Area */}
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={<CommandDeck />} />
+              <Route path="/captains-chat" element={<CaptainsChat />} />
+              <Route path="/captain-to-captain" element={<CaptainToCaptain />} />
+              <Route path="/vault-logs" element={<VaultLogs />} />
+              <Route path="/mission-log" element={<MissionLog />} />
+              <Route path="/armada-map" element={<ArmadaMap />} />
+              <Route path="/system-health" element={<SystemSelfTest />} />
+              {/* Redirect any unknown paths to command deck */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </main>
+        </div>
+
+        {/* Desktop Content - shown only on desktop */}
+        <main className="app-content desktop-only">
           <div className="content-wrapper">
             <Routes>
               <Route path="/" element={<CommandDeck />} />
@@ -65,7 +114,7 @@ const App = () => {
           </div>
         </main>
 
-        <footer className="app-footer">
+        <footer className="app-footer desktop-only">
           <div className="footer-content">
             <span>SR-AIbridge v2.0.0 | Production Ready | All Endpoints Wired</span>
             <span className="footer-status">
