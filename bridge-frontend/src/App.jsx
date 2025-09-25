@@ -35,7 +35,8 @@ const App = () => {
           </div>
         </header>
 
-        <nav className="app-navigation">
+        {/* Desktop horizontal navigation */}
+        <nav className="app-navigation desktop-nav">
           <div className="nav-tabs">
             {navigationItems.map(item => (
               <NavLink
@@ -49,21 +50,39 @@ const App = () => {
           </div>
         </nav>
 
-        <main className="app-content">
-          <div className="content-wrapper">
-            <Routes>
-              <Route path="/" element={<CommandDeck />} />
-              <Route path="/captains-chat" element={<CaptainsChat />} />
-              <Route path="/captain-to-captain" element={<CaptainToCaptain />} />
-              <Route path="/vault-logs" element={<VaultLogs />} />
-              <Route path="/mission-log" element={<MissionLog />} />
-              <Route path="/armada-map" element={<ArmadaMap />} />
-              <Route path="/system-health" element={<SystemSelfTest />} />
-              {/* Redirect any unknown paths to command deck */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </div>
-        </main>
+        {/* Main layout with sidebar for mobile/tablet */}
+        <div className="app-layout">
+          {/* Mobile/tablet sidebar navigation */}
+          <nav className="app-sidebar mobile-nav">
+            <div className="sidebar-nav">
+              {navigationItems.map(item => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className={({ isActive }) => `sidebar-nav-link ${isActive ? 'active' : ''}`}
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+            </div>
+          </nav>
+
+          <main className="app-content">
+            <div className="content-wrapper">
+              <Routes>
+                <Route path="/" element={<CommandDeck />} />
+                <Route path="/captains-chat" element={<CaptainsChat />} />
+                <Route path="/captain-to-captain" element={<CaptainToCaptain />} />
+                <Route path="/vault-logs" element={<VaultLogs />} />
+                <Route path="/mission-log" element={<MissionLog />} />
+                <Route path="/armada-map" element={<ArmadaMap />} />
+                <Route path="/system-health" element={<SystemSelfTest />} />
+                {/* Redirect any unknown paths to command deck */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </div>
+          </main>
+        </div>
 
         <footer className="app-footer">
           <div className="footer-content">
