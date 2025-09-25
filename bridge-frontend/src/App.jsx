@@ -1,6 +1,5 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink, Navigate } from 'react-router-dom';
-import Dashboard from './components/Dashboard.jsx';
+import CommandDeck from './components/CommandDeck.jsx';
 import CaptainsChat from './components/CaptainsChat.jsx';
 import CaptainToCaptain from './components/CaptainToCaptain.jsx';
 import VaultLogs from './components/VaultLogs.jsx';
@@ -11,7 +10,7 @@ import './styles.css';
 
 const App = () => {
   const navigationItems = [
-    { path: '/', label: '📊 Dashboard' },
+    { path: '/', label: '📊 Command Deck' },
     { path: '/captains-chat', label: '💬 Captains Chat' },
     { path: '/captain-to-captain', label: '⚔️ Captain-to-Captain' },
     { path: '/vault-logs', label: '📜 Vault Logs' },
@@ -53,14 +52,14 @@ const App = () => {
         <main className="app-content">
           <div className="content-wrapper">
             <Routes>
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/" element={<CommandDeck />} />
               <Route path="/captains-chat" element={<CaptainsChat />} />
               <Route path="/captain-to-captain" element={<CaptainToCaptain />} />
               <Route path="/vault-logs" element={<VaultLogs />} />
               <Route path="/mission-log" element={<MissionLog />} />
               <Route path="/armada-map" element={<ArmadaMap />} />
               <Route path="/system-health" element={<SystemSelfTest />} />
-              {/* Redirect any unknown paths to dashboard */}
+              {/* Redirect any unknown paths to command deck */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </div>
