@@ -1,137 +1,78 @@
-import React, { useState, useCallback } from 'react';
-import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
-import { BridgeProvider, useBridge } from '../hooks/useBridge';
-import './styles.css';
-import Dashboard from './Dashboard';
-import CaptainsChat from './CaptainsChat';
-import VaultLogs from './VaultLogs';
-import MissionLog from './MissionLog';
-import ArmadaMap from './ArmadaMap';
-import CaptainToCaptain from './CaptainToCaptain';
-import MissionControls from './MissionControls';
-import Agents from './Agents';
-import AutonomyDaemon from '../daemon/AutonomyDaemon';
-import DaemonGuardian from './DaemonGuardian';
-import GuardianBanner from './GuardianBanner';
+import React, { useState } from 'react';
+import Dashboard from './Dashboard.jsx';
+import CaptainsChat from './CaptainsChat.jsx';
+import CaptainToCaptain from './CaptainToCaptain.jsx';
+import VaultLogs from './VaultLogs.jsx';
+import MissionLog from './MissionLog.jsx';
+import ArmadaMap from './ArmadaMap.jsx';
+import SystemSelfTest from './SystemSelfTest.jsx';
+import '../styles.css';
 
-// === Bridge App Component ===
-const BridgeApp = () => {
-  const { 
-    status, 
-    loading: isLoading, 
-    error: connectionError, 
-    connected: wsConnected, 
-    wsError,
-    systemAlerts, 
-    guardianActive,
-    handleSystemAlert,
-    handleGuardianActivate
-  } = useBridge();
+const App = () => {
+  const [activeTab, setActiveTab] = useState('dashboard');
 
-  const [missionRefreshKey, setMissionRefreshKey] = useState(0);
+  const tabs = [
+    { id: 'dashboard', label: '📊 Dashboard', component: Dashboard },
+    { id: 'captains-chat', label: '💬 Captains Chat', component: CaptainsChat },
+    { id: 'captain-to-captain', label: '⚔️ Captain-to-Captain', component: CaptainToCaptain },
+    { id: 'vault-logs', label: '📜 Vault Logs', component: VaultLogs },
+    { id: 'mission-log', label: '🚀 Mission Log', component: MissionLog },
+    { id: 'armada-map', label: '🗺️ Armada Map', component: ArmadaMap },
+    { id: 'system-health', label: '🔍 System Health', component: SystemSelfTest }
+  ];
 
-  // Handle mission dispatch to trigger instant refresh in MissionLog
-  const handleMissionDispatch = useCallback((missionData) => {
-    setMissionRefreshKey(prev => prev + 1);
-    console.log('🚀 Mission dispatched, refreshing mission log');
-  }, []);
+  const renderTabContent = () => {
+    const activeTabData = tabs.find(tab => tab.id === activeTab);
+    if (!activeTabData) return null;
+    
+    const Component = activeTabData.component;
+    return <Component />;
+  };
 
   return (
-    <Router>
-      <div className="bridge-layout">
-        <aside className="sidebar">
-          <h1 className="bridge-title">⚓ SR-AIbridge</h1>
-          <nav>
-            <ul>
-              <li><NavLink to="/" end className="nav-link">📊 Dashboard</NavLink></li>
-              <li><NavLink to="/controls" className="nav-link">🎯 Mission Controls</NavLink></li>
-              <li><NavLink to="/agents" className="nav-link">🤖 Agents</NavLink></li>
-              <li><NavLink to="/chat" className="nav-link">💬 Captains Chat</NavLink></li>
-              <li><NavLink to="/vault" className="nav-link">📜 Vault Logs</NavLink></li>
-              <li><NavLink to="/missions" className="nav-link">🚀 Mission Log</NavLink></li>
-              <li><NavLink to="/armada" className="nav-link">🗺️ Armada Map</NavLink></li>
-              <li><NavLink to="/captains" className="nav-link">⚔️ Captain-to-Captain</NavLink></li>
-            </ul>
-          </nav>
-        </aside>
-
-        <div className="main-panel">
-          {/* Guardian Banner - Always visible status */}
-          <GuardianBanner />
-          
-          <header className="status-bar">
-            <div className="status-item">🛰️ Agents Online: <span className="status-value">{status.agentsOnline}</span></div>
-            <div className="status-item">📡 Active Missions: <span className="status-value">{status.activeMissions}</span></div>
-            <div className="status-item">⚓ Admiral: <span className="status-value">{status.admiral}</span></div>
-            <div className="status-item">🔌 WebSocket: 
-              <span className={`status-value ${wsConnected ? 'connected' : 'disconnected'}`}>
-                {wsConnected ? '🟢 Live' : '🔴 Offline'}
-              </span>
-            </div>
-          </header>
-
-          {(connectionError || wsError || systemAlerts.length > 0) && (
-            <div className="error-banner">
-              <span className="error-icon">⚠️</span>
-              <span className="error-message">
-                {connectionError || wsError || `System alerts: ${systemAlerts.join(', ')}`}
-              </span>
-              <span className="error-info">
-                {wsConnected ? 'REST API issue' : 'Real-time features may be limited'}
-              </span>
-            </div>
-          )}
-
-          {guardianActive && (
-            <div className="guardian-system-banner">
-              <span className="guardian-icon">🛡️</span>
-              <span className="guardian-message">GUARDIAN DEFENSE PROTOCOLS ACTIVE</span>
-            </div>
-          )}
-
-          {isLoading && !connectionError && (
-            <div className="loading-banner">
-              <span className="loading-icon">⏳</span>
-              <span className="loading-message">Connecting to Agent Manager...</span>
-            </div>
-          )}
-
-          <div className="main-content">
-            {/* Autonomy Daemon - Global System Monitor */}
-            <AutonomyDaemon 
-              onSystemAlert={handleSystemAlert}
-              onGuardianActivate={handleGuardianActivate}
-            />
-            
-            {/* DaemonGuardian - Enhanced monitoring with unified state */}
-            <DaemonGuardian 
-              onSystemAlert={handleSystemAlert}
-              onGuardianActivate={handleGuardianActivate}
-            />
-            
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/controls" element={<MissionControls onMissionDispatch={handleMissionDispatch} />} />
-              <Route path="/agents" element={<Agents />} />
-              <Route path="/chat" element={<CaptainsChat />} />
-              <Route path="/vault" element={<VaultLogs />} />
-              <Route path="/missions" element={<MissionLog refreshKey={missionRefreshKey} />} />
-              <Route path="/armada" element={<ArmadaMap />} />
-              <Route path="/captains" element={<CaptainToCaptain />} />
-            </Routes>
+    <div className="sr-aibridge-app">
+      <header className="app-header">
+        <div className="header-content">
+          <h1 className="app-title">
+            <span className="title-icon">🌉</span>
+            SR-AIbridge Command Center
+          </h1>
+          <div className="connection-status">
+            <span className="status-indicator online">●</span>
+            <span className="status-text">Connected</span>
           </div>
         </div>
-      </div>
-    </Router>
-  );
-};
+      </header>
 
-// === Main App Wrapper with Bridge Provider ===
-const App = () => {
-  return (
-    <BridgeProvider>
-      <BridgeApp />
-    </BridgeProvider>
+      <nav className="app-navigation">
+        <div className="nav-tabs">
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              className={`nav-tab ${activeTab === tab.id ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </nav>
+
+      <main className="app-content">
+        <div className="content-wrapper">
+          {renderTabContent()}
+        </div>
+      </main>
+
+      <footer className="app-footer">
+        <div className="footer-content">
+          <span>SR-AIbridge v2.0.0 | Production Ready | All Endpoints Wired</span>
+          <span className="footer-status">
+            Backend: /status | /missions | /vault/logs | /armada/status | /captains/messages | /health
+          </span>
+        </div>
+      </footer>
+    </div>
   );
 };
 

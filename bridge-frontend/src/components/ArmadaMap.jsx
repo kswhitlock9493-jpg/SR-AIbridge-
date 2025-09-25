@@ -1,255 +1,472 @@
 import React, { useState, useEffect } from 'react';
-import { useBridge } from '../hooks/useBridge';
+import { getArmadaStatus, getFleetData } from '../api';
 
 const ArmadaMap = () => {
-  const { 
-    armadaStatus, 
-    fleetData, 
-    realTimeData, 
-    loading, 
-    error, 
-    refreshData 
-  } = useBridge();
-  
-  const [displayFleet, setDisplayFleet] = useState({ fleet: [], summary: {} });
-  const [refreshError, setRefreshError] = useState(null);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [armadaStatus, setArmadaStatus] = useState({});
+  const [fleetData, setFleetData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [selectedShip, setSelectedShip] = useState(null);
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'map'
+  const [filters, setFilters] = useState({
+    status: 'all',
+    type: 'all',
+    search: ''
+  });
+  const [lastUpdate, setLastUpdate] = useState(new Date());
 
-  /**
-   * Update display fleet with real-time data
-   */
-  useEffect(() => {
-    const realTimeFleet = realTimeData.fleetData || [];
-    
-    // Combine armada status and fleet data from bridge context
-    const combined = {
-      fleet: armadaStatus?.fleet || fleetData || realTimeFleet,
-      summary: armadaStatus?.summary || {},
-      last_updated: new Date().toISOString()
-    };
-    
-    setDisplayFleet(combined);
-    
-    if (realTimeFleet.length > 0) {
-      console.log('📡 Real-time fleet updates available:', realTimeFleet.length);
-    }
-  }, [armadaStatus, fleetData, realTimeData.fleetData]);
-
-  /**
-   * Enhanced refresh with error handling
-   */
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
-    setRefreshError(null);
-    
+  // Fetch armada data from backend
+  const fetchArmadaData = async () => {
     try {
-      await refreshData('armada');
-      setRefreshError(null);
+      setLoading(true);
+      setError(null);
+
+      const [statusData, fleetInfo] = await Promise.allSettled([
+        getArmadaStatus(),
+        getFleetData()
+      ]);
+
+      if (statusData.status === 'fulfilled') {
+        setArmadaStatus(statusData.value || {});
+      }
+
+      if (fleetInfo.status === 'fulfilled') {
+        const fleet = fleetInfo.value;
+        // Handle different response formats
+        if (Array.isArray(fleet)) {
+          setFleetData(fleet);
+        } else if (fleet && Array.isArray(fleet.ships)) {
+          setFleetData(fleet.ships);
+        } else if (fleet && Array.isArray(fleet.fleet)) {
+          setFleetData(fleet.fleet);
+        } else {
+          setFleetData([]);
+        }
+      }
+
+      setLastUpdate(new Date());
     } catch (err) {
-      console.error('Failed to refresh armada data:', err);
-      setRefreshError(err.message || 'Failed to refresh fleet data');
+      console.error('Failed to fetch armada data:', err);
+      setError('Failed to load armada data: ' + err.message);
     } finally {
-      setIsRefreshing(false);
+      setLoading(false);
     }
   };
 
-  // Utility functions for fleet visualization
+  // Filter fleet data
+  const getFilteredFleet = () => {
+    let filtered = [...fleetData];
+
+    // Status filter
+    if (filters.status !== 'all') {
+      filtered = filtered.filter(ship => ship.status === filters.status);
+    }
+
+    // Type filter
+    if (filters.type !== 'all') {
+      filtered = filtered.filter(ship => ship.type === filters.type);
+    }
+
+    // Search filter
+    if (filters.search.trim()) {
+      const searchLower = filters.search.toLowerCase();
+      filtered = filtered.filter(ship =>
+        (ship.name || '').toLowerCase().includes(searchLower) ||
+        (ship.callsign || '').toLowerCase().includes(searchLower) ||
+        (ship.location || '').toLowerCase().includes(searchLower)
+      );
+    }
+
+    return filtered;
+  };
+
+  // Get status color
   const getStatusColor = (status) => {
-    switch (status?.toLowerCase()) {
-      case 'online': return '#00ff00';
-      case 'offline': return '#ff4444';
-      case 'maintenance': return '#ffaa00';
-      case 'patrol': return '#00aaff';
-      default: return '#888';
+    switch (status) {
+      case 'active':
+      case 'operational':
+      case 'online':
+        return '#28a745';
+      case 'standby':
+      case 'idle':
+        return '#ffc107';
+      case 'offline':
+      case 'maintenance':
+        return '#6c757d';
+      case 'combat':
+      case 'engaged':
+        return '#dc3545';
+      case 'patrol':
+      case 'mission':
+        return '#007bff';
+      default:
+        return '#6c757d';
     }
   };
 
-  const getStatusIcon = (status) => {
-    switch (status?.toLowerCase()) {
-      case 'online': return '🟢';
-      case 'offline': return '🔴';
-      case 'maintenance': return '🟡';
-      case 'patrol': return '🔵';
-      default: return '⚪';
+  // Get ship type icon
+  const getShipTypeIcon = (type) => {
+    switch (type) {
+      case 'battleship':
+      case 'dreadnought':
+        return '🚢';
+      case 'cruiser':
+        return '🛳️';
+      case 'destroyer':
+        return '⚓';
+      case 'frigate':
+        return '🛥️';
+      case 'scout':
+      case 'reconnaissance':
+        return '🔍';
+      case 'carrier':
+        return '✈️';
+      case 'transport':
+        return '📦';
+      default:
+        return '🚁';
     }
   };
 
-  const getShipIcon = (name) => {
-    if (name.toLowerCase().includes('flagship')) return '🚀';
-    if (name.toLowerCase().includes('frigate')) return '🛳️';
-    if (name.toLowerCase().includes('scout')) return '🛸';
-    return '⚓';
+  // Generate mock coordinates for visual representation
+  const getShipCoordinates = (ship, index) => {
+    const seed = ship.id || index;
+    const x = 50 + (seed * 37) % 40 - 20; // Random x between 30-70%
+    const y = 50 + (seed * 41) % 40 - 20; // Random y between 30-70%
+    return { x, y };
   };
 
-  if (loading && displayFleet.fleet.length === 0) {
-    return (
-      <div className="armada-map">
-        <h2>🗺️ Armada Map</h2>
-        <div className="loading">
-          <div className="loading-spinner"></div>
-          Connecting to fleet command...
-        </div>
-      </div>
-    );
-  }
+  // Initial load and periodic refresh
+  useEffect(() => {
+    fetchArmadaData();
+    const interval = setInterval(fetchArmadaData, 45000); // Refresh every 45 seconds
+    return () => clearInterval(interval);
+  }, []);
 
-  if (error && displayFleet.fleet.length === 0) {
-    return (
-      <div className="armada-map">
-        <h2>🗺️ Armada Map</h2>
-        <div className="error-state">
-          <div className="error-icon">⚠️</div>
-          <div className="error-message">Error connecting to fleet: {error}</div>
-          <div className="error-actions">
-            <button onClick={handleRefresh} className="retry-button" disabled={isRefreshing}>
-              {isRefreshing ? '⏳ Reconnecting...' : '🔄 Reconnect'}
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const { fleet = [], summary = {} } = displayFleet;
-  const hasRealTimeData = realTimeData.fleetData && realTimeData.fleetData.length > 0;
+  const filteredFleet = getFilteredFleet();
 
   return (
     <div className="armada-map">
-      <div className="header">
-        <h2>🗺️ Armada Map</h2>
-        <div className="header-info">
-          <span className={`live-indicator ${hasRealTimeData ? 'live' : 'polling'}`}>
-            {hasRealTimeData ? '🔴 LIVE' : '📡 POLLING'}
+      <div className="armada-header">
+        <h2>🗺️ Armada Tactical Map</h2>
+        <div className="header-actions">
+          <span className="last-update">
+            Last Updated: {lastUpdate.toLocaleTimeString()}
           </span>
-          <button 
-            onClick={handleRefresh} 
-            className="refresh-button"
-            disabled={isRefreshing}
-            title="Refresh fleet data"
-          >
-            {isRefreshing ? '⏳' : '🔄'} Refresh
+          <div className="view-mode-toggle">
+            <button
+              className={viewMode === 'grid' ? 'active' : ''}
+              onClick={() => setViewMode('grid')}
+            >
+              📋 Grid
+            </button>
+            <button
+              className={viewMode === 'map' ? 'active' : ''}
+              onClick={() => setViewMode('map')}
+            >
+              🗺️ Map
+            </button>
+          </div>
+          <button onClick={fetchArmadaData} className="refresh-btn">
+            🔄 Refresh
           </button>
         </div>
       </div>
-      
-      {/* Display refresh error if any */}
-      {refreshError && (
-        <div className="refresh-error">
-          <span className="error-icon">⚠️</span>
-          <span className="error-message">{refreshError}</span>
-          <button onClick={handleRefresh} className="error-retry" disabled={isRefreshing}>
-            🔄 Retry
-          </button>
+
+      {error && (
+        <div className="error-banner">
+          <span>⚠️</span>
+          <span>{error}</span>
+          <button onClick={() => setError(null)}>✕</button>
         </div>
       )}
-      
-      {summary.total_ships && (
-        <div className="fleet-summary">
-          <div className="summary-stats">
-            <div className="stat-item">
-              <span className="stat-value">{summary.total_ships}</span>
-              <span className="stat-label">Total Ships</span>
-            </div>
-            <div className="stat-item online">
-              <span className="stat-value">{summary.online}</span>
-              <span className="stat-label">Online</span>
-            </div>
-            <div className="stat-item patrol">
-              <span className="stat-value">{summary.patrol}</span>
-              <span className="stat-label">Patrol</span>
-            </div>
-            <div className="stat-item offline">
-              <span className="stat-value">{summary.offline}</span>
-              <span className="stat-label">Offline</span>
-            </div>
+
+      {/* Armada Status Overview */}
+      <div className="armada-overview">
+        <div className="overview-stats">
+          <div className="stat-item">
+            <span className="stat-label">Fleet Size:</span>
+            <span className="stat-value">{fleetData.length}</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-label">Operational:</span>
+            <span className="stat-value">
+              {fleetData.filter(ship => ship.status === 'active' || ship.status === 'operational').length}
+            </span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-label">On Mission:</span>
+            <span className="stat-value">
+              {fleetData.filter(ship => ship.status === 'mission' || ship.status === 'patrol').length}
+            </span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-label">Fleet Status:</span>
+            <span className="stat-value">{armadaStatus.status || 'Standby'}</span>
           </div>
         </div>
-      )}
-      
-      <div className="fleet-container">
-        {fleet.length === 0 ? (
-          <div className="no-fleet">
-            <div className="placeholder-icon">🚢</div>
-            <div className="placeholder-title">Waiting for fleet data...</div>
-            <div className="placeholder-subtitle">
-              {hasRealTimeData ? 'Live fleet tracking is active' : 'Checking fleet status...'}
-            </div>
+      </div>
+
+      {/* Filters */}
+      <div className="armada-filters">
+        <div className="filter-group">
+          <label>Status:</label>
+          <select
+            value={filters.status}
+            onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+          >
+            <option value="all">All Statuses</option>
+            <option value="active">Active</option>
+            <option value="operational">Operational</option>
+            <option value="standby">Standby</option>
+            <option value="patrol">Patrol</option>
+            <option value="mission">Mission</option>
+            <option value="offline">Offline</option>
+            <option value="maintenance">Maintenance</option>
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label>Type:</label>
+          <select
+            value={filters.type}
+            onChange={(e) => setFilters({ ...filters, type: e.target.value })}
+          >
+            <option value="all">All Types</option>
+            <option value="battleship">Battleship</option>
+            <option value="cruiser">Cruiser</option>
+            <option value="destroyer">Destroyer</option>
+            <option value="frigate">Frigate</option>
+            <option value="scout">Scout</option>
+            <option value="carrier">Carrier</option>
+            <option value="transport">Transport</option>
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label>Search:</label>
+          <input
+            type="text"
+            placeholder="Search ships..."
+            value={filters.search}
+            onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+          />
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="armada-content">
+        {loading && fleetData.length === 0 ? (
+          <div className="loading-spinner">
+            <span>⏳</span>
+            <p>Loading armada data...</p>
           </div>
-        ) : (
-          <div className="fleet-grid">
-            {fleet.map((ship) => (
-              <div 
-                key={ship.id} 
-                className={`ship-card ${ship.operational ? 'operational' : 'non-operational'}`}
-              >
-                <div className="ship-header">
-                  <div className="ship-title">
-                    <span className="ship-icon">{getShipIcon(ship.name)}</span>
-                    <h3 className="ship-name">{ship.name}</h3>
+        ) : filteredFleet.length > 0 ? (
+          <>
+            {viewMode === 'grid' ? (
+              /* Grid View */
+              <div className="fleet-grid">
+                {filteredFleet.map((ship, index) => (
+                  <div
+                    key={ship.id || index}
+                    className={`ship-card ${selectedShip?.id === ship.id ? 'selected' : ''}`}
+                    onClick={() => setSelectedShip(ship)}
+                  >
+                    <div className="ship-header">
+                      <div className="ship-name">
+                        <span className="ship-icon">{getShipTypeIcon(ship.type)}</span>
+                        <span className="name-text">{ship.name || `Ship ${ship.id || index + 1}`}</span>
+                      </div>
+                      <div
+                        className="status-indicator"
+                        style={{ backgroundColor: getStatusColor(ship.status) }}
+                      >
+                        {ship.status || 'unknown'}
+                      </div>
+                    </div>
+
+                    <div className="ship-details">
+                      <div className="detail-row">
+                        <span>Type:</span>
+                        <span>{ship.type || 'Unknown'}</span>
+                      </div>
+                      <div className="detail-row">
+                        <span>Callsign:</span>
+                        <span>{ship.callsign || 'N/A'}</span>
+                      </div>
+                      <div className="detail-row">
+                        <span>Location:</span>
+                        <span>{ship.location || 'Unknown'}</span>
+                      </div>
+                      {ship.mission && (
+                        <div className="detail-row">
+                          <span>Mission:</span>
+                          <span>{ship.mission}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="ship-stats">
+                      {ship.crew && (
+                        <div className="stat">
+                          <span>👥 {ship.crew}</span>
+                        </div>
+                      )}
+                      {ship.armament && (
+                        <div className="stat">
+                          <span>⚔️ {ship.armament}</span>
+                        </div>
+                      )}
+                      {ship.speed && (
+                        <div className="stat">
+                          <span>🚀 {ship.speed}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="status-section">
-                    <span className="status-icon">{getStatusIcon(ship.status)}</span>
-                    <span 
-                      className="status-text" 
-                      style={{ color: getStatusColor(ship.status) }}
-                    >
-                      {ship.status?.toUpperCase()}
-                    </span>
+                ))}
+              </div>
+            ) : (
+              /* Map View */
+              <div className="tactical-map">
+                <div className="map-container">
+                  <div className="map-grid">
+                    {/* Grid lines for tactical display */}
+                    {Array.from({ length: 10 }, (_, i) => (
+                      <div key={`h-${i}`} className="grid-line horizontal" style={{ top: `${i * 10}%` }} />
+                    ))}
+                    {Array.from({ length: 10 }, (_, i) => (
+                      <div key={`v-${i}`} className="grid-line vertical" style={{ left: `${i * 10}%` }} />
+                    ))}
+                  </div>
+
+                  {/* Ship positions */}
+                  {filteredFleet.map((ship, index) => {
+                    const { x, y } = getShipCoordinates(ship, index);
+                    return (
+                      <div
+                        key={ship.id || index}
+                        className={`ship-marker ${ship.status || 'unknown'} ${
+                          selectedShip?.id === ship.id ? 'selected' : ''
+                        }`}
+                        style={{ left: `${x}%`, top: `${y}%` }}
+                        onClick={() => setSelectedShip(ship)}
+                        title={`${ship.name || `Ship ${index + 1}`} - ${ship.status || 'unknown'}`}
+                      >
+                        <span className="ship-icon">{getShipTypeIcon(ship.type)}</span>
+                        <span className="ship-label">{ship.name || ship.callsign || `S${index + 1}`}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Map Legend */}
+                <div className="map-legend">
+                  <h4>🏷️ Legend</h4>
+                  <div className="legend-items">
+                    <div className="legend-item">
+                      <span className="legend-color" style={{ backgroundColor: '#28a745' }}></span>
+                      <span>Operational</span>
+                    </div>
+                    <div className="legend-item">
+                      <span className="legend-color" style={{ backgroundColor: '#007bff' }}></span>
+                      <span>On Mission</span>
+                    </div>
+                    <div className="legend-item">
+                      <span className="legend-color" style={{ backgroundColor: '#ffc107' }}></span>
+                      <span>Standby</span>
+                    </div>
+                    <div className="legend-item">
+                      <span className="legend-color" style={{ backgroundColor: '#6c757d' }}></span>
+                      <span>Offline</span>
+                    </div>
                   </div>
                 </div>
-                <div className="ship-details">
-                  <div className="detail-row">
-                    <span className="label">📍 Location:</span>
-                    <span className="value">{ship.location}</span>
-                  </div>
-                  {ship.patrol_sectors && ship.patrol_sectors.length > 0 && (
-                    <div className="detail-row">
-                      <span className="label">🎯 Patrol:</span>
-                      <span className="value">{ship.patrol_sectors.join(', ')}</span>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="no-fleet">
+            <span>🚁</span>
+            <p>No ships found matching your criteria</p>
+          </div>
+        )}
+      </div>
+
+      {/* Ship Details Panel */}
+      {selectedShip && (
+        <div className="ship-details-panel">
+          <div className="panel-header">
+            <h3>
+              {getShipTypeIcon(selectedShip.type)} {selectedShip.name || `Ship ${selectedShip.id}`}
+            </h3>
+            <button onClick={() => setSelectedShip(null)} className="close-btn">
+              ✕
+            </button>
+          </div>
+          <div className="panel-content">
+            <div className="detail-section">
+              <h4>Status Information</h4>
+              <div className="info-grid">
+                <div className="info-item">
+                  <span>Status:</span>
+                  <span
+                    className="status-badge"
+                    style={{ backgroundColor: getStatusColor(selectedShip.status) }}
+                  >
+                    {selectedShip.status || 'unknown'}
+                  </span>
+                </div>
+                <div className="info-item">
+                  <span>Type:</span>
+                  <span>{selectedShip.type || 'Unknown'}</span>
+                </div>
+                <div className="info-item">
+                  <span>Callsign:</span>
+                  <span>{selectedShip.callsign || 'N/A'}</span>
+                </div>
+                <div className="info-item">
+                  <span>Location:</span>
+                  <span>{selectedShip.location || 'Unknown'}</span>
+                </div>
+              </div>
+            </div>
+            
+            {selectedShip.mission && (
+              <div className="detail-section">
+                <h4>Current Mission</h4>
+                <p>{selectedShip.mission}</p>
+              </div>
+            )}
+
+            {(selectedShip.crew || selectedShip.armament || selectedShip.speed) && (
+              <div className="detail-section">
+                <h4>Specifications</h4>
+                <div className="spec-grid">
+                  {selectedShip.crew && (
+                    <div className="spec-item">
+                      <span>👥 Crew:</span>
+                      <span>{selectedShip.crew}</span>
                     </div>
                   )}
-                  <div className="detail-row">
-                    <span className="label">📡 Last Report:</span>
-                    <span className="value">
-                      {ship.last_reported ? 
-                        new Date(ship.last_reported).toLocaleTimeString() : 
-                        'Unknown'
-                      }
-                    </span>
-                  </div>
-                  {ship.operational !== undefined && (
-                    <div className="detail-row">
-                      <span className="label">⚙️ Operational:</span>
-                      <span className={`value ${ship.operational ? 'operational' : 'non-operational'}`}>
-                        {ship.operational ? '✅ Yes' : '❌ No'}
-                      </span>
+                  {selectedShip.armament && (
+                    <div className="spec-item">
+                      <span>⚔️ Armament:</span>
+                      <span>{selectedShip.armament}</span>
+                    </div>
+                  )}
+                  {selectedShip.speed && (
+                    <div className="spec-item">
+                      <span>🚀 Speed:</span>
+                      <span>{selectedShip.speed}</span>
                     </div>
                   )}
                 </div>
               </div>
-            ))}
+            )}
           </div>
-        )}
-      </div>
-      
-      <div className="fleet-footer">
-        <div className="status-info">
-          <span>
-            Last updated: {summary.last_updated ? 
-              new Date(summary.last_updated).toLocaleString() : 
-              'Live'
-            }
-          </span>
-          <span className="separator">|</span>
-          <span>
-            Real-time tracking: {hasRealTimeData ? 'Active' : 'Polling'}
-          </span>
-          <span className="separator">|</span>
-          <span>
-            Fleet count: {fleet.length}
-          </span>
         </div>
-      </div>
+      )}
     </div>
   );
 };

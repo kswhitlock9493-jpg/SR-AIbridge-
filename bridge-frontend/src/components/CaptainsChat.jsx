@@ -1,196 +1,295 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { sendCaptainMessage } from '../api';
-import { useBridge } from '../hooks/useBridge';
+import { getCaptainMessages, sendCaptainMessage } from '../api';
 
 const CaptainsChat = () => {
-  const { 
-    captainMessages: messages, 
-    realTimeData, 
-    loading, 
-    error, 
-    refreshData 
-  } = useBridge();
-  
-  const [input, setInput] = useState('');
-  const [sendError, setSendError] = useState(null);
-  const [isSending, setIsSending] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [currentUser, setCurrentUser] = useState('Admiral');
+  const [isConnected, setIsConnected] = useState(true);
+  const [lastUpdate, setLastUpdate] = useState(new Date());
   const messagesEndRef = useRef(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // Fetch messages from backend
+  const fetchMessages = async () => {
+    try {
+      setError(null);
+      const data = await getCaptainMessages();
+      setMessages(Array.isArray(data) ? data : []);
+      setLastUpdate(new Date());
+      setIsConnected(true);
+    } catch (err) {
+      console.error('Failed to fetch captain messages:', err);
+      setError('Failed to load messages: ' + err.message);
+      setIsConnected(false);
+    }
   };
 
-  /**
-   * Handle real-time message updates and scroll to bottom
-   */
-  useEffect(() => {
-    const realTimeMessages = realTimeData.chatMessages || [];
-    if (realTimeMessages.length > 0) {
-      console.log('📡 Real-time chat messages available:', realTimeMessages.length);
-    }
-    scrollToBottom();
-  }, [messages, realTimeData.chatMessages]);
-
-  /**
-   * Enhanced message sending with better error handling and retry capability
-   */
+  // Send new message
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!input.trim() || isSending) return;
-
-    setIsSending(true);
-    setSendError(null);
+    if (!newMessage.trim()) return;
 
     try {
-      const messageData = {
-        from_: "Bridge Command",
-        to: "Fleet", 
-        message: input.trim(),
+      setLoading(true);
+      setError(null);
+
+      await sendCaptainMessage({
+        author: currentUser,
+        message: newMessage.trim(),
         timestamp: new Date().toISOString()
-      };
-      
-      await sendCaptainMessage(messageData);
-      setInput('');
-      
-      // Refresh messages immediately after sending for instant update
-      await refreshData('messages');
-      
-      // Clear any previous errors on successful send
-      setSendError(null);
+      });
+
+      setNewMessage('');
+      await fetchMessages(); // Refresh messages
+      setIsConnected(true);
     } catch (err) {
       console.error('Failed to send message:', err);
-      setSendError(err.message || 'Failed to send message. Please try again.');
-      
-      // Don't clear the input on error so user can retry
+      setError('Failed to send message: ' + err.message);
+      setIsConnected(false);
     } finally {
-      setIsSending(false);
+      setLoading(false);
     }
   };
 
-  /**
-   * Retry sending the last message
-   */
-  const retryLastMessage = () => {
-    if (input.trim()) {
-      handleSendMessage({ preventDefault: () => {} });
-    }
+  // Auto-scroll to bottom when new messages arrive
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Format timestamp
   const formatTimestamp = (timestamp) => {
-    return new Date(timestamp).toLocaleTimeString();
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  if (loading && messages.length === 0) {
-    return (
-      <div className="captains-chat">
-        <h2>💬 Captains Chat</h2>
-        <div className="loading">
-          <div className="loading-spinner"></div>
-          Loading chat messages...
-        </div>
-      </div>
-    );
-  }
+  // Get message time difference for grouping
+  const shouldShowTimestamp = (currentMsg, previousMsg) => {
+    if (!previousMsg) return true;
+    
+    const currentTime = new Date(currentMsg.timestamp || Date.now());
+    const previousTime = new Date(previousMsg.timestamp || Date.now());
+    const timeDiff = currentTime - previousTime;
+    
+    return timeDiff > 300000; // Show timestamp if more than 5 minutes apart
+  };
+
+  // Get user avatar/icon
+  const getUserIcon = (author) => {
+    const icons = {
+      'Admiral': '⚓',
+      'Captain': '👨‍✈️',
+      'Commander': '🎖️',
+      'Lieutenant': '🎭',
+      'Ensign': '🔰',
+      'AI': '🤖'
+    };
+    return icons[author] || '👤';
+  };
+
+  // Get user color
+  const getUserColor = (author) => {
+    const colors = {
+      'Admiral': '#dc3545',
+      'Captain': '#007bff',
+      'Commander': '#28a745',
+      'Lieutenant': '#ffc107',
+      'Ensign': '#6f42c1',
+      'AI': '#20c997'
+    };
+    return colors[author] || '#6c757d';
+  };
+
+  // Initial load and periodic refresh
+  useEffect(() => {
+    fetchMessages();
+    const interval = setInterval(fetchMessages, 15000); // Refresh every 15 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  // Auto-scroll when messages change
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
     <div className="captains-chat">
-      <div className="header">
-        <h2>💬 Captains Chat</h2>
-        <div className="header-controls">
-          {/* Manual refresh for immediate message updates */}
-          <button 
-            onClick={() => refreshData('messages')} 
-            className="refresh-button"
-            disabled={loading}
-            title="Refresh messages"
-          >
-            {loading ? '⏳' : '🔄'} Refresh
-          </button>
-          <div className="connection-status">
-            <span className={`status-indicator ${realTimeData.chatMessages?.length > 0 ? 'live' : 'polling'}`}>
-              {realTimeData.chatMessages?.length > 0 ? '🔴 LIVE' : '📡 POLLING'}
+      <div className="chat-header">
+        <div className="header-title">
+          <h2>💬 Captains Communications</h2>
+          <div className={`connection-status ${isConnected ? 'connected' : 'disconnected'}`}>
+            <span className="status-indicator">●</span>
+            <span className="status-text">
+              {isConnected ? 'Connected' : 'Disconnected'}
             </span>
           </div>
         </div>
-      </div>
-      
-      {error && (
-        <div className="error-banner">
-          <span className="error-icon">⚠️</span>
-          <span className="error-message">Connection Error: {error}</span>
-          <button onClick={() => refreshData('messages')} className="error-retry">
-            🔄 Retry
+        <div className="header-actions">
+          <span className="last-update">
+            Last Updated: {lastUpdate.toLocaleTimeString()}
+          </span>
+          <button onClick={fetchMessages} className="refresh-btn">
+            🔄 Refresh
           </button>
         </div>
+      </div>
+
+      {error && (
+        <div className="error-banner">
+          <span>⚠️</span>
+          <span>{error}</span>
+          <button onClick={() => setError(null)}>✕</button>
+        </div>
       )}
-      
+
+      {/* User Selection */}
+      <div className="user-selector">
+        <label>Speaking as:</label>
+        <select
+          value={currentUser}
+          onChange={(e) => setCurrentUser(e.target.value)}
+        >
+          <option value="Admiral">Admiral</option>
+          <option value="Captain">Captain</option>
+          <option value="Commander">Commander</option>
+          <option value="Lieutenant">Lieutenant</option>
+          <option value="Ensign">Ensign</option>
+        </select>
+      </div>
+
+      {/* Messages Container */}
       <div className="messages-container">
-        {messages.length === 0 ? (
-          <div className="no-messages">
-            <div className="placeholder-icon">💬</div>
-            <div className="placeholder-title">No messages yet</div>
-            <div className="placeholder-subtitle">Start the conversation with your fleet</div>
-          </div>
-        ) : (
-          <div className="messages-list">
-            {messages.map((msg, index) => (
-              <div key={index} className="message-entry">
-                <div className="message-header">
-                  <span className="author">{msg.author || msg.from_ || 'Captain'}</span>
-                  <span className="timestamp">{formatTimestamp(msg.timestamp)}</span>
+        {messages.length > 0 ? (
+          <>
+            {messages.map((message, index) => {
+              const previousMessage = index > 0 ? messages[index - 1] : null;
+              const showTimestamp = shouldShowTimestamp(message, previousMessage);
+              const isOwnMessage = message.author === currentUser;
+
+              return (
+                <div key={message.id || index}>
+                  {showTimestamp && (
+                    <div className="timestamp-divider">
+                      <span>{formatTimestamp(message.timestamp || Date.now())}</span>
+                    </div>
+                  )}
+                  <div className={`message ${isOwnMessage ? 'own-message' : 'other-message'}`}>
+                    <div className="message-avatar">
+                      <span
+                        className="avatar-icon"
+                        style={{ color: getUserColor(message.author) }}
+                      >
+                        {getUserIcon(message.author)}
+                      </span>
+                    </div>
+                    <div className="message-content">
+                      <div className="message-header">
+                        <span
+                          className="author-name"
+                          style={{ color: getUserColor(message.author) }}
+                        >
+                          {message.author || 'Unknown'}
+                        </span>
+                        <span className="message-time">
+                          {formatTimestamp(message.timestamp || Date.now())}
+                        </span>
+                      </div>
+                      <div className="message-text">
+                        {message.message || message.content || 'No message content'}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="message-content">{msg.message}</div>
-              </div>
-            ))}
+              );
+            })}
             <div ref={messagesEndRef} />
+          </>
+        ) : (
+          <div className="no-messages">
+            <span>💬</span>
+            <p>No messages yet. Start the conversation!</p>
           </div>
         )}
       </div>
-      
-      {sendError && (
-        <div className="send-error">
-          <span className="error-icon">⚠️</span>
-          <span className="error-text">{sendError}</span>
-          <button onClick={retryLastMessage} className="retry-button" disabled={!input.trim()}>
-            🔄 Retry
-          </button>
-        </div>
-      )}
-      
-      <form onSubmit={handleSendMessage} className="message-form">
-        <div className="input-group">
+
+      {/* Message Input */}
+      <form onSubmit={handleSendMessage} className="message-input-container">
+        <div className="input-wrapper">
           <input
             type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message to the fleet..."
-            className="message-input"
-            disabled={isSending}
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type your message..."
+            disabled={loading}
             maxLength={500}
           />
-          <button 
-            type="submit" 
-            className="send-button"
-            disabled={!input.trim() || isSending}
-            title={!input.trim() ? 'Enter a message to send' : 'Send message'}
-          >
-            {isSending ? (
-              <>
-                <span className="spinner"></span>
-                Sending...
-              </>
-            ) : (
-              <>
-                📤 Send
-              </>
-            )}
-          </button>
-        </div>
-        <div className="input-footer">
-          <span className="char-count">{input.length}/500</span>
-          <span className="send-hint">Press Enter to send</span>
+          <div className="input-actions">
+            <span className="character-count">
+              {newMessage.length}/500
+            </span>
+            <button
+              type="submit"
+              disabled={loading || !newMessage.trim()}
+              className="send-btn"
+            >
+              {loading ? '⏳' : '📤'} Send
+            </button>
+          </div>
         </div>
       </form>
+
+      {/* Chat Statistics */}
+      <div className="chat-stats">
+        <div className="stat-item">
+          <span>Total Messages:</span>
+          <span>{messages.length}</span>
+        </div>
+        <div className="stat-item">
+          <span>Active Participants:</span>
+          <span>{new Set(messages.map(m => m.author)).size}</span>
+        </div>
+        <div className="stat-item">
+          <span>Last Activity:</span>
+          <span>
+            {messages.length > 0
+              ? formatTimestamp(messages[messages.length - 1].timestamp || Date.now())
+              : 'None'
+            }
+          </span>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="quick-actions">
+        <button
+          onClick={() => {
+            const status = `🛰️ System Status: All stations operational. ${new Date().toLocaleTimeString()}`;
+            setNewMessage(status);
+          }}
+          className="quick-action-btn"
+        >
+          📊 Status Update
+        </button>
+        <button
+          onClick={() => {
+            const alert = `🚨 Alert: All hands to battle stations! This is not a drill.`;
+            setNewMessage(alert);
+          }}
+          className="quick-action-btn"
+        >
+          🚨 Battle Alert
+        </button>
+        <button
+          onClick={() => {
+            const sitrep = `📋 SITREP: Awaiting orders. Fleet ready for deployment.`;
+            setNewMessage(sitrep);
+          }}
+          className="quick-action-btn"
+        >
+          📋 SITREP
+        </button>
+      </div>
     </div>
   );
 };

@@ -1,250 +1,160 @@
 import React, { useState, useEffect } from 'react';
-import { createMission, updateMissionStatus } from '../api';
-import { useBridge } from '../hooks/useBridge';
+import { getMissions, createMission, updateMissionStatus } from '../api';
 
-const MissionLog = ({ refreshKey }) => {
-  const { 
-    missions, 
-    realTimeData, 
-    loading, 
-    error, 
-    refreshData 
-  } = useBridge();
-  
-  const [filteredMissions, setFilteredMissions] = useState([]);
+const MissionLog = () => {
+  const [missions, setMissions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [newMission, setNewMission] = useState({
+    title: '',
+    description: '',
+    priority: 'medium',
+    type: 'standard'
+  });
   const [filters, setFilters] = useState({
     status: 'all',
     priority: 'all',
     search: ''
   });
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [newMission, setNewMission] = useState({
-    title: '',
-    description: '',
-    priority: 'medium'
-  });
-  const [sortBy, setSortBy] = useState('created_at');
-  const [sortOrder, setSortOrder] = useState('desc');
+  const [lastUpdate, setLastUpdate] = useState(new Date());
 
-  /**
-   * Merge real-time mission updates with API data
-   */
-  useEffect(() => {
-    const realTimeMissions = realTimeData.missions || [];
-    if (realTimeMissions.length > 0) {
-      // Real-time updates are already managed by the bridge context
-      console.log('📡 Real-time mission updates available:', realTimeMissions.length);
-    }
-  }, [realTimeData.missions]);
-
-  /**
-   * Apply filters and sorting to missions
-   */
-  useEffect(() => {
-    let filtered = [...missions];
-
-    // Apply status filter
-    if (filters.status !== 'all') {
-      filtered = filtered.filter(m => m.status?.toLowerCase() === filters.status);
-    }
-
-    // Apply priority filter
-    if (filters.priority !== 'all') {
-      filtered = filtered.filter(m => m.priority?.toLowerCase() === filters.priority);
-    }
-
-    // Apply search filter
-    if (filters.search) {
-      const searchTerm = filters.search.toLowerCase();
-      filtered = filtered.filter(m => 
-        m.title?.toLowerCase().includes(searchTerm) || 
-        m.description?.toLowerCase().includes(searchTerm)
-      );
-    }
-
-    // Apply sorting
-    filtered.sort((a, b) => {
-      const aValue = a[sortBy] || '';
-      const bValue = b[sortBy] || '';
-      
-      if (sortBy.includes('_at')) {
-        const aDate = new Date(aValue);
-        const bDate = new Date(bValue);
-        return sortOrder === 'desc' ? bDate - aDate : aDate - bDate;
-      }
-      
-      const comparison = aValue.toString().localeCompare(bValue.toString());
-      return sortOrder === 'desc' ? -comparison : comparison;
-    });
-
-    setFilteredMissions(filtered);
-  }, [missions, filters, sortBy, sortOrder]);
-
-  // Support instant refresh when new missions are dispatched via refreshKey prop
-  useEffect(() => {
-    if (refreshKey) {
-      refreshData('missions');
-    }
-  }, [refreshKey, refreshData]);
-
-  /**
-   * Handle creating new mission
-   */
-  const handleCreateMission = async (e) => {
-    e.preventDefault();
-    if (!newMission.title.trim()) return;
-
+  // Fetch missions from backend
+  const fetchMissions = async () => {
     try {
-      await createMission({
-        ...newMission,
-        status: 'planning',
-        created_at: new Date().toISOString()
-      });
-      
-      setNewMission({ title: '', description: '', priority: 'medium' });
-      setShowCreateForm(false);
-      await refreshData('missions'); // Refresh missions list
+      setLoading(true);
+      setError(null);
+      const data = await getMissions();
+      setMissions(Array.isArray(data) ? data : []);
+      setLastUpdate(new Date());
     } catch (err) {
-      console.error('Failed to create mission:', err);
+      console.error('Failed to fetch missions:', err);
+      setError('Failed to load missions: ' + err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  /**
-   * Handle updating mission status
-   */
+  // Create new mission
+  const handleCreateMission = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      await createMission(newMission);
+      setNewMission({ title: '', description: '', priority: 'medium', type: 'standard' });
+      setShowCreateForm(false);
+      await fetchMissions(); // Refresh missions list
+    } catch (err) {
+      console.error('Failed to create mission:', err);
+      setError('Failed to create mission: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Update mission status
   const handleStatusUpdate = async (missionId, newStatus) => {
     try {
       await updateMissionStatus(missionId, newStatus);
-      await refreshData('missions'); // Refresh missions list
+      await fetchMissions(); // Refresh missions list
     } catch (err) {
       console.error('Failed to update mission status:', err);
+      setError('Failed to update mission status: ' + err.message);
     }
   };
 
-  /**
-   * Clear all filters
-   */
-  const clearFilters = () => {
-    setFilters({ status: 'all', priority: 'all', search: '' });
+  // Filter and search missions
+  const getFilteredMissions = () => {
+    let filtered = [...missions];
+
+    // Status filter
+    if (filters.status !== 'all') {
+      filtered = filtered.filter(mission => mission.status === filters.status);
+    }
+
+    // Priority filter
+    if (filters.priority !== 'all') {
+      filtered = filtered.filter(mission => mission.priority === filters.priority);
+    }
+
+    // Search filter
+    if (filters.search.trim()) {
+      const searchLower = filters.search.toLowerCase();
+      filtered = filtered.filter(mission =>
+        (mission.title || '').toLowerCase().includes(searchLower) ||
+        (mission.description || '').toLowerCase().includes(searchLower)
+      );
+    }
+
+    return filtered.sort((a, b) => {
+      const dateA = new Date(a.created_at || Date.now());
+      const dateB = new Date(b.created_at || Date.now());
+      return dateB - dateA; // Most recent first
+    });
   };
 
-  // Stats for display
-  const stats = {
-    total: missions.length,
-    active: missions.filter(m => m.status === 'active').length,
-    completed: missions.filter(m => m.status === 'completed').length,
-    failed: missions.filter(m => m.status === 'failed').length
-  };
-
-  // Utility functions for mission data formatting
+  // Get status color
   const getStatusColor = (status) => {
-    switch (status?.toLowerCase()) {
-      case 'active': return '#00ff00';
-      case 'completed': return '#00aaff';
-      case 'planning': return '#ffaa00';
-      case 'failed': return '#ff4444';
-      default: return '#888';
+    switch (status) {
+      case 'active':
+      case 'in_progress':
+        return '#28a745';
+      case 'completed':
+        return '#007bff';
+      case 'failed':
+        return '#dc3545';
+      case 'pending':
+        return '#ffc107';
+      default:
+        return '#6c757d';
     }
   };
 
+  // Get priority color
   const getPriorityColor = (priority) => {
-    switch (priority?.toLowerCase()) {
-      case 'high': return '#ff4444';
-      case 'medium': return '#ffaa00';
-      case 'low': return '#00ff00';
-      default: return '#888';
+    switch (priority) {
+      case 'high':
+        return '#dc3545';
+      case 'medium':
+        return '#ffc107';
+      case 'low':
+        return '#28a745';
+      default:
+        return '#6c757d';
     }
   };
 
-  const formatTimestamp = (timestamp) => {
-    return new Date(timestamp).toLocaleString();
-  };
+  // Initial load and periodic refresh
+  useEffect(() => {
+    fetchMissions();
+    const interval = setInterval(fetchMissions, 30000); // Refresh every 30 seconds
+    return () => clearInterval(interval);
+  }, []);
 
-  if (loading && missions.length === 0) {
-    return (
-      <div className="mission-log">
-        <h2>🚀 Mission Log</h2>
-        <div className="loading">Loading missions...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="mission-log">
-        <h2>🚀 Mission Log</h2>
-        <div className="error">Error loading missions: {error}</div>
-        <button onClick={() => refreshData('missions')} className="retry-button">Retry</button>
-      </div>
-    );
-  }
+  const filteredMissions = getFilteredMissions();
 
   return (
     <div className="mission-log">
-      <div className="header">
+      <div className="mission-log-header">
         <h2>🚀 Mission Log</h2>
-        <div className="header-controls">
-          <span className="live-indicator">🔴 LIVE</span>
-          <button onClick={() => setShowCreateForm(!showCreateForm)} className="create-button">
+        <div className="header-actions">
+          <span className="last-update">
+            Last Updated: {lastUpdate.toLocaleTimeString()}
+          </span>
+          <button onClick={fetchMissions} className="refresh-btn">
+            🔄 Refresh
+          </button>
+          <button onClick={() => setShowCreateForm(true)} className="create-btn">
             ➕ New Mission
           </button>
-          <button onClick={() => refreshData('missions')} className="refresh-button">🔄 Refresh</button>
         </div>
       </div>
 
-      {/* Mission Statistics */}
-      <div className="mission-stats">
-        <div className="stat-item">
-          <span className="stat-value">{stats.total}</span>
-          <span className="stat-label">Total</span>
-        </div>
-        <div className="stat-item active">
-          <span className="stat-value">{stats.active}</span>
-          <span className="stat-label">Active</span>
-        </div>
-        <div className="stat-item completed">
-          <span className="stat-value">{stats.completed}</span>
-          <span className="stat-label">Completed</span>
-        </div>
-        <div className="stat-item failed">
-          <span className="stat-value">{stats.failed}</span>
-          <span className="stat-label">Failed</span>
-        </div>
-      </div>
-
-      {/* Create Mission Form */}
-      {showCreateForm && (
-        <div className="create-mission-form">
-          <h3>Create New Mission</h3>
-          <form onSubmit={handleCreateMission}>
-            <div className="form-row">
-              <input
-                type="text"
-                placeholder="Mission title..."
-                value={newMission.title}
-                onChange={(e) => setNewMission({ ...newMission, title: e.target.value })}
-                required
-              />
-              <select
-                value={newMission.priority}
-                onChange={(e) => setNewMission({ ...newMission, priority: e.target.value })}
-              >
-                <option value="low">Low Priority</option>
-                <option value="medium">Medium Priority</option>
-                <option value="high">High Priority</option>
-              </select>
-            </div>
-            <textarea
-              placeholder="Mission description..."
-              value={newMission.description}
-              onChange={(e) => setNewMission({ ...newMission, description: e.target.value })}
-              rows={3}
-            />
-            <div className="form-actions">
-              <button type="submit">Create Mission</button>
-              <button type="button" onClick={() => setShowCreateForm(false)}>Cancel</button>
-            </div>
-          </form>
+      {error && (
+        <div className="error-banner">
+          <span>⚠️</span>
+          <span>{error}</span>
+          <button onClick={() => setError(null)}>✕</button>
         </div>
       )}
 
@@ -252,18 +162,25 @@ const MissionLog = ({ refreshKey }) => {
       <div className="mission-filters">
         <div className="filter-group">
           <label>Status:</label>
-          <select value={filters.status} onChange={(e) => setFilters({ ...filters, status: e.target.value })}>
+          <select
+            value={filters.status}
+            onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+          >
             <option value="all">All Statuses</option>
-            <option value="planning">Planning</option>
+            <option value="pending">Pending</option>
             <option value="active">Active</option>
+            <option value="in_progress">In Progress</option>
             <option value="completed">Completed</option>
             <option value="failed">Failed</option>
           </select>
         </div>
-        
+
         <div className="filter-group">
           <label>Priority:</label>
-          <select value={filters.priority} onChange={(e) => setFilters({ ...filters, priority: e.target.value })}>
+          <select
+            value={filters.priority}
+            onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
+          >
             <option value="all">All Priorities</option>
             <option value="high">High</option>
             <option value="medium">Medium</option>
@@ -280,84 +197,191 @@ const MissionLog = ({ refreshKey }) => {
             onChange={(e) => setFilters({ ...filters, search: e.target.value })}
           />
         </div>
-
-        <div className="filter-group">
-          <label>Sort:</label>
-          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-            <option value="created_at">Created Date</option>
-            <option value="updated_at">Updated Date</option>
-            <option value="title">Title</option>
-            <option value="priority">Priority</option>
-            <option value="status">Status</option>
-          </select>
-          <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
-            <option value="desc">Descending</option>
-            <option value="asc">Ascending</option>
-          </select>
-        </div>
-
-        {(filters.status !== 'all' || filters.priority !== 'all' || filters.search) && (
-          <button onClick={clearFilters} className="clear-filters-button">Clear Filters</button>
-        )}
       </div>
-      
+
+      {/* Mission Statistics */}
+      <div className="mission-stats">
+        <div className="stat-item">
+          <span className="stat-label">Total Missions:</span>
+          <span className="stat-value">{missions.length}</span>
+        </div>
+        <div className="stat-item">
+          <span className="stat-label">Active:</span>
+          <span className="stat-value">
+            {missions.filter(m => m.status === 'active' || m.status === 'in_progress').length}
+          </span>
+        </div>
+        <div className="stat-item">
+          <span className="stat-label">Completed:</span>
+          <span className="stat-value">
+            {missions.filter(m => m.status === 'completed').length}
+          </span>
+        </div>
+      </div>
+
+      {/* Missions List */}
       <div className="missions-container">
-        {filteredMissions.length === 0 ? (
-          <div className="no-missions">
-            {missions.length === 0 ? 'No missions available' : 'No missions match your filters'}
+        {loading && missions.length === 0 ? (
+          <div className="loading-spinner">
+            <span>⏳</span>
+            <p>Loading missions...</p>
           </div>
-        ) : (
-          <div className="missions-list">
-            {filteredMissions.map((mission, index) => (
-              <div key={mission.id} className={`mission-entry ${index < 3 ? 'recent' : ''}`}>
+        ) : filteredMissions.length > 0 ? (
+          <div className="missions-grid">
+            {filteredMissions.map((mission) => (
+              <div key={mission.id} className="mission-card">
                 <div className="mission-header">
-                  <h3 className="mission-title">{mission.title}</h3>
-                  <div className="mission-badges">
-                    <span 
-                      className="status-badge" 
-                      style={{ color: getStatusColor(mission.status) }}
+                  <div className="mission-title">
+                    {mission.title || `Mission ${mission.id}`}
+                  </div>
+                  <div className="mission-meta">
+                    <span
+                      className="status-badge"
+                      style={{ backgroundColor: getStatusColor(mission.status) }}
                     >
-                      ● {mission.status?.toUpperCase()}
+                      {mission.status || 'pending'}
                     </span>
-                    <span 
-                      className="priority-badge" 
-                      style={{ color: getPriorityColor(mission.priority) }}
+                    <span
+                      className="priority-badge"
+                      style={{ backgroundColor: getPriorityColor(mission.priority) }}
                     >
-                      {mission.priority?.toUpperCase()} PRIORITY
+                      {mission.priority || 'medium'}
                     </span>
                   </div>
                 </div>
-                <div className="mission-description">{mission.description}</div>
-                
-                {/* Status Update Controls */}
-                <div className="mission-controls">
-                  <label>Update Status:</label>
-                  <select 
-                    value={mission.status || 'planning'}
-                    onChange={(e) => handleStatusUpdate(mission.id, e.target.value)}
-                  >
-                    <option value="planning">Planning</option>
-                    <option value="active">Active</option>
-                    <option value="completed">Completed</option>
-                    <option value="failed">Failed</option>
-                  </select>
+
+                <div className="mission-description">
+                  {mission.description || 'No description provided'}
                 </div>
 
-                <div className="mission-footer">
-                  <span className="created-date">
-                    Created: {formatTimestamp(mission.created_at)}
-                  </span>
-                  {mission.updated_at !== mission.created_at && (
-                    <span className="updated-date">
-                      Updated: {formatTimestamp(mission.updated_at)}
+                <div className="mission-details">
+                  <div className="detail-item">
+                    <span>Created:</span>
+                    <span>
+                      {mission.created_at 
+                        ? new Date(mission.created_at).toLocaleDateString()
+                        : 'Unknown'
+                      }
                     </span>
+                  </div>
+                  <div className="detail-item">
+                    <span>Type:</span>
+                    <span>{mission.type || 'standard'}</span>
+                  </div>
+                  {mission.agent_id && (
+                    <div className="detail-item">
+                      <span>Assigned Agent:</span>
+                      <span>{mission.agent_id}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="mission-actions">
+                  {mission.status === 'pending' && (
+                    <button
+                      onClick={() => handleStatusUpdate(mission.id, 'active')}
+                      className="action-btn activate"
+                    >
+                      🚀 Activate
+                    </button>
+                  )}
+                  {(mission.status === 'active' || mission.status === 'in_progress') && (
+                    <button
+                      onClick={() => handleStatusUpdate(mission.id, 'completed')}
+                      className="action-btn complete"
+                    >
+                      ✅ Complete
+                    </button>
+                  )}
+                  {mission.status !== 'failed' && mission.status !== 'completed' && (
+                    <button
+                      onClick={() => handleStatusUpdate(mission.id, 'failed')}
+                      className="action-btn fail"
+                    >
+                      ❌ Fail
+                    </button>
                   )}
                 </div>
               </div>
             ))}
           </div>
+        ) : (
+          <div className="no-missions">
+            <span>📋</span>
+            <p>No missions found matching your criteria</p>
+            <button onClick={() => setShowCreateForm(true)} className="create-btn">
+              Create First Mission
+            </button>
+          </div>
         )}
       </div>
+
+      {/* Create Mission Modal */}
+      {showCreateForm && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h3>Create New Mission</h3>
+              <button onClick={() => setShowCreateForm(false)} className="close-btn">
+                ✕
+              </button>
+            </div>
+            <form onSubmit={handleCreateMission} className="mission-form">
+              <div className="form-group">
+                <label>Title:</label>
+                <input
+                  type="text"
+                  value={newMission.title}
+                  onChange={(e) => setNewMission({ ...newMission, title: e.target.value })}
+                  required
+                  placeholder="Enter mission title"
+                />
+              </div>
+              <div className="form-group">
+                <label>Description:</label>
+                <textarea
+                  value={newMission.description}
+                  onChange={(e) => setNewMission({ ...newMission, description: e.target.value })}
+                  placeholder="Enter mission description"
+                  rows="3"
+                />
+              </div>
+              <div className="form-group">
+                <label>Priority:</label>
+                <select
+                  value={newMission.priority}
+                  onChange={(e) => setNewMission({ ...newMission, priority: e.target.value })}
+                >
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Type:</label>
+                <select
+                  value={newMission.type}
+                  onChange={(e) => setNewMission({ ...newMission, type: e.target.value })}
+                >
+                  <option value="standard">Standard</option>
+                  <option value="reconnaissance">Reconnaissance</option>
+                  <option value="combat">Combat</option>
+                  <option value="diplomatic">Diplomatic</option>
+                  <option value="exploration">Exploration</option>
+                </select>
+              </div>
+              <div className="form-actions">
+                <button type="button" onClick={() => setShowCreateForm(false)} className="cancel-btn">
+                  Cancel
+                </button>
+                <button type="submit" disabled={loading} className="submit-btn">
+                  {loading ? 'Creating...' : 'Create Mission'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
