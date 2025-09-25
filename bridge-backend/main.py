@@ -20,12 +20,35 @@ from schemas import (
 )
 from seed import seed_initial_data, get_fleet_data, get_system_status
 
+# Import bridge_core modules
+from bridge_core.claude_watcher import ClaudeWatcher
+from bridge_core.fault_injector import FaultInjector
+from bridge_core.self_healing_adapter import SelfHealingMASAdapter
+from bridge_core.federation_client import FederationClient
+from bridge_core.registry_payloads import current_registry_payloads
+
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 logger.info(f"🚀 Starting {settings.APP_NAME}")
 logger.info(f"🔧 Database: {settings.DATABASE_TYPE.upper()} at {settings.DATABASE_URL}")
+
+# Initialize bridge_core modules
+claude_watcher = ClaudeWatcher(retention_hours=24)
+fault_injector = FaultInjector(enabled=settings.FAULT_INJECTION_ENABLED if hasattr(settings, 'FAULT_INJECTION_ENABLED') else False)
+self_healing_adapter = SelfHealingMASAdapter(max_retries=3, healing_timeout=300)
+federation_client = FederationClient(
+    node_id=f"sr-bridge-{settings.APP_NAME.lower().replace(' ', '-')}",
+    node_name=settings.APP_NAME,
+    endpoint=settings.BASE_URL if hasattr(settings, 'BASE_URL') else "http://localhost:8000"
+)
+
+logger.info("🔧 Bridge core modules initialized")
+logger.info(f"📊 ClaudeWatcher: Event monitoring active")
+logger.info(f"⚠️ FaultInjector: {'ENABLED' if fault_injector.enabled else 'DISABLED'}")
+logger.info(f"🔄 SelfHealingAdapter: Recovery protocols loaded")
+logger.info(f"🌐 FederationClient: Node {federation_client.node_id} ready")
 
 
 @asynccontextmanager
@@ -193,7 +216,27 @@ async def trigger_self_heal():
     """Trigger system self-healing process"""
     try:
         logger.info("🔄 Triggering self-heal process...")
+        
+        # Log self-heal event
+        from bridge_core.claude_watcher import EventType, Severity
+        claude_watcher.log_event(
+            EventType.SYSTEM_HEALTH,
+            Severity.HIGH,
+            "self_heal_api",
+            "System self-heal process initiated",
+            {"trigger": "manual_api_call"}
+        )
+        
         heal_result = await database_self_heal()
+        
+        # Log completion
+        claude_watcher.log_event(
+            EventType.SYSTEM_HEALTH,
+            Severity.LOW,
+            "self_heal_api",
+            "System self-heal process completed successfully",
+            {"result": heal_result}
+        )
         
         return {
             "status": "completed",
@@ -204,6 +247,15 @@ async def trigger_self_heal():
         
     except Exception as e:
         logger.error(f"Self-heal error: {e}")
+        # Log failure
+        from bridge_core.claude_watcher import EventType, Severity
+        claude_watcher.log_event(
+            EventType.ERROR_DETECTED,
+            Severity.CRITICAL,
+            "self_heal_api",
+            f"System self-heal process failed: {str(e)}",
+            {"error": str(e)}
+        )
         return safe_error_response(str(e), "Self-heal process failed")
 
 
@@ -213,6 +265,9 @@ async def get_status():
     try:
         system_status = await get_system_status()
         db_health = await database_health()
+        
+        # Get ClaudeWatcher analysis for enhanced metrics
+        analysis = claude_watcher.get_system_analysis()
         
         return {
             "service": settings.APP_NAME,
@@ -238,12 +293,31 @@ async def get_status():
             "features": {
                 "sqlite_first": True,
                 "health_monitoring": True,
-                "self_healing": True
+                "self_healing": True,
+                "claude_watcher": True,
+                "fault_injection": fault_injector.enabled,
+                "federation": federation_client.federation_enabled
+            },
+            # ClaudeWatcher integration
+            "claude_watcher": {
+                "health_score": analysis["health_score"],
+                "recent_events": analysis["total_events_1h"],
+                "event_trend": analysis["event_trend"],
+                "recommendations": analysis["recommendations"][:3]  # Top 3 recommendations
             },
             "timestamp": datetime.utcnow().isoformat()
         }
     except Exception as e:
         logger.error(f"Status error: {e}")
+        # Log error event
+        from bridge_core.claude_watcher import EventType, Severity
+        claude_watcher.log_event(
+            EventType.ERROR_DETECTED,
+            Severity.HIGH,
+            "status_api",
+            f"Status endpoint error: {str(e)}",
+            {"error": str(e)}
+        )
         return {
             "service": settings.APP_NAME,
             "version": settings.APP_VERSION,
@@ -555,6 +629,7 @@ async def get_activity():
         return safe_error_response("Failed to retrieve activity")
 
 
+
 # === Armada Status ===
 @app.get("/armada/status")
 async def get_armada_status():
@@ -575,6 +650,210 @@ async def get_armada_status():
     except Exception as e:
         logger.error(f"Get armada status error: {e}")
         return safe_error_response("Failed to retrieve armada status")
+
+
+# === Bridge Core Integration Endpoints ===
+
+@app.get("/bridge-core/claude-watcher/analysis")
+async def get_claude_watcher_analysis():
+    """Get system analysis from ClaudeWatcher"""
+    try:
+        analysis = claude_watcher.get_system_analysis()
+        return {
+            "status": "success",
+            "analysis": analysis,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Claude watcher analysis error: {e}")
+        return safe_error_response("Failed to get system analysis")
+
+
+@app.get("/bridge-core/claude-watcher/events")
+async def get_recent_events():
+    """Get recent events from ClaudeWatcher"""
+    try:
+        events = claude_watcher.get_recent_events(hours=1)
+        return {
+            "status": "success",
+            "events": [event.to_dict() for event in events],
+            "count": len(events),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Get events error: {e}")
+        return safe_error_response("Failed to get recent events")
+
+
+@app.get("/bridge-core/fault-injector/status")
+async def get_fault_injector_status():
+    """Get fault injection status and statistics"""
+    try:
+        stats = fault_injector.get_statistics()
+        return {
+            "status": "success",
+            "fault_injection": stats,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Fault injector status error: {e}")
+        return safe_error_response("Failed to get fault injector status")
+
+
+@app.post("/bridge-core/fault-injector/toggle")
+async def toggle_fault_injection():
+    """Toggle fault injection on/off"""
+    try:
+        if fault_injector.enabled:
+            fault_injector.disable()
+            action = "disabled"
+        else:
+            fault_injector.enable()
+            action = "enabled"
+        
+        return {
+            "status": "success",
+            "message": f"Fault injection {action}",
+            "enabled": fault_injector.enabled,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Toggle fault injection error: {e}")
+        return safe_error_response("Failed to toggle fault injection")
+
+
+@app.get("/bridge-core/self-healing/statistics")
+async def get_self_healing_statistics():
+    """Get self-healing adapter statistics"""
+    try:
+        stats = self_healing_adapter.get_healing_statistics()
+        return {
+            "status": "success",
+            "healing_statistics": stats,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Self-healing statistics error: {e}")
+        return safe_error_response("Failed to get healing statistics")
+
+
+@app.get("/bridge-core/federation/status")
+async def get_federation_status():
+    """Get federation client status"""
+    try:
+        status = federation_client.get_federation_status()
+        return {
+            "status": "success",
+            "federation": status,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Federation status error: {e}")
+        return safe_error_response("Failed to get federation status")
+
+
+@app.post("/bridge-core/federation/heartbeat")
+async def handle_federation_heartbeat(heartbeat_data: Dict[str, Any]):
+    """Handle incoming federation heartbeat"""
+    try:
+        response = await federation_client.handle_heartbeat(heartbeat_data)
+        return response
+    except Exception as e:
+        logger.error(f"Federation heartbeat error: {e}")
+        return safe_error_response("Failed to handle heartbeat")
+
+
+@app.post("/bridge-core/federation/task")
+async def handle_federation_task(task_data: Dict[str, Any]):
+    """Handle incoming federation task"""
+    try:
+        response = await federation_client.handle_incoming_task(task_data)
+        return response
+    except Exception as e:
+        logger.error(f"Federation task error: {e}")
+        return safe_error_response("Failed to handle federation task")
+
+
+@app.get("/bridge-core/registry/payloads")
+async def get_registry_payloads():
+    """Get current registry payloads"""
+    try:
+        return {
+            "status": "success",
+            "registry_payloads": current_registry_payloads,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Registry payloads error: {e}")
+        return safe_error_response("Failed to get registry payloads")
+
+
+@app.get("/bridge-core/registry/agents")
+async def get_registry_agents():
+    """Get agent registry payloads"""
+    try:
+        return {
+            "status": "success",
+            "agents": current_registry_payloads["agents"],
+            "count": len(current_registry_payloads["agents"]),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Registry agents error: {e}")
+        return safe_error_response("Failed to get registry agents")
+
+
+@app.get("/bridge-core/status")
+async def get_bridge_core_status():
+    """Get comprehensive bridge core module status"""
+    try:
+        # Integrate ClaudeWatcher events into metrics
+        analysis = claude_watcher.get_system_analysis()
+        fault_stats = fault_injector.get_statistics()
+        healing_stats = self_healing_adapter.get_healing_statistics()
+        federation_status = federation_client.get_federation_status()
+        
+        status = {
+            "claude_watcher": {
+                "active": True,
+                "health_score": analysis["health_score"],
+                "recent_events": analysis["total_events_1h"],
+                "metrics": analysis["metrics"]
+            },
+            "fault_injector": {
+                "enabled": fault_injector.enabled,
+                "injection_rate": fault_stats["injection_rate"],
+                "total_messages": fault_stats["total_messages"],
+                "faults_injected": fault_stats["faults_injected"]
+            },
+            "self_healing_adapter": {
+                "active": True,
+                "success_rate": healing_stats["healing_success_rate"],
+                "total_messages": healing_stats["total_messages"],
+                "active_records": healing_stats["active_message_records"]
+            },
+            "federation_client": {
+                "enabled": federation_status["federation_enabled"],
+                "connected_bridges": federation_status["connected_bridges"],
+                "pending_tasks": federation_status["pending_tasks"],
+                "node_id": federation_status["node_id"]
+            },
+            "registry_payloads": {
+                "total_agents": current_registry_payloads["metadata"]["total_agents"],
+                "total_missions": current_registry_payloads["metadata"]["total_mission_templates"],
+                "version": current_registry_payloads["metadata"]["version"]
+            }
+        }
+        
+        return {
+            "status": "success",
+            "bridge_core": status,
+            "overall_health": "operational" if analysis["health_score"] > 70 else "degraded",
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Bridge core status error: {e}")
+        return safe_error_response("Failed to get bridge core status")
 
 
 if __name__ == "__main__":
