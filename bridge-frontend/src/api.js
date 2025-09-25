@@ -166,6 +166,11 @@ export async function getFleetData() {
   return apiClient.get('/fleet');
 }
 
+export async function getFleetStatus() {
+  // Alias for getFleetData to match /fleet/status endpoint requirement
+  return apiClient.get('/fleet');
+}
+
 // === Activity ===
 export async function getActivity() {
   return apiClient.get('/activity');
@@ -228,6 +233,16 @@ export async function getChatMessages() {
 
 export async function postChatMessage(author, message) {
   return apiClient.post('/chat/messages', { author, message });
+}
+
+// === Centralized fetchData function for all backend endpoints ===
+export async function fetchData(endpoint) {
+  /**
+   * Centralized function for fetching data from backend endpoints
+   * All panel components should use this for backend data endpoints:
+   * /status, /agents, /missions, /vault/logs, /captains/messages, /fleet/status, /armada/status, /health
+   */
+  return apiClient.get(endpoint);
 }
 
 // Export the API client for advanced usage
