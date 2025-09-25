@@ -653,15 +653,20 @@
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(3, auto);
     gap: 0.75rem;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0 4px;
+  }
+  
+  .panel {
+    padding: 0.75rem;
+    width: 100%;
   }
   
   .header-controls {
     flex-direction: column;
     gap: 0.5rem;
-  }
-  
-  .panel {
-    padding: 0.75rem;
   }
   
   .panel-header h3 {
@@ -716,5 +721,22 @@
   .action-btn {
     font-size: 0.8rem;
     padding: 0.4rem 0.8rem;
+  }
+}
+
+/* Ultra-narrow screen fallback - 1×6 stack */
+@media (max-width: 360px) {
+  .command-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, auto);
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0 2px;
+  }
+  
+  .panel {
+    width: 100%;
   }
 }
