@@ -8,7 +8,7 @@ const config = {
     (typeof process !== 'undefined' ? process.env.REACT_APP_API_URL : null) || 
     (import.meta.env?.MODE === 'development' || (typeof process !== 'undefined' && process.env.NODE_ENV === 'development')
       ? "http://localhost:8000" 
-      : "https://sr-aibridge-backend.onrender.com")
+      : "https://sr-aibridge.onrender.com")
 };
 
 export default config;
