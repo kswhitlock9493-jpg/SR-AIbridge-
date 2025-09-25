@@ -3,7 +3,7 @@ services:
     name: sr-aibridge-backend
     env: python
     buildCommand: "cd bridge-backend && pip install -r requirements.txt"
-    startCommand: "cd bridge-backend && uvicorn main_sqlite:app --host 0.0.0.0 --port $PORT"
+    startCommand: "cd bridge-backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
     healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION

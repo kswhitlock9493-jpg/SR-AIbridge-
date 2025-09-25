@@ -1,13 +1,12 @@
 """
 SQLAlchemy models for SR-AIbridge
-SQLite-first design with Guardian, VaultLog, Mission models
+SQLite-first design with Guardian, VaultLog, Mission, Agent models
+Pydantic schemas have been moved to schemas.py for clean separation
 """
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, Float, func
 from datetime import datetime
-from typing import Optional
-from pydantic import BaseModel
 
 Base = declarative_base()
 
@@ -71,64 +70,4 @@ class Agent(Base):
     location = Column(String(255), nullable=True)  # Agent location
     created_at = Column(DateTime, server_default=func.now())
 
-# Pydantic models for API
-class GuardianCreate(BaseModel):
-    name: str = "System Guardian"
-    status: str = "active"
-
-class GuardianResponse(BaseModel):
-    id: int
-    name: str
-    status: str
-    last_selftest: Optional[datetime] = None
-    last_action: Optional[str] = None
-    health_score: float
-    active: bool
-    created_at: datetime
-    updated_at: datetime
-
-class VaultLogCreate(BaseModel):
-    agent_name: str
-    action: str
-    details: str
-    log_level: str = "info"
-
-class VaultLogResponse(BaseModel):
-    id: int
-    agent_name: str
-    action: str
-    details: str
-    log_level: str
-    timestamp: datetime
-    guardian_id: Optional[int] = None
-
-class MissionCreate(BaseModel):
-    title: str
-    description: str = ""
-    status: str = "active"
-    priority: str = "normal"
-
-class MissionResponse(BaseModel):
-    id: int
-    title: str
-    description: Optional[str] = None
-    status: str
-    priority: str
-    agent_id: Optional[int] = None
-    progress: int
-    created_at: datetime
-    updated_at: datetime
-
-class AgentCreate(BaseModel):
-    name: str
-    endpoint: str
-    capabilities: str = ""
-
-class AgentResponse(BaseModel):
-    id: int
-    name: str
-    endpoint: str
-    capabilities: Optional[str] = None
-    status: str
-    last_heartbeat: Optional[datetime] = None
-    created_at: datetime
+# Note: Pydantic schemas have been moved to schemas.py for better separation of concerns
