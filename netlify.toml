@@ -5,6 +5,7 @@
 
 # Environment variables for frontend build
 [build.environment]
+  VITE_API_BASE = "https://sr-aibridge-backend.onrender.com"
   REACT_APP_API_URL = "https://sr-aibridge-backend.onrender.com"
   NODE_VERSION = "18"
 

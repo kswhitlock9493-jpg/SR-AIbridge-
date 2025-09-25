@@ -1,194 +1,278 @@
-import React from 'react';
-import { useBridge } from '../hooks/useBridge';
+import React, { useState, useEffect } from 'react';
+import { 
+  getStatus, 
+  getAgents, 
+  getMissions, 
+  getVaultLogs, 
+  getArmadaStatus, 
+  getSystemHealth,
+  getActivity 
+} from '../api';
 
 const Dashboard = () => {
-  const { 
-    status, 
-    agents, 
-    missions, 
-    vaultLogs: logs, 
-    fleetData: fleet, 
-    activity,
-    loading, 
-    error, 
-    refreshData,
-    fetchSystemHealth,
-    systemHealth
-  } = useBridge();
+  const [status, setStatus] = useState({
+    agentsOnline: 0,
+    activeMissions: 0,
+    admiral: "Loading..."
+  });
+  const [agents, setAgents] = useState([]);
+  const [missions, setMissions] = useState([]);
+  const [vaultLogs, setVaultLogs] = useState([]);
+  const [armadaStatus, setArmadaStatus] = useState({});
+  const [systemHealth, setSystemHealth] = useState({});
+  const [activity, setActivity] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [lastUpdate, setLastUpdate] = useState(new Date());
 
-  // Helper functions for data processing with fallback handling
-  const getOnlineAgents = () => {
-    if (!Array.isArray(agents) || agents.length === 0) return 0;
-    return agents.filter(a => a.status === 'online').length;
-  };
-  
-  const getActiveMissions = () => {
-    if (!Array.isArray(missions) || missions.length === 0) return 0;
-    return missions.filter(m => m.status === 'active').length;
-  };
-  
-  const getOnlineShips = () => {
-    const fleetArray = fleet?.fleet || fleet || [];
-    if (!Array.isArray(fleetArray) || fleetArray.length === 0) return 0;
-    return fleetArray.filter(s => s.status === 'online').length;
-  };
-  
-  const getFleetTotal = () => {
-    const fleetArray = fleet?.fleet || fleet || [];
-    return Array.isArray(fleetArray) ? fleetArray.length : 0;
-  };
-  
-  const getRecentLogs = () => {
-    // Use activity data if available, fallback to vault logs
-    const activityData = activity && Array.isArray(activity) ? activity : [];
-    const logsData = logs && Array.isArray(logs) ? logs : [];
-    
-    if (activityData.length > 0) {
-      return activityData.slice(0, 5);
-    }
-    return logsData.slice(0, 5);
-  };
-
-  // Handle System Self-Test
-  const handleSystemSelfTest = async () => {
+  // Fetch all dashboard data
+  const fetchDashboardData = async () => {
     try {
-      await fetchSystemHealth();
-      // Show self-test results in system health state
+      setLoading(true);
+      setError(null);
+
+      const [
+        statusData,
+        agentsData,
+        missionsData,
+        vaultData,
+        armadaData,
+        healthData,
+        activityData
+      ] = await Promise.allSettled([
+        getStatus(),
+        getAgents(),
+        getMissions(),
+        getVaultLogs(),
+        getArmadaStatus(),
+        getSystemHealth(),
+        getActivity()
+      ]);
+
+      // Process results with error handling
+      if (statusData.status === 'fulfilled') {
+        setStatus(statusData.value);
+      }
+      if (agentsData.status === 'fulfilled') {
+        setAgents(Array.isArray(agentsData.value) ? agentsData.value : []);
+      }
+      if (missionsData.status === 'fulfilled') {
+        setMissions(Array.isArray(missionsData.value) ? missionsData.value : []);
+      }
+      if (vaultData.status === 'fulfilled') {
+        setVaultLogs(Array.isArray(vaultData.value) ? vaultData.value : []);
+      }
+      if (armadaData.status === 'fulfilled') {
+        setArmadaStatus(armadaData.value || {});
+      }
+      if (healthData.status === 'fulfilled') {
+        setSystemHealth(healthData.value || {});
+      }
+      if (activityData.status === 'fulfilled') {
+        setActivity(Array.isArray(activityData.value) ? activityData.value : []);
+      }
+
+      setLastUpdate(new Date());
     } catch (err) {
-      console.error('Self-test failed:', err);
+      console.error('Dashboard data fetch error:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className="dashboard">
-        <h2>📊 Dashboard</h2>
-        <div className="loading">Loading dashboard data...</div>
-      </div>
-    );
-  }
+  // Initial load and periodic refresh
+  useEffect(() => {
+    fetchDashboardData();
+    const interval = setInterval(fetchDashboardData, 30000); // Refresh every 30 seconds
+    return () => clearInterval(interval);
+  }, []);
 
-  if (error) {
+  // Helper functions for data processing
+  const getOnlineAgents = () => {
+    return agents.filter(agent => agent.status === 'online' || agent.status === 'active').length;
+  };
+
+  const getActiveMissions = () => {
+    return missions.filter(mission => mission.status === 'active' || mission.status === 'in_progress').length;
+  };
+
+  const getSystemStatus = () => {
+    if (systemHealth.status === 'healthy') return 'Operational';
+    if (systemHealth.status === 'degraded') return 'Degraded';
+    if (systemHealth.status === 'unhealthy') return 'Critical';
+    return 'Unknown';
+  };
+
+  const getStatusColor = () => {
+    if (systemHealth.status === 'healthy') return '#28a745';
+    if (systemHealth.status === 'degraded') return '#ffc107';
+    return '#dc3545';
+  };
+
+  if (loading && !status.admiral) {
     return (
-      <div className="dashboard">
-        <h2>📊 Dashboard</h2>
-        <div className="error">Error loading dashboard: {error}</div>
-        <button onClick={() => refreshData()} className="retry-button">Retry</button>
+      <div className="dashboard loading">
+        <div className="loading-spinner">
+          <span>⏳</span>
+          <p>Loading Dashboard...</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="dashboard">
-      <div className="header">
-        <h2>📊 Bridge Dashboard</h2>
-        {/* Manual refresh button for user-initiated updates */}
-        <button onClick={() => refreshData()} className="refresh-button">🔄 Refresh</button>
+      <div className="dashboard-header">
+        <h2>🌉 SR-AIbridge Command Dashboard</h2>
+        <div className="last-update">
+          Last Updated: {lastUpdate.toLocaleTimeString()}
+          <button onClick={fetchDashboardData} className="refresh-btn">
+            🔄 Refresh
+          </button>
+        </div>
       </div>
 
+      {error && (
+        <div className="error-banner">
+          <span>⚠️</span>
+          <span>Error: {error}</span>
+          <button onClick={fetchDashboardData}>Retry</button>
+        </div>
+      )}
+
       <div className="dashboard-grid">
-        {/* Status Overview */}
-        <div className="dashboard-card status-overview">
-          <h3>🎯 System Status</h3>
-          <div className="status-grid">
-            <div className="status-item">
-              <span className="label">Admiral:</span>
-              <span className="value">{status.admiral || "No Admiral"}</span>
-            </div>
-            <div className="status-item">
-              <span className="label">Agents Online:</span>
-              <span className="value online">
-                {getOnlineAgents()}/{Array.isArray(agents) ? agents.length : 0}
-                {agents.length === 0 && <span className="placeholder"> (No agents)</span>}
-              </span>
-            </div>
-            <div className="status-item">
-              <span className="label">Active Missions:</span>
-              <span className="value active">
-                {getActiveMissions()}
-                {missions.length === 0 && <span className="placeholder"> (No missions)</span>}
-              </span>
-            </div>
-            <div className="status-item">
-              <span className="label">Fleet Online:</span>
-              <span className="value online">
-                {getOnlineShips()}/{getFleetTotal()}
-                {getFleetTotal() === 0 && <span className="placeholder"> (No fleet data)</span>}
-              </span>
+        {/* System Status Panel */}
+        <div className="status-panel">
+          <div className="panel-header">
+            <h3>🛰️ System Status</h3>
+            <div 
+              className="status-indicator"
+              style={{ backgroundColor: getStatusColor() }}
+            >
+              {getSystemStatus()}
             </div>
           </div>
-          
-          {/* System Self-Test Button */}
-          <div className="self-test-section">
-            <button onClick={handleSystemSelfTest} className="self-test-button">
-              🔍 Run Self-Test
-            </button>
-            {systemHealth && (
-              <div className={`system-health-status ${systemHealth.status}`}>
-                Status: {systemHealth.status}
-                {systemHealth.components && (
-                  <div className="health-components">
-                    {Object.entries(systemHealth.components).map(([component, data]) => (
-                      <div key={component} className={`component-status ${data.status}`}>
-                        {component}: {data.status}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+          <div className="status-metrics">
+            <div className="metric">
+              <span className="metric-label">Agents Online:</span>
+              <span className="metric-value">{getOnlineAgents()}/{agents.length}</span>
+            </div>
+            <div className="metric">
+              <span className="metric-label">Active Missions:</span>
+              <span className="metric-value">{getActiveMissions()}</span>
+            </div>
+            <div className="metric">
+              <span className="metric-label">Admiral:</span>
+              <span className="metric-value">{status.admiral || 'Unknown'}</span>
+            </div>
+            <div className="metric">
+              <span className="metric-label">Vault Entries:</span>
+              <span className="metric-value">{vaultLogs.length}</span>
+            </div>
           </div>
         </div>
 
-        {/* Recent Activity */}
-        <div className="dashboard-card recent-activity">
-          <h3>⚡ Recent Activity</h3>
+        {/* Recent Activity Panel */}
+        <div className="activity-panel">
+          <div className="panel-header">
+            <h3>📊 Recent Activity</h3>
+          </div>
           <div className="activity-list">
-            {getRecentLogs().length > 0 ? (
-              getRecentLogs().map((item) => (
-                <div key={item.id} className="activity-item">
-                  <span className="agent">{item.agent_name || item.agent}:</span>
-                  <span className="action">{item.action}</span>
-                  <span className="time">{new Date(item.timestamp).toLocaleTimeString()}</span>
+            {activity.length > 0 ? (
+              activity.slice(0, 5).map((item, index) => (
+                <div key={index} className="activity-item">
+                  <span className="activity-time">
+                    {new Date(item.timestamp || Date.now()).toLocaleTimeString()}
+                  </span>
+                  <span className="activity-description">
+                    {item.action || item.description || item.message || 'Activity logged'}
+                  </span>
                 </div>
               ))
             ) : (
-              <div className="no-data">
-                <span className="placeholder-text">No recent activity available</span>
-              </div>
+              <div className="no-activity">No recent activity</div>
             )}
           </div>
         </div>
 
-        {/* Mission Status */}
-        <div className="dashboard-card mission-status">
-          <h3>🚀 Mission Status</h3>
-          <div className="mission-summary">
-            {missions.slice(0, 3).map((mission) => (
-              <div key={mission.id} className="mission-item">
-                <div className="mission-title">{mission.title}</div>
-                <div className="mission-status">
-                  <span className={`status ${mission.status}`}>{mission.status}</span>
-                  <span className={`priority ${mission.priority}`}>{mission.priority}</span>
+        {/* Agents Overview Panel */}
+        <div className="agents-panel">
+          <div className="panel-header">
+            <h3>👥 Agents Overview</h3>
+          </div>
+          <div className="agents-grid">
+            {agents.length > 0 ? (
+              agents.slice(0, 6).map((agent) => (
+                <div key={agent.id} className={`agent-card ${agent.status || 'offline'}`}>
+                  <div className="agent-name">{agent.name || `Agent ${agent.id}`}</div>
+                  <div className="agent-status">{agent.status || 'offline'}</div>
+                  <div className="agent-type">{agent.type || 'Standard'}</div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div className="no-agents">No agents registered</div>
+            )}
           </div>
         </div>
 
-        {/* Fleet Status */}
-        <div className="dashboard-card fleet-status">
-          <h3>🗺️ Fleet Status</h3>
-          <div className="fleet-summary">
-            {(fleet?.fleet || fleet || []).slice(0, 4).map((ship) => (
-              <div key={ship.id} className="fleet-item">
-                <div className="ship-name">{ship.name}</div>
-                <div className="ship-details">
-                  <span className={`status ${ship.status}`}>● {ship.status}</span>
-                  <span className="location">{ship.location}</span>
+        {/* Mission Status Panel */}
+        <div className="missions-panel">
+          <div className="panel-header">
+            <h3>🚀 Mission Status</h3>
+          </div>
+          <div className="missions-list">
+            {missions.length > 0 ? (
+              missions.slice(0, 4).map((mission) => (
+                <div key={mission.id} className={`mission-item ${mission.status || 'pending'}`}>
+                  <div className="mission-title">
+                    {mission.title || mission.name || `Mission ${mission.id}`}
+                  </div>
+                  <div className="mission-status">{mission.status || 'pending'}</div>
+                  <div className="mission-progress">
+                    {mission.progress ? `${mission.progress}%` : 'N/A'}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div className="no-missions">No active missions</div>
+            )}
+          </div>
+        </div>
+
+        {/* Armada Status Panel */}
+        <div className="armada-panel">
+          <div className="panel-header">
+            <h3>🗺️ Armada Status</h3>
+          </div>
+          <div className="armada-info">
+            <div className="armada-metric">
+              <span>Fleet Size:</span>
+              <span>{armadaStatus.fleetSize || 0}</span>
+            </div>
+            <div className="armada-metric">
+              <span>Active Ships:</span>
+              <span>{armadaStatus.activeShips || 0}</span>
+            </div>
+            <div className="armada-metric">
+              <span>Fleet Status:</span>
+              <span>{armadaStatus.status || 'Standby'}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions Panel */}
+        <div className="actions-panel">
+          <div className="panel-header">
+            <h3>⚡ Quick Actions</h3>
+          </div>
+          <div className="action-buttons">
+            <button className="action-btn refresh" onClick={fetchDashboardData}>
+              🔄 Refresh All
+            </button>
+            <button className="action-btn health" onClick={() => window.location.hash = '#health'}>
+              🏥 System Health
+            </button>
           </div>
         </div>
       </div>
