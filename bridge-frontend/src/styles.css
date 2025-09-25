@@ -648,20 +648,46 @@
   }
 }
 
+/* Tablet breakpoint - Full viewport width for containers */
 @media (max-width: 768px) {
+  /* Override parent container constraints */
+  .sr-aibridge-app,
+  .app-content,
+  .content-wrapper,
+  .command-deck,
+  .dashboard,
+  .commanddeck-main,
+  .container,
+  .card,
+  .header-content,
+  .footer-content,
+  .nav-tabs {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 4px !important;
+  }
+  
+  /* Ensure main content and panels use full width */
+  .main-content,
+  .panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 0.75rem;
+  }
+  
+  /* Grid container must use viewport width */
   .command-grid {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(3, auto);
     gap: 0.75rem;
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0 4px;
-  }
-  
-  .panel {
-    padding: 0.75rem;
-    width: 100%;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 4px !important;
   }
   
   .header-controls {
@@ -724,19 +750,87 @@
   }
 }
 
+/* Mobile breakpoint - Enhanced full viewport width */
+@media (max-width: 480px) {
+  /* Override parent container constraints for mobile */
+  .sr-aibridge-app,
+  .app-content,
+  .content-wrapper,
+  .command-deck,
+  .dashboard,
+  .commanddeck-main,
+  .container,
+  .card,
+  .header-content,
+  .footer-content,
+  .nav-tabs {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 4px !important;
+  }
+  
+  /* Ensure main content and panels use full width */
+  .main-content,
+  .panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 0.5rem;
+  }
+  
+  /* Grid container must use viewport width */
+  .command-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, auto);
+    gap: 0.5rem;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 4px !important;
+  }
+}
+
 /* Ultra-narrow screen fallback - 1×6 stack */
 @media (max-width: 360px) {
+  /* Override parent container constraints for ultra-narrow */
+  .sr-aibridge-app,
+  .app-content,
+  .content-wrapper,
+  .command-deck,
+  .dashboard,
+  .commanddeck-main,
+  .container,
+  .card,
+  .header-content,
+  .footer-content,
+  .nav-tabs {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 2px !important;
+  }
+  
+  /* Ensure main content and panels use full width */
+  .main-content,
+  .panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+  
+  /* Grid container must use viewport width */
   .command-grid {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(6, auto);
     gap: 0.5rem;
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0 2px;
-  }
-  
-  .panel {
-    width: 100%;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 2px !important;
   }
 }
