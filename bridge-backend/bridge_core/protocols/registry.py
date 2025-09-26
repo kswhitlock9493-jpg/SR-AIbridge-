@@ -10,6 +10,7 @@ except Exception:  # pragma: no cover - graceful degrade if PyYAML missing
 """
 PR 1A-2h: ProtocolEntry lore & policy paths + lore()/policy() helpers.
 PR 1A-2i: Activation helpers (set_state / activate_protocol / vault_protocol)
+PR 1A-2j: invoke_protocol async stub (not_found | not_yet_implemented | ok)
 
 Provides:
 - ProtocolEntry class with lore_path & policy_path
@@ -19,12 +20,14 @@ Provides:
 - list_registry() returning metadata including has_lore / has_policy flags
 - DOCTRINE_ROOT constant (configurable in tests)
 - Activation helpers to toggle protocol state
+- invoke_protocol() async stub for later routing
 
 Design notes:
 - lore() returns '' if file missing.
 - policy() returns parsed YAML dict if file exists and PyYAML available, else {}.
 - Safe failure: any YAML parse error -> {}.
 - Activation helpers are additive; default state remains 'vaulted'.
+- invoke_protocol is intentionally minimal; future slices may delegate to per-entry handlers.
 """
 
 # Root where doctrine protocol folders will live
@@ -113,3 +116,24 @@ def activate_protocol(name: str) -> bool:
 def vault_protocol(name: str) -> bool:
     """Shortcut: mark a protocol as vaulted."""
     return set_state(name, "vaulted")
+
+# --- Invocation stub ------------------------------------------------------------
+
+async def invoke_protocol(name: str, payload: dict) -> dict:
+    """Invoke a protocol by name with a given payload.
+
+    Behavior:
+      - not found -> {"error": "not_found"}
+      - vaulted   -> {"protocol": name, "status": "not_yet_implemented"}
+      - active    -> {"protocol": name, "status": "ok", "echo": payload}
+    """
+    entry = REGISTRY.get(name)
+    if not entry:
+        return {"error": "not_found"}
+    if entry.state != "active":
+        return {"protocol": name, "status": "not_yet_implemented"}
+    return {
+        "protocol": name,
+        "status": "ok",
+        "echo": payload,
+    }
