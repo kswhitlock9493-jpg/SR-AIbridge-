@@ -6,6 +6,8 @@ import VaultLogs from './components/VaultLogs.jsx';
 import MissionLog from './components/MissionLog.jsx';
 import ArmadaMap from './components/ArmadaMap.jsx';
 import SystemSelfTest from './components/SystemSelfTest.jsx';
+import BrainConsole from './components/BrainConsole.jsx';
+import AdmiralKeysPanel from './components/AdmiralKeysPanel.jsx';
 import './styles.css';
 
 const App = () => {
@@ -16,6 +18,8 @@ const App = () => {
     { path: '/vault-logs', label: '📜 Vault Logs' },
     { path: '/mission-log', label: '🚀 Mission Log' },
     { path: '/armada-map', label: '🗺️ Armada Map' },
+    { path: '/brain', label: '🧠 Brain' },
+    { path: '/custody', label: '🔑 Custody' },
     { path: '/system-health', label: '🔍 System Health' }
   ];
 
@@ -76,6 +80,8 @@ const App = () => {
                 <Route path="/vault-logs" element={<VaultLogs />} />
                 <Route path="/mission-log" element={<MissionLog />} />
                 <Route path="/armada-map" element={<ArmadaMap />} />
+                <Route path="/brain" element={<BrainConsole />} />
+                <Route path="/custody" element={<AdmiralKeysPanel />} />
                 <Route path="/system-health" element={<SystemSelfTest />} />
                 {/* Redirect any unknown paths to command deck */}
                 <Route path="*" element={<Navigate to="/" replace />} />
