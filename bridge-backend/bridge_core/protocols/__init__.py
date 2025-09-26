@@ -1,0 +1,1 @@
+"""Sovereign Protocols package marker for registry + vaulting."""
