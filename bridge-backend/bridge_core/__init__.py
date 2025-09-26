@@ -9,7 +9,15 @@ from .self_healing_adapter import SelfHealingMASAdapter
 from .federation_client import FederationClient
 from .registry_payloads import current_registry_payloads
 
-# Super Engines
+# Six Super Engines - Sovereign Bridge Architecture
+from .engines.scrolltongue import ScrollTongue
+from .engines.commerceforge import CommerceForge
+from .engines.auroraforge import AuroraForge
+from .engines.chronicleloom import ChronicleLoom
+from .engines.calculuscore import CalculusCore
+from .engines.qhelmsingularity import QHelmSingularity
+
+# Legacy Super Engines (maintained for backward compatibility)
 from .labyrinthforge import LabyrinthForge
 from .chroniclevault import ChronicleVault
 from .prooffoundry import ProofFoundry
@@ -21,7 +29,14 @@ __all__ = [
     "SelfHealingMASAdapter",
     "FederationClient",
     "current_registry_payloads",
-    # Super Engines
+    # Six Super Engines - Sovereign Bridge Architecture
+    "ScrollTongue",
+    "CommerceForge",
+    "AuroraForge",
+    "ChronicleLoom",
+    "CalculusCore",
+    "QHelmSingularity",
+    # Legacy Super Engines (backward compatibility)
     "LabyrinthForge",
     "ChronicleVault", 
     "ProofFoundry",
