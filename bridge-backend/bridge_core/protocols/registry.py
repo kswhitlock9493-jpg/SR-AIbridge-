@@ -9,6 +9,7 @@ except Exception:  # pragma: no cover - graceful degrade if PyYAML missing
 
 """
 PR 1A-2h: ProtocolEntry lore & policy paths + lore()/policy() helpers.
+PR 1A-2i: Activation helpers (set_state / activate_protocol / vault_protocol)
 
 Provides:
 - ProtocolEntry class with lore_path & policy_path
@@ -17,11 +18,13 @@ Provides:
 - get_entry(name) helper
 - list_registry() returning metadata including has_lore / has_policy flags
 - DOCTRINE_ROOT constant (configurable in tests)
+- Activation helpers to toggle protocol state
 
 Design notes:
 - lore() returns '' if file missing.
 - policy() returns parsed YAML dict if file exists and PyYAML available, else {}.
 - Safe failure: any YAML parse error -> {}.
+- Activation helpers are additive; default state remains 'vaulted'.
 """
 
 # Root where doctrine protocol folders will live
@@ -90,3 +93,23 @@ def list_registry() -> list[dict]:
         }
         for entry in sorted(REGISTRY.values(), key=lambda e: e.name.lower())
     ]
+
+# --- Activation helpers ---------------------------------------------------------
+
+def set_state(name: str, state: str) -> bool:
+    """Set the state of a protocol entry. Returns True if successful, False if not found."""
+    entry = REGISTRY.get(name)
+    if not entry:
+        return False
+    entry.state = state
+    return True
+
+
+def activate_protocol(name: str) -> bool:
+    """Shortcut: mark a protocol as active."""
+    return set_state(name, "active")
+
+
+def vault_protocol(name: str) -> bool:
+    """Shortcut: mark a protocol as vaulted."""
+    return set_state(name, "vaulted")
