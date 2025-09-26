@@ -27,6 +27,10 @@ from bridge_core.self_healing_adapter import SelfHealingMASAdapter
 from bridge_core.federation_client import FederationClient
 from bridge_core.registry_payloads import current_registry_payloads
 
+# Import Sovereign Brain routes
+from bridge_core.routes_brain import router as brain_router
+from bridge_core.routes_custody import router as custody_router
+
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -107,6 +111,13 @@ app.add_middleware(
     expose_headers=["*"],
     max_age=3600  # Cache preflight requests for 1 hour
 )
+
+# Include Sovereign Brain routers
+app.include_router(brain_router)
+app.include_router(custody_router)
+
+logger.info("🧠 Sovereign Brain routes included")
+logger.info("🔑 Custody routes included")
 
 
 def safe_error_response(error: str, message: str = None) -> Dict[str, Any]:
