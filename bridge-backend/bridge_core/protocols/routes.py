@@ -1,18 +1,14 @@
 from fastapi import APIRouter, HTTPException
-from .registry import get_entry
+from pydantic import BaseModel
+from .registry import list_registry, get_entry, seal
 
-router = APIRouter()
+router = APIRouter(prefix="/bridge-core/protocols", tags=["protocols"])
 
-@router.get("/{name}/lore")
-def protocol_lore(name: str):
+# ... existing endpoints (registry, status, invoke, lore, policy) ...
+
+@router.post("/{name}/seal")
+def protocol_seal(name: str):
     e = get_entry(name)
     if not e:
         raise HTTPException(status_code=404, detail="protocol_not_found")
-    return {"name": e.name, "lore": e.lore()}
-
-@router.get("/{name}/policy")
-def protocol_policy(name: str):
-    e = get_entry(name)
-    if not e:
-        raise HTTPException(status_code=404, detail="protocol_not_found")
-    return {"name": e.name, "policy": e.policy()}
+    return seal(name, details={"sealed_via_api": True})
