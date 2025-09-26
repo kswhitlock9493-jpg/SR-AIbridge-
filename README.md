@@ -182,6 +182,50 @@ class Mission(Base):
     - Agent assignment
 ```
 
+### Six Super Engines (Sovereign Bridge Architecture)
+The system includes six powerful engines for advanced AI capabilities:
+
+```python
+# Mathematics and Computation
+CalculusCore(ProofFoundry):
+    - Advanced mathematical computations
+    - Symbolic differentiation and integration
+    - Theorem proving and optimization
+
+# Quantum Physics and Navigation  
+QHelmSingularity(EntangleCore):
+    - Quantum state manipulation
+    - Spacetime navigation algorithms
+    - Singularity physics modeling
+
+# Visual and Creative Synthesis
+AuroraForge():
+    - Visual content generation
+    - Creative pattern synthesis
+    - Multimedia processing
+
+# Chronicle and History Management
+ChronicleLoom(ChronicleVault):
+    - Temporal narrative weaving
+    - Chronicle data analysis
+    - Pattern detection across time
+
+# Natural Language Processing
+ScrollTongue():
+    - Advanced linguistic analysis
+    - Multi-language processing
+    - Semantic interpretation
+
+# Economic and Trading Systems
+CommerceForge():
+    - Market simulation and analysis
+    - Portfolio optimization
+    - Economic modeling
+```
+
+**Current Status**: Engine classes implemented, API endpoints pending backend dependency fix.
+**Testing**: Use `./smoke_test_engines.sh` to verify engine functionality once endpoints are deployed.
+
 ### Frontend Components
 - **Dashboard.jsx** - Main overview with real-time data
 - **SystemSelfTest.jsx** - Live health monitoring dashboard
@@ -279,6 +323,43 @@ python3 self_test.py --timeout 10 --wait-ready 30
 - ✅ JSON output for automated processing
 - ✅ Comprehensive endpoint testing (Health, Guardian, Agents, Missions, WebSocket)
 - ✅ Production URL support with wait-for-ready logic
+
+### Engine Smoke Test Script
+
+The `smoke_test_engines.sh` script provides comprehensive testing of all Six Super Engines:
+
+```bash
+# Test all engines on local backend
+./smoke_test_engines.sh
+
+# Test engines on production deployment
+./smoke_test_engines.sh https://your-backend.onrender.com
+
+# Verbose output with detailed logging
+VERBOSE=true ./smoke_test_engines.sh
+
+# Custom timeout and retry configuration
+TIMEOUT=10 RETRIES=1 ./smoke_test_engines.sh
+```
+
+**Six Super Engines Tested:**
+- ✅ **CalculusCore** - Math Engine (`/engines/math/prove`)
+- ✅ **QHelmSingularity** - Quantum Engine (`/engines/quantum/collapse`) 
+- ✅ **AuroraForge** - Science Engine (`/engines/science/experiment`)
+- ✅ **ChronicleLoom** - History Engine (`/engines/history/weave`)
+- ✅ **ScrollTongue** - Language Engine (`/engines/language/interpret`)
+- ✅ **CommerceForge** - Business Engine (`/engines/business/forge`)
+
+**Features:**
+- ✅ Comprehensive payload testing for each engine
+- ✅ Graceful handling of missing endpoints (pre-implementation)
+- ✅ Colored output with clear status indicators
+- ✅ Detailed logging with timestamped files
+- ✅ Configurable timeouts, retries, and verbosity
+- ✅ Health check fallback verification
+- ✅ CI/CD integration ready
+
+See [`docs/engine_smoke_test.md`](docs/engine_smoke_test.md) for detailed documentation, troubleshooting, and expected outputs.
 
 ### Setup Instructions
 

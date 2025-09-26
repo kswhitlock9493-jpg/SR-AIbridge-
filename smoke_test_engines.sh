@@ -8,6 +8,41 @@
 
 set -e  # Exit on any error
 
+# Show help if requested
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    echo "SR-AIbridge Engine Smoke Test Script"
+    echo "===================================="
+    echo ""
+    echo "Tests all Six Super Engines to confirm they are alive and functional"
+    echo ""
+    echo "Usage:"
+    echo "  ./smoke_test_engines.sh [BASE_URL]"
+    echo ""
+    echo "Parameters:"
+    echo "  BASE_URL    Backend URL (default: http://localhost:8000)"
+    echo ""
+    echo "Environment Variables:"
+    echo "  TIMEOUT     Request timeout in seconds (default: 30)"
+    echo "  RETRIES     Number of retry attempts (default: 3)"
+    echo "  VERBOSE     Show detailed output (default: false)"
+    echo "  OUTPUT_FILE Custom log file path (default: /tmp/engine_smoke_test_<timestamp>.log)"
+    echo ""
+    echo "Examples:"
+    echo "  ./smoke_test_engines.sh"
+    echo "  ./smoke_test_engines.sh https://your-backend.onrender.com"
+    echo "  VERBOSE=true ./smoke_test_engines.sh"
+    echo "  TIMEOUT=10 RETRIES=1 ./smoke_test_engines.sh http://localhost:8000"
+    echo ""
+    echo "Exit Codes:"
+    echo "  0 - All tests passed"
+    echo "  1 - Some tests failed" 
+    echo "  2 - All tests failed (likely endpoints not implemented)"
+    echo "  3 - Backend health check failed"
+    echo ""
+    echo "For detailed documentation, see: docs/engine_smoke_test.md"
+    exit 0
+fi
+
 # Configuration
 BASE_URL="${1:-http://localhost:8000}"
 TIMEOUT="${TIMEOUT:-30}"
