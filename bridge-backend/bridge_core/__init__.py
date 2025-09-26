@@ -9,10 +9,21 @@ from .self_healing_adapter import SelfHealingMASAdapter
 from .federation_client import FederationClient
 from .registry_payloads import current_registry_payloads
 
+# Super Engines
+from .labyrinthforge import LabyrinthForge
+from .chroniclevault import ChronicleVault
+from .prooffoundry import ProofFoundry
+from .entanglecore import EntangleCore
+
 __all__ = [
     "ClaudeWatcher",
     "FaultInjector", 
     "SelfHealingMASAdapter",
     "FederationClient",
-    "current_registry_payloads"
+    "current_registry_payloads",
+    # Super Engines
+    "LabyrinthForge",
+    "ChronicleVault", 
+    "ProofFoundry",
+    "EntangleCore"
 ]
