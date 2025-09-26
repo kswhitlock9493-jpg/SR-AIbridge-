@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Callable, Awaitable, Optional
 
 try:
     import yaml  # type: ignore
@@ -10,7 +10,7 @@ except Exception:  # pragma: no cover - graceful degrade if PyYAML missing
 """
 PR 1A-2h: ProtocolEntry lore & policy paths + lore()/policy() helpers.
 PR 1A-2i: Activation helpers (set_state / activate_protocol / vault_protocol)
-PR 1A-2j: invoke_protocol async stub (not_found | not_yet_implemented | ok)
+PR 1A-2j: per-entry handler wiring (async default handlers + invoke delegation)
 
 Provides:
 - ProtocolEntry class with lore_path & policy_path
@@ -20,14 +20,15 @@ Provides:
 - list_registry() returning metadata including has_lore / has_policy flags
 - DOCTRINE_ROOT constant (configurable in tests)
 - Activation helpers to toggle protocol state
-- invoke_protocol() async stub for later routing
+- Per-entry async handler default (_default_handler) bound at init
+- invoke_protocol() delegates to handler
 
 Design notes:
 - lore() returns '' if file missing.
 - policy() returns parsed YAML dict if file exists and PyYAML available, else {}.
 - Safe failure: any YAML parse error -> {}.
 - Activation helpers are additive; default state remains 'vaulted'.
-- invoke_protocol is intentionally minimal; future slices may delegate to per-entry handlers.
+- Default handler returns not_yet_implemented unless state is active.
 """
 
 # Root where doctrine protocol folders will live
@@ -40,12 +41,18 @@ class ProtocolEntry:
     Lore + policy assets (optional) live under:
         DOCTRINE/expansion/protocols/<name>/lore.md
         DOCTRINE/expansion/protocols/<name>/policy.yaml
+    handler: async callable(payload: dict) -> dict (default wired)
     """
-    def __init__(self, name: str, state: str = "vaulted"):
+    def __init__(self,
+        name: str,
+        state: str = "vaulted",
+        handler: Optional[Callable[[dict], Awaitable[dict]]] = None,
+    ):
         self.name = name
         self.state = state
         self.lore_path = DOCTRINE_ROOT / name / "lore.md"
         self.policy_path = DOCTRINE_ROOT / name / "policy.yaml"
+        self.handler = handler
 
     # --- Doctrine access helpers -------------------------------------------------
     def lore(self) -> str:
@@ -80,22 +87,14 @@ REGISTRY: Dict[str, ProtocolEntry] = {
     for name in PROTO_NAMES
 }
 
-def get_entry(name: str) -> "ProtocolEntry | None":
-    """Retrieve a protocol by name, or None if missing."""
-    return REGISTRY.get(name)
+async def _default_handler(entry: "ProtocolEntry", payload: dict) -> dict:
+    if entry.state != "active":
+        return {"protocol": entry.name, "status": "not_yet_implemented"}
+    return {"protocol": entry.name, "status": "ok", "echo": payload}
 
-
-def list_registry() -> list[dict]:
-    """Return metadata (name, state, has_lore, has_policy) for all protocols."""
-    return [
-        {
-            "name": entry.name,
-            "state": entry.state,
-            "has_lore": entry.lore_path.exists(),
-            "has_policy": entry.policy_path.exists(),
-        }
-        for entry in sorted(REGISTRY.values(), key=lambda e: e.name.lower())
-    ]
+# Bind default handlers
+for _e in REGISTRY.values():
+    _e.handler = (lambda entry=_e: (lambda payload: _default_handler(entry, payload)))()
 
 # --- Activation helpers ---------------------------------------------------------
 
@@ -117,23 +116,18 @@ def vault_protocol(name: str) -> bool:
     """Shortcut: mark a protocol as vaulted."""
     return set_state(name, "vaulted")
 
-# --- Invocation stub ------------------------------------------------------------
+# --- Invocation delegation ------------------------------------------------------
 
 async def invoke_protocol(name: str, payload: dict) -> dict:
-    """Invoke a protocol by name with a given payload.
+    """Delegate invocation to the protocol's bound handler.
 
-    Behavior:
-      - not found -> {"error": "not_found"}
-      - vaulted   -> {"protocol": name, "status": "not_yet_implemented"}
-      - active    -> {"protocol": name, "status": "ok", "echo": payload}
+    Errors:
+      - not_found  -> {"error": "not_found"}
+      - no_handler -> {"error": "no_handler"} (should not occur in normal flow)
     """
     entry = REGISTRY.get(name)
     if not entry:
         return {"error": "not_found"}
-    if entry.state != "active":
-        return {"protocol": name, "status": "not_yet_implemented"}
-    return {
-        "protocol": name,
-        "status": "ok",
-        "echo": payload,
-    }
+    if not entry.handler:
+        return {"error": "no_handler"}
+    return await entry.handler(payload)
