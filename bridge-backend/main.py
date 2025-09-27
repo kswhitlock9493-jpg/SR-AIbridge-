@@ -46,6 +46,8 @@ from bridge_core.missions.routes import router as missions_router
 from bridge_core.fleet.routes import router as fleet_router
 # Import system routes (PR 1A-2y)
 from bridge_core.system.routes import router as system_router
+# Import health routes
+from bridge_core.health.routes import router as health_router
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -145,6 +147,8 @@ app.include_router(missions_router)
 app.include_router(fleet_router)
 # Include system routes
 app.include_router(system_router)
+# Include health routes
+app.include_router(health_router)
 
 logger.info("🧠 Sovereign Brain routes included")
 logger.info("🔑 Custody routes included")
