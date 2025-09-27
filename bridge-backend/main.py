@@ -44,6 +44,8 @@ from bridge_core.guardians.routes import router as guardians_router
 from bridge_core.missions.routes import router as missions_router
 # Import fleet routes (PR 1A-2w)
 from bridge_core.fleet.routes import router as fleet_router
+# Import system routes (PR 1A-2y)
+from bridge_core.system.routes import router as system_router
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -141,6 +143,8 @@ app.include_router(guardians_router)
 app.include_router(missions_router)
 # Include fleet routes
 app.include_router(fleet_router)
+# Include system routes
+app.include_router(system_router)
 
 logger.info("🧠 Sovereign Brain routes included")
 logger.info("🔑 Custody routes included")
@@ -151,6 +155,7 @@ logger.info("📈 Activity routes included")
 logger.info("🛡️ Guardians routes included")
 logger.info("🎯 Missions routes included")
 logger.info("🚢 Fleet routes included")
+logger.info("⚡ System routes included")
 
 
 def safe_error_response(error: str, message: str = None) -> Dict[str, Any]:
