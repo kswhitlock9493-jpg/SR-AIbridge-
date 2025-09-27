@@ -34,6 +34,8 @@ from bridge_core.custody.routes import router as custody_router
 from bridge_core.protocols import routes as protocols_routes
 # Import agents routes (PR 1A-2o)
 from bridge_core.agents.routes import router as agents_router
+# Import vault routes (PR 1A-2r)
+from bridge_core.vault.routes import router as vault_router
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -121,11 +123,14 @@ app.include_router(custody_router)
 app.include_router(protocols_routes.router)
 # Include agents routes
 app.include_router(agents_router)
+# Include vault routes
+app.include_router(vault_router)
 
 logger.info("🧠 Sovereign Brain routes included")
 logger.info("🔑 Custody routes included")
 logger.info("📜 Protocol lore/policy routes included")
 logger.info("🤖 Agents routes included")
+logger.info("🗃️ Vault routes included")
 
 
 def safe_error_response(error: str, message: str = None) -> Dict[str, Any]:
