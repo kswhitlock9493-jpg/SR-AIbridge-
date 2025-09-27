@@ -11,7 +11,14 @@ def _read_logs(limit: int = 50) -> list[dict]:
         return []
     with VAULT_LOGS_FILE.open("r", encoding="utf-8") as f:
         lines = f.readlines()[-limit:]
-    return [json.loads(l) for l in lines]
+    logs = []
+    for l in lines:
+        try:
+            logs.append(json.loads(l))
+        except json.JSONDecodeError:
+            # Optionally, log the error or skip the malformed line
+            continue
+    return logs
 
 @router.get("")
 def list_activity(limit: int = 50):
