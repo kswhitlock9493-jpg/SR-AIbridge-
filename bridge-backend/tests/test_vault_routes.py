@@ -2,22 +2,23 @@ from fastapi.testclient import TestClient
 from main import app
 from pathlib import Path
 import json
-import tempfile
 
 client = TestClient(app)
 
-def test_vault_add_and_list(monkeypatch, tmp_path: Path):
-    vault_file = tmp_path / "events.jsonl"
-    monkeypatch.setattr("bridge_core.vault.routes.VAULT_LOGS_FILE", vault_file)
+def test_add_and_list_logs(tmp_path, monkeypatch):
+    logs_file = tmp_path / "events.jsonl"
+    monkeypatch.setattr("bridge_core.vault.routes.LOGS_FILE", logs_file)
 
-    # add log
-    r = client.post("/vault/logs", json={"source": "test", "message": "seal event"})
+    # Add log
+    r = client.post("/vault/logs", json={"source": "unit-test", "message": "test event"})
     assert r.status_code == 200
     entry = r.json()["entry"]
-    assert entry["source"] == "test"
+    assert entry["source"] == "unit-test"
+    assert entry["message"] == "test event"
 
-    # list logs
-    r = client.get("/vault/logs")
+    # List logs
+    r = client.get("/vault/logs?limit=10")
     assert r.status_code == 200
     logs = r.json()["logs"]
-    assert any(log["message"] == "seal event" for log in logs)
+    assert len(logs) >= 1
+    assert logs[0]["source"] == "unit-test"
