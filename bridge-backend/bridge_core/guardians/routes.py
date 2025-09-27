@@ -8,9 +8,9 @@ GUARDIANS = [
     {"id": "oracle", "name": "Oracle", "role": "Vision", "state": "standby"},
     {"id": "plex", "name": "Plex", "role": "Engineer", "state": "active"},
     {"id": "merlin", "name": "Merlin", "role": "Strategist", "state": "standby"},
-    {"id": "grok", "name": "Grok", "role": "Tactician", "state": "active"},
+    {"id": "vanguard", "name": "Vanguard", "role": "Tactician", "state": "active"},
     {"id": "co", "name": "Co", "role": "Mediator", "state": "standby"},
-    {"id": "claude", "name": "Claude", "role": "Analyst", "state": "active"},
+    {"id": "claudewatcher", "name": "Claudewatcher", "role": "Analyst", "state": "active"},
 ]
 
 @router.get("")
