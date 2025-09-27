@@ -1,3 +1,6 @@
 
 # Vault logs
 vault/logs/*.jsonl
+
+# Vault missions 
+vault/missions/*.jsonl
