@@ -1,22 +1,27 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
 router = APIRouter(prefix="/guardians", tags=["guardians"])
 
-# Placeholder in-memory registry for guardians
-GUARDIANS = {
-    "System": {"name": "System", "state": "online"},
-    "Protocol": {"name": "Protocol", "state": "watching"},
-    "Armada": {"name": "Armada", "state": "ready"},
-}
+# Placeholder set of guardians — extend when DB ready
+GUARDIANS = [
+    {"id": "prim", "name": "Prim", "role": "Coordinator", "state": "active"},
+    {"id": "oracle", "name": "Oracle", "role": "Vision", "state": "standby"},
+    {"id": "plex", "name": "Plex", "role": "Engineer", "state": "active"},
+    {"id": "merlin", "name": "Merlin", "role": "Strategist", "state": "standby"},
+    {"id": "grok", "name": "Grok", "role": "Tactician", "state": "active"},
+    {"id": "co", "name": "Co", "role": "Mediator", "state": "standby"},
+    {"id": "claude", "name": "Claude", "role": "Analyst", "state": "active"},
+]
 
 @router.get("")
 def list_guardians():
-    """Return all guardians with state."""
-    return {"guardians": list(GUARDIANS.values())}
+    """Return all guardians."""
+    return {"guardians": GUARDIANS}
 
-@router.get("/{name}")
-def guardian_status(name: str):
-    g = GUARDIANS.get(name)
+@router.get("/{gid}")
+def guardian_detail(gid: str):
+    """Return one guardian by ID."""
+    g = next((x for x in GUARDIANS if x["id"] == gid), None)
     if not g:
-        raise HTTPException(status_code=404, detail="guardian_not_found")
+        return {"error": "guardian_not_found"}
     return g
