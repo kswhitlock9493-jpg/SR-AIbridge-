@@ -115,8 +115,8 @@ app.add_middleware(
 # Include Sovereign Brain routers
 app.include_router(brain_router)
 app.include_router(custody_router)
-# Include protocol lore/policy routes
-app.include_router(protocols_routes.router, prefix="/bridge-core/protocols", tags=["protocols"])
+# Include protocol lore/policy routes  
+app.include_router(protocols_routes.router)
 
 logger.info("🧠 Sovereign Brain routes included")
 logger.info("🔑 Custody routes included")
