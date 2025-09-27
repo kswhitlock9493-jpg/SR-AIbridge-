@@ -492,29 +492,7 @@ async def get_armada_status():
 
 
 # === Activity Feed Endpoint ===
-@app.get("/activity")
-async def get_activity_feed(limit: int = 50):
-    """Get recent activity feed from vault logs"""
-    try:
-        logs = await db_manager.get_vault_logs(limit=limit)
-        
-        # Transform vault logs into activity feed format
-        activity = []
-        for log in logs:
-            activity.append({
-                "id": log.get("id"),
-                "type": "system",
-                "agent": log.get("agent_name", "System"),
-                "action": log.get("action", ""),
-                "details": log.get("details", ""),
-                "timestamp": log.get("timestamp"),
-                "level": log.get("log_level", "info")
-            })
-        
-        return activity
-    except Exception as e:
-        logger.error(f"Get activity feed error: {e}")
-        return safe_error_response(str(e), "Failed to retrieve activity feed")
+# Activity routes now handled by bridge_core.activity.routes router
 
 
 # === Guardian Endpoints ===
