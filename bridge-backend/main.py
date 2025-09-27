@@ -40,6 +40,8 @@ from bridge_core.vault.routes import router as vault_router
 from bridge_core.activity.routes import router as activity_router
 # Import guardians routes (PR 1A-2t)
 from bridge_core.guardians.routes import router as guardians_router
+# Import missions routes (PR 1A-2u)
+from bridge_core.missions.routes import router as missions_router
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -133,6 +135,8 @@ app.include_router(vault_router)
 app.include_router(activity_router)
 # Include guardians routes
 app.include_router(guardians_router)
+# Include missions routes
+app.include_router(missions_router)
 
 logger.info("🧠 Sovereign Brain routes included")
 logger.info("🔑 Custody routes included")
@@ -141,6 +145,7 @@ logger.info("🤖 Agents routes included")
 logger.info("🗃️ Vault routes included")
 logger.info("📈 Activity routes included")
 logger.info("🛡️ Guardians routes included")
+logger.info("🎯 Missions routes included")
 
 
 def safe_error_response(error: str, message: str = None) -> Dict[str, Any]:
@@ -407,35 +412,6 @@ async def create_agent(agent: AgentCreate):
         logger.error(f"Create agent error: {e}")
         return safe_error_response(str(e), "Failed to create agent")
 
-
-# === Mission Endpoints ===
-@app.get("/missions")
-async def get_missions():
-    """Get all missions with safe error handling"""
-    try:
-        missions = await db_manager.get_missions()
-        return missions
-    except Exception as e:
-        logger.error(f"Get missions error: {e}")
-        return safe_error_response(str(e), "Failed to retrieve missions")
-
-
-@app.post("/missions")
-async def create_mission(mission: MissionCreate):
-    """Create a new mission with safe error handling"""
-    try:
-        result = await db_manager.create_mission(mission.dict())
-        if result["status"] == "success":
-            return {
-                "status": "success", 
-                "message": "Mission created successfully",
-                "mission": result["mission"]
-            }
-        else:
-            return safe_error_response(result["error"], "Failed to create mission")
-    except Exception as e:
-        logger.error(f"Create mission error: {e}")
-        return safe_error_response(str(e), "Failed to create mission")
 
 
 # === Vault Log Endpoints ===
