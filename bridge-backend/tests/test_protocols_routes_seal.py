@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from bridge_backend.main import app
+from main import app
 from pathlib import Path
 import json
 

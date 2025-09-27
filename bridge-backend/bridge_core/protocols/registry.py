@@ -131,3 +131,26 @@ async def invoke_protocol(name: str, payload: dict) -> dict:
     if not entry.handler:
         return {"error": "no_handler"}
     return await entry.handler(payload)
+
+# --- Missing functions needed by routes.py ---
+
+def get_entry(name: str) -> Optional[ProtocolEntry]:
+    """Get a protocol entry by name."""
+    return REGISTRY.get(name)
+
+def list_registry() -> list:
+    """List all protocols in the registry with metadata."""
+    result = []
+    for name, entry in REGISTRY.items():
+        result.append({
+            "name": name,
+            "state": entry.state,
+            "has_lore": entry.lore_path.exists(),
+            "has_policy": entry.policy_path.exists()
+        })
+    return result
+
+def seal(name: str, details: dict = None) -> dict:
+    """Seal a protocol (stub implementation)."""
+    from .vaulting import seal as vault_seal
+    return vault_seal(name, status="sealed", details=details or {})
