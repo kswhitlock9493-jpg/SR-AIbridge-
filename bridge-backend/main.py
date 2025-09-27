@@ -42,6 +42,8 @@ from bridge_core.activity.routes import router as activity_router
 from bridge_core.guardians.routes import router as guardians_router
 # Import missions routes (PR 1A-2u)
 from bridge_core.missions.routes import router as missions_router
+# Import fleet routes (PR 1A-2w)
+from bridge_core.fleet.routes import router as fleet_router
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -137,6 +139,8 @@ app.include_router(activity_router)
 app.include_router(guardians_router)
 # Include missions routes
 app.include_router(missions_router)
+# Include fleet routes
+app.include_router(fleet_router)
 
 logger.info("🧠 Sovereign Brain routes included")
 logger.info("🔑 Custody routes included")
@@ -146,6 +150,7 @@ logger.info("🗃️ Vault routes included")
 logger.info("📈 Activity routes included")
 logger.info("🛡️ Guardians routes included")
 logger.info("🎯 Missions routes included")
+logger.info("🚢 Fleet routes included")
 
 
 def safe_error_response(error: str, message: str = None) -> Dict[str, Any]:
@@ -442,34 +447,6 @@ async def create_vault_log(log: VaultLogCreate):
     except Exception as e:
         logger.error(f"Create vault log error: {e}")
         return safe_error_response(str(e), "Failed to create log entry")
-
-
-# === Fleet/Armada Endpoints ===
-@app.get("/fleet")
-async def get_fleet():
-    """Get fleet status with safe error handling"""
-    try:
-        agents = await db_manager.get_agents()
-        fleet_ships = get_fleet_data()  # This returns a list of ships
-        
-        return {
-            "fleet_size": len(agents),
-            "ships_online": sum(1 for agent in agents if agent.get("status") == "online"),
-            "ships_offline": sum(1 for agent in agents if agent.get("status") != "online"),
-            "total_ships": len(agents),
-            "fleet_status": "operational" if agents else "standby",
-            "agents": agents,  # Agent data
-            "ships": fleet_ships  # Fleet ship data
-        }
-    except Exception as e:
-        logger.error(f"Get fleet error: {e}")
-        return safe_error_response(str(e), "Failed to retrieve fleet status")
-
-
-@app.get("/armada/status") 
-async def get_armada_status():
-    """Get armada status - alias for fleet status"""
-    return await get_fleet()
 
 
 # === Activity Feed Endpoint ===
