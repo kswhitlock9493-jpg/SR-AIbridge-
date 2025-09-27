@@ -29,7 +29,7 @@ from bridge_core.registry_payloads import current_registry_payloads
 
 # Import Sovereign Brain routes
 from bridge_core.routes_brain import router as brain_router
-from bridge_core.routes_custody import router as custody_router
+from bridge_core.custody.routes import router as custody_router
 # Import protocol lore/policy routes (PR 1A-2l)
 from bridge_core.protocols import routes as protocols_routes
 # Import agents routes (PR 1A-2o)
