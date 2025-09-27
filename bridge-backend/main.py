@@ -32,6 +32,8 @@ from bridge_core.routes_brain import router as brain_router
 from bridge_core.routes_custody import router as custody_router
 # Import protocol lore/policy routes (PR 1A-2l)
 from bridge_core.protocols import routes as protocols_routes
+# Import agents routes (PR 1A-2o)
+from bridge_core.agents.routes import router as agents_router
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -117,10 +119,13 @@ app.include_router(brain_router)
 app.include_router(custody_router)
 # Include protocol lore/policy routes  
 app.include_router(protocols_routes.router)
+# Include agents routes
+app.include_router(agents_router)
 
 logger.info("🧠 Sovereign Brain routes included")
 logger.info("🔑 Custody routes included")
 logger.info("📜 Protocol lore/policy routes included")
+logger.info("🤖 Agents routes included")
 
 
 def safe_error_response(error: str, message: str = None) -> Dict[str, Any]:
