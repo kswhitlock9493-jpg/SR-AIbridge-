@@ -388,7 +388,130 @@ async def create_agent(agent: AgentCreate):
         return safe_error_response(str(e), "Failed to create agent")
 
 
-# (Truncated for brevity in update query – remaining original endpoints retained without modification)
+# === Mission Endpoints ===
+@app.get("/missions")
+async def get_missions():
+    """Get all missions with safe error handling"""
+    try:
+        missions = await db_manager.get_missions()
+        return missions
+    except Exception as e:
+        logger.error(f"Get missions error: {e}")
+        return safe_error_response(str(e), "Failed to retrieve missions")
+
+
+@app.post("/missions")
+async def create_mission(mission: MissionCreate):
+    """Create a new mission with safe error handling"""
+    try:
+        result = await db_manager.create_mission(mission.dict())
+        if result["status"] == "success":
+            return {
+                "status": "success", 
+                "message": "Mission created successfully",
+                "mission": result["mission"]
+            }
+        else:
+            return safe_error_response(result["error"], "Failed to create mission")
+    except Exception as e:
+        logger.error(f"Create mission error: {e}")
+        return safe_error_response(str(e), "Failed to create mission")
+
+
+# === Vault Log Endpoints ===
+@app.get("/vault/logs")
+async def get_vault_logs(limit: int = 100):
+    """Get vault logs with safe error handling"""
+    try:
+        logs = await db_manager.get_vault_logs(limit=limit)
+        return logs
+    except Exception as e:
+        logger.error(f"Get vault logs error: {e}")
+        return safe_error_response(str(e), "Failed to retrieve vault logs")
+
+
+@app.post("/vault/logs")
+async def create_vault_log(log: VaultLogCreate):
+    """Create a new vault log entry with safe error handling"""
+    try:
+        result = await db_manager.create_vault_log(log.dict())
+        if result["status"] == "success":
+            return {
+                "status": "success",
+                "message": "Log entry created successfully", 
+                "log": result["log"]
+            }
+        else:
+            return safe_error_response(result["error"], "Failed to create log entry")
+    except Exception as e:
+        logger.error(f"Create vault log error: {e}")
+        return safe_error_response(str(e), "Failed to create log entry")
+
+
+# === Fleet/Armada Endpoints ===
+@app.get("/fleet")
+async def get_fleet():
+    """Get fleet status with safe error handling"""
+    try:
+        agents = await db_manager.get_agents()
+        fleet_ships = get_fleet_data()  # This returns a list of ships
+        
+        return {
+            "fleet_size": len(agents),
+            "ships_online": sum(1 for agent in agents if agent.get("status") == "online"),
+            "ships_offline": sum(1 for agent in agents if agent.get("status") != "online"),
+            "total_ships": len(agents),
+            "fleet_status": "operational" if agents else "standby",
+            "agents": agents,  # Agent data
+            "ships": fleet_ships  # Fleet ship data
+        }
+    except Exception as e:
+        logger.error(f"Get fleet error: {e}")
+        return safe_error_response(str(e), "Failed to retrieve fleet status")
+
+
+@app.get("/armada/status") 
+async def get_armada_status():
+    """Get armada status - alias for fleet status"""
+    return await get_fleet()
+
+
+# === Activity Feed Endpoint ===
+@app.get("/activity")
+async def get_activity_feed(limit: int = 50):
+    """Get recent activity feed from vault logs"""
+    try:
+        logs = await db_manager.get_vault_logs(limit=limit)
+        
+        # Transform vault logs into activity feed format
+        activity = []
+        for log in logs:
+            activity.append({
+                "id": log.get("id"),
+                "type": "system",
+                "agent": log.get("agent_name", "System"),
+                "action": log.get("action", ""),
+                "details": log.get("details", ""),
+                "timestamp": log.get("timestamp"),
+                "level": log.get("log_level", "info")
+            })
+        
+        return activity
+    except Exception as e:
+        logger.error(f"Get activity feed error: {e}")
+        return safe_error_response(str(e), "Failed to retrieve activity feed")
+
+
+# === Guardian Endpoints ===
+@app.get("/guardians")
+async def get_guardians():
+    """Get all guardians with safe error handling"""
+    try:
+        guardians = await db_manager.get_guardians()
+        return guardians
+    except Exception as e:
+        logger.error(f"Get guardians error: {e}")
+        return safe_error_response(str(e), "Failed to retrieve guardians")
 
 if __name__ == "__main__":
     import uvicorn
