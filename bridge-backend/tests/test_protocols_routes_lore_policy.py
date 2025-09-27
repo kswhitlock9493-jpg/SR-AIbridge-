@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 from pathlib import Path
-from bridge_backend.main import app
+from main import app
 from bridge_core.protocols import registry
 
 client = TestClient(app)
