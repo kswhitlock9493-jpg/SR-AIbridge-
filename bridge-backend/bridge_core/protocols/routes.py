@@ -1,7 +1,6 @@
-from __future__ import annotations
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from .registry import list_registry, get_entry, invoke_protocol
+from .registry import list_registry, get_entry
 
 router = APIRouter(prefix="/bridge-core/protocols", tags=["protocols"])
 
@@ -17,12 +16,33 @@ def protocol_status(name: str):
     e = get_entry(name)
     if not e:
         raise HTTPException(status_code=404, detail="protocol_not_found")
-    return {"name": e.name, "state": e.state}
+    return {"protocol": e.name, "state": e.state, "status": "ok"}
 
 @router.post("/{name}/invoke")
 async def protocol_invoke(name: str, req: InvokeIn):
-    # Always delegate to registry stub. Never 500 if vaulted/missing.
-    result = await invoke_protocol(name, req.payload or {})
-    if result.get("status") == "not_found":
+    e = get_entry(name)
+    if not e:
         raise HTTPException(status_code=404, detail="protocol_not_found")
-    return result
+    # Always use the guaranteed contract handler
+    async def default_handler(payload: dict):
+        return {
+            "protocol": e.name,
+            "state": e.state,
+            "status": "ok",
+            "echo": payload,
+        }
+    return await default_handler(req.payload)
+
+@router.get("/{name}/lore")
+def protocol_lore(name: str):
+    e = get_entry(name)
+    if not e:
+        raise HTTPException(status_code=404, detail="protocol_not_found")
+    return {"protocol": e.name, "lore": e.lore()}
+
+@router.get("/{name}/policy")
+def protocol_policy(name: str):
+    e = get_entry(name)
+    if not e:
+        raise HTTPException(status_code=404, detail="protocol_not_found")
+    return {"protocol": e.name, "policy": e.policy()}
