@@ -38,6 +38,8 @@ from bridge_core.agents.routes import router as agents_router
 from bridge_core.vault.routes import router as vault_router
 # Import activity routes (PR 1A-2s)
 from bridge_core.activity.routes import router as activity_router
+# Import guardians routes (PR 1A-2t)
+from bridge_core.guardians.routes import router as guardians_router
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -129,6 +131,8 @@ app.include_router(agents_router)
 app.include_router(vault_router)
 # Include activity routes
 app.include_router(activity_router)
+# Include guardians routes
+app.include_router(guardians_router)
 
 logger.info("🧠 Sovereign Brain routes included")
 logger.info("🔑 Custody routes included")
@@ -136,6 +140,7 @@ logger.info("📜 Protocol lore/policy routes included")
 logger.info("🤖 Agents routes included")
 logger.info("🗃️ Vault routes included")
 logger.info("📈 Activity routes included")
+logger.info("🛡️ Guardians routes included")
 
 
 def safe_error_response(error: str, message: str = None) -> Dict[str, Any]:
@@ -493,18 +498,8 @@ async def get_armada_status():
 
 # === Activity Feed Endpoint ===
 # Activity routes now handled by bridge_core.activity.routes router
+# Guardian routes now handled by bridge_core.guardians.routes router
 
-
-# === Guardian Endpoints ===
-@app.get("/guardians")
-async def get_guardians():
-    """Get all guardians with safe error handling"""
-    try:
-        guardians = await db_manager.get_guardians()
-        return guardians
-    except Exception as e:
-        logger.error(f"Get guardians error: {e}")
-        return safe_error_response(str(e), "Failed to retrieve guardians")
 
 if __name__ == "__main__":
     import uvicorn
