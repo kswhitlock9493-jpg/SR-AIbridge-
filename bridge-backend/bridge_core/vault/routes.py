@@ -3,43 +3,44 @@ from pydantic import BaseModel
 from pathlib import Path
 from datetime import datetime
 import json
+import uuid
 
-router = APIRouter(prefix="/vault", tags=["vault"])
+router = APIRouter(prefix="/vault/logs", tags=["vault"])
 
-VAULT_LOGS_DIR = Path("vault") / "logs"
-VAULT_LOGS_FILE = VAULT_LOGS_DIR / "events.jsonl"
-VAULT_LOGS_DIR.mkdir(parents=True, exist_ok=True)
+LOGS_DIR = Path("vault") / "logs"
+LOGS_FILE = LOGS_DIR / "events.jsonl"
+LOGS_DIR.mkdir(parents=True, exist_ok=True)
 
 class VaultLogIn(BaseModel):
     source: str
     message: str
-    details: dict | None = None
-
-def _append_log(entry: dict):
-    with VAULT_LOGS_FILE.open("a", encoding="utf-8") as f:
-        f.write(json.dumps(entry) + "\n")
+    details: dict = {}
 
 def _read_logs(limit: int = 100) -> list[dict]:
-    if not VAULT_LOGS_FILE.exists():
+    if not LOGS_FILE.exists():
         return []
-    with VAULT_LOGS_FILE.open("r", encoding="utf-8") as f:
+    with LOGS_FILE.open("r", encoding="utf-8") as f:
         lines = f.readlines()[-limit:]
-    return [json.loads(l) for l in lines]
+    return [json.loads(line) for line in lines]
 
-@router.get("/logs")
-def get_logs(limit: int = 100):
-    """Return last N vault log entries (default 100)."""
+def _write_log(entry: dict):
+    with LOGS_FILE.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(entry) + "\n")
+
+@router.get("")
+def list_logs(limit: int = 100):
+    """Return the last N vault logs (default 100)."""
     return {"logs": _read_logs(limit)}
 
-@router.post("/logs")
-def add_log(item: VaultLogIn):
+@router.post("")
+def add_log(log: VaultLogIn):
     """Append a new vault log entry."""
-    stamp = datetime.utcnow().isoformat(timespec="seconds") + "Z"
     entry = {
-        "timestamp": stamp,
-        "source": item.source,
-        "message": item.message,
-        "details": item.details or {},
+        "id": str(uuid.uuid4()),
+        "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "source": log.source,
+        "message": log.message,
+        "details": log.details,
     }
-    _append_log(entry)
+    _write_log(entry)
     return {"status": "logged", "entry": entry}
