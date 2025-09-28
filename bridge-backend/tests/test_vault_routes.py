@@ -1,24 +1,40 @@
 from fastapi.testclient import TestClient
-from main import app
+from bridge_backend.main import app
 from pathlib import Path
-import json
 
 client = TestClient(app)
 
-def test_add_and_list_logs(tmp_path, monkeypatch):
-    logs_file = tmp_path / "events.jsonl"
-    monkeypatch.setattr("bridge_core.vault.routes.LOGS_FILE", logs_file)
+def test_list_and_browse_vault(tmp_path, monkeypatch):
+    vault_root = tmp_path / "vault"
+    vault_root.mkdir()
+    (vault_root / "foo.txt").write_text("hello", encoding="utf-8")
+    subdir = vault_root / "subdir"
+    subdir.mkdir()
+    (subdir / "bar.txt").write_text("world", encoding="utf-8")
 
-    # Add log
-    r = client.post("/vault/logs", json={"source": "unit-test", "message": "test event"})
-    assert r.status_code == 200
-    entry = r.json()["entry"]
-    assert entry["source"] == "unit-test"
-    assert entry["message"] == "test event"
+    monkeypatch.setattr("bridge_core.vault.routes.VAULT_ROOT", vault_root)
 
-    # List logs
-    r = client.get("/vault/logs?limit=10")
+    # list top-level
+    r = client.get("/vault")
     assert r.status_code == 200
-    logs = r.json()["logs"]
-    assert len(logs) >= 1
-    assert logs[0]["source"] == "unit-test"
+    items = r.json()["vault"]
+    assert any(i["name"] == "foo.txt" for i in items)
+
+    # browse subdir
+    r = client.get("/vault/subdir")
+    assert r.status_code == 200
+    data = r.json()
+    assert any(i["name"] == "bar.txt" for i in data["items"])
+
+    # read file
+    r = client.get("/vault/subdir/bar.txt")
+    assert r.status_code == 200
+    assert "world" in r.json()["content"]
+
+def test_missing_path(monkeypatch, tmp_path):
+    vault_root = tmp_path / "vault"
+    vault_root.mkdir()
+    monkeypatch.setattr("bridge_core.vault.routes.VAULT_ROOT", vault_root)
+
+    r = client.get("/vault/does_not_exist")
+    assert r.status_code == 404
