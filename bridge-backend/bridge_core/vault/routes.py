@@ -1,46 +1,39 @@
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
 from pathlib import Path
-from datetime import datetime
-import json
-import uuid
 
-router = APIRouter(prefix="/vault/logs", tags=["vault"])
+router = APIRouter(prefix="/vault", tags=["vault"])
 
-LOGS_DIR = Path("vault") / "logs"
-LOGS_FILE = LOGS_DIR / "events.jsonl"
-LOGS_DIR.mkdir(parents=True, exist_ok=True)
-
-class VaultLogIn(BaseModel):
-    source: str
-    message: str
-    details: dict = {}
-
-def _read_logs(limit: int = 100) -> list[dict]:
-    if not LOGS_FILE.exists():
-        return []
-    with LOGS_FILE.open("r", encoding="utf-8") as f:
-        lines = f.readlines()[-limit:]
-    return [json.loads(line) for line in lines]
-
-def _write_log(entry: dict):
-    with LOGS_FILE.open("a", encoding="utf-8") as f:
-        f.write(json.dumps(entry) + "\n")
+VAULT_ROOT = Path("vault")
 
 @router.get("")
-def list_logs(limit: int = 100):
-    """Return the last N vault logs (default 100)."""
-    return {"logs": _read_logs(limit)}
+def list_vault():
+    """List top-level vault directories and files."""
+    if not VAULT_ROOT.exists():
+        return {"vault": []}
+    items = []
+    for p in VAULT_ROOT.iterdir():
+        items.append({
+            "name": p.name,
+            "type": "dir" if p.is_dir() else "file"
+        })
+    return {"vault": items}
 
-@router.post("")
-def add_log(log: VaultLogIn):
-    """Append a new vault log entry."""
-    entry = {
-        "id": str(uuid.uuid4()),
-        "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-        "source": log.source,
-        "message": log.message,
-        "details": log.details,
-    }
-    _write_log(entry)
-    return {"status": "logged", "entry": entry}
+@router.get("/{subpath:path}")
+def browse_vault(subpath: str):
+    """Browse inside vault by path."""
+    target = VAULT_ROOT / subpath
+    if not target.exists():
+        raise HTTPException(status_code=404, detail="not_found")
+    if target.is_dir():
+        return {
+            "path": str(subpath),
+            "items": [
+                {"name": p.name, "type": "dir" if p.is_dir() else "file"}
+                for p in target.iterdir()
+            ]
+        }
+    else:
+        return {
+            "path": str(subpath),
+            "content": target.read_text(encoding="utf-8")
+        }
