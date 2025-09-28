@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
 )
 from sqlalchemy import text
+from .models import Base  # ORM Base import
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./vault/bridge.db")
 
@@ -16,24 +17,7 @@ SessionLocal = async_sessionmaker(bind=engine, expire_on_commit=False)
 async def init_db():
     """Initialize database with required tables (idempotent)."""
     async with engine.begin() as conn:
-        # minimal tables for missions + logs
-        await conn.run_sync(lambda c: c.exec_driver_sql("""
-        CREATE TABLE IF NOT EXISTS missions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT,
-            status TEXT,
-            created_at TEXT
-        );
-        """))
-        await conn.run_sync(lambda c: c.exec_driver_sql("""
-        CREATE TABLE IF NOT EXISTS logs (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            timestamp TEXT,
-            source TEXT,
-            message TEXT,
-            details TEXT
-        );
-        """))
+        await conn.run_sync(Base.metadata.create_all)  # ORM migration
 
 async def get_missions() -> List[Dict[str, Any]]:
     async with SessionLocal() as session:
