@@ -25,6 +25,6 @@ app.include_router(health_router)
 app.include_router(system_router)
 app.include_router(custody_router)
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def root():
     return {"message": "SR-Albridge backend is running"}
