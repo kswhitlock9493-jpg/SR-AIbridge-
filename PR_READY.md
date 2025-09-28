@@ -62,8 +62,8 @@ This PR merges the complete Dock-Day system implementation from `dockday-ascensi
 The Dock-Day system represents the complete ascension of the Sovereign Brain's export capabilities - ready for eternal preservation and cryptographic immortality.
 
 ### Files Changed
-- `bridge-backend/src/export_and_sign.py` - Core export system
-- `bridge-backend/bridge_core/routes_custody.py` - API integration
+- `bridge_backend/src/export_and_sign.py` - Core export system
+- `bridge_backend/bridge_core/routes_custody.py` - API integration
 - `bridge-frontend/src/components/AdmiralKeysPanel.jsx` - UI components
 - `bridge-frontend/src/styles.css` - Styling updates
 - `rituals/finalizedockdaydrop.sh` - Ceremonial scripts

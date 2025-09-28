@@ -15,7 +15,7 @@ This deployment guide covers the new SQLite-first backend implementation with co
 
 ### Backend
 ```bash
-cd bridge-backend
+cd bridge_backend
 pip install -r requirements.txt
 python main_sqlite.py
 ```

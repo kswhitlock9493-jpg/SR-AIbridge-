@@ -45,8 +45,8 @@ SR-AIbridge now operates in **fully autonomous mode** with the following capabil
    ```bash
    # Deploy from GitHub
    Repository: https://github.com/kswhitlock9493-jpg/SR-AIbridge-
-   Build Command: cd bridge-backend && pip install -r requirements.txt
-   Start Command: cd bridge-backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+   Build Command: cd bridge_backend && pip install -r requirements.txt
+   Start Command: cd bridge_backend && uvicorn main:app --host 0.0.0.0 --port $PORT
    ```
 
 2. **Frontend (Netlify)**:
@@ -90,7 +90,7 @@ SR-AIbridge now operates in **fully autonomous mode** with the following capabil
 
 2. **Update Requirements**:
    ```txt
-   # Add to bridge-backend/requirements.txt
+   # Add to bridge_backend/requirements.txt
    sqlalchemy>=2.0.0
    asyncpg>=0.28.0
    alembic>=1.12.0
@@ -99,7 +99,7 @@ SR-AIbridge now operates in **fully autonomous mode** with the following capabil
 
 #### Step 2: Database Models
 
-1. **Create Database Models** (`bridge-backend/models.py`):
+1. **Create Database Models** (`bridge_backend/models.py`):
    ```python
    from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean
    from sqlalchemy.ext.declarative import declarative_base
@@ -155,7 +155,7 @@ SR-AIbridge now operates in **fully autonomous mode** with the following capabil
        updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
    ```
 
-2. **Create Database Service** (`bridge-backend/database.py`):
+2. **Create Database Service** (`bridge_backend/database.py`):
    ```python
    import os
    from sqlalchemy import create_engine
@@ -181,7 +181,7 @@ SR-AIbridge now operates in **fully autonomous mode** with the following capabil
 
 #### Step 3: Update Main Application
 
-1. **Update Storage Backend** (`bridge-backend/database_storage.py`):
+1. **Update Storage Backend** (`bridge_backend/database_storage.py`):
    ```python
    from database import database, SessionLocal
    from models import Agent, Mission, VaultLog, CaptainMessage, ArmadaShip
@@ -417,7 +417,7 @@ RENDER_DEPLOY_HOOK=https://api.render.com/deploy/your-hook
 
 #### Enhanced Self-Test Script
 
-The `bridge-backend/self_test.py` script has been enhanced for production monitoring:
+The `bridge_backend/self_test.py` script has been enhanced for production monitoring:
 
 ```bash
 # Production health check
@@ -457,7 +457,7 @@ python3 self_test.py --timeout 10 --wait-ready 30
 ```bash
 # Clone repository locally
 git clone https://github.com/your-username/SR-AIbridge.git
-cd SR-AIbridge/bridge-backend
+cd SR-AIbridge/bridge_backend
 
 # Install dependencies
 pip install -r requirements.txt

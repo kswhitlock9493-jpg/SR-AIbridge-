@@ -62,7 +62,7 @@ jobs:
       - name: Validate backend configuration
         run: |
           echo "Validating backend setup..."
-          cd bridge-backend
+          cd bridge_backend
           python3 -m py_compile main.py
           python3 -m py_compile self_test.py
           echo "✅ Backend Python files validated"
@@ -103,7 +103,7 @@ jobs:
         run: cd bridge-frontend && npm ci
 
       - name: Install backend dependencies
-        run: cd bridge-backend && pip install -r requirements.txt
+        run: cd bridge_backend && pip install -r requirements.txt
 
       - name: Test frontend build
         run: cd bridge-frontend && npm run build
@@ -112,13 +112,13 @@ jobs:
 
       - name: Test backend syntax
         run: |
-          cd bridge-backend
+          cd bridge_backend
           python3 -m py_compile main.py
           python3 -m py_compile self_test.py
           python3 -c "import main; print('✅ Backend imports successfully')"
 
       - name: Verify self-test script
         run: |
-          cd bridge-backend
+          cd bridge_backend
           python3 self_test.py --help
           echo "✅ Self-test script is executable"

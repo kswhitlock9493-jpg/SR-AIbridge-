@@ -80,12 +80,12 @@ RENDER_DEPLOY_HOOK=https://api.render.com/deploy/your-service-id
 ### Default Configuration
 
 If secrets are not configured, the workflows use these defaults:
-- **Backend URL**: `https://sr-aibridge-backend.onrender.com`
+- **Backend URL**: `https://sr-aibridge_backend.onrender.com`
 - **Frontend URL**: `https://sr-aibridge.netlify.app`
 
 ## 🧪 Self-Test Script Enhancement
 
-The `bridge-backend/self_test.py` script has been enhanced for production use:
+The `bridge_backend/self_test.py` script has been enhanced for production use:
 
 ### New Features
 - **Configurable Timeouts**: `--timeout` (default: 30s)
@@ -98,7 +98,7 @@ The `bridge-backend/self_test.py` script has been enhanced for production use:
 
 ```bash
 # Basic health check against production
-python3 self_test.py --url https://sr-aibridge-backend.onrender.com
+python3 self_test.py --url https://sr-aibridge_backend.onrender.com
 
 # CI/CD optimized run with JSON output
 python3 self_test.py --url $BACKEND_URL --json --timeout 45 --retries 5
@@ -145,7 +145,7 @@ The CI/CD system seamlessly integrates with existing deployment configurations:
 
 - **`render.yaml`**: Backend deployment configuration
 - **`netlify.toml`**: Frontend deployment and redirect rules
-- **`bridge-backend/self_test.py`**: Enhanced health monitoring
+- **`bridge_backend/self_test.py`**: Enhanced health monitoring
 - **Package configurations**: Respects existing dependencies and build processes
 
 ## 🚨 Failure Handling

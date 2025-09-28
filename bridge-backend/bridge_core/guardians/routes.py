@@ -1,1 +1,0 @@
-# Content of bridge-backend/bridge_core/guardians/routes.py

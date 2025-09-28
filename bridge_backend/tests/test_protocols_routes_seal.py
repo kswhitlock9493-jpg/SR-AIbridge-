@@ -7,7 +7,7 @@ client = TestClient(app)
 
 def test_protocol_seal_creates_artifact(tmp_path: Path, monkeypatch):
     # Redirect vault dir to tmp for isolation
-    from bridge_core.protocols import vaulting
+    from bridge_backend.bridge_core.protocols import vaulting
     orig_vault_dir = vaulting.VAULT_DIR
     vaulting.VAULT_DIR = tmp_path / "vault/protocols"
     vaulting.VAULT_DIR.mkdir(parents=True, exist_ok=True)

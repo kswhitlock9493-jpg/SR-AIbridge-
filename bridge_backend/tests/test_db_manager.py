@@ -1,6 +1,6 @@
 import pytest
 import asyncio
-from bridge_core.db import db_manager
+from bridge_backend.bridge_core.db import db_manager
 
 @pytest.mark.asyncio
 async def test_db_manager_missions(tmp_path, monkeypatch):

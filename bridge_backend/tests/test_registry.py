@@ -3,7 +3,7 @@ Tests for the protocol registry module.
 """
 
 import pytest
-from bridge_core.protocols.registry import ProtocolEntry
+from bridge_backend.bridge_core.protocols.registry import ProtocolEntry
 
 
 class TestProtocolEntry:

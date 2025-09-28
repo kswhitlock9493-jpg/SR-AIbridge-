@@ -7,9 +7,9 @@ import pytest
 import json
 from datetime import datetime
 
-from src.brain import BrainLedger, create_brain_ledger
-from src.keys import SovereignKeys, initialize_admiral_keys
-from src.signer import create_signer
+from bridge_backend.src.brain import BrainLedger, create_brain_ledger
+from bridge_backend.src.keys import SovereignKeys, initialize_admiral_keys
+from bridge_backend.src.signer import create_signer
 
 
 class TestBrainLedger:

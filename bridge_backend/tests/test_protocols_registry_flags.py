@@ -1,5 +1,5 @@
 from pathlib import Path
-from bridge_core.protocols import registry
+from bridge_backend.bridge_core.protocols import registry
 
 def test_list_registry_flags(tmp_path: Path):
     # Create a fake doctrine directory containing only lore.md for CipherSigRelay
