@@ -1,6 +1,16 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="SR-Albridge Backend", version="2.0.0")
+
+# CORS middleware for all endpoints
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # For dev/testing; use specific URLs for production!
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Import and include all routers with full package path
 from bridge_backend.bridge_core.protocols.routes import router as protocols_router
