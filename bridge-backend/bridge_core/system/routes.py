@@ -1,36 +1,30 @@
 from fastapi import APIRouter
 from datetime import datetime
-from pathlib import Path
 
-router = APIRouter(tags=["system"])
+router = APIRouter(prefix="/system", tags=["system"])
 
-@router.get("/health")
-def health_check():
-    """Lightweight probe for readiness."""
+@router.get("/metrics")
+def system_metrics():
+    """Return basic runtime metrics (stub until Prometheus integration)."""
+    now = datetime.utcnow().isoformat() + "Z"
     return {
-        "status": "healthy",
-        "service": "SR-AIbridge Backend",
-        "version": "1.2.0-sqlite-first",
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": now,
+        "uptime": "mock-uptime",
+        "requests": {"total": 0, "errors": 0},
     }
 
-@router.get("/status")
-def system_status():
-    """Composite probe for system state."""
-    vault_dir = Path("vault")
-    db_file = Path("vault/bridge.sqlite")
+@router.post("/repair")
+def system_repair():
+    """Trigger a mock system repair operation."""
+    return {"status": "repair_started", "time": datetime.utcnow().isoformat() + "Z"}
+
+@router.get("/diagnostics")
+def system_diagnostics():
+    """Return static diagnostic info."""
     return {
-        "status": "healthy",
-        "components": {
-            "database": {
-                "status": "healthy" if db_file.exists() else "missing",
-                "type": "sqlite",
-            },
-            "vault": {
-                "status": "healthy" if vault_dir.exists() else "missing",
-                "path": str(vault_dir),
-            },
-            "api": {"status": "healthy", "endpoints_active": True},
-        },
-        "self_heal_available": True,
+        "checks": [
+            {"name": "db", "status": "standby"},
+            {"name": "vault", "status": "ok"},
+            {"name": "agents", "status": "ok"},
+        ]
     }
