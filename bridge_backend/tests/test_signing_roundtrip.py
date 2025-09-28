@@ -7,8 +7,8 @@ import pytest
 import json
 from datetime import datetime
 
-from src.keys import SovereignKeys
-from src.signer import AtomicSigner, BatchSigner, create_signer
+from bridge_backend.src.keys import SovereignKeys
+from bridge_backend.src.signer import AtomicSigner, BatchSigner, create_signer
 
 
 class TestSigningRoundtrip:

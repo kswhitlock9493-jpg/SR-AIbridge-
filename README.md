@@ -15,7 +15,7 @@ SR-AIbridge now includes a production-ready SQLite-first backend with:
 
 ### Backend Setup
 ```bash
-cd bridge-backend
+cd bridge_backend
 pip install -r requirements.txt
 python main_sqlite.py
 ```
@@ -144,7 +144,7 @@ All endpoints include comprehensive error handling and return safe, structured J
 
 ### Run the Demo Seed Script
 ```bash
-cd bridge-backend
+cd bridge_backend
 python seed.py
 ```
 
@@ -264,7 +264,7 @@ The recommended production deployment uses the included configuration files:
 **Development**:
 ```bash
 # SQLite-first backend
-cd bridge-backend && python main_sqlite.py
+cd bridge_backend && python main_sqlite.py
 
 # Frontend
 cd bridge-frontend && npm start
@@ -274,7 +274,7 @@ cd bridge-frontend && npm start
 ```dockerfile
 # Backend Dockerfile
 FROM python:3.12-slim
-COPY bridge-backend/ /app
+COPY bridge_backend/ /app
 WORKDIR /app
 RUN pip install -r requirements.txt
 CMD ["uvicorn", "main_sqlite:app", "--host", "0.0.0.0", "--port", "8000"]
@@ -304,7 +304,7 @@ SR-AIbridge includes a comprehensive CI/CD pipeline with automated health monito
 
 ### Enhanced Self-Test Script
 
-The `bridge-backend/self_test.py` script provides production-ready health monitoring:
+The `bridge_backend/self_test.py` script provides production-ready health monitoring:
 
 ```bash
 # Quick production health check

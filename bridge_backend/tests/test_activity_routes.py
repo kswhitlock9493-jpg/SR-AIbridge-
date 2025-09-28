@@ -7,7 +7,7 @@ client = TestClient(app)
 
 def test_activity_from_logs(tmp_path, monkeypatch):
     vault_file = tmp_path / "events.jsonl"
-    monkeypatch.setattr("bridge_core.activity.routes.VAULT_LOGS_FILE", vault_file)
+    monkeypatch.setattr("bridge_backend.bridge_core.activity.routes.VAULT_LOGS_FILE", vault_file)
 
     # create dummy logs
     entries = [

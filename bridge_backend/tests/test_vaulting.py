@@ -9,7 +9,7 @@ import tempfile
 from pathlib import Path
 from datetime import datetime
 
-from bridge_core.protocols.vaulting import seal, get_vault_dir
+from bridge_backend.bridge_core.protocols.vaulting import seal, get_vault_dir
 
 
 class TestVaulting:

@@ -5,14 +5,14 @@ The `dockday-ascension` branch contains the complete implementation of the Dock-
 
 ## Core Features Implemented
 
-### 1. Backend Dock-Day Export System (`bridge-backend/src/export_and_sign.py`)
+### 1. Backend Dock-Day Export System (`bridge_backend/src/export_and_sign.py`)
 - **DockDayExporter Class**: Complete export manager with manifest signing
 - **Cryptographic Attestation**: All exports are cryptographically signed using Admiral keys
 - **Multi-format Support**: Supports both directory and compressed (ZIP) exports
 - **Comprehensive Manifest**: Detailed manifest with checksums, metadata, and signatures
 - **Verification System**: Complete drop verification with integrity checking
 
-### 2. API Integration (`bridge-backend/bridge_core/routes_custody.py`)
+### 2. API Integration (`bridge_backend/bridge_core/routes_custody.py`)
 - **POST /custody/dock-day-drop**: Create dock-day drops via API
 - **POST /custody/verify-drop**: Verify existing drops
 - **Complete Error Handling**: Robust error handling and HTTP responses
@@ -65,7 +65,7 @@ dock_day_drop_YYYYMMDD_HHMMSS/
 
 ### CLI Export
 ```bash
-cd bridge-backend
+cd bridge_backend
 python3 -m src.export_and_sign export --name "production_backup"
 ```
 
@@ -82,8 +82,8 @@ curl -X POST http://localhost:8000/custody/dock-day-drop \
 ```
 
 ## Testing Evidence
-- **Existing Drops**: `bridge-backend/dock_day_exports/` contains test exports
-- **Log Files**: `bridge-backend/dock_day.log` shows successful operations
+- **Existing Drops**: `bridge_backend/dock_day_exports/` contains test exports
+- **Log Files**: `bridge_backend/dock_day.log` shows successful operations
 - **CLI Help**: Full command-line interface help system implemented
 
 ## Admiral's Notes

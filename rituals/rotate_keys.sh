@@ -10,7 +10,7 @@ echo "   The old shall be archived, the new shall reign"
 echo ""
 
 # Configuration
-BRAIN_DIR=${BRAIN_DIR:-"./bridge-backend"}
+BRAIN_DIR=${BRAIN_DIR:-"./bridge_backend"}
 KEY_DIR=${KEY_DIR:-"$BRAIN_DIR/keys"}
 BACKUP_DIR=${BACKUP_DIR:-"$BRAIN_DIR/key_backups"}
 LOG_FILE=${LOG_FILE:-"$BRAIN_DIR/key_rotation.log"}

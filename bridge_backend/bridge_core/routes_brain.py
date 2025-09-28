@@ -7,8 +7,8 @@ from typing import List, Dict, Any, Optional
 from pydantic import BaseModel
 from datetime import datetime
 
-from src.brain import create_brain_ledger
-from src.signer import create_signer
+from bridge_backend.src.brain import create_brain_ledger
+from bridge_backend.src.signer import create_signer
 
 # Create router
 router = APIRouter(prefix="/brain", tags=["brain"])

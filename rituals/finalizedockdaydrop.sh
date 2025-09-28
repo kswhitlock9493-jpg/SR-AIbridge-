@@ -11,7 +11,7 @@ echo "   Ready for the eternal archives"
 echo ""
 
 # Configuration
-BRAIN_DIR=${BRAIN_DIR:-"./bridge-backend"}
+BRAIN_DIR=${BRAIN_DIR:-"./bridge_backend"}
 EXPORT_DIR=${EXPORT_DIR:-"$BRAIN_DIR/dock_day_exports"}
 DROP_NAME=${DROP_NAME:-"dock_day_drop_$(date '+%Y%m%d_%H%M%S')"}
 LOG_FILE=${LOG_FILE:-"$BRAIN_DIR/dock_day.log"}

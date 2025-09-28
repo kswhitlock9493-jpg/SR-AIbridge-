@@ -12,7 +12,7 @@ def test_list_and_browse_vault(tmp_path, monkeypatch):
     subdir.mkdir()
     (subdir / "bar.txt").write_text("world", encoding="utf-8")
 
-    monkeypatch.setattr("bridge_core.vault.routes.VAULT_ROOT", vault_root)
+    monkeypatch.setattr("bridge_backend.bridge_core.vault.routes.VAULT_ROOT", vault_root)
 
     # list top-level
     r = client.get("/vault")
@@ -34,7 +34,7 @@ def test_list_and_browse_vault(tmp_path, monkeypatch):
 def test_missing_path(monkeypatch, tmp_path):
     vault_root = tmp_path / "vault"
     vault_root.mkdir()
-    monkeypatch.setattr("bridge_core.vault.routes.VAULT_ROOT", vault_root)
+    monkeypatch.setattr("bridge_backend.bridge_core.vault.routes.VAULT_ROOT", vault_root)
 
     r = client.get("/vault/does_not_exist")
     assert r.status_code == 404

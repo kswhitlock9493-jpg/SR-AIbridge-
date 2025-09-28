@@ -82,13 +82,13 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd bridge-backend
+          cd bridge_backend
           pip install -r requirements.txt
 
       - name: Run comprehensive self-test
         id: self-test
         run: |
-          cd bridge-backend
+          cd bridge_backend
           BACKEND_URL="${{ needs.wait-for-deployment.outputs.backend_url }}"
           echo "Running self-test against: $BACKEND_URL"
 
@@ -112,13 +112,13 @@ jobs:
         if: always()
         with:
           name: self-test-results
-          path: bridge-backend/self_test_results.json
+          path: bridge_backend/self_test_results.json
           retention-days: 30
 
       - name: Parse and display test summary
         if: always()
         run: |
-          cd bridge-backend
+          cd bridge_backend
           if [ -f self_test_results.json ]; then
             echo "## 🧪 Self-Test Results" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
