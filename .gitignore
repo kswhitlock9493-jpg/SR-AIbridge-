@@ -37,6 +37,9 @@ yarn-error.log*
 *.sqlite
 *.sqlite3
 
+# Vault runtime data
+vault/
+
 # Environment
 .env
 .venv
