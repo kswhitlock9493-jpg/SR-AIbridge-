@@ -1,0 +1,15 @@
+{
+  "test-protocol": {
+    "state": "active",
+    "details": {
+      "version": 1,
+      "module": "test"
+    }
+  },
+  "another-protocol": {
+    "state": "inactive",
+    "details": {
+      "priority": "high"
+    }
+  }
+}

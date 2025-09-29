@@ -29,6 +29,7 @@ try:
     from bridge_core.console.routes import router as console_router
     from bridge_core.captains.routes import router as captains_router
     from bridge_core.guardians.routes import router as guardians_router, guardians_router
+    from bridge_core.protocols import storage as protocol_storage
 except ImportError:
     # Absolute imports when running from parent directory (Render deployment)
     from bridge_backend.bridge_core.protocols.routes import router as protocols_router
@@ -45,6 +46,7 @@ except ImportError:
     from bridge_backend.bridge_core.console.routes import router as console_router
     from bridge_backend.bridge_core.captains.routes import router as captains_router
     from bridge_backend.bridge_core.guardians.routes import router as guardians_router, guardians_router
+    from bridge_backend.bridge_core.protocols import storage as protocol_storage
 
 app.include_router(protocols_router)
 app.include_router(complex_protocols_router)
@@ -61,6 +63,9 @@ app.include_router(console_router)
 app.include_router(captains_router)
 app.include_router(guardians_router)
 app.include_router(guardians_router)
+
+# Load registry from vault at startup
+protocol_storage.load_registry()
 
 @app.api_route("/", methods=["GET", "HEAD"])
 def root():
