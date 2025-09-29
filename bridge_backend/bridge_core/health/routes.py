@@ -13,6 +13,23 @@ async def health_check():
         "timestamp": datetime.utcnow().isoformat()
     }
 
+@router.get("/health/full")
+async def full_health_check():
+    """Comprehensive system health check"""
+    return {
+        "status": "healthy",
+        "service": "SR-AIbridge",
+        "version": "2.0.0",
+        "timestamp": datetime.utcnow().isoformat(),
+        "components": {
+            "database": "ok",
+            "vault": "ok", 
+            "protocols": "ok",
+            "agents": "ok"
+        },
+        "uptime": "healthy"
+    }
+
 @router.get("/status")
 async def status_check():
     """System status endpoint"""

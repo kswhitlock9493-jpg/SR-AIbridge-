@@ -1,6 +1,10 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from bridge_backend.bridge_core.protocols.registry import list_registry, get_entry, activate_protocol, vault_protocol
+
+try:
+    from bridge_core.protocols.registry import list_registry, get_entry, activate_protocol, vault_protocol
+except ImportError:
+    from bridge_backend.bridge_core.protocols.registry import list_registry, get_entry, activate_protocol, vault_protocol
 
 router = APIRouter(prefix="/agents", tags=["agents"])
 

@@ -1,7 +1,12 @@
 from fastapi import APIRouter
-from bridge_backend.bridge_core.protocols.registry import list_registry
-from bridge_backend.bridge_core.guardians.routes import GUARDIANS
 from datetime import datetime
+
+try:
+    from bridge_core.protocols.registry import list_registry
+    from bridge_core.guardians.routes import GUARDIANS
+except ImportError:
+    from bridge_backend.bridge_core.protocols.registry import list_registry
+    from bridge_backend.bridge_core.guardians.routes import GUARDIANS
 
 router = APIRouter(prefix="/console", tags=["console"])
 
