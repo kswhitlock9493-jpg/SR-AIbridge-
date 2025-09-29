@@ -7,6 +7,29 @@ try:
 except Exception:  # pragma: no cover - graceful degrade if PyYAML missing
     yaml = None
 
+
+class ProtocolRegistry:
+    """In-memory registry for protocols (swap to DB later)."""
+
+    def __init__(self):
+        self._protocols: Dict[str, Dict] = {}
+
+    def add(self, name: str, status: str, details: str = "stub") -> None:
+        self._protocols[name] = {
+            "name": name,
+            "status": status,
+            "details": details,
+        }
+
+    def list(self) -> list[Dict]:
+        return list(self._protocols.values())
+
+    def get(self, name: str) -> Optional[Dict]:
+        return self._protocols.get(name)
+
+    def clear(self) -> None:
+        self._protocols.clear()
+
 """
 PR 1A-2h: ProtocolEntry lore & policy paths + lore()/policy() helpers.
 PR 1A-2i: Activation helpers (set_state / activate_protocol / vault_protocol)
