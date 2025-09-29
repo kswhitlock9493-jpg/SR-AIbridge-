@@ -3,13 +3,25 @@ from bridge_backend.main import app
 
 try:
     from bridge_core.protocols import storage
+    from bridge_core.protocols.registry import _registry, register_protocol
 except ImportError:
     from bridge_backend.bridge_core.protocols import storage
+    from bridge_backend.bridge_core.protocols.registry import _registry, register_protocol
 
 from pathlib import Path
 import json
+import pytest
 
 client = TestClient(app)
+
+@pytest.fixture(autouse=True)
+def reset_registry():
+    """Reset the registry before each test to ensure clean state."""
+    _registry.clear()
+    # Re-register test protocols with default state
+    register_protocol("comms", {"description": "handles communication protocols"})
+    register_protocol("ops", {"description": "operations-level routines"})
+    register_protocol("nav", {"description": "navigation suite"})
 
 def test_list_protocols():
     r = client.get("/protocols")
