@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from bridge_backend.bridge_core.protocols.registry import list_registry
-from bridge_backend.bridge_core.guardians.routes import GUARDIANS
+from bridge_core.protocols.registry import list_registry
+from bridge_core.guardians.routes import GUARDIANS
 from datetime import datetime
 
 router = APIRouter(prefix="/console", tags=["console"])

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pathlib import Path
+import json
 
 router = APIRouter(prefix="/vault", tags=["vault"])
 
@@ -17,6 +18,21 @@ def list_vault():
             "type": "dir" if p.is_dir() else "file"
         })
     return {"vault": items}
+
+@router.get("/logs")
+def get_vault_logs():
+    """Get vault logs - specific endpoint for the /vault/logs route"""
+    logs_file = VAULT_ROOT / "logs" / "events.jsonl"
+    if not logs_file.exists():
+        return {"logs": []}
+    
+    try:
+        with logs_file.open("r", encoding="utf-8") as f:
+            lines = f.readlines()[-50:]  # Get last 50 lines
+        logs = [json.loads(line.strip()) for line in lines if line.strip()]
+        return {"logs": logs}
+    except Exception:
+        return {"logs": []}
 
 @router.get("/{subpath:path}")
 def browse_vault(subpath: str):
