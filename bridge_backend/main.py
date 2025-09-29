@@ -16,6 +16,7 @@ app.add_middleware(
 try:
     # Relative imports when running from bridge_backend directory
     from bridge_core.protocols.routes import router as protocols_router
+    from bridge_core.protocols.complex_routes import router as complex_protocols_router
     from bridge_core.agents.routes import router as agents_router
     from bridge_core.routes_brain import router as brain_router
     from bridge_core.activity.routes import router as activity_router
@@ -31,6 +32,7 @@ try:
 except ImportError:
     # Absolute imports when running from parent directory (Render deployment)
     from bridge_backend.bridge_core.protocols.routes import router as protocols_router
+    from bridge_backend.bridge_core.protocols.complex_routes import router as complex_protocols_router
     from bridge_backend.bridge_core.agents.routes import router as agents_router
     from bridge_backend.bridge_core.routes_brain import router as brain_router
     from bridge_backend.bridge_core.activity.routes import router as activity_router
@@ -45,6 +47,7 @@ except ImportError:
     from bridge_backend.bridge_core.guardians.routes import router as guardians_router, guardians_router
 
 app.include_router(protocols_router)
+app.include_router(complex_protocols_router)
 app.include_router(agents_router)
 app.include_router(brain_router)
 app.include_router(activity_router)
