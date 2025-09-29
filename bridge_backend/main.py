@@ -13,17 +13,17 @@ app.add_middleware(
 )
 
 # Import and include all routers with full package path
-from bridge_core.protocols.routes import router as protocols_router
-from bridge_core.agents.routes import router as agents_router
-from bridge_core.routes_brain import router as brain_router
-from bridge_core.activity.routes import router as activity_router
-from bridge_core.missions.routes import router as missions_router
-from bridge_core.vault.routes import router as vault_router
-from bridge_core.fleet.routes import router as fleet_router
-from bridge_core.health.routes import router as health_router
-from bridge_core.system.routes import router as system_router
-from bridge_core.custody.routes import router as custody_router
-from bridge_core.console.routes import router as console_router
+from bridge_backend.bridge_core.protocols.routes import router as protocols_router
+from bridge_backend.bridge_core.agents.routes import router as agents_router
+from bridge_backend.bridge_core.routes_brain import router as brain_router
+from bridge_backend.bridge_core.activity.routes import router as activity_router
+from bridge_backend.bridge_core.missions.routes import router as missions_router
+from bridge_backend.bridge_core.vault.routes import router as vault_router
+from bridge_backend.bridge_core.fleet.routes import router as fleet_router
+from bridge_backend.bridge_core.health.routes import router as health_router
+from bridge_backend.bridge_core.system.routes import router as system_router
+from bridge_backend.bridge_core.custody.routes import router as custody_router
+from bridge_backend.bridge_core.console.routes import router as console_router
 
 app.include_router(protocols_router)
 app.include_router(agents_router)
