@@ -1,30 +1,58 @@
 from fastapi.testclient import TestClient
 from bridge_backend.main import app
 
+try:
+    from bridge_core.protocols import storage
+except ImportError:
+    from bridge_backend.bridge_core.protocols import storage
+
+from pathlib import Path
+import json
+
 client = TestClient(app)
 
 def test_list_protocols():
-    r = client.get("/protocols/")
+    r = client.get("/protocols")
     assert r.status_code == 200
     data = r.json()
     assert "protocols" in data
-    assert len(data["protocols"]) == 3
+    assert len(data["protocols"]) >= 3
     assert any(p["name"] == "comms" for p in data["protocols"])
-    # Verify the protocol structure
+    # Verify the protocol structure - now uses "state" instead of "status"
     comms = next(p for p in data["protocols"] if p["name"] == "comms")
-    assert comms["status"] == "available"
-    assert comms["details"] == "handles communication protocols"
+    assert comms["state"] == "inactive"
+    assert "description" in comms["details"]
 
 def test_get_protocol():
     r = client.get("/protocols/comms")
     assert r.status_code == 200
     assert r.json()["name"] == "comms"
-    assert r.json()["status"] == "available"
-    assert r.json()["details"] == "handles communication protocols"
+    assert r.json()["state"] == "inactive"
+    assert "description" in r.json()["details"]
 
 def test_get_nonexistent_protocol():
     r = client.get("/protocols/nonexistent")
+    assert r.status_code == 404
+    assert r.json()["detail"] == "protocol_not_found"
+
+def test_activate_and_vault_protocol(tmp_path, monkeypatch):
+    proto_file = tmp_path / "protocols.json"
+    monkeypatch.setattr(storage, "PROTOCOLS_FILE", proto_file)
+
+    # activate
+    r = client.post("/protocols/comms/activate")
     assert r.status_code == 200
-    assert r.json()["name"] == "nonexistent"
-    assert r.json()["status"] == "unknown"
-    assert r.json()["details"] == "not found"
+    assert r.json()["state"] == "active"
+
+    # check persisted
+    data = json.loads(proto_file.read_text(encoding="utf-8"))
+    assert data["comms"]["state"] == "active"
+
+    # vault
+    r = client.post("/protocols/comms/vault")
+    assert r.status_code == 200
+    assert r.json()["state"] == "vaulted"
+
+    # check persisted
+    data = json.loads(proto_file.read_text(encoding="utf-8"))
+    assert data["comms"]["state"] == "vaulted"
