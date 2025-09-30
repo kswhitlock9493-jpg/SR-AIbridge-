@@ -36,6 +36,7 @@ try:
     from bridge_core.engines.truth.routes import router as truth_router
     from bridge_core.engines.indoctrination.routes import router as indoctrination_router
     from bridge_core.engines.agents_foundry.routes import router as agents_foundry_router
+    from bridge_core.registry.routes import router as registry_router
     from bridge_core.protocols import storage as protocol_storage
 except ImportError:
     # Absolute imports when running from parent directory (Render deployment)
@@ -60,6 +61,7 @@ except ImportError:
     from bridge_backend.bridge_core.engines.truth.routes import router as truth_router
     from bridge_backend.bridge_core.engines.indoctrination.routes import router as indoctrination_router
     from bridge_backend.bridge_core.engines.agents_foundry.routes import router as agents_foundry_router
+    from bridge_backend.bridge_core.registry.routes import router as registry_router
     from bridge_backend.bridge_core.protocols import storage as protocol_storage
 
 app.include_router(protocols_router)
@@ -84,6 +86,7 @@ app.include_router(filing_router)
 app.include_router(truth_router)
 app.include_router(indoctrination_router)
 app.include_router(agents_foundry_router)
+app.include_router(registry_router)
 
 # Load registry from vault at startup
 protocol_storage.load_registry()

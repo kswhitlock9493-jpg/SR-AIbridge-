@@ -10,7 +10,9 @@ def now_iso():
     return datetime.utcnow().isoformat() + "Z"
 
 class IndoctrinationEngine:
-    def __init__(self):
+    def __init__(self, vault_dir: Path = VAULT):
+        self.vault_dir = Path(vault_dir)
+        self.vault_dir.mkdir(parents=True, exist_ok=True)
         self.registry: Dict[str, Dict[str, Any]] = {}
 
     def onboard(self, name: str, role: str, specialties: List[str]) -> Dict[str, Any]:
@@ -57,6 +59,25 @@ class IndoctrinationEngine:
     def list_agents(self) -> List[Dict[str, Any]]:
         return list(self.registry.values())
 
+    def list_scrolls(self) -> List[Dict[str, Any]]:
+        """List all indoctrination scrolls (doctrine files)."""
+        scrolls = []
+        for scroll_file in self.vault_dir.glob("*.json"):
+            try:
+                data = json.loads(scroll_file.read_text(encoding="utf-8"))
+                scrolls.append({
+                    "id": data.get("id"),
+                    "name": data.get("name"),
+                    "role": data.get("role"),
+                    "status": data.get("status"),
+                    "created_at": data.get("created_at"),
+                    "certified": data.get("certified", False),
+                })
+            except Exception:
+                continue
+        scrolls.sort(key=lambda x: x.get("created_at", ""), reverse=True)
+        return scrolls
+
     def _write_vault(self, aid: str, rec: Dict[str, Any]):
-        out = VAULT / f"{aid}.json"
+        out = self.vault_dir / f"{aid}.json"
         out.write_text(json.dumps(rec, indent=2))
