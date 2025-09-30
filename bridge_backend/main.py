@@ -33,6 +33,7 @@ try:
     from bridge_core.engines.parser.routes import router as parser_router
     from bridge_core.engines.recovery.routes import router as recovery_router
     from bridge_core.engines.routes_filing import router as filing_router
+    from bridge_core.engines.truth.routes import router as truth_router
     from bridge_core.protocols import storage as protocol_storage
 except ImportError:
     # Absolute imports when running from parent directory (Render deployment)
@@ -54,6 +55,7 @@ except ImportError:
     from bridge_backend.bridge_core.engines.parser.routes import router as parser_router
     from bridge_backend.bridge_core.engines.recovery.routes import router as recovery_router
     from bridge_backend.bridge_core.engines.routes_filing import router as filing_router
+    from bridge_backend.bridge_core.engines.truth.routes import router as truth_router
     from bridge_backend.bridge_core.protocols import storage as protocol_storage
 
 app.include_router(protocols_router)
@@ -75,6 +77,7 @@ app.include_router(autonomy_router)
 app.include_router(parser_router)
 app.include_router(recovery_router)
 app.include_router(filing_router)
+app.include_router(truth_router)
 
 # Load registry from vault at startup
 protocol_storage.load_registry()
