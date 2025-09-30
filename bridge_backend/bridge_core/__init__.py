@@ -16,6 +16,7 @@ from .engines.auroraforge import AuroraForge
 from .engines.chronicleloom import ChronicleLoom
 from .engines.calculuscore import CalculusCore
 from .engines.qhelmsingularity import QHelmSingularity
+from .engines.autonomy import AutonomyEngine
 
 # Legacy Super Engines (maintained for backward compatibility)
 from .labyrinthforge import LabyrinthForge
@@ -36,6 +37,7 @@ __all__ = [
     "ChronicleLoom",
     "CalculusCore",
     "QHelmSingularity",
+    "AutonomyEngine",
     # Legacy Super Engines (backward compatibility)
     "LabyrinthForge",
     "ChronicleVault", 

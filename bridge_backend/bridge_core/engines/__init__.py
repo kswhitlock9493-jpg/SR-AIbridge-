@@ -9,6 +9,7 @@ from .auroraforge import AuroraForge
 from .chronicleloom import ChronicleLoom
 from .calculuscore import CalculusCore
 from .qhelmsingularity import QHelmSingularity
+from .autonomy import AutonomyEngine
 
 __all__ = [
     "ScrollTongue",
@@ -16,5 +17,6 @@ __all__ = [
     "AuroraForge",
     "ChronicleLoom",
     "CalculusCore",
-    "QHelmSingularity"
+    "QHelmSingularity",
+    "AutonomyEngine"
 ]
