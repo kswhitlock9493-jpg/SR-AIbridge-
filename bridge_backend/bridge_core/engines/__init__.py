@@ -10,6 +10,7 @@ from .chronicleloom import ChronicleLoom
 from .calculuscore import CalculusCore
 from .qhelmsingularity import QHelmSingularity
 from .autonomy import AutonomyEngine
+from .parser import ParserEngine
 
 __all__ = [
     "ScrollTongue",
@@ -18,5 +19,6 @@ __all__ = [
     "ChronicleLoom",
     "CalculusCore",
     "QHelmSingularity",
-    "AutonomyEngine"
+    "AutonomyEngine",
+    "ParserEngine"
 ]

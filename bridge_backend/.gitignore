@@ -4,3 +4,6 @@ vault/logs/*.jsonl
 
 # Vault missions 
 vault/missions/*.jsonl
+
+# Parser vault files
+vault/parser/

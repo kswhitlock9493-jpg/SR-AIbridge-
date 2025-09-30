@@ -30,6 +30,7 @@ try:
     from bridge_core.captains.routes import router as captains_router
     from bridge_core.guardians.routes import router as guardians_router, guardians_router
     from bridge_core.engines.autonomy.routes import router as autonomy_router
+    from bridge_core.engines.parser.routes import router as parser_router
     from bridge_core.protocols import storage as protocol_storage
 except ImportError:
     # Absolute imports when running from parent directory (Render deployment)
@@ -48,6 +49,7 @@ except ImportError:
     from bridge_backend.bridge_core.captains.routes import router as captains_router
     from bridge_backend.bridge_core.guardians.routes import router as guardians_router, guardians_router
     from bridge_backend.bridge_core.engines.autonomy.routes import router as autonomy_router
+    from bridge_backend.bridge_core.engines.parser.routes import router as parser_router
     from bridge_backend.bridge_core.protocols import storage as protocol_storage
 
 app.include_router(protocols_router)
@@ -66,6 +68,7 @@ app.include_router(captains_router)
 app.include_router(guardians_router)
 app.include_router(guardians_router)
 app.include_router(autonomy_router)
+app.include_router(parser_router)
 
 # Load registry from vault at startup
 protocol_storage.load_registry()
