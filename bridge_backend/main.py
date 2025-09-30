@@ -31,6 +31,7 @@ try:
     from bridge_core.guardians.routes import router as guardians_router, guardians_router
     from bridge_core.engines.autonomy.routes import router as autonomy_router
     from bridge_core.engines.parser.routes import router as parser_router
+    from bridge_core.engines.recovery.routes import router as recovery_router
     from bridge_core.engines.routes_filing import router as filing_router
     from bridge_core.protocols import storage as protocol_storage
 except ImportError:
@@ -51,6 +52,7 @@ except ImportError:
     from bridge_backend.bridge_core.guardians.routes import router as guardians_router, guardians_router
     from bridge_backend.bridge_core.engines.autonomy.routes import router as autonomy_router
     from bridge_backend.bridge_core.engines.parser.routes import router as parser_router
+    from bridge_backend.bridge_core.engines.recovery.routes import router as recovery_router
     from bridge_backend.bridge_core.engines.routes_filing import router as filing_router
     from bridge_backend.bridge_core.protocols import storage as protocol_storage
 
@@ -71,6 +73,7 @@ app.include_router(guardians_router)
 app.include_router(guardians_router)
 app.include_router(autonomy_router)
 app.include_router(parser_router)
+app.include_router(recovery_router)
 app.include_router(filing_router)
 
 # Load registry from vault at startup
