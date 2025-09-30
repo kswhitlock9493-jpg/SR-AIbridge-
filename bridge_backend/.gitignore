@@ -7,3 +7,6 @@ vault/missions/*.jsonl
 
 # Parser vault files
 vault/parser/
+
+# Speech vault files
+vault/speech/
