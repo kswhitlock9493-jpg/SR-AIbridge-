@@ -10,3 +10,6 @@ vault/parser/
 
 # Speech vault files
 vault/speech/
+
+# Creativity vault files
+vault/creativity/
