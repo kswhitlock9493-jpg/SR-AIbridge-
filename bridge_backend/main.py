@@ -37,6 +37,7 @@ try:
     from bridge_core.engines.indoctrination.routes import router as indoctrination_router
     from bridge_core.engines.agents_foundry.routes import router as agents_foundry_router
     from bridge_core.engines.speech.routes import router as speech_router
+    from bridge_core.engines.screen.routes import router as screen_router
     from bridge_core.registry.routes import router as registry_router
     from bridge_core.protocols import storage as protocol_storage
 except ImportError:
@@ -63,6 +64,7 @@ except ImportError:
     from bridge_backend.bridge_core.engines.indoctrination.routes import router as indoctrination_router
     from bridge_backend.bridge_core.engines.agents_foundry.routes import router as agents_foundry_router
     from bridge_backend.bridge_core.engines.speech.routes import router as speech_router
+    from bridge_backend.bridge_core.engines.screen.routes import router as screen_router
     from bridge_backend.bridge_core.registry.routes import router as registry_router
     from bridge_backend.bridge_core.protocols import storage as protocol_storage
 
@@ -89,6 +91,7 @@ app.include_router(truth_router)
 app.include_router(indoctrination_router)
 app.include_router(agents_foundry_router)
 app.include_router(speech_router)
+app.include_router(screen_router)
 app.include_router(registry_router)
 
 # Load registry from vault at startup
