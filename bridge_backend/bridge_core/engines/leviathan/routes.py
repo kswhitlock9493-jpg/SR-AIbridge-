@@ -15,8 +15,9 @@ class IndexIn(BaseModel):
 
 class SearchIn(BaseModel):
     query: str
+    tags: Optional[List[str]] = None
     namespaces: Optional[List[str]] = None
-    limit: int = 20
+    limit: int = 50
 
 @router.post("/index")
 def index(payload: IndexIn):
@@ -24,7 +25,8 @@ def index(payload: IndexIn):
 
 @router.post("/search")
 def search(payload: SearchIn):
-    return {"results": L.search(payload.query, namespaces=payload.namespaces,
+    return {"results": L.search(payload.query, tags=payload.tags,
+                                namespaces=payload.namespaces,
                                 limit=payload.limit)}
 
 @router.get("/sources")
