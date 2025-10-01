@@ -8,6 +8,7 @@ import {
   getSystemHealth,
   getActivity 
 } from '../api';
+import UnifiedLeviathanPanel from './leviathan/UnifiedLeviathanPanel';
 
 // Command Deck - Enhanced Dashboard with better error handling and UX
 const CommandDeck = () => {
@@ -351,6 +352,11 @@ const CommandDeck = () => {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Leviathan Unified Search Panel */}
+      <div style={{ marginTop: 16 }}>
+        <UnifiedLeviathanPanel />
       </div>
     </div>
   );
