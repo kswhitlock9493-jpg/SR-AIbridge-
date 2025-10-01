@@ -2,6 +2,7 @@ from __future__ import annotations
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, Any, List, Optional
+from dataclasses import dataclass, asdict
 import json, uuid, hashlib
 
 from bridge_core.engines.leviathan.service import LeviathanEngine
@@ -9,7 +10,7 @@ from bridge_core.engines.leviathan.service import LeviathanEngine
 VAULT = Path("vault")
 CREATIVITY_DIR = VAULT / "creativity"
 CREATIVITY_DIR.mkdir(parents=True, exist_ok=True)
-LEDGER = CREATIVITY_DIR / "ledger.jsonl"
+ASSETS_DIR = CREATIVITY_DIR  # Alias for compatibility
 
 def now_iso() -> str:
     return datetime.utcnow().isoformat(timespec="seconds") + "Z"
@@ -17,40 +18,60 @@ def now_iso() -> str:
 def sha256_text(t: str) -> str:
     return hashlib.sha256(t.encode("utf-8", "ignore")).hexdigest()
 
+@dataclass
+class CreativeAsset:
+    sha: str
+    title: str
+    text: str
+    tags: List[str]
+    source: str
+    created_at: str
+
+    def to_dict(self):
+        return asdict(self)
+
 class CreativityBay:
     def __init__(self, vault_dir: Path = CREATIVITY_DIR):
         self.vault = vault_dir
         self.vault.mkdir(parents=True, exist_ok=True)
         self.leviathan = LeviathanEngine()
 
-    def ingest(self, content: str, ctype: str, project: Optional[str] = None,
-               captain: Optional[str] = None, tags: Optional[List[str]] = None) -> Dict[str, Any]:
-        sha = sha256_text(content)
+    def ingest(self, title: str, text: str, tags: Optional[List[str]], source: str) -> CreativeAsset:
+        sha = sha256_text(text)
         ts = now_iso()
-        entry = {
-            "id": str(uuid.uuid4()),
-            "sha": sha,
-            "type": ctype,
-            "project": project,
-            "captain": captain,
-            "tags": tags or [],
-            "ts": ts,
-        }
-        # write content to vault file
-        f = self.vault / f"{sha}.txt"
-        f.write_text(content, encoding="utf-8")
+        asset = CreativeAsset(
+            sha=sha, title=title, text=text,
+            tags=tags or [], source=source, created_at=ts
+        )
+        # persist text + metadata
+        (self.vault / f"{sha}.txt").write_text(text, encoding="utf-8")
+        (self.vault / f"{sha}.json").write_text(json.dumps(asset.to_dict(), indent=2), encoding="utf-8")
+        return asset
 
-        # append to ledger
-        with LEDGER.open("a", encoding="utf-8") as log:
-            log.write(json.dumps(entry) + "\n")
-
-        # index into leviathan
-        self.leviathan.index(content, namespace=f"creativity:{ctype}", source=f"vault/creativity/{sha}.txt")
-
-        return {"ok": True, "sha": sha, "meta": entry}
+    def search(self, query: str, tags: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+        results = []
+        for f in self.vault.glob("*.json"):
+            try:
+                meta = json.loads(f.read_text(encoding="utf-8"))
+                # Check if query matches text or title
+                if query.lower() in meta.get("text", "").lower() or query.lower() in meta.get("title", "").lower():
+                    # If tags filter is specified, check if all requested tags are present
+                    if tags:
+                        if not set(tags).issubset(set(meta.get("tags", []))):
+                            continue
+                    results.append(meta)
+            except Exception:
+                continue
+        return results
 
     def list_entries(self, limit: int = 50) -> List[Dict[str, Any]]:
-        if not LEDGER.exists():
-            return []
-        lines = LEDGER.read_text(encoding="utf-8").splitlines()[-limit:]
-        return [json.loads(x) for x in lines]
+        entries = []
+        for f in sorted(self.vault.glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True):
+            if len(entries) >= limit:
+                break
+            try:
+                meta = json.loads(f.read_text(encoding="utf-8"))
+                entries.append(meta)
+            except Exception:
+                continue
+        return entries
