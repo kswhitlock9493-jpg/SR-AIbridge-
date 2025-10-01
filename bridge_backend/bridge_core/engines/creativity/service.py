@@ -5,8 +5,6 @@ from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, asdict
 import json, uuid, hashlib
 
-from bridge_core.engines.leviathan.service import LeviathanEngine
-
 VAULT = Path("vault")
 CREATIVITY_DIR = VAULT / "creativity"
 CREATIVITY_DIR.mkdir(parents=True, exist_ok=True)
@@ -34,7 +32,6 @@ class CreativityBay:
     def __init__(self, vault_dir: Path = CREATIVITY_DIR):
         self.vault = vault_dir
         self.vault.mkdir(parents=True, exist_ok=True)
-        self.leviathan = LeviathanEngine()
 
     def ingest(self, title: str, text: str, tags: Optional[List[str]], source: str) -> CreativeAsset:
         sha = sha256_text(text)

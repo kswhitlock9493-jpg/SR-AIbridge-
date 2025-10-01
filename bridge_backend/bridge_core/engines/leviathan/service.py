@@ -1,128 +1,206 @@
 from __future__ import annotations
 from pathlib import Path
-from datetime import datetime
-import sqlite3, hashlib, json, uuid
-from typing import Dict, Any, List, Optional
+from typing import List, Dict, Any, Optional
+import json
+import datetime as dt
 
-VAULT = Path("vault")
-LEVIATHAN_DIR = VAULT / "leviathan"
-LEVIATHAN_DIR.mkdir(parents=True, exist_ok=True)
-LEDGER = LEVIATHAN_DIR / "ledger.jsonl"
-DB = LEVIATHAN_DIR / "index.db"
+# Creativity assets (from 6g/6h)
+from ..creativity.service import ASSETS_DIR  # vault/creativity/assets
 
-# Import creativity assets directory for global search
-CREATIVITY_DIR = VAULT / "creativity"
-ASSETS_DIR = CREATIVITY_DIR
-
-def now_iso() -> str:
-    return datetime.utcnow().isoformat(timespec="seconds") + "Z"
-
-def sha256_text(t: str) -> str:
-    return hashlib.sha256(t.encode("utf-8", "ignore")).hexdigest()
-
-def _init_db():
-    con = sqlite3.connect(DB)
-    cur = con.cursor()
-    cur.execute("""CREATE TABLE IF NOT EXISTS docs (
-        sha TEXT PRIMARY KEY,
-        namespace TEXT,
-        text TEXT,
-        source TEXT,
-        ts TEXT
-    )""")
-    cur.execute("""CREATE VIRTUAL TABLE IF NOT EXISTS docs_idx USING fts5(
-        sha, namespace, text, source, ts
-    )""")
-    con.commit()
-    con.close()
+# Parser + Truth utilities (from Section 5)
+from ..truth.utils import (
+    TRUTH_DIR, PARSER_DIR, PARSER_LEDGER,
+    read_jsonl, load_chunk_text, now_iso
+)
 
 class LeviathanEngine:
-    def __init__(self, vault_root: Path = VAULT):
-        _init_db()
+    """
+    Unified deep search across Bridge planes:
+      - creativity:  assets in vault/creativity/assets/*.json
+      - parser:      sentences from Parser ledger chunks
+      - truth:       bound truths from Truth Engine
+    Tag filtering applies where tags exist (creativity today; others optional).
+    """
+
+    def __init__(self, vault_root: Path = Path("vault")):
         self.vault = vault_root
 
+    # -----------------------------
+    # Loaders for each plane
+    # -----------------------------
+
     def _load_creativity_assets(self) -> List[Dict[str, Any]]:
-        """Load creativity assets from vault for global search"""
-        out = []
+        out: List[Dict[str, Any]] = []
         for f in ASSETS_DIR.glob("*.json"):
             try:
                 meta = json.loads(f.read_text(encoding="utf-8"))
+                # expected: {sha,title,text,tags,source,created_at}
                 out.append(meta)
             except Exception:
                 continue
         return out
 
-    def index(self, text: str, namespace: str, source: str) -> Dict[str, Any]:
-        sha = sha256_text(text)
-        ts = now_iso()
-        con = sqlite3.connect(DB)
-        cur = con.cursor()
-        cur.execute("INSERT OR REPLACE INTO docs VALUES (?,?,?,?,?)",
-                    (sha, namespace, text, source, ts))
-        cur.execute("INSERT OR REPLACE INTO docs_idx VALUES (?,?,?,?,?)",
-                    (sha, namespace, text, source, ts))
-        con.commit()
-        con.close()
-        with LEDGER.open("a", encoding="utf-8") as f:
-            f.write(json.dumps({"sha": sha, "namespace": namespace,
-                                "source": source, "ts": ts}) + "\n")
-        return {"ok": True, "sha": sha, "namespace": namespace, "ts": ts}
-
-    def search(self, query: str, tags: Optional[List[str]] = None, 
-               namespaces: Optional[List[str]] = None, limit: int = 50) -> List[Dict[str, Any]]:
+    def _load_parser_sentences(self) -> List[Dict[str, Any]]:
         """
-        Global deep search across vault assets + creativity bay with optional tag filtering.
+        Expand parser ledger into sentence-level docs with provenance.
+        Uses the same sentence splitter as Truth Engine utils.
         """
-        results = []
-
-        # Search creativity bay with tag filtering
-        for meta in self._load_creativity_assets():
-            if query.lower() in meta.get("text", "").lower() or query.lower() in meta.get("title", "").lower():
-                # If tags filter is specified, check if all requested tags are present
-                if tags:
-                    if not set(tags).issubset(set(meta.get("tags", []))):
-                        continue
-                results.append({
-                    "sha": meta.get("sha", ""),
-                    "title": meta.get("title", ""),
-                    "tags": meta.get("tags", []),
-                    "source": meta.get("source", ""),
-                    "created_at": meta.get("created_at", ""),
-                    "snippet": meta.get("text", "")[:200] + ("..." if len(meta.get("text", "")) > 200 else "")
+        from ..truth.utils import sentences_from_text  # local import to avoid cycles
+        ledger = read_jsonl(PARSER_LEDGER)
+        rows: List[Dict[str, Any]] = []
+        for row in ledger:
+            sha = row.get("sha") or row.get("hash") or row.get("id")
+            if not sha:
+                continue
+            txt = load_chunk_text(sha) or ""
+            if not txt.strip():
+                continue
+            for sent in sentences_from_text(txt):
+                rows.append({
+                    "plane": "parser",
+                    "sha": sha,
+                    "title": (row.get("source") or "parser") + " • sentence",
+                    "text": sent,
+                    "tags": row.get("tags", []),          # optional
+                    "source": row.get("source", "parser"),
+                    "created_at": row.get("ts") or now_iso(),
+                    "path": f"{PARSER_DIR}/{sha}.txt"
                 })
-
-        # Also search traditional indexed docs (namespace-based search)
-        con = sqlite3.connect(DB)
-        cur = con.cursor()
-        ns_filter = ""
-        params = [query]
-        if namespaces:
-            placeholders = ",".join("?" for _ in namespaces)
-            ns_filter = f"AND namespace IN ({placeholders})"
-            params.extend(namespaces)
-        cur.execute(f"SELECT sha, namespace, text, source, ts FROM docs_idx WHERE text MATCH ? {ns_filter} LIMIT ?",
-                    (*params, limit))
-        rows = cur.fetchall()
-        con.close()
-        
-        # Add indexed docs to results (these don't have tags)
-        for r in rows:
-            results.append({
-                "sha": r[0], 
-                "namespace": r[1], 
-                "text": r[2], 
-                "source": r[3], 
-                "ts": r[4]
-            })
-
-        # Sort by created_at/ts if available, newest first
-        results.sort(key=lambda r: r.get("created_at") or r.get("ts", ""), reverse=True)
-        return results[:limit]
-
-    def sources(self) -> List[str]:
-        con = sqlite3.connect(DB)
-        cur = con.cursor()
-        cur.execute("SELECT DISTINCT namespace FROM docs")
-        rows = [r[0] for r in cur.fetchall()]
-        con.close()
         return rows
+
+    def _load_truths(self) -> List[Dict[str, Any]]:
+        truths_file = TRUTH_DIR / "truths.jsonl"
+        rows: List[Dict[str, Any]] = []
+        for t in read_jsonl(truths_file):
+            # expected truth entry (from 5f Binder): { "truth": "...", "prov":[{sha,source,ts},...], "created_at": ... }
+            canon = t.get("truth") or ""
+            created = t.get("created_at") or now_iso()
+            tags = t.get("tags", [])  # optional
+            prov = t.get("prov", [])
+            sha_hint = prov[0]["sha"] if prov else None
+            rows.append({
+                "plane": "truth",
+                "sha": sha_hint,
+                "title": "Truth • canonical",
+                "text": canon,
+                "tags": tags,
+                "source": "truth_engine",
+                "created_at": created,
+                "path": str(TRUTH_DIR / "truths.jsonl"),
+                "prov": prov
+            })
+        return rows
+
+    # -----------------------------
+    # Search helpers
+    # -----------------------------
+
+    @staticmethod
+    def _match_text(q: str, text: str, title: Optional[str] = None) -> bool:
+        ql = (q or "").strip().lower()
+        if not ql:
+            return False
+        tl = (text or "").lower()
+        if ql in tl:
+            return True
+        if title and ql in (title or "").lower():
+            return True
+        return False
+
+    @staticmethod
+    def _tags_ok(required: Optional[List[str]], have: Optional[List[str]]) -> bool:
+        if not required:
+            return True
+        have_set = set(have or [])
+        return set(required).issubset(have_set)
+
+    @staticmethod
+    def _snippet(text: str, limit: int = 200) -> str:
+        if not text:
+            return ""
+        return text[:limit] + ("..." if len(text) > limit else "")
+
+    @staticmethod
+    def _parse_ts(ts: str) -> dt.datetime:
+        try:
+            return dt.datetime.fromisoformat(ts.replace("Z", "+00:00"))
+        except Exception:
+            return dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc)
+
+    # -----------------------------
+    # Public search
+    # -----------------------------
+
+    def search(
+        self,
+        query: str,
+        tags: Optional[List[str]] = None,
+        limit: int = 50,
+        planes: Optional[List[str]] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Unified search. planes default: ["creativity","parser","truth"]
+        """
+        planes = planes or ["creativity", "parser", "truth"]
+        bag: List[Dict[str, Any]] = []
+
+        # creativity
+        if "creativity" in planes:
+            for meta in self._load_creativity_assets():
+                if self._match_text(query, meta.get("text", ""), meta.get("title", "")) \
+                   and self._tags_ok(tags, meta.get("tags")):
+                    bag.append({
+                        "plane": "creativity",
+                        "sha": meta.get("sha"),
+                        "title": meta.get("title"),
+                        "tags": meta.get("tags", []),
+                        "source": meta.get("source"),
+                        "created_at": meta.get("created_at"),
+                        "snippet": self._snippet(meta.get("text", "")),
+                        "path": meta.get("path")  # optional
+                    })
+
+        # parser
+        if "parser" in planes:
+            for row in self._load_parser_sentences():
+                if self._match_text(query, row["text"], row["title"]) \
+                   and self._tags_ok(tags, row.get("tags", [])):
+                    bag.append({
+                        "plane": "parser",
+                        "sha": row["sha"],
+                        "title": row["title"],
+                        "tags": row.get("tags", []),
+                        "source": row["source"],
+                        "created_at": row["created_at"],
+                        "snippet": self._snippet(row["text"]),
+                        "path": row["path"]
+                    })
+
+        # truth
+        if "truth" in planes:
+            for row in self._load_truths():
+                if self._match_text(query, row["text"], row["title"]) \
+                   and self._tags_ok(tags, row.get("tags", [])):
+                    bag.append({
+                        "plane": "truth",
+                        "sha": row.get("sha"),
+                        "title": row["title"],
+                        "tags": row.get("tags", []),
+                        "source": row["source"],
+                        "created_at": row["created_at"],
+                        "snippet": self._snippet(row["text"]),
+                        "path": row["path"],
+                        "prov": row.get("prov", [])
+                    })
+
+        # Sort newest first, then by plane priority (truth > parser > creativity)
+        priority = {"truth": 0, "parser": 1, "creativity": 2}
+        bag.sort(
+            key=lambda r: (
+                self._parse_ts(r.get("created_at") or now_iso()),
+                -priority.get(r.get("plane"), 9)
+            ),
+            reverse=True
+        )
+
+        return bag[: max(1, min(limit, 200))]
