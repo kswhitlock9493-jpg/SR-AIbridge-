@@ -4,19 +4,28 @@ from typing import Optional, List
 from .service import CreativityBay
 
 router = APIRouter(prefix="/engines/creativity", tags=["creativity"])
-C = CreativityBay()
+BAY = CreativityBay()
 
 class IngestIn(BaseModel):
-    content: str
-    ctype: str
-    project: Optional[str] = None
-    captain: Optional[str] = None
-    tags: Optional[List[str]] = None
+    title: str
+    text: str
+    tags: Optional[List[str]] = []
+    source: str
 
 @router.post("/ingest")
 def ingest(payload: IngestIn):
-    return C.ingest(payload.content, payload.ctype, payload.project, payload.captain, payload.tags)
+    asset = BAY.ingest(payload.title, payload.text, payload.tags, payload.source)
+    return {"ok": True, "asset": asset.to_dict()}
+
+class SearchIn(BaseModel):
+    query: str
+    tags: Optional[List[str]] = None
+
+@router.post("/search")
+def search(payload: SearchIn):
+    results = BAY.search(payload.query, payload.tags)
+    return {"results": results}
 
 @router.get("/list")
 def list_entries(limit: int = 50):
-    return {"entries": C.list_entries(limit=limit)}
+    return {"entries": BAY.list_entries(limit=limit)}
