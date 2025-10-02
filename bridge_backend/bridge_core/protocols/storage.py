@@ -1,8 +1,13 @@
 from pathlib import Path
 import json
 from typing import Dict
-from bridge_backend.bridge_core.protocols.registry import ProtocolEntry, _registry
-from bridge_backend.bridge_core.protocols.vaulting import get_vault_dir
+
+try:
+    from bridge_core.protocols.registry import ProtocolEntry, _registry
+    from bridge_core.protocols.vaulting import get_vault_dir
+except ImportError:
+    from bridge_backend.bridge_core.protocols.registry import ProtocolEntry, _registry
+    from bridge_backend.bridge_core.protocols.vaulting import get_vault_dir
 
 VAULT_DIR = get_vault_dir()
 VAULT_DIR.mkdir(parents=True, exist_ok=True)
