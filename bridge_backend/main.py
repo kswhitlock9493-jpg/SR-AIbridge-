@@ -43,6 +43,8 @@ try:
     from bridge_core.engines.creativity.routes import router as creativity_router
     from bridge_core.registry.routes import router as registry_router
     from bridge_core.protocols import storage as protocol_storage
+    from bridge_core.permissions.routes import router as permissions_router
+    from bridge_core.payments.stripe_webhooks import router as stripe_router
 except ImportError:
     # Absolute imports when running from parent directory (Render deployment)
     from bridge_backend.bridge_core.protocols.routes import router as protocols_router
@@ -73,6 +75,8 @@ except ImportError:
     from bridge_backend.bridge_core.engines.creativity.routes import router as creativity_router
     from bridge_backend.bridge_core.registry.routes import router as registry_router
     from bridge_backend.bridge_core.protocols import storage as protocol_storage
+    from bridge_backend.bridge_core.permissions.routes import router as permissions_router
+    from bridge_backend.bridge_core.payments.stripe_webhooks import router as stripe_router
 
 app.include_router(protocols_router)
 app.include_router(complex_protocols_router)
@@ -102,6 +106,8 @@ app.include_router(leviathan_router)
 app.include_router(leviathan_solver_router)
 app.include_router(creativity_router)
 app.include_router(registry_router)
+app.include_router(permissions_router)
+app.include_router(stripe_router)
 
 # Load registry from vault at startup
 protocol_storage.load_registry()
