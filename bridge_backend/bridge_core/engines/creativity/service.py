@@ -16,6 +16,15 @@ def now_iso() -> str:
 def sha256_text(t: str) -> str:
     return hashlib.sha256(t.encode("utf-8", "ignore")).hexdigest()
 
+def can_ingest(tier: str, size_bytes: int) -> bool:
+    """Check if tier allows ingesting content of given size."""
+    if tier == "free":
+        return size_bytes <= 200_000  # ~200KB max, 2 creative formats
+    elif tier == "paid":
+        return size_bytes <= 5_000_000  # ~5MB max, all formats
+    else:  # Admiral
+        return True
+
 @dataclass
 class CreativeAsset:
     sha: str
