@@ -10,6 +10,7 @@ import BrainConsole from './components/BrainConsole.jsx';
 import AdmiralKeysPanel from './components/AdmiralKeysPanel.jsx';
 import IndoctrinationPanel from './components/IndoctrinationPanel.jsx';
 import TierPanel from './components/dashboard/TierPanel.jsx';
+import PermissionsConsole from './components/PermissionsConsole.jsx';
 import './styles.css';
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
     { path: '/custody', label: '🔑 Custody' },
     { path: '/tier-dashboard', label: '⭐ Tier Dashboard' },
     { path: '/indoctrination', label: '⚔️ Indoctrination' },
+    { path: '/permissions', label: '🔒 Permissions' },
     { path: '/system-health', label: '🔍 System Health' }
   ];
 
@@ -88,6 +90,7 @@ const App = () => {
                 <Route path="/custody" element={<AdmiralKeysPanel />} />
                 <Route path="/tier-dashboard" element={<TierPanel />} />
                 <Route path="/indoctrination" element={<IndoctrinationPanel />} />
+                <Route path="/permissions" element={<PermissionsConsole />} />
                 <Route path="/system-health" element={<SystemSelfTest />} />
                 {/* Redirect any unknown paths to command deck */}
                 <Route path="*" element={<Navigate to="/" replace />} />
