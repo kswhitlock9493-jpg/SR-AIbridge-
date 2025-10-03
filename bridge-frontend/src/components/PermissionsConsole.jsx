@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getSchema, getCurrent, applyTier, saveSettings, sendConsent } from "../api/permissions";
 
 export default function PermissionsConsole({ captain="Kyle" }) {
-  const [schema, setSchema] = useState(null);
   const [settings, setSettings] = useState(null);
   const [busy, setBusy] = useState(false);
   const CONSENT_TEXT = `By enabling autonomy, location, voice, screen, or data access, you authorize the Bridge to operate within the selected limits. Logs are append-only under vault/ for audit.`;
 
   useEffect(() => {
     (async () => {
-      const s = await getSchema(); setSchema(s.data || s);
+      await getSchema(); // Load schema (could be used for validation later)
       const c = await getCurrent(captain); setSettings((c.data || c).settings);
     })();
   }, [captain]);
