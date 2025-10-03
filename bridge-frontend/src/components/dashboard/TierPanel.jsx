@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "../ui/card.jsx";
 import { Button } from "../ui/button.jsx";
 import { Badge } from "../ui/badge.jsx";
+import config from "../../config.js";
+
+const API_BASE_URL = config.API_BASE_URL;
 
 export default function TierPanel() {
   const [tier, setTier] = useState("loading");
@@ -9,7 +12,7 @@ export default function TierPanel() {
   const [features, setFeatures] = useState([]);
 
   useEffect(() => {
-    fetch("/registry/tier/me")
+    fetch(`${API_BASE_URL}/registry/tier/me`)
       .then(r => r.json())
       .then(data => {
         setTier(data.tier);
