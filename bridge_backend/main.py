@@ -12,6 +12,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Import and add RBAC permission middleware
+try:
+    from bridge_core.middleware.permissions import PermissionMiddleware
+except ImportError:
+    from bridge_backend.bridge_core.middleware.permissions import PermissionMiddleware
+
+app.add_middleware(PermissionMiddleware)
+
 # Import and include all routers - using try/except for deployment compatibility
 try:
     # Relative imports when running from bridge_backend directory
