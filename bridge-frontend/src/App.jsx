@@ -9,6 +9,7 @@ import SystemSelfTest from './components/SystemSelfTest.jsx';
 import BrainConsole from './components/BrainConsole.jsx';
 import AdmiralKeysPanel from './components/AdmiralKeysPanel.jsx';
 import IndoctrinationPanel from './components/IndoctrinationPanel.jsx';
+import TierPanel from './components/dashboard/TierPanel.jsx';
 import './styles.css';
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
     { path: '/armada-map', label: '🗺️ Armada Map' },
     { path: '/brain', label: '🧠 Brain' },
     { path: '/custody', label: '🔑 Custody' },
+    { path: '/tier-dashboard', label: '⭐ Tier Dashboard' },
     { path: '/indoctrination', label: '⚔️ Indoctrination' },
     { path: '/system-health', label: '🔍 System Health' }
   ];
@@ -84,6 +86,7 @@ const App = () => {
                 <Route path="/armada-map" element={<ArmadaMap />} />
                 <Route path="/brain" element={<BrainConsole />} />
                 <Route path="/custody" element={<AdmiralKeysPanel />} />
+                <Route path="/tier-dashboard" element={<TierPanel />} />
                 <Route path="/indoctrination" element={<IndoctrinationPanel />} />
                 <Route path="/system-health" element={<SystemSelfTest />} />
                 {/* Redirect any unknown paths to command deck */}
