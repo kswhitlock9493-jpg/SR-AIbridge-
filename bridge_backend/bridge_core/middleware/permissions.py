@@ -48,7 +48,7 @@ class PermissionMiddleware(BaseHTTPMiddleware):
                 content={"detail": "leviathan_locked_free"}
             )
 
-        if tier == "free" and request.url.path.startswith("/engines/agents_foundry"):
+        if tier == "free" and request.url.path.startswith("/engines/agents"):
             return JSONResponse(
                 status_code=403,
                 content={"detail": "agents_locked_free"}

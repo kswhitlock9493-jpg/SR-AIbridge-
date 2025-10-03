@@ -52,7 +52,7 @@ def test_free_tier_cannot_access_leviathan():
 
 def test_free_tier_cannot_access_agents_foundry():
     """Test that free tier users cannot access Agents Foundry endpoints"""
-    r = client.get("/engines/agents_foundry/status?user_id=free_user")
+    r = client.get("/engines/agents/status?user_id=free_user")
     assert r.status_code == 403
     assert r.json()["detail"] == "agents_locked_free"
 
