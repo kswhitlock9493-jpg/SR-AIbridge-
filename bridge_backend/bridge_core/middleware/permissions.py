@@ -10,9 +10,33 @@ except ImportError:
 
 # Simple RBAC matrix
 ROLE_MATRIX = {
-    "admiral": {"all": True},  # you
-    "captain": {"admin": False, "agents": True, "vault": True, "screen": False, "view_own_missions": True, "view_agent_jobs": False},
-    "agent": {"self": True, "vault": False, "view_own_missions": False, "execute_jobs": True},
+    "admiral": {
+        "all": True,  # Full access to everything
+        "custody": True,  # Admiral-only custody/keys
+        "system_health": "global",  # Global system health view
+        "brain": "24/7",  # 24/7 memory autonomy
+        "vault": "master",  # Master vault access
+    },
+    "captain": {
+        "admin": False,
+        "agents": True,  # Can manage their own agents
+        "vault": True,  # Own vault access
+        "screen": False,
+        "view_own_missions": True,
+        "view_agent_jobs": False,
+        "custody": False,  # No custody access
+        "system_health": "local",  # Local self-test only
+        "brain": "14hr",  # 14hr memory autonomy
+    },
+    "agent": {
+        "self": True,
+        "vault": False,
+        "view_own_missions": False,
+        "execute_jobs": True,
+        "custody": False,  # No custody access
+        "system_health": False,  # No health access
+        "brain": "7hr",  # 7hr memory autonomy
+    },
 }
 
 class PermissionMiddleware(BaseHTTPMiddleware):
@@ -61,6 +85,13 @@ class PermissionMiddleware(BaseHTTPMiddleware):
                 return JSONResponse(
                     status_code=403,
                     content={"detail": "role_restricted"}
+                )
+            
+            # Custody is Admiral-only
+            if "/custody" in request.url.path and not perms.get("custody", False):
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "custody_admiral_only"}
                 )
 
         # Project-specific gate (if autonomy task has restrictions)
