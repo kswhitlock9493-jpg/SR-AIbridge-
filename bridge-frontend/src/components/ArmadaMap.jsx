@@ -8,6 +8,7 @@ const ArmadaMap = () => {
   const [error, setError] = useState(null);
   const [selectedShip, setSelectedShip] = useState(null);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'map'
+  const [roleFilter, setRoleFilter] = useState('captain'); // 'captain' or 'agent'
   const [filters, setFilters] = useState({
     status: 'all',
     type: 'all',
@@ -22,8 +23,8 @@ const ArmadaMap = () => {
       setError(null);
 
       const [statusData, fleetInfo] = await Promise.allSettled([
-        getArmadaStatus(),
-        getFleetData()
+        getArmadaStatus(roleFilter),
+        getFleetData(roleFilter)
       ]);
 
       if (statusData.status === 'fulfilled') {
@@ -39,6 +40,9 @@ const ArmadaMap = () => {
           setFleetData(fleet.ships);
         } else if (fleet && Array.isArray(fleet.fleet)) {
           setFleetData(fleet.fleet);
+        } else if (fleet && fleet.captains && fleet.agents) {
+          // Handle new format with separate captains/agents
+          setFleetData(roleFilter === 'captain' ? fleet.captains : fleet.agents);
         } else {
           setFleetData([]);
         }
@@ -141,7 +145,7 @@ const ArmadaMap = () => {
     fetchArmadaData();
     const interval = setInterval(fetchArmadaData, 45000); // Refresh every 45 seconds
     return () => clearInterval(interval);
-  }, []);
+  }, [roleFilter]); // Re-fetch when role filter changes
 
   const filteredFleet = getFilteredFleet();
 
@@ -180,6 +184,30 @@ const ArmadaMap = () => {
           <button onClick={() => setError(null)}>✕</button>
         </div>
       )}
+
+      {/* Role Toggle - Captains vs Agents */}
+      <div className="role-toggle-section">
+        <label>View Mode:</label>
+        <div className="role-toggle">
+          <button
+            className={roleFilter === 'captain' ? 'active' : ''}
+            onClick={() => setRoleFilter('captain')}
+          >
+            👨‍✈️ Captains
+          </button>
+          <button
+            className={roleFilter === 'agent' ? 'active' : ''}
+            onClick={() => setRoleFilter('agent')}
+          >
+            🤖 Agents
+          </button>
+        </div>
+        <span className="info-text">
+          {roleFilter === 'captain' 
+            ? '📋 Viewing captain-owned vessels and projects' 
+            : '🤖 Viewing autonomous agent jobs'}
+        </span>
+      </div>
 
       {/* Armada Status Overview */}
       <div className="armada-overview">
