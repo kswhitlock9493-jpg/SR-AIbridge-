@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getArmadaStatus, getFleetData } from '../api';
 
 const ArmadaMap = () => {
@@ -17,7 +17,7 @@ const ArmadaMap = () => {
   const [lastUpdate, setLastUpdate] = useState(new Date());
 
   // Fetch armada data from backend
-  const fetchArmadaData = async () => {
+  const fetchArmadaData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -55,7 +55,7 @@ const ArmadaMap = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [roleFilter]);
 
   // Filter fleet data
   const getFilteredFleet = () => {
@@ -145,7 +145,7 @@ const ArmadaMap = () => {
     fetchArmadaData();
     const interval = setInterval(fetchArmadaData, 45000); // Refresh every 45 seconds
     return () => clearInterval(interval);
-  }, [roleFilter]); // Re-fetch when role filter changes
+  }, [fetchArmadaData]); // Re-fetch when role filter changes
 
   const filteredFleet = getFilteredFleet();
 

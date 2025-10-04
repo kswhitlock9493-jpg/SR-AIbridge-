@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import config from '../config';
 
 const AdmiralKeysPanel = () => {
   const [custodyState, setCustodyState] = useState({
@@ -15,13 +16,9 @@ const AdmiralKeysPanel = () => {
   const [verifyEnvelope, setVerifyEnvelope] = useState('');
   const [operationResult, setOperationResult] = useState(null);
 
-  const API_BASE = 'http://localhost:8000';
+  const API_BASE = config.API_BASE_URL;
 
-  useEffect(() => {
-    fetchCustodyData();
-  }, []);
-
-  const fetchCustodyData = async () => {
+  const fetchCustodyData = useCallback(async () => {
     try {
       setCustodyState(prev => ({ ...prev, loading: true, error: null }));
       
@@ -55,7 +52,11 @@ const AdmiralKeysPanel = () => {
         loading: false
       }));
     }
-  };
+  }, [API_BASE]);
+
+  useEffect(() => {
+    fetchCustodyData();
+  }, [fetchCustodyData]);
 
   const rotateAdmiralKeys = async () => {
     if (!confirm('⚠️ This will replace the current Admiral keys. Are you sure?')) {
