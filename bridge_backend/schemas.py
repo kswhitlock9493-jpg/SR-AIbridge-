@@ -60,6 +60,8 @@ class MissionCreate(BaseModel):
     description: str = Field(default="", description="Mission description")
     status: str = Field(default="active", description="Mission status")
     priority: str = Field(default="normal", description="Mission priority")
+    captain: Optional[str] = Field(default=None, description="Captain owner of the mission")
+    role: str = Field(default="captain", description="Role: 'captain' or 'agent'")
     objectives: Optional[str] = Field(default=None, description="Mission objectives as JSON string")
 
 
@@ -69,6 +71,8 @@ class MissionUpdate(BaseModel):
     description: Optional[str] = None
     status: Optional[str] = None
     priority: Optional[str] = None
+    captain: Optional[str] = None
+    role: Optional[str] = None
     progress: Optional[int] = None
     objectives: Optional[str] = None
 
@@ -80,6 +84,8 @@ class MissionResponse(BaseModel):
     description: Optional[str] = None
     status: str
     priority: str
+    captain: Optional[str] = None
+    role: str
     agent_id: Optional[int] = None  
     assigned_agents: Optional[str] = None
     progress: int
@@ -99,6 +105,8 @@ class AgentCreate(BaseModel):
     name: str = Field(description="Agent name")
     endpoint: Optional[str] = Field(default=None, description="Agent endpoint URL")
     capabilities: Optional[str] = Field(default="", description="Agent capabilities as JSON string")
+    role: str = Field(default="agent", description="Role: 'captain' or 'agent'")
+    captain: Optional[str] = Field(default=None, description="Captain owner if this is a captain's agent")
     location: Optional[str] = Field(default=None, description="Agent location")
 
 
@@ -108,6 +116,8 @@ class AgentUpdate(BaseModel):
     endpoint: Optional[str] = None
     capabilities: Optional[str] = None
     status: Optional[str] = None
+    role: Optional[str] = None
+    captain: Optional[str] = None
     location: Optional[str] = None
     health_score: Optional[float] = None
 
@@ -119,6 +129,8 @@ class AgentResponse(BaseModel):
     endpoint: Optional[str] = None
     capabilities: Optional[str] = None
     status: str
+    role: str
+    captain: Optional[str] = None
     last_heartbeat: Optional[datetime] = None
     last_seen: Optional[datetime] = None
     health_score: float

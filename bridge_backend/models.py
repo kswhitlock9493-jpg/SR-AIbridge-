@@ -46,6 +46,8 @@ class Mission(Base):
     description = Column(Text, nullable=True)
     status = Column(String(50), nullable=False, default="active")
     priority = Column(String(50), nullable=False, default="normal")
+    captain = Column(String(255), nullable=True)  # Captain owner of the mission
+    role = Column(String(50), nullable=False, default="captain")  # 'captain' or 'agent'
     agent_id = Column(Integer, nullable=True)
     assigned_agents = Column(Text, nullable=True)  # JSON string for multiple agents
     progress = Column(Integer, default=0)
@@ -64,6 +66,8 @@ class Agent(Base):
     endpoint = Column(String(255), nullable=True)  # Made optional for seeded agents
     capabilities = Column(Text, nullable=True)  # JSON string
     status = Column(String(50), default="online")
+    role = Column(String(50), nullable=False, default="agent")  # 'captain' or 'agent'
+    captain = Column(String(255), nullable=True)  # If this is a captain's personal agent
     last_heartbeat = Column(DateTime, nullable=True)
     last_seen = Column(DateTime, nullable=True)  # Alternative to heartbeat
     health_score = Column(Float, default=100.0)

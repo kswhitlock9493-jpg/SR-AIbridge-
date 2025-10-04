@@ -11,8 +11,8 @@ except ImportError:
 # Simple RBAC matrix
 ROLE_MATRIX = {
     "admiral": {"all": True},  # you
-    "captain": {"admin": False, "agents": True, "vault": True, "screen": False},
-    "agent": {"self": True, "vault": False},
+    "captain": {"admin": False, "agents": True, "vault": True, "screen": False, "view_own_missions": True, "view_agent_jobs": False},
+    "agent": {"self": True, "vault": False, "view_own_missions": False, "execute_jobs": True},
 }
 
 class PermissionMiddleware(BaseHTTPMiddleware):
