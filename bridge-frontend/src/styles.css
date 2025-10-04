@@ -1713,6 +1713,114 @@
   padding: 0.25rem;
 }
 
+/* ===== CAPTAIN/AGENT ROLE SEPARATION UI ===== */
+
+/* Captain Selector in Mission Log */
+.captain-selector {
+  background: rgba(30, 60, 114, 0.2);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid rgba(58, 134, 255, 0.3);
+}
+
+.captain-selector label {
+  font-weight: 600;
+  color: #58a6ff;
+  font-size: 0.95rem;
+}
+
+.captain-selector select {
+  background: rgba(13, 17, 23, 0.8);
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.captain-selector select:hover {
+  border-color: #58a6ff;
+  background: rgba(13, 17, 23, 0.95);
+}
+
+.captain-selector select:focus {
+  outline: none;
+  border-color: #58a6ff;
+  box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
+}
+
+.captain-selector .info-text {
+  color: #8b949e;
+  font-size: 0.85rem;
+  margin-left: auto;
+}
+
+/* Role Toggle in Armada Map */
+.role-toggle-section {
+  background: rgba(30, 60, 114, 0.2);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid rgba(58, 134, 255, 0.3);
+}
+
+.role-toggle-section label {
+  font-weight: 600;
+  color: #58a6ff;
+  font-size: 0.95rem;
+}
+
+.role-toggle {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(13, 17, 23, 0.6);
+  padding: 0.3rem;
+  border-radius: 6px;
+}
+
+.role-toggle button {
+  padding: 0.6rem 1.2rem;
+  border: 1px solid #30363d;
+  background: rgba(13, 17, 23, 0.8);
+  color: #8b949e;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.role-toggle button:hover {
+  background: rgba(30, 60, 114, 0.4);
+  color: #c9d1d9;
+  border-color: #58a6ff;
+}
+
+.role-toggle button.active {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: #fff;
+  border-color: #58a6ff;
+  box-shadow: 0 2px 8px rgba(58, 134, 255, 0.3);
+}
+
+.role-toggle-section .info-text {
+  color: #8b949e;
+  font-size: 0.85rem;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 /* ===== RESPONSIVE ADJUSTMENTS ===== */
 @media (max-width: 768px) {
   .brain-console, .custody-panel {
@@ -1751,5 +1859,17 @@
   
   .status-details {
     grid-template-columns: 1fr;
+  }
+  
+  .captain-selector,
+  .role-toggle-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .captain-selector .info-text,
+  .role-toggle-section .info-text {
+    margin-left: 0;
+    margin-top: 0.5rem;
   }
 }
