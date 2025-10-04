@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import config from '../config';
 
 const BrainConsole = () => {
   const [brainState, setBrainState] = useState({
@@ -20,13 +21,9 @@ const BrainConsole = () => {
     metadata: ''
   });
 
-  const API_BASE = 'http://localhost:8000';
+  const API_BASE = config.API_BASE_URL;
 
-  useEffect(() => {
-    fetchBrainData();
-  }, []);
-
-  const fetchBrainData = async () => {
+  const fetchBrainData = useCallback(async () => {
     try {
       setBrainState(prev => ({ ...prev, loading: true, error: null }));
       
@@ -60,7 +57,11 @@ const BrainConsole = () => {
         loading: false
       }));
     }
-  };
+  }, [API_BASE]);
+
+  useEffect(() => {
+    fetchBrainData();
+  }, [fetchBrainData]);
 
   const searchMemories = async () => {
     try {

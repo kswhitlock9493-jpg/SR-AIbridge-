@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getMissions, createMission, updateMissionStatus } from '../api';
 
 const MissionLog = () => {
@@ -21,7 +21,7 @@ const MissionLog = () => {
   const [lastUpdate, setLastUpdate] = useState(new Date());
 
   // Fetch missions from backend (captain-filtered)
-  const fetchMissions = async () => {
+  const fetchMissions = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -35,7 +35,7 @@ const MissionLog = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentCaptain]);
 
   // Create new mission
   const handleCreateMission = async (e) => {
@@ -136,7 +136,7 @@ const MissionLog = () => {
     fetchMissions();
     const interval = setInterval(fetchMissions, 30000); // Refresh every 30 seconds
     return () => clearInterval(interval);
-  }, [currentCaptain]); // Re-fetch when captain changes
+  }, [fetchMissions]); // Re-fetch when captain changes
 
   const filteredMissions = getFilteredMissions();
 
