@@ -1305,28 +1305,37 @@ spec:
 
 **SQLite to PostgreSQL Migration:**
 
-1. **Update Environment Variables**
+SR-AIbridge now includes production-grade PostgreSQL support with monthly partitioned tables, role-based access control, and automatic indexing.
+
+📖 **See [POSTGRES_MIGRATION.md](POSTGRES_MIGRATION.md) for the complete migration guide**
+
+**Quick Overview:**
+
+1. **Create PostgreSQL Database**
+   - Render Pro plan (50 GB recommended)
+   - Initialize with `init.sql` schema
+
+2. **Update Environment Variables**
    ```bash
    DATABASE_TYPE=postgres
-   DATABASE_URL=postgresql://user:pass@host:5432/dbname
+   DATABASE_URL=postgresql+asyncpg://user:pass@host:5432/dbname
    ```
 
-2. **No Code Changes Required**
+3. **No Code Changes Required**
    - SQLAlchemy handles both databases
    - Same API, different backend
+   - Automatic schema detection
 
-3. **For Render:**
-   - Uncomment database section in `render.yaml`
-   - Add database to your Render service
-   - Environment variables auto-configured
+4. **Features Included**
+   - Monthly partitioned logs and memories
+   - Automatic index creation and optimization
+   - Role-based access (Admiral, Captain, Agent)
+   - Secure Data Relay Protocol (optional)
 
-4. **Migration Tools**
+5. **Monthly Maintenance**
    ```bash
-   # Export from SQLite
-   python migrate_to_postgres.py --export
-
-   # Import to PostgreSQL
-   python migrate_to_postgres.py --import
+   # Automated via GitHub Actions or Render Cron
+   psql "$DATABASE_URL" -f maintenance.sql
    ```
 
 ### Environment Configuration
