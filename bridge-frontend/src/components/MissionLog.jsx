@@ -6,6 +6,7 @@ const MissionLog = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [currentCaptain, setCurrentCaptain] = useState('Captain Alpha'); // Current captain context
   const [newMission, setNewMission] = useState({
     title: '',
     description: '',
@@ -19,12 +20,13 @@ const MissionLog = () => {
   });
   const [lastUpdate, setLastUpdate] = useState(new Date());
 
-  // Fetch missions from backend
+  // Fetch missions from backend (captain-filtered)
   const fetchMissions = async () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await getMissions();
+      // Fetch only captain-owned missions
+      const data = await getMissions(currentCaptain, 'captain');
       setMissions(Array.isArray(data) ? data : []);
       setLastUpdate(new Date());
     } catch (err) {
@@ -40,7 +42,12 @@ const MissionLog = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      await createMission(newMission);
+      // Include captain ownership in mission creation
+      await createMission({
+        ...newMission,
+        captain: currentCaptain,
+        role: 'captain'
+      });
       setNewMission({ title: '', description: '', priority: 'medium', type: 'standard' });
       setShowCreateForm(false);
       await fetchMissions(); // Refresh missions list
@@ -129,7 +136,7 @@ const MissionLog = () => {
     fetchMissions();
     const interval = setInterval(fetchMissions, 30000); // Refresh every 30 seconds
     return () => clearInterval(interval);
-  }, []);
+  }, [currentCaptain]); // Re-fetch when captain changes
 
   const filteredMissions = getFilteredMissions();
 
@@ -157,6 +164,22 @@ const MissionLog = () => {
           <button onClick={() => setError(null)}>✕</button>
         </div>
       )}
+
+      {/* Captain Selector */}
+      <div className="captain-selector">
+        <label>Captain:</label>
+        <select 
+          value={currentCaptain}
+          onChange={(e) => setCurrentCaptain(e.target.value)}
+        >
+          <option value="Captain Alpha">Captain Alpha</option>
+          <option value="Captain Beta">Captain Beta</option>
+          <option value="Captain Gamma">Captain Gamma</option>
+          <option value="Captain Delta">Captain Delta</option>
+          <option value="Captain Epsilon">Captain Epsilon</option>
+        </select>
+        <span className="info-text">📋 Viewing missions for {currentCaptain}</span>
+      </div>
 
       {/* Filters */}
       <div className="mission-filters">

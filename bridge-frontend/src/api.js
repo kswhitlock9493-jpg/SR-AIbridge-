@@ -122,8 +122,12 @@ export async function removeAgent(agentId) {
 }
 
 // === Missions ===
-export async function getMissions() {
-  return apiClient.get('/missions');
+export async function getMissions(captain = null, role = null) {
+  const params = new URLSearchParams();
+  if (captain) params.append('captain', captain);
+  if (role) params.append('role', role);
+  const query = params.toString() ? `?${params.toString()}` : '';
+  return apiClient.get(`/missions${query}`);
 }
 
 export async function createMission(mission) {
@@ -157,18 +161,24 @@ export async function sendCaptainMessage(message) {
 }
 
 // === Armada/Fleet ===
-export async function getArmadaStatus() {
-  return apiClient.get('/armada/status');
+export async function getArmadaStatus(role = null) {
+  const params = new URLSearchParams();
+  if (role) params.append('role', role);
+  const query = params.toString() ? `?${params.toString()}` : '';
+  return apiClient.get(`/armada/status${query}`);
 }
 
-export async function getFleetData() {
-  // Updated to use the new /fleet endpoint
-  return apiClient.get('/fleet');
+export async function getFleetData(role = null) {
+  // Updated to use the new /fleet endpoint with optional role filter
+  const params = new URLSearchParams();
+  if (role) params.append('role', role);
+  const query = params.toString() ? `?${params.toString()}` : '';
+  return apiClient.get(`/fleet${query}`);
 }
 
-export async function getFleetStatus() {
+export async function getFleetStatus(role = null) {
   // Alias for getFleetData to match /fleet/status endpoint requirement
-  return apiClient.get('/fleet');
+  return getFleetData(role);
 }
 
 // === Activity ===
