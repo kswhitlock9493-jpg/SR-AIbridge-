@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, NavLink, Navigate } from 'react-router-dom';
 import CommandDeck from './components/CommandDeck.jsx';
+import CommandDeckV1 from './pages/CommandDeckV1.jsx';
 import CaptainsChat from './components/CaptainsChat.jsx';
 import CaptainToCaptain from './components/CaptainToCaptain.jsx';
 import VaultLogs from './components/VaultLogs.jsx';
@@ -16,6 +17,7 @@ import './styles.css';
 const App = () => {
   const navigationItems = [
     { path: '/', label: '📊 Command Deck' },
+    { path: '/deck', label: '🌉 Heritage Deck' },
     { path: '/captains-chat', label: '💬 Captains Chat' },
     { path: '/captain-to-captain', label: '⚔️ Captain-to-Captain' },
     { path: '/vault-logs', label: '📜 Vault Logs' },
@@ -81,6 +83,7 @@ const App = () => {
             <div className="content-wrapper">
               <Routes>
                 <Route path="/" element={<CommandDeck />} />
+                <Route path="/deck" element={<CommandDeckV1 />} />
                 <Route path="/captains-chat" element={<CaptainsChat />} />
                 <Route path="/captain-to-captain" element={<CaptainToCaptain />} />
                 <Route path="/vault-logs" element={<VaultLogs />} />
