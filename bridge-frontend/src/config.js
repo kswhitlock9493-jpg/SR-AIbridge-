@@ -8,7 +8,15 @@ const config = {
     (typeof process !== 'undefined' ? process.env.REACT_APP_API_URL : null) || 
     (import.meta.env?.MODE === 'development' || (typeof process !== 'undefined' && process.env.NODE_ENV === 'development')
       ? "http://localhost:8000" 
-      : "https://sr-aibridge.onrender.com")
+      : "https://sr-aibridge.onrender.com"),
+  
+  // WebSocket Base URL for real-time updates
+  WS_BASE_URL: import.meta.env?.VITE_WS_BASE ||
+    import.meta.env?.VITE_WS_BASE_URL ||
+    (typeof process !== 'undefined' ? process.env.VITE_WS_BASE : null) ||
+    (import.meta.env?.MODE === 'development' || (typeof process !== 'undefined' && process.env.NODE_ENV === 'development')
+      ? "ws://localhost:8000"
+      : "wss://sr-aibridge.onrender.com")
 };
 
 export default config;
