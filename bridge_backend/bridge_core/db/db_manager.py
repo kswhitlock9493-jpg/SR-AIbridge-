@@ -47,3 +47,12 @@ async def add_log(timestamp: str, source: str, message: str, details: str = ""):
             {"t": timestamp, "src": source, "m": message, "d": details},
         )
         await session.commit()
+
+
+async def get_db_session() -> AsyncSession:
+    """Dependency for FastAPI routes to get async database session"""
+    async with SessionLocal() as session:
+        try:
+            yield session
+        finally:
+            await session.close()

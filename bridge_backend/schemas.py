@@ -252,3 +252,62 @@ class ListResponse(BaseModel):
     status: str = "success"
     count: int
     timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+
+
+# === Blueprint Schemas ===
+class TaskItem(BaseModel):
+    """Schema for individual task items in a blueprint"""
+    key: str
+    title: str
+    detail: str
+    depends_on: List[str] = []
+    role_hint: Optional[str] = None
+    acceptance: List[str] = []
+
+
+class BlueprintPlan(BaseModel):
+    """Schema for blueprint plan structure"""
+    objectives: List[str]
+    tasks: List[TaskItem]
+    artifacts: List[str] = []
+    success_criteria: List[str] = []
+
+
+class BlueprintCreate(BaseModel):
+    """Schema for creating a blueprint"""
+    title: str = Field(description="Blueprint title")
+    brief: str = Field(description="Mission brief/description")
+    captain: str = Field(description="Captain who owns this blueprint")
+
+
+class BlueprintOut(BaseModel):
+    """Schema for blueprint responses"""
+    id: int
+    mission_id: Optional[int] = None
+    captain: str
+    title: str
+    brief: str
+    plan: Dict[str, Any]  # Will be BlueprintPlan structure
+    created_at: datetime
+    updated_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+
+class AgentJobOut(BaseModel):
+    """Schema for agent job responses"""
+    id: int
+    mission_id: int
+    blueprint_id: int
+    task_key: str
+    task_desc: str
+    status: str
+    agent_name: Optional[str] = None
+    inputs: Dict[str, Any]
+    outputs: Dict[str, Any]
+    created_at: datetime
+    updated_at: datetime
+    
+    class Config:
+        from_attributes = True

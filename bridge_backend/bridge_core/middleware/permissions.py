@@ -16,6 +16,9 @@ ROLE_MATRIX = {
         "system_health": "global",  # Global system health view
         "brain": "24/7",  # 24/7 memory autonomy
         "vault": "master",  # Master vault access
+        "blueprint:create": True,
+        "blueprint:commit": True,
+        "blueprint:delete": True,
     },
     "captain": {
         "admin": False,
@@ -27,6 +30,9 @@ ROLE_MATRIX = {
         "custody": False,  # No custody access
         "system_health": "local",  # Local self-test only
         "brain": "14hr",  # 14hr memory autonomy
+        "blueprint:create": True,
+        "blueprint:commit": True,
+        "blueprint:delete": False,
     },
     "agent": {
         "self": True,
@@ -36,6 +42,9 @@ ROLE_MATRIX = {
         "custody": False,  # No custody access
         "system_health": False,  # No health access
         "brain": "7hr",  # 7hr memory autonomy
+        "blueprint:create": False,
+        "blueprint:commit": False,
+        "blueprint:delete": False,
     },
 }
 

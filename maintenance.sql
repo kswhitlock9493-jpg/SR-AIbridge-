@@ -21,6 +21,29 @@ BEGIN
        FOR VALUES FROM (%L) TO (%L);',
     to_char(next_month, 'YYYYMM'), next_month, next_month + interval '1 month'
   );
+  
+  -- Create agent_jobs partition if the table exists
+  IF EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'sra' AND tablename = 'agent_jobs') THEN
+    EXECUTE format(
+      'CREATE TABLE IF NOT EXISTS sra.agent_jobs_%s PARTITION OF sra.agent_jobs
+         FOR VALUES FROM (%L) TO (%L);',
+      to_char(next_month, 'YYYYMM'), next_month, next_month + interval '1 month'
+    );
+    
+    -- Re-apply key indexes on new agent_jobs partition
+    EXECUTE format('CREATE INDEX IF NOT EXISTS %I ON sra.agent_jobs_%s (mission_id);',
+                   'idx_sra_agent_jobs_'||to_char(next_month,'YYYYMM')||'_mission',
+                   to_char(next_month,'YYYYMM'));
+    EXECUTE format('CREATE INDEX IF NOT EXISTS %I ON sra.agent_jobs_%s (captain_id);',
+                   'idx_sra_agent_jobs_'||to_char(next_month,'YYYYMM')||'_captain',
+                   to_char(next_month,'YYYYMM'));
+    EXECUTE format('CREATE INDEX IF NOT EXISTS %I ON sra.agent_jobs_%s (task_key);',
+                   'idx_sra_agent_jobs_'||to_char(next_month,'YYYYMM')||'_task_key',
+                   to_char(next_month,'YYYYMM'));
+    EXECUTE format('CREATE INDEX IF NOT EXISTS %I ON sra.agent_jobs_%s (status);',
+                   'idx_sra_agent_jobs_'||to_char(next_month,'YYYYMM')||'_status',
+                   to_char(next_month,'YYYYMM'));
+  END IF;
 
   -- Re-apply key indexes on new vault_logs partition
   EXECUTE format('CREATE INDEX IF NOT EXISTS %I ON sra.vault_logs_%s (level);',
@@ -50,13 +73,13 @@ BEGIN
                  'idx_sra_brain_memories_'||to_char(next_month,'YYYYMM')||'_category',
                  to_char(next_month,'YYYYMM'));
 
-  -- Drop very old partitions (logs & memories)
+  -- Drop very old partitions (logs, memories, and agent_jobs)
   FOR p IN
     SELECT inhrelid::regclass AS child, pg_get_expr(relpartbound, inhrelid) AS bound
     FROM pg_inherits i
     JOIN pg_class c ON c.oid = i.inhrelid
     JOIN pg_class p2 ON p2.oid = i.inhparent
-    WHERE p2.relname IN ('vault_logs','brain_memories') AND p2.relnamespace = 'sra'::regnamespace
+    WHERE p2.relname IN ('vault_logs','brain_memories','agent_jobs') AND p2.relnamespace = 'sra'::regnamespace
   LOOP
     -- crude parse: if partition end < drop_before, drop it
     IF to_date(substring(p.child::text from '.*_(\d{6})$'), 'YYYYMM') < to_date(to_char(drop_before,'YYYYMM'),'YYYYMM') THEN
