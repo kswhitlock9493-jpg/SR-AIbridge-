@@ -50,6 +50,7 @@ try:
     from bridge_core.engines.leviathan.routes_solver import router as leviathan_solver_router
     from bridge_core.engines.creativity.routes import router as creativity_router
     from bridge_core.engines.cascade.routes import router as cascade_router
+    from bridge_core.engines.blueprint.routes import router as blueprint_router
     from bridge_core.registry.routes import router as registry_router
     from bridge_core.protocols import storage as protocol_storage
     from bridge_core.permissions.routes import router as permissions_router
@@ -83,6 +84,7 @@ except ImportError:
     from bridge_backend.bridge_core.engines.leviathan.routes_solver import router as leviathan_solver_router
     from bridge_backend.bridge_core.engines.creativity.routes import router as creativity_router
     from bridge_backend.bridge_core.engines.cascade.routes import router as cascade_router
+    from bridge_backend.bridge_core.engines.blueprint.routes import router as blueprint_router
     from bridge_backend.bridge_core.registry.routes import router as registry_router
     from bridge_backend.bridge_core.protocols import storage as protocol_storage
     from bridge_backend.bridge_core.permissions.routes import router as permissions_router
@@ -116,6 +118,7 @@ app.include_router(leviathan_router)
 app.include_router(leviathan_solver_router)
 app.include_router(creativity_router)
 app.include_router(cascade_router)
+app.include_router(blueprint_router)
 app.include_router(registry_router)
 app.include_router(permissions_router)
 app.include_router(stripe_router)

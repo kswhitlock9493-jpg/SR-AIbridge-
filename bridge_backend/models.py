@@ -4,11 +4,20 @@ SQLite-first design with Guardian, VaultLog, Mission, Agent models
 Pydantic schemas have been moved to schemas.py for clean separation
 """
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import declarative_base
-from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, Float, func
+from sqlalchemy.orm import declarative_base, relationship
+from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, Float, func, ForeignKey, JSON, Enum as PgEnum
 from datetime import datetime
+import enum
 
 Base = declarative_base()
+
+# Enums for AgentJob status
+class JobStatus(str, enum.Enum):
+    queued = "queued"
+    running = "running"
+    done = "done"
+    failed = "failed"
+    skipped = "skipped"
 
 # SQLAlchemy ORM Models
 class Guardian(Base):
@@ -73,5 +82,48 @@ class Agent(Base):
     health_score = Column(Float, default=100.0)
     location = Column(String(255), nullable=True)  # Agent location
     created_at = Column(DateTime, server_default=func.now())
+
+class Blueprint(Base):
+    """Blueprint planning model for missions"""
+    __tablename__ = "blueprints"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    mission_id = Column(Integer, ForeignKey("missions.id"), nullable=True)
+    captain = Column(String(255), nullable=False, index=True)
+    title = Column(String(255), nullable=False)
+    brief = Column(Text, nullable=False)
+    plan = Column(JSON, nullable=False)  # objectives/tasks/deps/artifacts stored as JSON
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    
+    # Relationships
+    mission = relationship("Mission", back_populates="blueprint", foreign_keys=[mission_id])
+    agent_jobs = relationship("AgentJob", back_populates="blueprint", cascade="all, delete-orphan")
+
+class AgentJob(Base):
+    """Agent job tracking for blueprint execution"""
+    __tablename__ = "agent_jobs"
+    
+    id = Column(Integer, primary_key=True)
+    mission_id = Column(Integer, ForeignKey("missions.id"), nullable=False, index=True)
+    blueprint_id = Column(Integer, ForeignKey("blueprints.id"), nullable=False)
+    captain = Column(String(255), nullable=False, index=True)
+    agent_name = Column(String(255), nullable=True, index=True)
+    role = Column(String(50), nullable=False, default="agent")  # agent/captain/admiral
+    task_key = Column(String(50), nullable=False, index=True)  # e.g., "T2.1"
+    task_desc = Column(Text, nullable=False)
+    status = Column(String(50), nullable=False, default="queued")  # Using string for SQLite compatibility
+    inputs = Column(JSON, nullable=False, default=dict)
+    outputs = Column(JSON, nullable=False, default=dict)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    
+    # Relationships
+    mission_rel = relationship("Mission", back_populates="agent_jobs", foreign_keys=[mission_id])
+    blueprint = relationship("Blueprint", back_populates="agent_jobs", foreign_keys=[blueprint_id])
+
+# Add reverse relationships to Mission
+Mission.blueprint = relationship("Blueprint", uselist=False, back_populates="mission")
+Mission.agent_jobs = relationship("AgentJob", back_populates="mission_rel")
 
 # Note: Pydantic schemas have been moved to schemas.py for better separation of concerns

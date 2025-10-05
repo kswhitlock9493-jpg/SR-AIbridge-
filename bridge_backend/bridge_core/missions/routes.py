@@ -1,9 +1,29 @@
-from fastapi import APIRouter, HTTPException, Query, Request
+from fastapi import APIRouter, HTTPException, Query, Request, Depends
 from pydantic import BaseModel
 from pathlib import Path
 from datetime import datetime
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+from typing import List
 import json
 import uuid
+
+# Import dependencies with compatibility handling
+try:
+    from bridge_backend.bridge_core.db.db_manager import get_db_session
+    from bridge_backend.models import AgentJob, Mission
+    from bridge_backend.schemas import AgentJobOut
+except ImportError:
+    try:
+        from ...db.db_manager import get_db_session
+        from ....models import AgentJob, Mission
+        from ....schemas import AgentJobOut
+    except ImportError:
+        # Fallback - will be None if not available
+        get_db_session = None
+        AgentJob = None
+        Mission = None
+        AgentJobOut = None
 
 router = APIRouter(prefix="/missions", tags=["missions"])
 
@@ -65,3 +85,30 @@ def create_mission(m: MissionIn, request: Request):
     }
     _write_mission(entry)
     return {"status": "created", "mission": entry}
+
+
+@router.get("/{mission_id}/jobs", response_model=List[AgentJobOut] if AgentJobOut else list)
+async def get_mission_jobs(
+    mission_id: int,
+    session: AsyncSession = Depends(get_db_session) if get_db_session else None
+):
+    """
+    Get all agent jobs for a specific mission
+    Returns blueprint-generated jobs with status, dependencies, and outputs
+    """
+    if not get_db_session or not AgentJob:
+        raise HTTPException(
+            status_code=501,
+            detail="Blueprint feature requires database backend (not available with JSONL storage)"
+        )
+    
+    try:
+        # Query all jobs for this mission
+        result = await session.execute(
+            select(AgentJob).where(AgentJob.mission_id == mission_id).order_by(AgentJob.task_key)
+        )
+        jobs = result.scalars().all()
+        
+        return jobs
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get mission jobs: {str(e)}")
