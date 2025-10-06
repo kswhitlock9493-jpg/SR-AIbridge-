@@ -25,6 +25,15 @@ class Settings:
     DATABASE_TYPE: str = os.getenv("DATABASE_TYPE", "sqlite").lower()
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///bridge.db")
     
+    # Bridge Services
+    VAULT_URL: str = os.getenv("VAULT_URL", "https://bridge.netlify.app/api/vault")
+    CASCADE_MODE: str = os.getenv("CASCADE_MODE", "development")
+    FEDERATION_SYNC_KEY: str = os.getenv("FEDERATION_SYNC_KEY", "")
+    
+    # Optional Monitoring
+    DATADOG_API_KEY: str = os.getenv("DATADOG_API_KEY", "")
+    DATADOG_REGION: str = os.getenv("DATADOG_REGION", "us")
+    
     # CORS Configuration
     CORS_ALLOW_ALL: bool = os.getenv("CORS_ALLOW_ALL", "false").lower() == "true"
     ALLOWED_ORIGINS: List[str] = os.getenv(
