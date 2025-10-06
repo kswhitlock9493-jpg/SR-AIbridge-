@@ -1,12 +1,12 @@
 [build]
   base = "bridge-frontend"
+  publish = "bridge-frontend/build"
   command = "npm run build"
-  publish = "build"
 
 # Environment variables for frontend build
 [build.environment]
-  VITE_API_BASE = "https://sr-aibridge.onrender.com"
-  REACT_APP_API_URL = "https://sr-aibridge.onrender.com"
+  PUBLIC_API_BASE = "/api"
+  SECRETS_SCAN_OMIT_KEYS = "CASCADE_MODE,VAULT_URL,DATADOG_REGION"
   NODE_VERSION = "18"
 
 # Single Page Application redirects
