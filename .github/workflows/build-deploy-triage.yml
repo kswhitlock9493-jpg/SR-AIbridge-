@@ -1,0 +1,65 @@
+name: 🔁 Build & Deploy Triage
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  triage:
+    name: Validate → Build → Deploy → Notify
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - run: pip install requests python-dotenv
+
+      - name: 🔍 Validate & Auto-Heal Env
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+          BRIDGE_URL: ${{ secrets.BRIDGE_URL }}
+        run: |
+          python3 scripts/check_env_parity.py || (
+            python3 scripts/repair_netlify_env.py
+            python3 scripts/check_env_parity.py
+            python3 scripts/report_bridge_event.py
+          )
+
+      - name: 🧱 Build Frontend
+        run: |
+          cd bridge-frontend
+          npm ci
+          npm run build || (
+            echo "❌ Build failed — notifying Bridge"
+            python3 ../scripts/report_bridge_event.py report_build_failure || true
+            exit 1
+          )
+
+      - name: 🚀 Deploy to Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          npm install -g netlify-cli
+          netlify deploy --dir=bridge-frontend/build --site=$NETLIFY_SITE_ID --prod || (
+            echo "⚠️ Deploy failed — notifying Bridge"
+            python3 scripts/report_bridge_event.py report_deploy_failure || true
+            exit 1
+          )
+
+      - name: 📡 Notify Bridge of Deploy Success
+        if: success()
+        env:
+          BRIDGE_URL: ${{ secrets.BRIDGE_URL }}
+        run: python3 -c "from scripts.report_bridge_event import report_deploy_success; report_deploy_success()"
+
