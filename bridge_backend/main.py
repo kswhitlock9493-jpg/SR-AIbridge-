@@ -1,3 +1,4 @@
+import sys
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -137,6 +138,29 @@ app.include_router(diagnostics_timeline_router)
 
 # Load registry from vault at startup
 protocol_storage.load_registry()
+
+# Startup event handler for endpoint triage
+@app.on_event("startup")
+async def startup_triage():
+    """Run endpoint triage on startup"""
+    import asyncio
+    import subprocess
+    import os
+    
+    # Run triage in background to not block startup
+    async def run_triage():
+        await asyncio.sleep(5)  # Wait for server to be ready
+        try:
+            script_path = os.path.join(os.path.dirname(__file__), "scripts", "endpoint_triage.py")
+            if os.path.exists(script_path):
+                print("🚑 Running initial endpoint triage...")
+                subprocess.Popen([sys.executable, script_path], 
+                               stdout=subprocess.DEVNULL, 
+                               stderr=subprocess.DEVNULL)
+        except Exception as e:
+            print(f"⚠️ Failed to run endpoint triage: {e}")
+    
+    asyncio.create_task(run_triage())
 
 @app.api_route("/", methods=["GET", "HEAD"])
 def root():

@@ -16,3 +16,6 @@ vault/creativity/
 
 # Cascade vault files
 vault/cascade/
+
+# Endpoint triage reports
+endpoint_report.json
