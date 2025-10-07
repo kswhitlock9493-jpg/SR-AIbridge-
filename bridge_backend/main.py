@@ -151,6 +151,14 @@ async def startup_triage():
     async def run_triage():
         await asyncio.sleep(5)  # Wait for server to be ready
         try:
+            # Run triage pre-seed first
+            preseed_script = os.path.join(os.path.dirname(__file__), "scripts", "triage_preseed.py")
+            if os.path.exists(preseed_script):
+                print("🌱 Running triage pre-seed...")
+                subprocess.run([sys.executable, preseed_script], 
+                              stdout=subprocess.DEVNULL, 
+                              stderr=subprocess.DEVNULL)
+            
             # Run endpoint triage
             endpoint_script = os.path.join(os.path.dirname(__file__), "scripts", "endpoint_triage.py")
             if os.path.exists(endpoint_script):
