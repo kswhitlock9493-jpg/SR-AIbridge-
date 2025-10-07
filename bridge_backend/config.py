@@ -34,6 +34,10 @@ class Settings:
     DATADOG_API_KEY: str = os.getenv("DATADOG_API_KEY", "")
     DATADOG_REGION: str = os.getenv("DATADOG_REGION", "us")
     
+    # Deploy Diagnostics
+    AUTO_DIAGNOSE: bool = os.getenv("AUTO_DIAGNOSE", "true").lower() == "true"
+    DIAGNOSE_WEBHOOK_URL: str = os.getenv("DIAGNOSE_WEBHOOK_URL", "")
+    
     # CORS Configuration
     CORS_ALLOW_ALL: bool = os.getenv("CORS_ALLOW_ALL", "false").lower() == "true"
     ALLOWED_ORIGINS: List[str] = os.getenv(
