@@ -21,6 +21,15 @@ class Settings:
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
     PORT: int = int(os.getenv("PORT", 8000))
     
+    # Backend API Configuration
+    BRIDGE_API_URL: str = os.getenv("BRIDGE_API_URL", "http://localhost:8000")
+    
+    # Security
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "dev-secret-key-change-in-production")
+    
+    # Logging
+    LOG_LEVEL: str = os.getenv("LOG_LEVEL", "info").lower()
+    
     # Database
     DATABASE_TYPE: str = os.getenv("DATABASE_TYPE", "sqlite").lower()
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///bridge.db")
