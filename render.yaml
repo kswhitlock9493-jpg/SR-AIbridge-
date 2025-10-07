@@ -13,13 +13,31 @@ services:
       - key: ENVIRONMENT
         value: production
       - key: DATABASE_TYPE
-        value: sqlite
+        value: postgres
       - key: DATABASE_URL
-        value: sqlite:///bridge.db
+        value: postgresql://sr_admin:<YOUR_PASSWORD>@dpg-d3i3jc0dl3ps73csp9e0-a.oregon-postgres.render.com/sr_aibridge_main
+      - key: BRIDGE_API_URL
+        value: https://sr-aibridge.onrender.com
+      - key: SECRET_KEY
+        generateValue: true
+      - key: LOG_LEVEL
+        value: info
+      - key: CASCADE_MODE
+        value: production
+      - key: VAULT_URL
+        value: https://bridge.netlify.app/api/vault
+      - key: FEDERATION_SYNC_KEY
+        generateValue: true
+      - key: DATADOG_REGION
+        value: us
       - key: CORS_ALLOW_ALL
         value: false
       - key: ALLOWED_ORIGINS
         value: https://bridge.netlify.app,https://sr-aibridge.netlify.app
+      - key: AUTO_DIAGNOSE
+        value: true
+      - key: DEBUG
+        value: false
 
 # SQLite-first deployment - no external database needed
 # Data persists in the container filesystem
