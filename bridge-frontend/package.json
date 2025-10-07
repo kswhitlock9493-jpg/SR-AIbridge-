@@ -26,10 +26,12 @@
   "scripts": {
     "dev": "vite",
     "start": "vite",
+    "prebuild": "python3 ../scripts/validate_netlify_env.py",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "repair": "python3 ../scripts/repair_netlify_env.py"
   },
   "eslintConfig": {
     "root": true,
