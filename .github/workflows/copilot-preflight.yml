@@ -7,7 +7,7 @@ on:
 
 jobs:
   preflight:
-    name: Prepare Copilot Environment
+    name: Prepare Copilot Environment & Watchdog
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -46,13 +46,12 @@ jobs:
         run: |
           echo "🌐 Configuring temporary allowlist..."
           mkdir -p .github/allowlist
-          echo "example.com" >> .github/allowlist/hosts.txt
-          echo "api.netlify.com" >> .github/allowlist/hosts.txt
           echo "bridge.sr-aibridge.com" >> .github/allowlist/hosts.txt
           echo "diagnostics.sr-aibridge.com" >> .github/allowlist/hosts.txt
+          echo "api.netlify.com" >> .github/allowlist/hosts.txt
           echo "render.com" >> .github/allowlist/hosts.txt
-          echo "pypi.org" >> .github/allowlist/hosts.txt
           echo "registry.npmjs.org" >> .github/allowlist/hosts.txt
+          echo "pypi.org" >> .github/allowlist/hosts.txt
           echo "✅ Added default allowlist hosts."
 
       - name: Preflight Sanity Check
@@ -60,3 +59,7 @@ jobs:
           echo "🚀 Running DeepScan preflight..."
           python3 bridge_backend/scripts/deepscan_reporter.py || echo "⚠️ DeepScan preflight skipped (safe mode)"
           echo "✅ Preflight sequence complete."
+
+      - name: Run Firewall Watchdog
+        run: |
+          python3 scripts/firewall_watchdog.py
