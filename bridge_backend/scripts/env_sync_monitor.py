@@ -22,16 +22,19 @@ def ping(url):
         print(f"Error pinging {url}: {e}")
         return 0
 
-def report(status):
+def report(backend, frontend):
     """Report sync status to Bridge diagnostics."""
+    healthy = backend == 200 and frontend == 200
     payload = {
         "type": "ENV_SYNC_REPORT",
-        "status": "ok" if status else "drift",
+        "backend": backend,
+        "frontend": frontend,
+        "status": "healthy" if healthy else "drift",
         "timestamp": time.ctime()
     }
     try:
         requests.post(f"{BRIDGE_DIAGNOSTICS}/envsync", json=payload, timeout=10)
-        print(f"✅ Reported sync status: {payload['status']}")
+        print(json.dumps(payload, indent=2))
     except Exception as e:
         print(f"⚠️ Failed to report to diagnostics: {e}")
 
@@ -57,7 +60,7 @@ def main():
         if frontend != 200:
             print(f"  - Netlify frontend returned: {frontend}")
     
-    report(status)
+    report(backend, frontend)
     print("=" * 50)
     
     return 0 if status else 1

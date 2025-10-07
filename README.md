@@ -1754,6 +1754,27 @@ curl https://sr-aibridge.onrender.com/health/full
 python3 bridge_backend/scripts/env_sync_monitor.py
 ```
 
+**Manual Triage:**
+
+For emergency patching and diagnostics:
+
+```bash
+# Validate environment setup
+python3 scripts/validate_env_setup.py
+
+# Auto-repair Netlify environment
+python3 scripts/repair_netlify_env.py
+
+# Check environment parity between platforms
+python3 scripts/check_env_parity.py
+
+# Report bridge event to diagnostics
+python3 scripts/report_bridge_event.py
+
+# Run full environment sync monitor
+python3 bridge_backend/scripts/env_sync_monitor.py
+```
+
 ### Performance Monitoring
 
 **Metrics Collected:**
