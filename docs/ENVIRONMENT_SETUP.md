@@ -227,43 +227,108 @@ Variables **never** safe for frontend:
 
 ## Troubleshooting
 
+### Netlify Scanner Compliance & Security Policy (v1.6.4)
+
+**Important:** Version 1.6.4 introduces legitimate scanner compliance instead of suppression.
+
+#### Safe Omit Paths vs Sensitive Paths
+
+The following table maps safe directories (can be excluded from scanning) vs sensitive paths (must be scanned):
+
+| Path | Type | Scanner Treatment | Reason |
+|------|------|------------------|---------|
+| `node_modules/**` | Safe | ✅ Omit | Third-party dependencies |
+| `bridge-frontend/dist/**` | Safe | ✅ Omit | Build artifacts |
+| `bridge-frontend/build/**` | Safe | ✅ Omit | Build artifacts |
+| `bridge-frontend/public/**` | Safe | ✅ Omit | Static assets |
+| `bridge-frontend/src/**` | Sensitive | ❌ Must Scan | Application code |
+| `bridge_backend/**` | Sensitive | ❌ Must Scan | Backend code |
+| `.env*` files | Sensitive | ❌ Must Scan | Environment configs |
+
+#### How to Read Scanner Logs
+
+When Netlify scanner runs, look for these indicators:
+
+**✅ Clean Output (Expected):**
+```
+Building site...
+✓ Secrets scanning: No issues found
+✓ Functions directory validated
+✓ Site built successfully
+```
+
+**⚠️ Warning Output (Review Required):**
+```
+⚠ Secrets scanning found 1 instance
+  → Check file: src/config.js line 42
+  → Reason: Potential API key pattern detected
+```
+
+**❌ Blocking Output (Action Required):**
+```
+❌ Secrets scanning found 3 instances
+  → Build blocked for security review
+  → Remove hardcoded secrets before deployment
+```
+
+#### Configuration Validation
+
+To validate your scanner configuration:
+
+```bash
+# Run scanner compliance validation
+python3 scripts/validate_scanner_output.py
+```
+
+This script checks:
+- ✅ Scanner is enabled (not suppressed)
+- ✅ Proper omit paths are configured
+- ✅ Functions directory exists
+- ✅ No false positives in build logs
+
 ### Build Fails with Missing Environment Variables
 
 1. Check that all required variables are set in Netlify Dashboard
 2. Run the repair script: `npm run repair` (from `bridge-frontend` directory)
 3. Verify variables were set correctly in Netlify Dashboard
 
-### Secret Scan Warnings
+### Secret Scan Warnings (Updated for v1.6.4)
 
-If Netlify flags secret scans despite proper configuration:
+**New Approach:** Version 1.6.4 uses legitimate compliance instead of scanner suppression.
 
-1. Verify `SECRETS_SCAN_ENABLED = "false"` is set in `netlify.toml`
-2. Verify `SECRETS_SCAN_DISABLED = "true"` is also set (double suppression)
-3. Check that `SECRETS_SCAN_OMIT_KEYS` includes all safe environment variables
-4. Ensure no actual secrets are hardcoded in source files
-5. Use environment variables for all sensitive values
-6. Check that `.env` files are in `.gitignore`
+If Netlify flags secret scans:
 
-**Secrets-Scan Mitigation Strategy:**
-
-The following configuration silences false positives:
+1. **DO NOT disable the scanner** - This violates Netlify's security policy
+2. Run validation: `python3 scripts/validate_scanner_output.py`
+3. Check if flagged content is actually a secret:
+   - If YES: Remove hardcoded secret, use environment variable
+   - If NO (false positive): Verify omit paths are configured correctly
+4. Ensure proper configuration in `netlify.toml`:
 
 ```toml
 [build.environment]
-  SECRETS_SCAN_ENABLED = "false"
-  SECRETS_SCAN_DISABLED = "true"
-  SECRETS_SCAN_OMIT_KEYS = "NODE_ENV,VITE_API_BASE,REACT_APP_API_URL"
-  SECRETS_SCAN_LOG_LEVEL = "error"
+  SECRETS_SCAN_ENABLED = "true"  # ✅ Scanner enabled
+  SECRETS_SCAN_LOG_LEVEL = "warn"
 
 [build.processing.secrets_scan]
-  omit = ["node_modules/**", "dist/**", "build/**"]
+  omit = [
+    "node_modules/**",
+    "bridge-frontend/dist/**",
+    "bridge-frontend/build/**",
+    "bridge-frontend/public/**"
+  ]
 ```
 
-This configuration:
-- Disables secret scanning via multiple flags
-- Excludes safe environment variables from scanning
-- Omits build artifacts and dependencies
-- Reduces log noise to errors only
+**What Changed from v1.6.3:**
+- ❌ Removed: `SECRETS_SCAN_DISABLED = "true"` (was a bypass)
+- ❌ Removed: `SECRETS_SCAN_OMIT_KEYS` (not a proper solution)
+- ✅ Added: Proper omit paths for build artifacts only
+- ✅ Added: Scanner validation in CI pipeline
+
+**Result:**
+- Scanner runs legitimately on source code
+- Build artifacts are excluded (they contain no secrets)
+- Compliance is achieved without policy violations
 
 ### Database Connection Errors on Render
 
