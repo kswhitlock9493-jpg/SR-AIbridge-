@@ -3,35 +3,26 @@
 # ==========================================
 
 [build]
-  base = "bridge-frontend"
-  command = "npm ci && npm run build"
+  base    = "bridge-frontend"
   publish = "bridge-frontend/dist"
+  command = "npm install --include=dev && npm run build"
+  functions = "bridge-frontend/netlify/functions"
 
 [build.environment]
+  NODE_VERSION = "22"
   NODE_ENV = "production"
-  AUTO_REPAIR_MODE = "true"
-  BRIDGE_HEALTH_REPORT = "enabled"
-  SECRETS_SCAN_ENABLED = "true"
-  SECRETS_SCAN_LOG_LEVEL = "warn"
-  DIAGNOSTIC_KEY = "sr-dx-prod-bridge-001"
-  CONFIDENCE_MODE = "enabled"
-  CASCADE_MODE = "production"
-  PUBLIC_API_BASE = "/api"
-  VITE_API_BASE = "https://sr-aibridge.onrender.com/api"
-  REACT_APP_API_URL = "https://sr-aibridge.onrender.com/api"
 
-# ✅ Exclude only safe directories that contain no secrets
+[build.processing]
+  skip_processing = false
+  skip_functions_bundling = false
+
 [build.processing.secrets_scan]
-  omit = [
-    "node_modules/**",
-    "bridge-frontend/dist/**",
-    "bridge-frontend/build/**",
-    "bridge-frontend/public/**"
-  ]
+  enabled = true
+  omit_keys = "CASCADE_MODE,VAULT_URL,AUTO_DIAGNOSE,VITE_API_BASE,REACT_APP_API_URL,NODE_ENV,PUBLIC_API_BASE,DIAGNOSTIC_KEY,BRIDGE_HEALTH_REPORT,AUTO_REPAIR_MODE,CONFIDENCE_MODE"
+  exclude = [ "bridge-frontend/dist/**", "bridge-frontend/public/**", "bridge-frontend/node_modules/**" ]
 
-# ✅ Valid, empty functions directory to satisfy build system
-[functions]
-  directory = "bridge-frontend/netlify/functions"
+[[plugins]]
+  package = "@netlify/plugin-functions-core"
 
 # ================================
 # Redirects
@@ -43,9 +34,14 @@
 
 [context.production.environment]
   NODE_ENV = "production"
+  AUTO_REPAIR_MODE = "true"
   BRIDGE_HEALTH_REPORT = "enabled"
-  SECRETS_SCAN_ENABLED = "true"
-  SECRETS_SCAN_LOG_LEVEL = "warn"
+  DIAGNOSTIC_KEY = "sr-dx-prod-bridge-001"
+  CONFIDENCE_MODE = "enabled"
+  CASCADE_MODE = "production"
+  PUBLIC_API_BASE = "/api"
+  VITE_API_BASE = "https://sr-aibridge.onrender.com/api"
+  REACT_APP_API_URL = "https://sr-aibridge.onrender.com/api"
 
 # ================================
 # Headers

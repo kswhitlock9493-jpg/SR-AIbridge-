@@ -42,9 +42,11 @@ bridge_backend/
 *.sqlite
 *.sqlite3
 
-# Scan reports
+# Scan and verification reports
 bridge_backend/scan_reports/
+netlify_build_verification.json
 
-# Netlify functions (deployment-specific)
+# Netlify functions (deployment-specific, keep only diagnostic.js)
 bridge-frontend/netlify/functions/*
 !bridge-frontend/netlify/functions/.keep
+!bridge-frontend/netlify/functions/diagnostic.js

@@ -3,11 +3,15 @@
 node_modules/
 dist/
 build/
+.cache/
+*.log
+
+# Netlify Functions (keep only diagnostic.js)
 bridge-frontend/netlify/functions/*
 !bridge-frontend/netlify/functions/.keep
 !bridge-frontend/netlify/functions/diagnostic.js
+
 __pycache__/
-*.log
 *.cache
 *.pyc
 coverage/
@@ -60,6 +64,9 @@ bridge_backend/api_triage_report.json
 bridge_backend/hooks_triage_report.json
 bridge_backend/ci_cd_report.json
 bridge_backend/unified_timeline.json
+
+# Verification reports
+netlify_build_verification.json
 
 # Environment
 .env
