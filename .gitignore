@@ -45,6 +45,7 @@ bridge_backend/scan_reports/
 
 # Environment
 .env
+.env.render
 .venv
 env/
 venv/
