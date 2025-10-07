@@ -1,0 +1,43 @@
+name: 🔁 Environment Parity & Auto-Heal
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  check-env-parity:
+    name: Validate & Auto-Heal Render ↔ Netlify ↔ .env.production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧰 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: 📦 Install Dependencies
+        run: |
+          pip install requests python-dotenv
+
+      - name: 🔍 Validate & Auto-Heal Environment Parity
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+          BRIDGE_URL: ${{ secrets.BRIDGE_URL }}
+          NETLIFY_API_KEY: ${{ secrets.NETLIFY_API_KEY }}
+        run: |
+          echo "🔎 Checking parity between Netlify, Render, and .env.production..."
+          python3 scripts/check_env_parity.py || (
+            echo "⚠️ Parity check failed — initiating auto-repair..."
+            python3 scripts/repair_netlify_env.py
+            echo "🔁 Re-running parity check after repair..."
+            python3 scripts/check_env_parity.py || exit 1
+            echo "📡 Notifying Bridge of auto-heal event..."
+            python3 scripts/report_bridge_event.py
+          )
