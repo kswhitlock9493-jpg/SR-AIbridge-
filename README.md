@@ -8,6 +8,7 @@ SR-AIbridge is a comprehensive, production-ready platform for managing AI agents
 [![Python](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18+-blue.svg)](https://reactjs.org/)
+[![Bridge Status](https://img.shields.io/badge/Bridge_Health-Stable-brightgreen)](https://sr-aibridge.onrender.com/health)
 
 ## ✨ What is SR-AIbridge?
 
@@ -1719,6 +1720,38 @@ git push origin main
 
 # Via Netlify Dashboard
 # Deployments → Select previous → "Publish deploy"
+```
+
+**Manual Redeploy:**
+
+If you need to manually trigger a redeploy:
+
+```bash
+# Clear Netlify cache and redeploy
+# 1. Go to Netlify Dashboard
+# 2. Site settings → Build & deploy → Clear cache
+# 3. Trigger deploy → Deploy site
+
+# Trigger Render redeploy
+# 1. Go to Render Dashboard
+# 2. Select your service
+# 3. Manual Deploy → Deploy latest commit
+```
+
+**Diagnostic API Test Commands:**
+
+```bash
+# Test backend health endpoint
+curl https://sr-aibridge.onrender.com/api/health
+
+# Test diagnostics sync endpoint
+curl https://diagnostics.sr-aibridge.com/envsync
+
+# Verify bridge status
+curl https://sr-aibridge.onrender.com/health/full
+
+# Check environment sync status
+python3 bridge_backend/scripts/env_sync_monitor.py
 ```
 
 ### Performance Monitoring

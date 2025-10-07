@@ -113,7 +113,7 @@ AUTO_DIAGNOSE=true
 
 The `.env.netlify` file contains frontend-safe environment variables. These should be set in the Netlify Dashboard, not committed to the repository.
 
-### netlify.toml Configuration
+### netlify.toml Configuration (v1.6.2)
 
 The `netlify.toml` file includes:
 
@@ -126,17 +126,38 @@ The `netlify.toml` file includes:
 [build.environment]
   NODE_ENV = "production"
   SECRETS_SCAN_ENABLED = "false"
-  VITE_API_BASE = "https://sr-aibridge.onrender.com"
-  REACT_APP_API_URL = "https://sr-aibridge.onrender.com"
+  SECRETS_SCAN_LOG_LEVEL = "error"
+  VITE_API_BASE = "https://sr-aibridge.onrender.com/api"
+  REACT_APP_API_URL = "https://sr-aibridge.onrender.com/api"
+  PUBLIC_API_BASE = "/api"
+  CASCADE_MODE = "production"
+  CONFIDENCE_MODE = "enabled"
+  DIAGNOSTIC_KEY = "sr-dx-prod-bridge-001"
+  AUTO_REPAIR_MODE = "true"
+  BRIDGE_HEALTH_REPORT = "enabled"
+
+[build.processing.secrets_scan]
+  omit = ["node_modules/**", "dist/**", "build/**"]
+
+[functions]
+  directory = "bridge-frontend/netlify/functions"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+[context.production.environment]
+  NODE_ENV = "production"
+  SECRETS_SCAN_ENABLED = "false"
+  SECRETS_SCAN_LOG_LEVEL = "error"
+  BRIDGE_HEALTH_REPORT = "enabled"
 ```
 
 **Key Points:**
 - `SECRETS_SCAN_ENABLED = "false"` disables redundant secret scanning since all secrets are properly managed through Netlify's encrypted environment layer
+- `AUTO_REPAIR_MODE = "true"` enables automatic environment repair on deployment
+- `BRIDGE_HEALTH_REPORT = "enabled"` activates continuous health monitoring
 - Build command is simplified to `npm run build` (dev dependencies are installed automatically in Netlify)
 - All environment variables route through Netlify's encrypted environment layer
 
@@ -260,6 +281,75 @@ npm run repair
 ### Environment Parity Check (`check_env_parity.py`)
 
 Compares environment variables across Netlify, Render, and `.env.production` to ensure synchronization.
+
+### Environment Sync Monitor (`env_sync_monitor.py`)
+
+Runs nightly to verify both Render and Netlify environments and log any drift.
+
+**Location:** `bridge_backend/scripts/env_sync_monitor.py`
+
+**Purpose:**
+- Checks parity between Render backend and Netlify frontend
+- Pings both environments to verify availability
+- Reports drift to Bridge diagnostics endpoint
+- Provides real-time health status
+
+**Usage:**
+```bash
+python3 bridge_backend/scripts/env_sync_monitor.py
+```
+
+**Features:**
+- ✅ Automated nightly sync verification
+- ✅ Real-time health reporting to diagnostics dashboard
+- ✅ Environment drift detection
+- ✅ Integration with CI/CD pipeline
+
+## Auto-Repair & CI/CD Integration
+
+### GitHub Actions Auto-Heal Workflow
+
+**File:** `.github/workflows/env_autoheal.yml`
+
+**Triggers:**
+- Push to `main` branch
+- Manual workflow dispatch
+
+**Features:**
+- ✅ Validates all environment variables
+- ✅ Repairs missing Netlify environment values via API
+- ✅ Reports DEPLOYMENT_REPAIR or STABLE events to Bridge diagnostics
+- ✅ Runs automatically on every commit
+
+**Workflow Steps:**
+1. Setup Python 3.11 environment
+2. Install dependencies (requests, toml, aiohttp)
+3. Validate Netlify & Render environment configuration
+4. Run environment auto-repair if needed
+5. Post bridge diagnostics report
+
+**Required GitHub Secrets:**
+- `NETLIFY_API_KEY` - Your Netlify API access token
+- `NETLIFY_SITE_ID` - Your site's unique identifier
+- `BRIDGE_URL` - Bridge diagnostics endpoint URL
+
+### Auto-Repair Mode
+
+When `AUTO_REPAIR_MODE = "true"` is set in `netlify.toml`:
+
+1. **Automatic Variable Restoration**: Missing Netlify variables are automatically patched via API
+2. **Self-Healing**: Environment drift is detected and corrected automatically
+3. **Diagnostics Reporting**: All repair actions are logged to the Bridge diagnostics dashboard
+4. **Zero-Touch Recovery**: No manual intervention required for common environment issues
+
+### Bridge Health Reporting
+
+When `BRIDGE_HEALTH_REPORT = "enabled"`:
+
+- Real-time health status posted to diagnostics dashboard
+- Environment sync status monitored continuously
+- Build and deployment events tracked
+- Parity violations logged and alerted
 
 ## Conclusion
 
