@@ -1,7 +1,6 @@
----
-name: Deploy SR-AIbridge
+name: Build & Deploy SR-AIbridge
 
-"on":
+on:
   push:
     branches: [main]
   pull_request:
@@ -38,7 +37,7 @@ jobs:
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
-          publish-dir: './bridge-frontend/build'
+          publish-dir: './bridge-frontend/dist'
           production-branch: main
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions"
@@ -48,6 +47,22 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         timeout-minutes: 10
+
+      - name: Notify Bridge Diagnostics
+        if: success() && github.ref == 'refs/heads/main'
+        run: |
+          BRIDGE_URL="${{ secrets.BRIDGE_URL || secrets.BACKEND_URL || 'https://sr-aibridge-backend.onrender.com' }}"
+          curl -X POST "$BRIDGE_URL/api/diagnostics" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "type": "DEPLOYMENT_SUCCESS",
+              "status": "success",
+              "source": "GitHubAction",
+              "meta": {
+                "environment": "production",
+                "timestamp": "'"$(date -u +"%Y-%m-%dT%H:%M:%SZ")"'"
+              }
+            }' || echo "Diagnostics notification failed (non-critical)"
 
   # Backend deployment to Render (webhook-based)
   deploy-backend:

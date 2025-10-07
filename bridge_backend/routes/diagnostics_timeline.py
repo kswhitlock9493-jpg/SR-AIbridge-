@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
+from datetime import datetime
 import os
 import requests
 
@@ -32,3 +33,13 @@ async def get_diagnostics_timeline(limit: int = 50):
         return {"count": len(formatted), "events": formatted}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to retrieve diagnostics: {e}")
+
+@router.post("")
+async def submit_diagnostics(request: Request):
+    """Handle frontend diagnostic event submissions gracefully."""
+    try:
+        payload = await request.json() if request.headers.get("content-type") == "application/json" else {}
+        print(f'📡 Bridge Diagnostics Received: {payload}')
+        return {"status": "received", "time": datetime.utcnow().isoformat()}
+    except Exception as err:
+        return {"status": "error", "message": str(err)}
