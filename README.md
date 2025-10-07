@@ -1788,6 +1788,8 @@ alerts:
 
 ## ⚙️ Configuration
 
+> 📋 **For Production Deployment:** See [docs/ENVIRONMENT_SETUP.md](docs/ENVIRONMENT_SETUP.md) for complete Render and Netlify environment variable setup.
+
 ### Environment Variables
 
 #### Backend Configuration

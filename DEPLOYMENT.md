@@ -1,5 +1,7 @@
 # SR-AIbridge Deployment Guide
 
+> 📋 **New:** For detailed environment variable setup and Render/Netlify synchronization, see [ENVIRONMENT_SETUP.md](docs/ENVIRONMENT_SETUP.md)
+
 ## SQLite-first Backend with Full Health Monitoring
 
 This deployment guide covers the new SQLite-first backend implementation with comprehensive health checks and self-healing capabilities.
