@@ -823,6 +823,41 @@ Features:
 
 See [`docs/engine_smoke_test.md`](docs/engine_smoke_test.md) for detailed documentation.
 
+### Full Endpoint Testing
+
+For comprehensive endpoint validation, including health checks, diagnostics, agents, and all engines:
+
+```bash
+python3 test_endpoints_full.py
+```
+
+Test deployed backend:
+```bash
+python3 test_endpoints_full.py https://your-backend.onrender.com
+```
+
+Features:
+- ✅ Tests all critical API endpoints (health, status, diagnostics, agents)
+- ✅ Validates engine endpoints with retry logic
+- ✅ Detailed pass/fail reporting with response times
+- ✅ JSON output format for CI/CD integration
+- ✅ Configurable timeout and retry settings
+- ✅ Color-coded console output
+
+Advanced usage:
+```bash
+# Custom timeout
+python3 test_endpoints_full.py --timeout 60
+
+# JSON output for CI/CD
+python3 test_endpoints_full.py --json
+
+# Combine options
+python3 test_endpoints_full.py https://your-backend.onrender.com --timeout 60 --json
+```
+
+See [`docs/endpoint_test_full.md`](docs/endpoint_test_full.md) for detailed documentation.
+
 ### Health & Monitoring
 - `GET /health` - Basic health check for load balancers
 - `GET /health/full` - Comprehensive system health
