@@ -1,6 +1,6 @@
 [build]
-  base = ""                         # run npm from repo root
-  command = "cd bridge-frontend && npm run build"
+  base = ""                                   # Run from repo root
+  command = "cd bridge-frontend && npm ci && npm run build"
   publish = "bridge-frontend/build"
 
 [functions]

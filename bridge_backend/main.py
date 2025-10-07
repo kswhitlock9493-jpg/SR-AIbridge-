@@ -57,6 +57,7 @@ try:
     from bridge_core.payments.stripe_webhooks import router as stripe_router
     from bridge_core.heritage.routes import router as heritage_router
     from bridge_core.scans.routes import router as scans_router
+    from routes.control import router as control_router
 except ImportError:
     # Absolute imports when running from parent directory (Render deployment)
     from bridge_backend.bridge_core.protocols.routes import router as protocols_router
@@ -93,6 +94,7 @@ except ImportError:
     from bridge_backend.bridge_core.payments.stripe_webhooks import router as stripe_router
     from bridge_backend.bridge_core.heritage.routes import router as heritage_router
     from bridge_backend.bridge_core.scans.routes import router as scans_router
+    from bridge_backend.routes.control import router as control_router
 
 app.include_router(protocols_router)
 app.include_router(complex_protocols_router)
@@ -128,6 +130,7 @@ app.include_router(permissions_router)
 app.include_router(stripe_router)
 app.include_router(heritage_router)
 app.include_router(scans_router)
+app.include_router(control_router)
 
 # Load registry from vault at startup
 protocol_storage.load_registry()

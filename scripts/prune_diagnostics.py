@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 
 def prune_old_diagnostics():
     bridge_url = os.getenv("BRIDGE_URL")
+    webhook = os.getenv("BRIDGE_SLACK_WEBHOOK")
     if not bridge_url:
         print("⚠️ BRIDGE_URL missing.")
         return
@@ -41,6 +42,11 @@ def prune_old_diagnostics():
             }
         }
         requests.post(endpoint, json=payload, timeout=10)
+        
+        # Slack notify
+        if webhook:
+            requests.post(webhook, json={"text": f"🧹 Deleted {len(to_delete)} old Bridge diagnostics."}, timeout=5)
+        
         print(f"✅ Pruned {len(to_delete)} diagnostics; cleanup logged to Bridge.")
 
     except Exception as e:
