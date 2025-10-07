@@ -23,6 +23,9 @@ endpoint_report.json
 # API triage reports
 api_triage_report.json
 
+# Hooks triage reports
+hooks_triage_report.json
+
 # CI/CD triage reports
 ci_cd_report.json
 
