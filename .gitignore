@@ -70,6 +70,7 @@ logs/copilot_firewall.log
 logs/copilot_diagnostics.log
 bridge_backend/logs/copilot_env_validation.json
 bridge_backend/logs/firewall_watchdog.log
+bridge_backend/logs/integrity_audit.json
 **/bridge_backend/logs/copilot_env_validation.json
 
 # OS
