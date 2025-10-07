@@ -56,3 +56,22 @@ def init_database_check():
     except RuntimeError:
         # No event loop available yet, will be called during FastAPI startup
         pass
+
+
+# Auto-diagnose deployment logs if enabled
+def run_auto_diagnose():
+    """Run deployment diagnostics if AUTO_DIAGNOSE is enabled"""
+    try:
+        from bridge_backend.config import settings
+        from subprocess import run
+        import os
+        
+        if settings.AUTO_DIAGNOSE:
+            print("🧩 Auto-diagnose active. Running deploy_diagnose.py...")
+            # Get the directory containing this __init__.py file
+            backend_dir = os.path.dirname(os.path.abspath(__file__))
+            script_path = os.path.join(backend_dir, "scripts", "deploy_diagnose.py")
+            run(["python3", script_path], check=False)
+    except Exception as e:
+        print(f"⚠️ Auto-diagnose skipped: {e}")
+
