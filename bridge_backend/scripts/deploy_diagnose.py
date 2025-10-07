@@ -33,6 +33,7 @@ def fetch_render_logs():
 
 def fetch_netlify_logs():
     if not NETLIFY_API_KEY or not NETLIFY_SITE_ID:
+        print("⚠️  Skipping Netlify diagnostics: no API credentials.")
         return []
     url = f"https://api.netlify.com/api/v1/sites/{NETLIFY_SITE_ID}/deploys"
     headers = {"Authorization": f"Bearer {NETLIFY_API_KEY}"}
