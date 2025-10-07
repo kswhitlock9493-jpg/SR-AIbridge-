@@ -1,0 +1,48 @@
+name: Endpoint Triage
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"  # every hour
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Dependencies
+        run: |
+          pip install requests
+
+      - name: Run Endpoint Triage
+        env:
+          BRIDGE_BASE_URL: ${{ secrets.BACKEND_URL || 'https://sr-aibridge.onrender.com' }}
+          BRIDGE_URL: ${{ secrets.BRIDGE_URL }}
+        run: |
+          cd bridge_backend
+          python3 scripts/endpoint_triage.py --manual
+
+      - name: Upload Diagnostics to Bridge
+        if: always()
+        env:
+          BRIDGE_URL: ${{ secrets.BRIDGE_URL }}
+        run: |
+          if [ -f bridge_backend/endpoint_report.json ]; then
+            curl -X POST "${{ secrets.BRIDGE_URL }}/api/diagnostics" \
+              -H "Content-Type: application/json" \
+              -d @bridge_backend/endpoint_report.json || true
+          fi
+
+      - name: Upload Report Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: endpoint-triage-report
+          path: bridge_backend/endpoint_report.json
+          if-no-files-found: ignore

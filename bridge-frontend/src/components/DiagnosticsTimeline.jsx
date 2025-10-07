@@ -33,6 +33,7 @@ export default function DiagnosticsTimeline() {
       DEPLOYMENT_ROLLBACK: "♻️",
       DEPLOYMENT_REDEPLOY: "🔁",
       DIAGNOSTIC_CLEANUP: "🧹",
+      ENDPOINT_TRIAGE: "🩺",
     };
     return map[type] || "ℹ️";
   };
