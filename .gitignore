@@ -68,6 +68,8 @@ dist/
 # Copilot firewall logs (auto-generated)
 logs/copilot_firewall.log
 logs/copilot_diagnostics.log
+bridge_backend/logs/copilot_env_validation.json
+**/bridge_backend/logs/copilot_env_validation.json
 
 # OS
 .DS_Store

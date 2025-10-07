@@ -1,48 +1,52 @@
-# GitHub Copilot Agent Configuration
-version: 1.1
-firewall:
-  allowlist:
-    - "api.github.com"
-    - "api.netlify.com"
-    - "bridge.sr-aibridge.com"
-    - "diagnostics.sr-aibridge.com"
-    - "render.com"
-    - "registry.npmjs.org"
-    - "pypi.org"
-    - "nodejs.org"
-    - "cdn.jsdelivr.net"
-    - "raw.githubusercontent.com"
-    - "github.com"
-  block_unknown_hosts: true
-  log_unknown_access: true
-  log_path: "logs/copilot_firewall.log"
+version: 1
+agent:
+  enabled: true
 
-env:
-  NODE_ENV: production
-  PYTHONPATH: "${{ github.workspace }}"
-  BRIDGE_URL: "${{ secrets.BRIDGE_URL }}"
-  NETLIFY_SITE_ID: "${{ secrets.NETLIFY_SITE_ID }}"
-  NETLIFY_AUTH_TOKEN: "${{ secrets.NETLIFY_AUTH_TOKEN }}"
-  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  environment:
+    python_version: "3.11"
+    node_version: "20.x"
+    preinstalled_tools:
+      - pip
+      - poetry
+      - npm
+      - netlify-cli
+      - requests
+      - toml
+      - aiohttp
+    env_vars:
+      - name: BRIDGE_ENV
+        value: "production"
+      - name: NETLIFY_API
+        value: "https://api.netlify.com"
+      - name: BRIDGE_BACKEND
+        value: "https://bridge.sr-aibridge.com"
+      - name: BRIDGE_DIAGNOSTICS
+        value: "https://diagnostics.sr-aibridge.com"
 
-setup:
-  run_before_firewall: true
-  auto_update_packages: true
-  ensure_tools:
-    - python3
-    - pip
-    - node
-    - npm
+  firewall:
+    mode: "custom"
+    allowlist:
+      - https://api.netlify.com
+      - https://bridge.sr-aibridge.com
+      - https://diagnostics.sr-aibridge.com
+      - https://render.com
+      - https://registry.npmjs.org
+      - https://pypi.org
+      - https://nodejs.org
+      - https://cdn.jsdelivr.net
+      - https://raw.githubusercontent.com
+      - https://github.com
+    blocklist:
+      - https://example.com
 
-# Diagnostics and telemetry configuration
-diagnostics:
-  logging_level: "info"
-  watchdog_integration: true
-  report_frequency: "per_run"
-  triage:
-    enabled: true
-    alert_on_failures: true
-    report_path: "logs/copilot_diagnostics.log"
+  diagnostics:
+    logging_level: "info"
+    watchdog_integration: true
+    report_frequency: "per_run"
+    triage:
+      enabled: true
+      alert_on_failures: true
+      report_path: "bridge_backend/logs/copilot_diagnostics.log"
 
 telemetry:
   enabled: true
