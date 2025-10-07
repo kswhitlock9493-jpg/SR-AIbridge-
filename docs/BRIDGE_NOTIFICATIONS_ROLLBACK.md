@@ -7,12 +7,12 @@ This document describes the enhanced CI/CD automation features added to SR-AIbri
 ### 1. Netlify Build Context Fix ✅
 **Problem**: Netlify build was failing with exit code 127 because npm wasn't found in PATH.
 
-**Solution**: Updated `netlify.toml` to run from repo root and explicitly `cd` into frontend before building:
+**Solution**: Updated `netlify.toml` to use bridge-frontend as base and ensure dev dependencies are installed:
 ```toml
 [build]
-  base = ""                                   # Run from repo root
-  command = "cd bridge-frontend && npm ci && npm run build"
-  publish = "bridge-frontend/build"
+  base = "bridge-frontend"
+  command = "npm install --include=dev && npm run build"
+  publish = "bridge-frontend/dist"
 ```
 
 ### 2. Slack/Discord Webhook Notifications 📡
@@ -78,7 +78,7 @@ Automatically reverts to the last successful deployment if a deploy fails.
 ```yaml
 - name: 🚀 Deploy to Netlify
   run: |
-    netlify deploy --dir=bridge-frontend/build --site=$NETLIFY_SITE_ID --prod || (
+    netlify deploy --dir=bridge-frontend/dist --site=$NETLIFY_SITE_ID --prod || (
       echo "⚠️ Deploy failed — rolling back to previous successful version"
       python3 scripts/report_bridge_event.py report_deploy_failure || true
       python3 scripts/netlify_rollback.py

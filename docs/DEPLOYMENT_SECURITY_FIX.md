@@ -118,13 +118,13 @@ Updated with production-ready settings:
 ```toml
 [build]
   base = "bridge-frontend"
-  publish = "bridge-frontend/build"
-  command = "npm run build"
+  publish = "bridge-frontend/dist"
+  command = "npm install --include=dev && npm run build"
 
 [build.environment]
+  NODE_ENV = "development"
   PUBLIC_API_BASE = "/api"
   SECRETS_SCAN_OMIT_KEYS = "CASCADE_MODE,VAULT_URL,DATADOG_REGION"
-  NODE_VERSION = "18"
 
 [[redirects]]
   from = "/*"
@@ -133,7 +133,9 @@ Updated with production-ready settings:
 ```
 
 **Key Changes:**
-- `publish` path updated to `bridge-frontend/build` (correct build output)
+- `publish` path updated to `bridge-frontend/dist` (Vite's default output directory)
+- Build command now includes `npm install --include=dev` to ensure Vite and dev dependencies are available
+- `NODE_ENV = "development"` forces installation of devDependencies during Netlify builds
 - `SECRETS_SCAN_OMIT_KEYS` prevents false-positive secret scans
 - `PUBLIC_API_BASE` uses relative path for proxy routing
 - SPA redirects for proper client-side routing
@@ -223,8 +225,8 @@ else:
 1. Connect GitHub repository
 2. Set build settings:
    - Base directory: `bridge-frontend`
-   - Build command: `npm run build`
-   - Publish directory: `bridge-frontend/build`
+   - Build command: `npm install --include=dev && npm run build`
+   - Publish directory: `bridge-frontend/dist`
 3. Add environment variables from `.env.netlify`
 4. Deploy frontend
 5. Verify build completes without secret scan warnings

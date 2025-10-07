@@ -91,8 +91,8 @@ The `netlify.toml` file is configured with:
 
 ### Build Settings
 - **Base directory**: `bridge-frontend`
-- **Publish directory**: `bridge-frontend/build`
-- **Build command**: `npm run build`
+- **Publish directory**: `bridge-frontend/dist`
+- **Build command**: `npm install --include=dev && npm run build`
 
 ### Security Headers
 All responses include security-hardened headers:
