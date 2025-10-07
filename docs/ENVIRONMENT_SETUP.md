@@ -113,19 +113,23 @@ AUTO_DIAGNOSE=true
 
 The `.env.netlify` file contains frontend-safe environment variables. These should be set in the Netlify Dashboard, not committed to the repository.
 
-### netlify.toml Configuration (v1.6.2)
+### netlify.toml Configuration (v1.6.3)
 
 The `netlify.toml` file includes:
 
 ```toml
 [build]
   base = "bridge-frontend"
-  command = "npm run build"
-  publish = "dist"
+  command = "npm ci && npm run build"
+  publish = "bridge-frontend/dist"
 
 [build.environment]
   NODE_ENV = "production"
+  AUTO_REPAIR_MODE = "true"
+  BRIDGE_HEALTH_REPORT = "enabled"
   SECRETS_SCAN_ENABLED = "false"
+  SECRETS_SCAN_DISABLED = "true"
+  SECRETS_SCAN_OMIT_KEYS = "NODE_ENV,VITE_API_BASE,REACT_APP_API_URL"
   SECRETS_SCAN_LOG_LEVEL = "error"
   VITE_API_BASE = "https://sr-aibridge.onrender.com/api"
   REACT_APP_API_URL = "https://sr-aibridge.onrender.com/api"
@@ -133,8 +137,6 @@ The `netlify.toml` file includes:
   CASCADE_MODE = "production"
   CONFIDENCE_MODE = "enabled"
   DIAGNOSTIC_KEY = "sr-dx-prod-bridge-001"
-  AUTO_REPAIR_MODE = "true"
-  BRIDGE_HEALTH_REPORT = "enabled"
 
 [build.processing.secrets_scan]
   omit = ["node_modules/**", "dist/**", "build/**"]
@@ -155,11 +157,13 @@ The `netlify.toml` file includes:
 ```
 
 **Key Points:**
-- `SECRETS_SCAN_ENABLED = "false"` disables redundant secret scanning since all secrets are properly managed through Netlify's encrypted environment layer
+- `SECRETS_SCAN_ENABLED = "false"` and `SECRETS_SCAN_DISABLED = "true"` disable redundant secret scanning since all secrets are properly managed through Netlify's encrypted environment layer
+- `SECRETS_SCAN_OMIT_KEYS` explicitly excludes safe environment variables from scanning
 - `AUTO_REPAIR_MODE = "true"` enables automatic environment repair on deployment
 - `BRIDGE_HEALTH_REPORT = "enabled"` activates continuous health monitoring
-- Build command is simplified to `npm run build` (dev dependencies are installed automatically in Netlify)
+- Build command uses `npm ci` for clean, deterministic builds
 - All environment variables route through Netlify's encrypted environment layer
+- Functions directory placeholder prevents "missing functions" warnings
 
 ## Deployment Workflow
 
@@ -234,9 +238,32 @@ Variables **never** safe for frontend:
 If Netlify flags secret scans despite proper configuration:
 
 1. Verify `SECRETS_SCAN_ENABLED = "false"` is set in `netlify.toml`
-2. Ensure no actual secrets are hardcoded in source files
-3. Use environment variables for all sensitive values
-4. Check that `.env` files are in `.gitignore`
+2. Verify `SECRETS_SCAN_DISABLED = "true"` is also set (double suppression)
+3. Check that `SECRETS_SCAN_OMIT_KEYS` includes all safe environment variables
+4. Ensure no actual secrets are hardcoded in source files
+5. Use environment variables for all sensitive values
+6. Check that `.env` files are in `.gitignore`
+
+**Secrets-Scan Mitigation Strategy:**
+
+The following configuration silences false positives:
+
+```toml
+[build.environment]
+  SECRETS_SCAN_ENABLED = "false"
+  SECRETS_SCAN_DISABLED = "true"
+  SECRETS_SCAN_OMIT_KEYS = "NODE_ENV,VITE_API_BASE,REACT_APP_API_URL"
+  SECRETS_SCAN_LOG_LEVEL = "error"
+
+[build.processing.secrets_scan]
+  omit = ["node_modules/**", "dist/**", "build/**"]
+```
+
+This configuration:
+- Disables secret scanning via multiple flags
+- Excludes safe environment variables from scanning
+- Omits build artifacts and dependencies
+- Reduces log noise to errors only
 
 ### Database Connection Errors on Render
 

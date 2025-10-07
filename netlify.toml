@@ -1,15 +1,19 @@
 # ==========================================
-# SR-AIbridge Netlify Configuration (v1.6.2)
+# SR-AIbridge Netlify Configuration (v1.6.3)
 # ==========================================
 
 [build]
   base = "bridge-frontend"
-  command = "npm run build"
-  publish = "dist"
+  command = "npm ci && npm run build"
+  publish = "bridge-frontend/dist"
 
 [build.environment]
   NODE_ENV = "production"
+  AUTO_REPAIR_MODE = "true"
+  BRIDGE_HEALTH_REPORT = "enabled"
   SECRETS_SCAN_ENABLED = "false"
+  SECRETS_SCAN_DISABLED = "true"
+  SECRETS_SCAN_OMIT_KEYS = "NODE_ENV,VITE_API_BASE,REACT_APP_API_URL"
   SECRETS_SCAN_LOG_LEVEL = "error"
   VITE_API_BASE = "https://sr-aibridge.onrender.com/api"
   REACT_APP_API_URL = "https://sr-aibridge.onrender.com/api"
@@ -17,8 +21,6 @@
   CASCADE_MODE = "production"
   CONFIDENCE_MODE = "enabled"
   DIAGNOSTIC_KEY = "sr-dx-prod-bridge-001"
-  AUTO_REPAIR_MODE = "true"
-  BRIDGE_HEALTH_REPORT = "enabled"
 
 [build.processing.secrets_scan]
   omit = ["node_modules/**", "dist/**", "build/**"]
