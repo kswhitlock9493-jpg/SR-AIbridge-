@@ -2,6 +2,8 @@ from fastapi import APIRouter, HTTPException, Request
 from datetime import datetime
 import os
 import requests
+import json
+from pathlib import Path
 
 router = APIRouter(prefix="/api/diagnostics", tags=["diagnostics"])
 
@@ -33,6 +35,38 @@ async def get_diagnostics_timeline(limit: int = 50):
         return {"count": len(formatted), "events": formatted}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to retrieve diagnostics: {e}")
+
+@router.get("/timeline/unified")
+async def get_unified_timeline():
+    """Return unified health timeline from merged triage reports."""
+    try:
+        # Get the base directory (bridge_backend)
+        base_dir = Path(__file__).parent.parent
+        unified_file = base_dir / "unified_timeline.json"
+        
+        # If unified timeline doesn't exist, try to build it
+        if not unified_file.exists():
+            try:
+                # Import and run the synchrony collector
+                import sys
+                scripts_dir = base_dir / "scripts"
+                sys.path.insert(0, str(scripts_dir))
+                from synchrony_collector import build_unified_timeline
+                build_unified_timeline()
+            except Exception as e:
+                print(f"⚠️ Failed to build unified timeline: {e}")
+                return {"count": 0, "events": []}
+        
+        # Read the unified timeline
+        if unified_file.exists():
+            with open(unified_file, 'r') as f:
+                timeline = json.load(f)
+            return {"count": len(timeline), "events": timeline}
+        else:
+            return {"count": 0, "events": []}
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve unified timeline: {e}")
 
 @router.post("")
 async def submit_diagnostics(request: Request):

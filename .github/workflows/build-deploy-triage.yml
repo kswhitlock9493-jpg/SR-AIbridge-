@@ -72,3 +72,21 @@ jobs:
           BRIDGE_URL: ${{ secrets.BRIDGE_URL }}
         run: python3 -c "from scripts.report_bridge_event import report_deploy_success; report_deploy_success()"
 
+      - name: 📊 Generate CI/CD Triage Report
+        if: always()
+        working-directory: bridge_backend
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            python3 scripts/ci_cd_triage.py DEPLOYMENT_SUCCESS success
+          else
+            python3 scripts/ci_cd_triage.py DEPLOYMENT_FAILURE failed
+          fi
+      
+      - name: 📤 Upload CI/CD Triage Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-cd-triage-report
+          path: bridge_backend/ci_cd_report.json
+          retention-days: 30
+
