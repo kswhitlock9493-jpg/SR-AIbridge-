@@ -410,6 +410,29 @@ Response:
 }
 ```
 
+**Example: Diagnostics Function (v1.6.4)**
+
+The Netlify function provides runtime verification:
+
+```bash
+curl https://your-site.netlify.app/.netlify/functions/diagnostic
+```
+
+Response:
+```json
+{
+  "message": "Bridge function runtime verified.",
+  "status": "operational",
+  "timestamp": "2024-01-15T12:00:00.000Z",
+  "version": "1.6.4"
+}
+```
+
+This endpoint confirms that:
+- ✅ Netlify functions runtime is operational
+- ✅ Build and deployment completed successfully
+- ✅ Function directory is properly configured
+
 #### Agent Management
 
 | Method | Endpoint | Description |

@@ -55,7 +55,7 @@ When `BRIDGE_HEALTH_REPORT = "enabled"`:
 
 ## TOML + Function Sanity Checks
 
-### Netlify Configuration (v1.6.3)
+### Netlify Configuration (v1.6.4)
 
 The `netlify.toml` file is the source of truth for build configuration:
 
@@ -69,10 +69,19 @@ The `netlify.toml` file is the source of truth for build configuration:
   NODE_ENV = "production"
   AUTO_REPAIR_MODE = "true"
   BRIDGE_HEALTH_REPORT = "enabled"
-  SECRETS_SCAN_ENABLED = "false"
-  SECRETS_SCAN_DISABLED = "true"
-  SECRETS_SCAN_OMIT_KEYS = "NODE_ENV,VITE_API_BASE,REACT_APP_API_URL"
-  SECRETS_SCAN_LOG_LEVEL = "error"
+  SECRETS_SCAN_ENABLED = "true"
+  SECRETS_SCAN_LOG_LEVEL = "warn"
+  DIAGNOSTIC_KEY = "sr-dx-prod-bridge-001"
+  CONFIDENCE_MODE = "enabled"
+  CASCADE_MODE = "production"
+
+[build.processing.secrets_scan]
+  omit = [
+    "node_modules/**",
+    "bridge-frontend/dist/**",
+    "bridge-frontend/build/**",
+    "bridge-frontend/public/**"
+  ]
 
 [functions]
   directory = "bridge-frontend/netlify/functions"
@@ -81,57 +90,100 @@ The `netlify.toml` file is the source of truth for build configuration:
 **Key Points:**
 - Uses `npm ci` for deterministic, clean installs
 - Publish path includes `bridge-frontend/` prefix
-- Functions directory placeholder prevents warnings
-- Secret scanner fully disabled with multiple flags
+- Functions directory contains valid diagnostic function
+- **Scanner enabled with proper omit paths (v1.6.4 change)**
 
-### Functions Directory Placeholder
+### Functions Directory Implementation
 
-**Location:** `bridge-frontend/netlify/functions/.keep`
+**Location:** `bridge-frontend/netlify/functions/`
+
+**Contents:**
+- `.keep` - Ensures directory exists in git
+- `diagnostic.js` - Minimal function stub for runtime verification
 
 **Purpose:**
 - Satisfies Netlify's runtime check for functions directory
-- Prevents "missing functions directory" warnings
+- Provides valid endpoint for sanity checks
 - Zero overhead, full compliance
-- Stays inert (no actual functions)
+- No longer just a placeholder (v1.6.4 improvement)
+
+**diagnostic.js Function:**
+```javascript
+export async function handler(event, context) {
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: "Bridge function runtime verified.",
+      status: "operational",
+      timestamp: new Date().toISOString(),
+      version: "1.6.4"
+    })
+  };
+}
+```
 
 **Why This Matters:**
-Netlify checks for the functions directory specified in `netlify.toml`. Without it, builds may emit warnings or fail. The `.keep` file ensures the directory exists without adding functionality.
+Netlify checks for the functions directory specified in `netlify.toml`. The diagnostic function provides a valid, testable endpoint at `/netlify/functions/diagnostic` that confirms the runtime is operational.
 
-## Secret Scanner Suppression
+## Secret Scanner Compliance (v1.6.4 Update)
 
-### The Problem
+### The Paradigm Shift
 
-Netlify's secret scanner can generate false positives for:
-- Environment variable names (not values)
-- API endpoint URLs (public information)
-- Configuration keys that aren't secrets
+**Previous Approach (v1.6.3):** Suppress the scanner completely
+**New Approach (v1.6.4):** Achieve legitimate compliance
 
-### The Solution
+### Why the Change?
 
-Multi-layered suppression in `netlify.toml`:
+Netlify's automated secret scanner is a security feature designed to protect deployments. Disabling it:
+- Violates Netlify's security policies
+- Creates deployment vulnerabilities
+- Can trigger automated blocks
+- Is not a sustainable solution
+
+### The Legitimate Solution
+
+**Proper Configuration in `netlify.toml`:**
 
 ```toml
 [build.environment]
-  SECRETS_SCAN_ENABLED = "false"
-  SECRETS_SCAN_DISABLED = "true"
-  SECRETS_SCAN_OMIT_KEYS = "NODE_ENV,VITE_API_BASE,REACT_APP_API_URL"
-  SECRETS_SCAN_LOG_LEVEL = "error"
+  SECRETS_SCAN_ENABLED = "true"  # ✅ Scanner enabled
+  SECRETS_SCAN_LOG_LEVEL = "warn"
 
 [build.processing.secrets_scan]
-  omit = ["node_modules/**", "dist/**", "build/**"]
+  omit = [
+    "node_modules/**",
+    "bridge-frontend/dist/**",
+    "bridge-frontend/build/**",
+    "bridge-frontend/public/**"
+  ]
 ```
 
 **Strategy:**
-1. **Double Suppression**: Both `SECRETS_SCAN_ENABLED = "false"` and `SECRETS_SCAN_DISABLED = "true"`
-2. **Explicit Omissions**: List safe variables in `SECRETS_SCAN_OMIT_KEYS`
-3. **Directory Exclusions**: Exclude build artifacts and dependencies
-4. **Log Level**: Reduce noise by setting log level to `error`
+1. **Enable Scanner**: Let it run on source code where secrets could exist
+2. **Omit Build Artifacts**: Exclude only directories with no source code
+3. **Clean Source**: Ensure no secrets are hardcoded anywhere
+4. **Use Environment Variables**: All sensitive values come from platform config
 
 **Result:**
-- ✅ Zero false positives
-- ✅ Clean build logs
-- ✅ Actual secrets still protected via Netlify's encrypted environment layer
-- ✅ Build performance improved (scanner overhead removed)
+- ✅ Full compliance with Netlify security policy
+- ✅ Scanner runs legitimately, no bypasses
+- ✅ Build artifacts excluded (they contain no secrets)
+- ✅ No false positives from proper configuration
+- ✅ Sustainable, policy-compliant solution
+
+### Validation
+
+To verify scanner compliance:
+
+```bash
+python3 scripts/validate_scanner_output.py
+```
+
+This checks:
+- Scanner is enabled (not disabled)
+- Proper omit paths configured
+- Functions directory exists
+- No actual secrets in source code
 
 ## Drift Auto-Repair Lifecycle
 
@@ -146,8 +198,8 @@ Multi-layered suppression in `netlify.toml`:
 **Steps:**
 1. **Setup Environment** - Python 3.11, required dependencies
 2. **Validate Environment** - Run `validate_env_setup.py`
-3. **Auto-Repair Drift** - Execute `repair_netlify_env.py`
-4. **Safe Exit** - Always complete successfully (ignore scanner exits)
+3. **Validate Scanner Compliance** - Run `validate_scanner_output.py` (v1.6.4 addition)
+4. **Auto-Repair Drift** - Execute `repair_netlify_env.py`
 5. **Report Diagnostics** - Post event to Bridge dashboard
 
 **Key Feature: Safe Exit**
@@ -291,6 +343,9 @@ python3 -c "import toml; toml.load('netlify.toml')"
 # Validate environment setup
 python3 scripts/validate_env_setup.py
 
+# Validate scanner compliance (v1.6.4)
+python3 scripts/validate_scanner_output.py
+
 # Validate Copilot environment
 python3 scripts/validate_copilot_env.py
 ```
@@ -339,15 +394,39 @@ gh run view --log
 
 ## Troubleshooting
 
-### Build Fails with Secret Scanner Warning
+### Build Fails with Secret Scanner Warning (Updated for v1.6.4)
 
 **Symptom:** Build logs show secret scanner warnings
 
-**Solution:**
-1. Verify `SECRETS_SCAN_DISABLED = "true"` in `netlify.toml`
-2. Add flagged variables to `SECRETS_SCAN_OMIT_KEYS`
-3. Clear Netlify cache and redeploy
-4. If issue persists, contact Netlify support
+**Solution (v1.6.4 Approach):**
+1. **DO NOT disable the scanner** - This violates Netlify policy
+2. Run `python3 scripts/validate_scanner_output.py` to check configuration
+3. Verify proper configuration in `netlify.toml`:
+   ```toml
+   [build.environment]
+     SECRETS_SCAN_ENABLED = "true"
+     SECRETS_SCAN_LOG_LEVEL = "warn"
+   
+   [build.processing.secrets_scan]
+     omit = [
+       "node_modules/**",
+       "bridge-frontend/dist/**",
+       "bridge-frontend/build/**",
+       "bridge-frontend/public/**"
+     ]
+   ```
+4. If scanner finds actual secrets:
+   - Remove hardcoded secrets from source code
+   - Use environment variables instead
+   - Add to Netlify Dashboard as encrypted env vars
+5. If false positive on build artifacts:
+   - Verify omit paths include the flagged directory
+   - Clear Netlify cache and redeploy
+
+**What Changed from v1.6.3:**
+- No longer using `SECRETS_SCAN_DISABLED = "true"`
+- No longer using `SECRETS_SCAN_OMIT_KEYS`
+- Now using legitimate compliance approach
 
 ### Environment Drift Detected
 
@@ -359,13 +438,27 @@ gh run view --log
 3. Run `python3 scripts/repair_netlify_env.py` to auto-fix Netlify
 4. Verify with `python3 bridge_backend/scripts/env_sync_monitor.py`
 
-### Functions Directory Warning
+### Functions Directory Warning (Updated for v1.6.4)
 
 **Symptom:** Netlify build warns about missing functions directory
 
 **Solution:**
-1. Verify `bridge-frontend/netlify/functions/.keep` exists
-2. If missing, create it: `mkdir -p bridge-frontend/netlify/functions && touch bridge-frontend/netlify/functions/.keep`
+1. Verify `bridge-frontend/netlify/functions/` directory exists
+2. Verify it contains both:
+   - `.keep` file (ensures directory exists in git)
+   - `diagnostic.js` function (provides runtime verification)
+3. If missing, restore from repository
+4. Test the function after deploy: `curl https://your-site.netlify.app/.netlify/functions/diagnostic`
+
+**Expected Output:**
+```json
+{
+  "message": "Bridge function runtime verified.",
+  "status": "operational",
+  "timestamp": "2024-01-15T12:00:00.000Z",
+  "version": "1.6.4"
+}
+```
 3. Commit and push
 
 ### Auto-Repair Not Working

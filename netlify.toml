@@ -1,5 +1,5 @@
 # ==========================================
-# SR-AIbridge Netlify Configuration (v1.6.3)
+# SR-AIbridge Netlify Configuration (v1.6.4)
 # ==========================================
 
 [build]
@@ -11,20 +11,25 @@
   NODE_ENV = "production"
   AUTO_REPAIR_MODE = "true"
   BRIDGE_HEALTH_REPORT = "enabled"
-  SECRETS_SCAN_ENABLED = "false"
-  SECRETS_SCAN_DISABLED = "true"
-  SECRETS_SCAN_OMIT_KEYS = "NODE_ENV,VITE_API_BASE,REACT_APP_API_URL"
-  SECRETS_SCAN_LOG_LEVEL = "error"
+  SECRETS_SCAN_ENABLED = "true"
+  SECRETS_SCAN_LOG_LEVEL = "warn"
+  DIAGNOSTIC_KEY = "sr-dx-prod-bridge-001"
+  CONFIDENCE_MODE = "enabled"
+  CASCADE_MODE = "production"
+  PUBLIC_API_BASE = "/api"
   VITE_API_BASE = "https://sr-aibridge.onrender.com/api"
   REACT_APP_API_URL = "https://sr-aibridge.onrender.com/api"
-  PUBLIC_API_BASE = "/api"
-  CASCADE_MODE = "production"
-  CONFIDENCE_MODE = "enabled"
-  DIAGNOSTIC_KEY = "sr-dx-prod-bridge-001"
 
+# ✅ Exclude only safe directories that contain no secrets
 [build.processing.secrets_scan]
-  omit = ["node_modules/**", "dist/**", "build/**"]
+  omit = [
+    "node_modules/**",
+    "bridge-frontend/dist/**",
+    "bridge-frontend/build/**",
+    "bridge-frontend/public/**"
+  ]
 
+# ✅ Valid, empty functions directory to satisfy build system
 [functions]
   directory = "bridge-frontend/netlify/functions"
 
@@ -38,9 +43,9 @@
 
 [context.production.environment]
   NODE_ENV = "production"
-  SECRETS_SCAN_ENABLED = "false"
-  SECRETS_SCAN_LOG_LEVEL = "error"
   BRIDGE_HEALTH_REPORT = "enabled"
+  SECRETS_SCAN_ENABLED = "true"
+  SECRETS_SCAN_LOG_LEVEL = "warn"
 
 # ================================
 # Headers

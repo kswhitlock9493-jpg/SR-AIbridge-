@@ -1,12 +1,23 @@
-# Python
+# SR-AIbridge Safety List
+.env*
+node_modules/
+dist/
+build/
+bridge-frontend/netlify/functions/*
+!bridge-frontend/netlify/functions/.keep
+!bridge-frontend/netlify/functions/diagnostic.js
 __pycache__/
+*.log
+*.cache
 *.pyc
+coverage/
+.DS_Store
+
+# Python
 *.pyo
 *.pyd
 .Python
-build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
