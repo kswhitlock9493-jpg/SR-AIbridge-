@@ -62,6 +62,9 @@ dist/
 .cache/
 .parcel-cache/
 
+# GitHub allowlist (auto-generated)
+.github/allowlist/hosts.txt
+
 # OS
 .DS_Store
 Thumbs.db
