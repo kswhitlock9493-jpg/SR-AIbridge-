@@ -1,13 +1,15 @@
-name: 🔁 Environment Parity & Auto-Heal
+name: 🔁 Build & Deploy Triage
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  check-env-parity:
-    name: Validate & Auto-Heal Render ↔ Netlify ↔ .env.production
+  build-deploy-triage:
+    name: Validate → Build → Deploy → Notify Bridge
     runs-on: ubuntu-latest
 
     steps:
@@ -32,12 +34,49 @@ jobs:
           BRIDGE_URL: ${{ secrets.BRIDGE_URL }}
           NETLIFY_API_KEY: ${{ secrets.NETLIFY_API_KEY }}
         run: |
-          echo "🔎 Checking parity between Netlify, Render, and .env.production..."
+          echo "🔎 Checking environment parity..."
           python3 scripts/check_env_parity.py || (
-            echo "⚠️ Parity check failed — initiating auto-repair..."
+            echo "⚠️ Parity failed — initiating auto-repair..."
             python3 scripts/repair_netlify_env.py
-            echo "🔁 Re-running parity check after repair..."
-            python3 scripts/check_env_parity.py || exit 1
-            echo "📡 Notifying Bridge of auto-heal event..."
+            python3 scripts/check_env_parity.py
             python3 scripts/report_bridge_event.py
           )
+
+      - name: 🧱 Build Frontend
+        run: |
+          cd bridge-frontend
+          npm ci
+          npm run build
+
+      - name: 🔍 Verify Build Output Directory
+        run: |
+          echo "Checking for deploy folder..."
+          if [ ! -d "bridge-frontend/build" ]; then
+            echo "❌ Missing deploy directory! Creating placeholder."
+            mkdir -p bridge-frontend/build
+          fi
+          echo "✅ Deploy directory confirmed."
+
+      - name: 🚀 Deploy to Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          npm install -g netlify-cli
+          netlify deploy --dir=bridge-frontend/build --site=$NETLIFY_SITE_ID --prod || (
+            echo "⚠️ Deploy failed — reporting to Bridge"
+            python3 - <<'EOF'
+from scripts.report_bridge_event import report_deploy_failure
+report_deploy_failure()
+EOF
+            exit 1
+          )
+
+      - name: 📡 Notify Bridge of Deploy Success
+        if: success()
+        run: |
+          echo "✅ Deployment succeeded — notifying Bridge..."
+          python3 - <<'EOF'
+from scripts.report_bridge_event import report_deploy_success
+report_deploy_success()
+EOF

@@ -3,9 +3,15 @@
   publish = "bridge-frontend/build"
   command = "npm run build"
 
+[functions]
+  directory = "bridge-frontend/netlify/functions"
+
 [build.environment]
   PUBLIC_API_BASE = "/api"
   SECRETS_SCAN_OMIT_KEYS = "CASCADE_MODE,VAULT_URL,AUTO_DIAGNOSE,VITE_API_BASE,REACT_APP_API_URL"
+
+[context.production.environment]
+  NODE_ENV = "production"
 
 # ================================
 # Redirects
