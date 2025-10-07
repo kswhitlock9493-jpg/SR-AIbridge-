@@ -77,9 +77,19 @@ async def full_health_check(request: Request):
 @router.get("/status")
 async def status_check():
     """System status endpoint"""
+    import time
     return {
-        "status": "healthy",
-        "service": "SR-AIbridge",
-        "version": "2.0.0",
+        "status": "OK",
+        "uptime": time.process_time(),
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+@router.get("/api/status")
+async def api_status_check():
+    """API status endpoint for frontend health checks"""
+    import time
+    return {
+        "status": "OK",
+        "uptime": time.process_time(),
         "timestamp": datetime.utcnow().isoformat()
     }

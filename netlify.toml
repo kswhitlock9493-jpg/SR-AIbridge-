@@ -7,7 +7,7 @@
   directory = "netlify/functions"
 
 [build.environment]
-  NODE_ENV = "development"
+  NODE_ENV = "production"
   PUBLIC_API_BASE = "/api"
   SECRETS_SCAN_OMIT_KEYS = "CASCADE_MODE,VAULT_URL,AUTO_DIAGNOSE,VITE_API_BASE,REACT_APP_API_URL"
 
