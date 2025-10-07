@@ -22,6 +22,8 @@ agent:
         value: "https://bridge.sr-aibridge.com"
       - name: BRIDGE_DIAGNOSTICS
         value: "https://diagnostics.sr-aibridge.com"
+      - name: RENDER_API
+        value: "https://sr-aibridge.onrender.com"
 
   firewall:
     mode: "custom"
@@ -29,6 +31,7 @@ agent:
       - https://api.netlify.com
       - https://bridge.sr-aibridge.com
       - https://diagnostics.sr-aibridge.com
+      - https://sr-aibridge.onrender.com
       - https://render.com
       - https://registry.npmjs.org
       - https://pypi.org

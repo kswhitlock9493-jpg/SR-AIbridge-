@@ -159,6 +159,102 @@ def test_watchdog_integration():
                 assert "allowed" in first_event
 
 
+def test_resolve_dns():
+    """Test DNS resolution function"""
+    with patch('firewall_watchdog.socket.gethostbyname', return_value='1.2.3.4'):
+        result = firewall_watchdog.resolve_dns("example.com")
+        assert result["host"] == "example.com"
+        assert result["ip"] == "1.2.3.4"
+        assert result["status"] == "resolved"
+    
+    # Test error case
+    with patch('firewall_watchdog.socket.gethostbyname', side_effect=Exception("DNS failed")):
+        result = firewall_watchdog.resolve_dns("invalid.host")
+        assert result["host"] == "invalid.host"
+        assert result["status"] == "error"
+        assert "DNS failed" in result["detail"]
+
+
+def test_ping_host():
+    """Test HTTP ping functionality"""
+    # Test successful ping
+    with patch('firewall_watchdog.requests.get') as mock_get:
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_get.return_value = mock_response
+        
+        result = firewall_watchdog.ping_host("example.com")
+        assert result["host"] == "example.com"
+        assert result["status"] == 200
+    
+    # Test blocked host
+    with patch('firewall_watchdog.requests.get', side_effect=Exception("Connection refused")):
+        result = firewall_watchdog.ping_host("blocked.host")
+        assert result["host"] == "blocked.host"
+        assert result["status"] == "blocked"
+        assert "Connection refused" in result["detail"]
+
+
+def test_self_heal_dns():
+    """Test self-healing DNS functionality"""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        watchdog_log_path = os.path.join(tmpdir, "logs", "watchdog.log")
+        
+        with patch.object(firewall_watchdog, 'WATCHDOG_LOG_PATH', watchdog_log_path), \
+             patch.object(firewall_watchdog, 'TARGETS', ["test1.com", "test2.com"]), \
+             patch('firewall_watchdog.ping_host') as mock_ping, \
+             patch('firewall_watchdog.resolve_dns') as mock_resolve:
+            
+            # Mock ping_host to return blocked for first host, success for second
+            mock_ping.side_effect = [
+                {"host": "test1.com", "status": "blocked", "detail": "timeout"},
+                {"host": "test2.com", "status": 200}
+            ]
+            
+            # Mock resolve_dns
+            mock_resolve.return_value = {
+                "host": "test1.com",
+                "ip": "1.2.3.4",
+                "status": "resolved"
+            }
+            
+            firewall_watchdog.self_heal_dns()
+            
+            # Verify log was created
+            assert os.path.exists(watchdog_log_path)
+            
+            # Verify log contents
+            with open(watchdog_log_path, 'r') as f:
+                log_data = json.loads(f.read().strip())
+                assert "timestamp" in log_data
+                assert "entries" in log_data
+                assert len(log_data["entries"]) == 2
+
+
+def test_write_log():
+    """Test write_log functionality for self-healing DNS"""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        watchdog_log_path = os.path.join(tmpdir, "logs", "watchdog.log")
+        
+        with patch.object(firewall_watchdog, 'WATCHDOG_LOG_PATH', watchdog_log_path):
+            test_data = [
+                {"host": "test.com", "status": "resolved"},
+                {"host": "test2.com", "status": "blocked"}
+            ]
+            
+            firewall_watchdog.write_log(test_data)
+            
+            # Verify file was created
+            assert os.path.exists(watchdog_log_path)
+            
+            # Verify contents
+            with open(watchdog_log_path, 'r') as f:
+                log_entry = json.loads(f.read().strip())
+                assert "timestamp" in log_entry
+                assert "entries" in log_entry
+                assert log_entry["entries"] == test_data
+
+
 if __name__ == "__main__":
     print("Running firewall_watchdog tests...")
     
@@ -183,4 +279,17 @@ if __name__ == "__main__":
     test_watchdog_integration()
     print("✅ test_watchdog_integration")
     
+    test_resolve_dns()
+    print("✅ test_resolve_dns")
+    
+    test_ping_host()
+    print("✅ test_ping_host")
+    
+    test_self_heal_dns()
+    print("✅ test_self_heal_dns")
+    
+    test_write_log()
+    print("✅ test_write_log")
+    
     print("\n🎉 All tests passed!")
+
