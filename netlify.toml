@@ -1,17 +1,15 @@
 [build]
-  base = ""                                   # Run from repo root
-  command = "cd bridge-frontend && npm ci && npm run build"
-  publish = "bridge-frontend/build"
+  base = "bridge-frontend"
+  command = "npm install --include=dev && npm run build"
+  publish = "bridge-frontend/dist"
 
 [functions]
   directory = "bridge-frontend/netlify/functions"
 
 [build.environment]
+  NODE_ENV = "development"
   PUBLIC_API_BASE = "/api"
   SECRETS_SCAN_OMIT_KEYS = "CASCADE_MODE,VAULT_URL,AUTO_DIAGNOSE,VITE_API_BASE,REACT_APP_API_URL"
-
-[context.production.environment]
-  NODE_ENV = "production"
 
 # ================================
 # Redirects

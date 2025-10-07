@@ -15,7 +15,7 @@ export default defineConfig({
   
   // Build configuration for production
   build: {
-    outDir: 'build',
+    outDir: 'dist',
     sourcemap: false,
     minify: 'terser',
     rollupOptions: {
