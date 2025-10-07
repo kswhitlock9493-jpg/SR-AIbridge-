@@ -1,0 +1,31 @@
+# GitHub Copilot Agent Configuration
+version: 1.0
+firewall:
+  allowlist:
+    - "api.github.com"
+    - "api.netlify.com"
+    - "bridge.sr-aibridge.com"
+    - "diagnostics.sr-aibridge.com"
+    - "render.com"
+    - "registry.npmjs.org"
+    - "pypi.org"
+    - "nodejs.org"
+    - "example.com"
+  block_unknown_hosts: true
+
+env:
+  NODE_ENV: production
+  PYTHONPATH: "${{ github.workspace }}"
+  BRIDGE_URL: "${{ secrets.BRIDGE_URL }}"
+  NETLIFY_SITE_ID: "${{ secrets.NETLIFY_SITE_ID }}"
+  NETLIFY_AUTH_TOKEN: "${{ secrets.NETLIFY_AUTH_TOKEN }}"
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+setup:
+  run_before_firewall: true
+  auto_update_packages: true
+  ensure_tools:
+    - python3
+    - pip
+    - node
+    - npm
