@@ -1,3 +1,7 @@
+# ==========================================
+# SR-AIbridge Netlify Configuration (v1.6.2)
+# ==========================================
+
 [build]
   base = "bridge-frontend"
   command = "npm run build"
@@ -6,8 +10,21 @@
 [build.environment]
   NODE_ENV = "production"
   SECRETS_SCAN_ENABLED = "false"
-  VITE_API_BASE = "https://sr-aibridge.onrender.com"
-  REACT_APP_API_URL = "https://sr-aibridge.onrender.com"
+  SECRETS_SCAN_LOG_LEVEL = "error"
+  VITE_API_BASE = "https://sr-aibridge.onrender.com/api"
+  REACT_APP_API_URL = "https://sr-aibridge.onrender.com/api"
+  PUBLIC_API_BASE = "/api"
+  CASCADE_MODE = "production"
+  CONFIDENCE_MODE = "enabled"
+  DIAGNOSTIC_KEY = "sr-dx-prod-bridge-001"
+  AUTO_REPAIR_MODE = "true"
+  BRIDGE_HEALTH_REPORT = "enabled"
+
+[build.processing.secrets_scan]
+  omit = ["node_modules/**", "dist/**", "build/**"]
+
+[functions]
+  directory = "bridge-frontend/netlify/functions"
 
 # ================================
 # Redirects
@@ -16,6 +33,12 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+[context.production.environment]
+  NODE_ENV = "production"
+  SECRETS_SCAN_ENABLED = "false"
+  SECRETS_SCAN_LOG_LEVEL = "error"
+  BRIDGE_HEALTH_REPORT = "enabled"
 
 # ================================
 # Headers
