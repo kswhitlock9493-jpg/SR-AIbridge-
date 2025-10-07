@@ -3,7 +3,10 @@ import os
 import requests
 import hmac
 import hashlib
+import subprocess
+import sys
 from datetime import datetime
+from pathlib import Path
 
 router = APIRouter(prefix="/api/control", tags=["control"])
 
@@ -68,3 +71,32 @@ async def trigger_rollback(request: Request):
         return {"message": "Rollback successful", "rollback_id": last_success["id"]}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/hooks/triage")
+async def trigger_hooks_triage(request: Request):
+    """
+    Manually trigger hooks triage
+    Requires HMAC signature validation
+    """
+    if not verify_signature(request):
+        raise HTTPException(status_code=401, detail="Invalid signature")
+    
+    # Run hooks triage script
+    try:
+        script_path = Path(__file__).parent.parent / "scripts" / "hooks_triage.py"
+        
+        if not script_path.exists():
+            raise HTTPException(status_code=500, detail="Hooks triage script not found")
+        
+        # Run in background
+        subprocess.Popen(
+            [sys.executable, str(script_path), "--manual"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+        
+        return {"message": "Hooks triage initiated", "status": "running"}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to run hooks triage: {str(e)}")
