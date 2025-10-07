@@ -36,6 +36,9 @@ jobs:
           )
 
       - name: 🧱 Build Frontend
+        env:
+          BRIDGE_URL: ${{ secrets.BRIDGE_URL }}
+          BRIDGE_SLACK_WEBHOOK: ${{ secrets.BRIDGE_SLACK_WEBHOOK }}
         run: |
           cd bridge-frontend
           npm ci
@@ -44,6 +47,8 @@ jobs:
             python3 ../scripts/report_bridge_event.py report_build_failure || true
             exit 1
           )
+          echo "✅ Build succeeded — notifying Bridge"
+          python3 ../scripts/report_bridge_event.py report_build_success
 
       - name: 🚀 Deploy to Netlify
         env:

@@ -87,6 +87,10 @@ def report_deploy_success():
     notify_bridge("DEPLOYMENT_SUCCESS", "success", "GitHubAction")
     notify_slack("DEPLOYMENT_SUCCESS", "success", "Deploy completed successfully.")
 
+def report_build_success():
+    notify_bridge("BUILD_SUCCESS", "success", "GitHubAction")
+    notify_slack("BUILD_SUCCESS", "success", "Vite build completed successfully.")
+
 if __name__ == "__main__":
     # Default behavior for standalone execution
     report_repair_success()
