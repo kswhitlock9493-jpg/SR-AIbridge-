@@ -60,6 +60,7 @@ try:
     from bridge_core.scans.routes import router as scans_router
     from routes.control import router as control_router
     from routes.diagnostics_timeline import router as diagnostics_timeline_router
+    from routes.hooks_control import router as hooks_control_router
 except ImportError:
     # Absolute imports when running from parent directory (Render deployment)
     from bridge_backend.bridge_core.protocols.routes import router as protocols_router
@@ -98,6 +99,7 @@ except ImportError:
     from bridge_backend.bridge_core.scans.routes import router as scans_router
     from bridge_backend.routes.control import router as control_router
     from bridge_backend.routes.diagnostics_timeline import router as diagnostics_timeline_router
+    from bridge_backend.routes.hooks_control import router as hooks_control_router
 
 app.include_router(protocols_router)
 app.include_router(complex_protocols_router)
@@ -135,6 +137,7 @@ app.include_router(heritage_router)
 app.include_router(scans_router)
 app.include_router(control_router)
 app.include_router(diagnostics_timeline_router)
+app.include_router(hooks_control_router)
 
 # Load registry from vault at startup
 protocol_storage.load_registry()
@@ -164,6 +167,14 @@ async def startup_triage():
             if os.path.exists(api_script):
                 print("🧬 Running API triage...")
                 subprocess.Popen([sys.executable, api_script], 
+                               stdout=subprocess.DEVNULL, 
+                               stderr=subprocess.DEVNULL)
+            
+            # Run Hooks triage
+            hooks_script = os.path.join(os.path.dirname(__file__), "scripts", "hooks_triage.py")
+            if os.path.exists(hooks_script):
+                print("🪝 Running Hooks triage...")
+                subprocess.Popen([sys.executable, hooks_script], 
                                stdout=subprocess.DEVNULL, 
                                stderr=subprocess.DEVNULL)
         except Exception as e:

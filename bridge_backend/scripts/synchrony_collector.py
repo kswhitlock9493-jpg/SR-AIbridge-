@@ -14,6 +14,7 @@ from typing import List, Dict, Any
 TRIAGE_FILES = [
     "endpoint_report.json",
     "api_triage_report.json",
+    "hooks_triage_report.json",
     "ci_cd_report.json"
 ]
 
