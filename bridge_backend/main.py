@@ -166,6 +166,14 @@ async def startup_triage():
                 subprocess.Popen([sys.executable, api_script], 
                                stdout=subprocess.DEVNULL, 
                                stderr=subprocess.DEVNULL)
+            
+            # Run Hooks triage
+            hooks_script = os.path.join(os.path.dirname(__file__), "scripts", "hooks_triage.py")
+            if os.path.exists(hooks_script):
+                print("🪝 Running Hooks triage...")
+                subprocess.Popen([sys.executable, hooks_script], 
+                               stdout=subprocess.DEVNULL, 
+                               stderr=subprocess.DEVNULL)
         except Exception as e:
             print(f"⚠️ Failed to run triage: {e}")
     
