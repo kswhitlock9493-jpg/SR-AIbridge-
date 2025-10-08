@@ -10,6 +10,7 @@ SR-AIbridge is a comprehensive, production-ready platform for managing AI agents
 [![React](https://img.shields.io/badge/React-18+-blue.svg)](https://reactjs.org/)
 [![Bridge Status](https://img.shields.io/badge/Bridge_Health-Stable-brightgreen)](https://sr-aibridge.onrender.com/health)
 [![Bridge Compliance](https://img.shields.io/badge/Bridge--Compliance-Verified-brightgreen)](docs/ENVIRONMENT_SETUP.md#bridge-compliance-and-plugin-enforcement-v166)
+[![Bridge Sync Status](https://img.shields.io/endpoint?url=https://sr-aibridge.netlify.app/bridge_sync_badge.json)](https://github.com/kswhitlock9493-jpg/SR-AIbridge-/blob/main/.github/workflows/bridge_autodeploy.yml)
 
 ## ✨ What is SR-AIbridge?
 
@@ -26,6 +27,8 @@ SR-AIbridge provides a complete tactical command system for coordinating AI agen
 - 🚢 **Fleet Management** - Armada coordination with role-based access control
 - 📜 **Vault Logging** - Comprehensive activity tracking and audit trails
 - 🔄 **CI/CD Integration** - Automated deployment and health monitoring
+- 🔁 **Auto-Deploy Mode (v1.6.7)** - Self-sustaining 6-hour redeploy cycles with live sync badges
+- 🔧 **Environment Recovery** - Automatic registry self-healing and dependency management
 
 ---
 

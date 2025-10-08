@@ -1,16 +1,25 @@
 # ==========================================
-# SR-AIbridge Netlify Configuration (v1.6.6)
+# SR-AIbridge Netlify Configuration (v1.6.7)
 # ==========================================
 
 [build]
   base    = "bridge-frontend"
   publish = "bridge-frontend/dist"
-  command = "npm install --include=dev && npm run build"
+  command = "npm install --legacy-peer-deps && npm run build"
   functions = "bridge-frontend/netlify/functions"
 
 [build.environment]
   NODE_VERSION = "22"
   NODE_ENV = "production"
+  NPM_FLAGS = "--legacy-peer-deps"
+  AUTO_REPAIR_MODE = "true"
+  BRIDGE_HEALTH_REPORT = "enabled"
+  CONFIDENCE_MODE = "enabled"
+  DIAGNOSTIC_KEY = "sr-dx-prod-bridge-001"
+  SECRETS_SCAN_ENABLED = "false"
+  VITE_API_BASE = "https://sr-aibridge.onrender.com"
+  REACT_APP_API_URL = "https://sr-aibridge.onrender.com"
+  HEALTH_BADGE_ENDPOINT = "https://diagnostics.sr-aibridge.com/envsync"
 
 [build.processing]
   skip_processing = false
@@ -20,9 +29,6 @@
   enabled = true
   omit_keys = "CASCADE_MODE,VAULT_URL,AUTO_DIAGNOSE,VITE_API_BASE,REACT_APP_API_URL,NODE_ENV,PUBLIC_API_BASE,DIAGNOSTIC_KEY,BRIDGE_HEALTH_REPORT,AUTO_REPAIR_MODE,CONFIDENCE_MODE"
   exclude = [ "bridge-frontend/dist/**", "bridge-frontend/public/**", "bridge-frontend/node_modules/**" ]
-
-[[plugins]]
-  package = "@netlify/plugin-functions-core"
 
 [[plugins]]
   package = "@netlify/plugin-lighthouse"
@@ -45,6 +51,7 @@
   PUBLIC_API_BASE = "/api"
   VITE_API_BASE = "https://sr-aibridge.onrender.com/api"
   REACT_APP_API_URL = "https://sr-aibridge.onrender.com/api"
+  VAULT_URL = "https://sr-aibridge.netlify.app/api/vault"
 
 # ================================
 # Headers

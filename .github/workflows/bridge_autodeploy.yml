@@ -1,0 +1,69 @@
+name: Bridge Auto-Deploy Mode
+
+on:
+  push:
+    branches: [ "main" ]
+  schedule:
+    - cron: "0 */6 * * *"   # Every 6 hours
+  workflow_dispatch:
+
+jobs:
+  bridge-autodeploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: bridge-frontend/package-lock.json
+
+      - name: Install Dependencies
+        run: |
+          cd bridge-frontend
+          npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+
+      - name: Build Frontend
+        run: |
+          cd bridge-frontend
+          npm run build
+
+      - name: Verify Backend Health
+        run: |
+          echo "🔍 Verifying backend health..."
+          response=$(curl -f -s https://sr-aibridge.onrender.com/api/health || echo "FAILED")
+          if [[ "$response" == "FAILED" ]]; then
+            echo "❌ Backend health check failed"
+            exit 1
+          fi
+          echo "✅ Backend is healthy"
+
+      - name: Generate Sync Badge
+        run: |
+          python3 bridge_backend/scripts/generate_sync_badge.py
+
+      - name: Deploy to Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          npm install -g netlify-cli
+          cd bridge-frontend
+          netlify deploy --prod --dir=dist --message="Auto-redeploy via Bridge Auto-Deploy Mode v1.6.7"
+
+      - name: Report to Diagnostics
+        run: |
+          python3 bridge_backend/scripts/report_bridge_event.py --status AUTODEPLOY_OK || echo "⚠️ Diagnostics reporting skipped"
+
+      - name: Deployment Summary
+        run: |
+          echo "=== Bridge Auto-Deploy Summary ==="
+          echo "✅ Frontend built successfully"
+          echo "✅ Backend health verified"
+          echo "✅ Sync badge updated"
+          echo "✅ Deployed to Netlify"
+          echo "=================================="
