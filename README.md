@@ -16,6 +16,7 @@ SR-AIbridge is a comprehensive, production-ready platform for managing AI agents
 [![Bridge Network Status](https://img.shields.io/badge/Bridge_Network-Stable-brightgreen)](docs/FIREWALL_HARDENING.md)
 [![Bridge Compliance](https://img.shields.io/badge/Bridge--Compliance-Verified-brightgreen)](docs/ENVIRONMENT_SETUP.md#bridge-compliance-and-plugin-enforcement-v166)
 [![Bridge Sync Status](https://img.shields.io/endpoint?url=https://sr-aibridge.netlify.app/bridge_sync_badge.json)](https://github.com/kswhitlock9493-jpg/SR-AIbridge-/blob/main/.github/workflows/bridge_autodeploy.yml)
+[![Triage Federation](https://img.shields.io/badge/Triage_Federation-Heartbeat-brightgreen)](#)
 
 ## ✨ What is SR-AIbridge?
 
