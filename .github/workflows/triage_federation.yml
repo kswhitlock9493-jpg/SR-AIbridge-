@@ -1,0 +1,63 @@
+name: Triage Federation Heartbeat
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+  schedule:
+    - cron: "*/30 * * * *"   # every 30 min
+  workflow_dispatch:
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Prepare paths
+        run: |
+          echo "DIAG=bridge_backend/diagnostics" >> $GITHUB_ENV
+          mkdir -p bridge_backend/tools/triage/common
+          mkdir -p bridge_backend/diagnostics
+
+      - name: API Triage (auto-heal)
+        run: |
+          python3 bridge_backend/tools/triage/api_triage.py || true
+
+      - name: Endpoint Triage (parity-aware)
+        run: |
+          python3 bridge_backend/tools/triage/endpoint_triage.py || true
+
+      - name: Diagnostics Federation (heartbeat & guard)
+        run: |
+          python3 bridge_backend/tools/triage/diagnostics_federate.py || true
+
+      - name: Upload Triage Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: triage-federation-reports
+          path: ${{ env.DIAG }}/*.json
+
+      - name: Determine Outcome
+        id: gate
+        run: |
+          python - <<'PY'
+          import json, pathlib
+          p = pathlib.Path("bridge_backend/diagnostics/triage_federation_report.json")
+          ok = False
+          if p.exists():
+            ok = json.loads(p.read_text()).get("ok", False)
+          print(f"::set-output name=ok::{str(ok).lower()}")
+          PY
+
+      - name: Fail if federation failed after auto-heal
+        if: steps.gate.outputs.ok == 'false'
+        run: |
+          echo "Federation triage failed after retries. See artifacts."
+          exit 1
