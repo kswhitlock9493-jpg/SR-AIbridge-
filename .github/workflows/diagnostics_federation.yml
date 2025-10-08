@@ -1,8 +1,9 @@
+---
 name: Diagnostics Federation
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   schedule:
     - cron: "*/30 * * * *"   # every 30 minutes
   workflow_dispatch:
@@ -12,15 +13,19 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TELEMETRY_SIGNING_SECRET: ${{ secrets.TELEMETRY_SIGNING_SECRET }}
-      TELEMETRY_ENDPOINT: "https://sr-aibridge.netlify.app/.netlify/functions/telemetry"
-      RENDER_HEALTH_URL: "https://sr-aibridge.onrender.com/api/health"
-      FRONTEND_HEALTH_URL: "https://sr-aibridge.netlify.app/.netlify/functions/health"
+      TELEMETRY_ENDPOINT: >-
+        https://sr-aibridge.netlify.app/.netlify/functions/telemetry
+      RENDER_HEALTH_URL: >-
+        https://sr-aibridge.onrender.com/api/health
+      FRONTEND_HEALTH_URL: >-
+        https://sr-aibridge.netlify.app/.netlify/functions/health
     steps:
       - uses: actions/checkout@v4
 
       - name: Python
         uses: actions/setup-python@v5
-        with: { python-version: "3.11" }
+        with:
+          python-version: "3.11"
 
       - name: Check Sync
         id: sync
@@ -52,4 +57,6 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        run: npx netlify deploy --prod --dir=bridge-frontend/dist --message="Diagnostics badge refresh"
+        run: >-
+          npx netlify deploy --prod --dir=bridge-frontend/dist
+          --message="Diagnostics badge refresh"
