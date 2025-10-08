@@ -1,0 +1,22 @@
+name: Bridge Parity & Triage Engine
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Run Bridge Parity Engine
+        run: python3 bridge_backend/tools/parity_engine.py
+      - name: Upload Triage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: bridge_parity_triage_report
+          path: bridge_backend/diagnostics/bridge_parity_report.json
