@@ -27,6 +27,8 @@ SR-AIbridge provides a complete tactical command system for coordinating AI agen
 - 🚢 **Fleet Management** - Armada coordination with role-based access control
 - 📜 **Vault Logging** - Comprehensive activity tracking and audit trails
 - 🔄 **CI/CD Integration** - Automated deployment and health monitoring
+- 🔁 **Auto-Deploy Mode (v1.6.7)** - Self-sustaining 6-hour redeploy cycles with live sync badges
+- 🔧 **Environment Recovery** - Automatic registry self-healing and dependency management
 
 ---
 

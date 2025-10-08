@@ -276,6 +276,97 @@ Set up monitoring alerts for:
 - Auto-refresh with backoff on errors
 - Responsive design for mobile
 
+## Auto-Deploy & Continuous Monitoring (v1.6.7)
+
+### Bridge Auto-Deploy Workflow
+
+SR-AIbridge v1.6.7 introduces autonomous deployment management:
+
+**Workflow File:** `.github/workflows/bridge_autodeploy.yml`
+
+**Features:**
+- 🔄 **Automatic Redeploys**: Every 6 hours
+- 🏥 **Health Checks**: Backend verification before deployment
+- 📊 **Live Status Badge**: Real-time Render↔Netlify sync monitoring
+- 🔧 **Self-Healing**: Automatic recovery from drift
+
+**Workflow Steps:**
+
+1. **Setup** - Checkout code, install Node 22, install dependencies
+2. **Build** - Compile frontend with Vite
+3. **Verify Backend** - Check Render health endpoint
+4. **Generate Badge** - Create sync status badge
+5. **Deploy** - Push to Netlify production
+6. **Report** - Log event to diagnostics system
+
+**Trigger Methods:**
+
+```bash
+# Automatic triggers:
+- Push to main branch
+- Cron schedule: 0 */6 * * * (every 6 hours)
+
+# Manual trigger:
+- GitHub Actions UI → Bridge Auto-Deploy Mode → Run workflow
+```
+
+### Live Sync Badge
+
+Monitor system health in real-time via the Bridge Sync Badge:
+
+**Badge Display:**
+- 🟢 **STABLE**: Both platforms healthy
+- 🟡 **PARTIAL**: One platform down
+- 🔴 **DRIFT**: Both platforms experiencing issues
+
+**Badge is automatically updated:**
+- Every 6 hours via auto-deploy workflow
+- On each push to main
+- When manually triggered
+
+**View badge at:** `https://sr-aibridge.netlify.app/bridge_sync_badge.json`
+
+### Package & Registry Configuration (v1.6.7)
+
+**Updated Dependencies:**
+
+```json
+{
+  "devDependencies": {
+    "@netlify/functions": "^2.8.2",
+    "@netlify/plugin-lighthouse": "^4.1.0"
+  }
+}
+```
+
+**Registry Fallback (`.npmrc`):**
+
+```ini
+registry=https://registry.npmjs.org/
+@netlify:registry=https://registry.npmjs.org/
+always-auth=false
+legacy-peer-deps=true
+```
+
+This configuration:
+- Prevents 404 errors from deprecated packages
+- Ensures build stability across environments
+- Supports Node 22+ with legacy peer dependency handling
+
+### Deployment Secrets Required
+
+Ensure these secrets are configured in GitHub repository settings:
+
+| Secret | Purpose |
+|--------|---------|
+| `NETLIFY_AUTH_TOKEN` | Netlify deployment authentication |
+| `NETLIFY_SITE_ID` | Target Netlify site identifier |
+
+**To configure:**
+1. Go to repository Settings → Secrets and variables → Actions
+2. Add `NETLIFY_AUTH_TOKEN` (from Netlify Personal Access Tokens)
+3. Add `NETLIFY_SITE_ID` (from Netlify Site Settings)
+
 ## Support
 
 For issues and questions:
@@ -284,5 +375,7 @@ For issues and questions:
 3. Review application logs
 4. Check deployment configurations
 5. Verify environment variables
+6. **NEW:** Check Bridge Sync Badge status
+7. **NEW:** Review auto-deploy workflow runs
 
 The system is designed to be self-healing and should automatically recover from most common issues.
