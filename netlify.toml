@@ -1,5 +1,5 @@
 # ==========================================
-# SR-AIbridge Netlify Configuration (v1.6.4)
+# SR-AIbridge Netlify Configuration (v1.6.6)
 # ==========================================
 
 [build]
@@ -23,6 +23,9 @@
 
 [[plugins]]
   package = "@netlify/plugin-functions-core"
+
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
 
 # ================================
 # Redirects

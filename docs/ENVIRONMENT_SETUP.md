@@ -113,7 +113,7 @@ AUTO_DIAGNOSE=true
 
 The `.env.netlify` file contains frontend-safe environment variables. These should be set in the Netlify Dashboard, not committed to the repository.
 
-### netlify.toml Configuration (v1.7.0)
+### netlify.toml Configuration (v1.6.6)
 
 The `netlify.toml` file includes:
 
@@ -140,6 +140,9 @@ The `netlify.toml` file includes:
 [[plugins]]
   package = "@netlify/plugin-functions-core"
 
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+
 [context.production.environment]
   NODE_ENV = "production"
   AUTO_REPAIR_MODE = "true"
@@ -152,13 +155,15 @@ The `netlify.toml` file includes:
   REACT_APP_API_URL = "https://sr-aibridge.onrender.com/api"
 ```
 
-**Key Changes in v1.7.0:**
+**Key Changes in v1.6.6:**
 - ✅ Secret scanner now **enabled** with proper `omit_keys` configuration (not disabled)
 - ✅ Functions directory properly configured and validated
 - ✅ NODE_ENV and other safe config variables excluded from secret detection via `omit_keys`
 - ✅ Build artifacts and node_modules excluded via `exclude` patterns
 - ✅ Deterministic builds with `npm install --include=dev`
 - ✅ Modern Netlify Functions Core plugin added
+- ✅ **New**: Lighthouse plugin for performance monitoring
+- ✅ **New**: Pre-build sanitizer for secret scan compliance
 
 **Key Points:**
 - Secret scanner is **enabled** with `omit_keys` to prevent false positives on safe config variables
@@ -170,6 +175,93 @@ The `netlify.toml` file includes:
 - Build command uses `npm ci` for clean, deterministic builds
 - All environment variables route through Netlify's encrypted environment layer
 - Functions directory placeholder prevents "missing functions" warnings
+
+### Bridge Compliance and Plugin Enforcement (v1.6.6)
+
+Version 1.6.6 introduces a comprehensive compliance enforcement system to stabilize the Netlify ↔ Render deployment pipeline.
+
+#### Plugin Requirements
+
+The following Netlify plugins are required and automatically installed:
+
+```json
+{
+  "devDependencies": {
+    "@netlify/plugin-functions-core": "^5.3.0",
+    "@netlify/plugin-lighthouse": "^4.1.0"
+  }
+}
+```
+
+Install these plugins locally for testing:
+
+```bash
+cd bridge-frontend
+npm install -D @netlify/plugin-functions-core @netlify/plugin-lighthouse
+```
+
+#### Pre-Build Sanitizer
+
+The pre-build sanitizer (`bridge-frontend/scripts/prebuild_sanitizer.cjs`) runs before the build to:
+
+- Detect `.env`, `.map`, and `.json` files that might leak secret-like patterns
+- Sanitize potential secrets before Netlify's internal scanner runs
+- Generate a compliance manifest (`sanitized_manifest.log`)
+- Ensure zero false positives during secret scans
+
+**Usage:**
+
+```bash
+# Run manually
+cd bridge-frontend
+node scripts/prebuild_sanitizer.cjs
+
+# Output example:
+# [SR-AIBridge Sanitizer]
+# Version: 1.6.6
+# ---
+# ✔ Sanitized 3 file(s)
+#   - dist/assets/config.json
+#   - node_modules/.cache/vite/env.json
+#   - .env.local
+# ✔ Updated manifests: dist/assets, node_modules/.cache
+# ✔ Compliance ready for build
+# ✔ Manifest: sanitized_manifest.log
+```
+
+The sanitizer is automatically executed during GitHub Actions workflows and can be integrated into the build process.
+
+#### Local Compliance Checks
+
+Verify compliance before deploying:
+
+```bash
+# Validate environment setup
+python3 scripts/validate_env_setup.py
+
+# Validate scanner compliance
+python3 scripts/validate_scanner_output.py
+
+# Run sanitizer
+cd bridge-frontend
+node scripts/prebuild_sanitizer.cjs
+
+# Build and test
+npm run build
+```
+
+#### GitHub Actions Workflow
+
+The Bridge Compliance Enforcement workflow (`.github/workflows/bridge_compliance.yml`) automatically:
+
+1. Validates environment configuration
+2. Installs dependencies
+3. Runs the pre-build sanitizer
+4. Builds the frontend
+5. Reports compliance status
+6. Uploads sanitizer manifest as an artifact
+
+The workflow runs on every push to `main` and can be triggered manually via workflow dispatch.
 
 ## Deployment Workflow
 

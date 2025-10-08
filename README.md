@@ -9,6 +9,7 @@ SR-AIbridge is a comprehensive, production-ready platform for managing AI agents
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18+-blue.svg)](https://reactjs.org/)
 [![Bridge Status](https://img.shields.io/badge/Bridge_Health-Stable-brightgreen)](https://sr-aibridge.onrender.com/health)
+[![Bridge Compliance](https://img.shields.io/badge/Bridge--Compliance-Verified-brightgreen)](docs/ENVIRONMENT_SETUP.md#bridge-compliance-and-plugin-enforcement-v166)
 
 ## ✨ What is SR-AIbridge?
 
@@ -342,6 +343,57 @@ python main.py  # Will auto-create new database
 # Reinstall dependencies
 pip install -r requirements.txt --force-reinstall
 ```
+
+### Deployment Verification & Compliance (v1.6.6)
+
+**Bridge Compliance Checks:**
+
+Before deploying to production, verify compliance with these commands:
+
+```bash
+# 1. Validate environment configuration
+python3 scripts/validate_env_setup.py
+
+# 2. Validate scanner compliance
+python3 scripts/validate_scanner_output.py
+
+# 3. Install Netlify plugins (frontend)
+cd bridge-frontend
+npm install -D @netlify/plugin-functions-core @netlify/plugin-lighthouse
+
+# 4. Run pre-build sanitizer
+node scripts/prebuild_sanitizer.cjs
+
+# 5. Build and verify
+npm run build
+
+# 6. Test deployment locally
+npm run preview
+```
+
+**Post-Deployment Verification:**
+
+```bash
+# Check backend health
+curl https://sr-aibridge.onrender.com/api/health
+
+# Check frontend health
+curl https://sr-aibridge.netlify.app
+
+# Full bridge diagnostics
+curl https://sr-aibridge.onrender.com/health/full
+
+# Verify environment sync
+python3 bridge_backend/scripts/env_sync_monitor.py
+```
+
+**Compliance Status:**
+
+The Bridge Compliance badge should read "Verified" after successful deployment:
+
+![Bridge Compliance](https://img.shields.io/badge/Bridge--Compliance-Verified-brightgreen)
+
+See [docs/ENVIRONMENT_SETUP.md](docs/ENVIRONMENT_SETUP.md#bridge-compliance-and-plugin-enforcement-v166) for detailed compliance documentation.
 
 ---
 
