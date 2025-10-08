@@ -27,14 +27,37 @@ jobs:
           mkdir -p bridge_backend/diagnostics
 
       - name: API Triage (auto-heal)
+        env:
+          PUBLIC_API_BASE: ${{ secrets.BACKEND_URL || 'https://sr-aibridge.onrender.com' }}
+          TRIAGE_MAX_RETRIES: 4
+          TRIAGE_TIMEOUT_MS: 8000
+          TRIAGE_BACKOFF_BASE: 0.8
+          TRIAGE_BACKOFF_FACTOR: 2.0
+          TRIAGE_JITTER_MAX: 0.35
+          TRIAGE_CIRCUIT_BREAKER_FAILS: 6
         run: |
           python3 bridge_backend/tools/triage/api_triage.py || true
 
+      - name: Generate Parity Report (for endpoint triage)
+        run: |
+          python3 bridge_backend/tools/parity_engine.py || true
+
       - name: Endpoint Triage (parity-aware)
+        env:
+          PUBLIC_API_BASE: ${{ secrets.BACKEND_URL || 'https://sr-aibridge.onrender.com' }}
+          ENDPOINT_TRIAGE_LIMIT: 20
+          TRIAGE_MAX_RETRIES: 4
+          TRIAGE_TIMEOUT_MS: 8000
+          TRIAGE_BACKOFF_BASE: 0.8
+          TRIAGE_BACKOFF_FACTOR: 2.0
+          TRIAGE_JITTER_MAX: 0.35
+          TRIAGE_CIRCUIT_BREAKER_FAILS: 6
         run: |
           python3 bridge_backend/tools/triage/endpoint_triage.py || true
 
       - name: Diagnostics Federation (heartbeat & guard)
+        env:
+          FEDERATION_MAX_WAIT_S: 120
         run: |
           python3 bridge_backend/tools/triage/diagnostics_federate.py || true
 
