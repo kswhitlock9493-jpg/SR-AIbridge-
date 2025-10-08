@@ -5,7 +5,7 @@
 [build]
   base    = "bridge-frontend"
   publish = "bridge-frontend/dist"
-  command = "npm install --legacy-peer-deps && npm run build"
+  command = "npm install --legacy-peer-deps && npm run build && npm run postbuild:badge"
   functions = "bridge-frontend/netlify/functions"
 
 [build.environment]
@@ -20,6 +20,10 @@
   VITE_API_BASE = "https://sr-aibridge.onrender.com"
   REACT_APP_API_URL = "https://sr-aibridge.onrender.com"
   HEALTH_BADGE_ENDPOINT = "https://diagnostics.sr-aibridge.com/envsync"
+  # New for v1.6.8
+  SITE_URL = "https://sr-aibridge.netlify.app"
+  RENDER_HEALTH_URL = "https://sr-aibridge.onrender.com/api/health"
+  FRONTEND_HEALTH_URL = "https://sr-aibridge.netlify.app"
 
 [build.processing]
   skip_processing = false

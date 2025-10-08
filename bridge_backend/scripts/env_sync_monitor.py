@@ -1,69 +1,27 @@
 #!/usr/bin/env python3
-"""
-SR-AIbridge Environment Sync Monitor
-Checks parity between Render and Netlify, repairs drift, reports to diagnostics.
-"""
+import os, sys, json, time
+import urllib.request
 
-import os
-import requests
-import json
-import time
-
-BRIDGE_DIAGNOSTICS = os.getenv("BRIDGE_DIAGNOSTICS", "https://diagnostics.sr-aibridge.com")
-RENDER_BACKEND = "https://sr-aibridge.onrender.com/api/health"
-NETLIFY_FRONTEND = "https://sr-aibridge.netlify.app"
-
-def ping(url):
-    """Ping a URL and return status code."""
+def ping(url: str) -> bool:
     try:
-        r = requests.get(url, timeout=10)
-        return r.status_code
-    except Exception as e:
-        print(f"Error pinging {url}: {e}")
-        return 0
+        with urllib.request.urlopen(url, timeout=6) as r:
+            return 200 <= r.status < 300
+    except Exception:
+        return False
 
-def report(backend, frontend):
-    """Report sync status to Bridge diagnostics."""
-    healthy = backend == 200 and frontend == 200
-    payload = {
-        "type": "ENV_SYNC_REPORT",
-        "backend": backend,
-        "frontend": frontend,
-        "status": "healthy" if healthy else "drift",
-        "timestamp": time.ctime()
-    }
-    try:
-        requests.post(f"{BRIDGE_DIAGNOSTICS}/envsync", json=payload, timeout=10)
-        print(json.dumps(payload, indent=2))
-    except Exception as e:
-        print(f"⚠️ Failed to report to diagnostics: {e}")
+RENDER = os.getenv("RENDER_HEALTH_URL", "https://sr-aibridge.onrender.com/api/health")
+FRONTEND = os.getenv("FRONTEND_HEALTH_URL", "https://sr-aibridge.netlify.app/.netlify/functions/health")
 
-def main():
-    """Main entry point for environment sync monitor."""
-    print("🔍 SR-AIbridge Environment Sync Monitor")
-    print("=" * 50)
-    
-    backend = ping(RENDER_BACKEND)
-    frontend = ping(NETLIFY_FRONTEND)
-    
-    print(f"Render Backend: {backend}")
-    print(f"Netlify Frontend: {frontend}")
-    
-    status = backend == 200 and frontend == 200
-    
-    if status:
-        print("✅ All environments are in sync and healthy")
-    else:
-        print("❌ Environment drift detected!")
-        if backend != 200:
-            print(f"  - Render backend returned: {backend}")
-        if frontend != 200:
-            print(f"  - Netlify frontend returned: {frontend}")
-    
-    report(backend, frontend)
-    print("=" * 50)
-    
-    return 0 if status else 1
+backend_ok = ping(RENDER)
+frontend_ok = ping(FRONTEND)
 
-if __name__ == "__main__":
-    exit(main())
+status = "stable" if backend_ok and frontend_ok else ("degraded" if backend_ok or frontend_ok else "down")
+
+print(json.dumps({
+    "backend_ok": backend_ok,
+    "frontend_ok": frontend_ok,
+    "status": status,
+    "ts": int(time.time())
+}, indent=2))
+
+sys.exit(0 if status == "stable" else 1)

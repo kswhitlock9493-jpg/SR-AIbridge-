@@ -34,6 +34,7 @@
     "start": "vite",
     "prebuild": "python3 ../scripts/validate_netlify_env.py",
     "build": "vite build",
+    "postbuild:badge": "node ./scripts/update-badge.js || true",
     "preview": "vite preview",
     "test": "vitest",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",

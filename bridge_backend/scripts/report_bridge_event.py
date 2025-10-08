@@ -1,66 +1,26 @@
 #!/usr/bin/env python3
-"""
-Bridge Event Reporter
-Reports deployment and health events to the diagnostics system
-"""
+import os, sys, json, hmac, hashlib, urllib.request
 
-import argparse
-import requests
-import json
-import sys
-from datetime import datetime, timezone
+secret = os.getenv("TELEMETRY_SIGNING_SECRET", "")
+webhook = os.getenv("TELEMETRY_ENDPOINT",
+                    "https://sr-aibridge.netlify.app/.netlify/functions/telemetry")
 
-def report_event(status, details=None):
-    """Report a bridge event to the diagnostics system"""
-    
-    event_data = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "status": status,
-        "source": "bridge_autodeploy",
-        "details": details or f"Auto-deploy event: {status}"
-    }
-    
-    print(f"📡 Reporting bridge event: {status}")
-    
-    # Try to report to diagnostics endpoint
-    diagnostics_url = "https://sr-aibridge.onrender.com/api/diagnostics/events"
-    
-    try:
-        response = requests.post(
-            diagnostics_url,
-            json=event_data,
-            timeout=10
-        )
-        
-        if response.status_code in [200, 201]:
-            print(f"✅ Event reported successfully")
-            return 0
-        else:
-            print(f"⚠️ Diagnostics returned HTTP {response.status_code}")
-            return 0  # Don't fail the workflow for this
-            
-    except Exception as e:
-        print(f"⚠️ Could not report to diagnostics: {e}")
-        print("   (This is non-critical, continuing...)")
-        return 0  # Don't fail the workflow for diagnostics issues
+payload = {
+  "type": os.getenv("BRIDGE_EVENT_TYPE", "DIAGNOSTIC"),
+  "status": os.getenv("BRIDGE_EVENT_STATUS", "UNKNOWN"),
+  "details": os.getenv("BRIDGE_EVENT_DETAILS", ""),
+}
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Report Bridge deployment events"
-    )
-    parser.add_argument(
-        "--status",
-        required=True,
-        help="Event status (e.g., AUTODEPLOY_OK, AUTODEPLOY_FAILED)"
-    )
-    parser.add_argument(
-        "--details",
-        help="Optional event details"
-    )
-    
-    args = parser.parse_args()
-    
-    return report_event(args.status, args.details)
+raw = json.dumps(payload).encode("utf-8")
+sig = "sha256=" + hmac.new(secret.encode("utf-8"), raw, hashlib.sha256).hexdigest()
 
-if __name__ == "__main__":
-    sys.exit(main())
+req = urllib.request.Request(webhook, data=raw, method="POST",
+    headers={"content-type": "application/json", "X-Bridge-Signature": sig})
+
+try:
+    with urllib.request.urlopen(req, timeout=8) as r:
+        print("Telemetry delivered:", r.status)
+        sys.exit(0)
+except Exception as e:
+    print("Telemetry failed:", e)
+    sys.exit(1)
