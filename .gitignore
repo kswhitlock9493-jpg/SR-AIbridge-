@@ -112,3 +112,6 @@ bridge_backend/logs/integrity_audit.json
 # OS
 .DS_Store
 Thumbs.db
+
+# Network diagnostics report (auto-generated)
+bridge_backend/diagnostics/copilot_network_report.json
