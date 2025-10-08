@@ -1,70 +1,20 @@
 # ==========================================
-# SR-AIbridge Netlify Configuration (v1.6.7)
+# SR-AIbridge Netlify Configuration (v1.7.4)
 # ==========================================
 
 [build]
   base    = "bridge-frontend"
-  publish = "bridge-frontend/dist"
-  command = "npm install --legacy-peer-deps && npm run build && npm run postbuild:badge"
-  functions = "bridge-frontend/netlify/functions"
+  publish = "dist"
+  command = "npm run build"
+  functions = "netlify/functions"
 
 [build.environment]
-  NODE_VERSION = "22"
   NODE_ENV = "production"
-  NPM_FLAGS = "--legacy-peer-deps"
-  AUTO_REPAIR_MODE = "true"
-  BRIDGE_HEALTH_REPORT = "enabled"
-  CONFIDENCE_MODE = "enabled"
-  DIAGNOSTIC_KEY = "sr-dx-prod-bridge-001"
-  SECRETS_SCAN_ENABLED = "false"
   VITE_API_BASE = "https://sr-aibridge.onrender.com"
   REACT_APP_API_URL = "https://sr-aibridge.onrender.com"
-  HEALTH_BADGE_ENDPOINT = "https://diagnostics.sr-aibridge.com/envsync"
-  # New for v1.6.8
-  SITE_URL = "https://sr-aibridge.netlify.app"
-  RENDER_HEALTH_URL = "https://sr-aibridge.onrender.com/api/health"
-  FRONTEND_HEALTH_URL = "https://sr-aibridge.netlify.app"
 
-[build.processing]
-  skip_processing = false
-  skip_functions_bundling = false
-
-[build.processing.secrets_scan]
-  enabled = true
-  omit_keys = "CASCADE_MODE,VAULT_URL,AUTO_DIAGNOSE,VITE_API_BASE,REACT_APP_API_URL,NODE_ENV,PUBLIC_API_BASE,DIAGNOSTIC_KEY,BRIDGE_HEALTH_REPORT,AUTO_REPAIR_MODE,CONFIDENCE_MODE"
-  exclude = [ "bridge-frontend/dist/**", "bridge-frontend/public/**", "bridge-frontend/node_modules/**" ]
-
-[[plugins]]
-  package = "@netlify/plugin-lighthouse"
-
-# ================================
-# Redirects
-# ================================
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-[context.production.environment]
-  NODE_ENV = "production"
-  AUTO_REPAIR_MODE = "true"
-  BRIDGE_HEALTH_REPORT = "enabled"
-  DIAGNOSTIC_KEY = "sr-dx-prod-bridge-001"
-  CONFIDENCE_MODE = "enabled"
-  CASCADE_MODE = "production"
-  PUBLIC_API_BASE = "/api"
-  VITE_API_BASE = "https://sr-aibridge.onrender.com/api"
-  REACT_APP_API_URL = "https://sr-aibridge.onrender.com/api"
-  VAULT_URL = "https://sr-aibridge.netlify.app/api/vault"
-
-# ================================
-# Headers
-# ================================
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://sr-aibridge.onrender.com; img-src 'self' data: https:;"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"

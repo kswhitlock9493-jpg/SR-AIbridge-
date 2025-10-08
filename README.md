@@ -1,5 +1,9 @@
 # 🚀 SR-AIbridge
 
+![Netlify Deploy Status](https://img.shields.io/badge/Netlify_Verified-brightgreen?style=for-the-badge)
+![Bridge Network Health](https://img.shields.io/badge/Bridge_Parity_Engine-Active-blue?style=for-the-badge)
+![Firewall Healer](https://img.shields.io/badge/Firewall_Intelligence-Operational-orange?style=for-the-badge)
+
 **A Sovereign Command & Control System for AI Agent Coordination**
 
 SR-AIbridge is a comprehensive, production-ready platform for managing AI agents, missions, and autonomous operations. Built with modern async architecture, it features real-time monitoring, self-healing capabilities, cryptographic attestation, and a rich ecosystem of specialized AI engines.
