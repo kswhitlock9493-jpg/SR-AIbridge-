@@ -11,7 +11,7 @@ import apiClient from '../api';
  */
 export async function blueprint_bp_id(bp_id) {
   try {
-    const url = `/blueprint/{bp_id}`;
+    const url = `/blueprint/${bp_id}`;
     const response = await apiClient.get(url);
     return response;
   } catch (error) {

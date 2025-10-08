@@ -11,7 +11,7 @@ import apiClient from '../api';
  */
 export async function engines_indoctrination_aid_revoke(aid) {
   try {
-    const url = `/engines/indoctrination/{aid}/revoke`;
+    const url = `/engines/indoctrination/${aid}/revoke`;
     const response = await apiClient.delete(url);
     return response;
   } catch (error) {

@@ -11,7 +11,7 @@ import apiClient from '../api';
  */
 export async function protocols_name_activate(name) {
   try {
-    const url = `/protocols/{name}/activate`;
+    const url = `/protocols/${name}/activate`;
     const response = await apiClient.get(url);
     return response;
   } catch (error) {

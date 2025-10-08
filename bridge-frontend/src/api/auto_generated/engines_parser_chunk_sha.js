@@ -11,7 +11,7 @@ import apiClient from '../api';
  */
 export async function engines_parser_chunk_sha(sha) {
   try {
-    const url = `/engines/parser/chunk/{sha}`;
+    const url = `/engines/parser/chunk/${sha}`;
     const response = await apiClient.get(url);
     return response;
   } catch (error) {

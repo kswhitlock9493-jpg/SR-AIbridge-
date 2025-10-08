@@ -11,7 +11,7 @@ import apiClient from '../api';
  */
 export async function blueprint_bp_id_commit(bp_id) {
   try {
-    const url = `/blueprint/{bp_id}/commit`;
+    const url = `/blueprint/${bp_id}/commit`;
     const response = await apiClient.get(url);
     return response;
   } catch (error) {

@@ -11,7 +11,7 @@ import apiClient from '../api';
  */
 export async function custody_keys_key_name(key_name) {
   try {
-    const url = `/custody/keys/{key_name}`;
+    const url = `/custody/keys/${key_name}`;
     const response = await apiClient.get(url);
     return response;
   } catch (error) {

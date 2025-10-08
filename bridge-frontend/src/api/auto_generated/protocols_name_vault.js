@@ -11,7 +11,7 @@ import apiClient from '../api';
  */
 export async function protocols_name_vault(name) {
   try {
-    const url = `/protocols/{name}/vault`;
+    const url = `/protocols/${name}/vault`;
     const response = await apiClient.get(url);
     return response;
   } catch (error) {

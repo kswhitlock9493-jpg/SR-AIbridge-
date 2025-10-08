@@ -11,7 +11,7 @@ import apiClient from '../api';
  */
 export async function engines_indoctrination_aid_certify(aid) {
   try {
-    const url = `/engines/indoctrination/{aid}/certify`;
+    const url = `/engines/indoctrination/${aid}/certify`;
     const response = await apiClient.get(url);
     return response;
   } catch (error) {

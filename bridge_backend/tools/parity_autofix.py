@@ -49,6 +49,11 @@ def generate_frontend_stub(route: str, severity: str) -> str:
     path_params = re.findall(r"\{(\w+)\}", route)
     params_signature = ", ".join(path_params) if path_params else ""
     
+    # Replace path parameters with template string interpolation
+    url_template = route
+    for param in path_params:
+        url_template = url_template.replace(f"{{{param}}}", f"${{{param}}}")
+    
     # Build the stub
     stub = f'''// AUTO-GEN-BRIDGE v1.7.0 - {severity.upper()}
 // Route: {route}
@@ -63,7 +68,7 @@ import apiClient from '../api';
  */
 export async function {func_name}({params_signature}) {{
   try {{
-    const url = `{route}`;
+    const url = `{url_template}`;
     const response = await apiClient.{method}(url);
     return response;
   }} catch (error) {{

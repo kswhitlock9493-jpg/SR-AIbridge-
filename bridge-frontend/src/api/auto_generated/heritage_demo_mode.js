@@ -11,7 +11,7 @@ import apiClient from '../api';
  */
 export async function heritage_demo_mode(mode) {
   try {
-    const url = `/heritage/demo/{mode}`;
+    const url = `/heritage/demo/${mode}`;
     const response = await apiClient.get(url);
     return response;
   } catch (error) {

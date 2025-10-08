@@ -11,7 +11,7 @@ import apiClient from '../api';
  */
 export async function engines_screen_sid(sid) {
   try {
-    const url = `/engines/screen/{sid}`;
+    const url = `/engines/screen/${sid}`;
     const response = await apiClient.get(url);
     return response;
   } catch (error) {

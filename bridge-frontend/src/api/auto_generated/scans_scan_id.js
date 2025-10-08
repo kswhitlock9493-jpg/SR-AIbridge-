@@ -11,7 +11,7 @@ import apiClient from '../api';
  */
 export async function scans_scan_id(scan_id) {
   try {
-    const url = `/scans/{scan_id}`;
+    const url = `/scans/${scan_id}`;
     const response = await apiClient.get(url);
     return response;
   } catch (error) {

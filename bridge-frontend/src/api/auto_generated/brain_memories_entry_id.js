@@ -11,7 +11,7 @@ import apiClient from '../api';
  */
 export async function brain_memories_entry_id(entry_id) {
   try {
-    const url = `/brain/memories/{entry_id}`;
+    const url = `/brain/memories/${entry_id}`;
     const response = await apiClient.get(url);
     return response;
   } catch (error) {

@@ -11,7 +11,7 @@ import apiClient from '../api';
  */
 export async function bridge_core_protocols_name_lore(name) {
   try {
-    const url = `/bridge-core/protocols/{name}/lore`;
+    const url = `/bridge-core/protocols/${name}/lore`;
     const response = await apiClient.get(url);
     return response;
   } catch (error) {

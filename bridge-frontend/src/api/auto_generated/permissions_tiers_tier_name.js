@@ -11,7 +11,7 @@ import apiClient from '../api';
  */
 export async function permissions_tiers_tier_name(tier_name) {
   try {
-    const url = `/permissions/tiers/{tier_name}`;
+    const url = `/permissions/tiers/${tier_name}`;
     const response = await apiClient.get(url);
     return response;
   } catch (error) {

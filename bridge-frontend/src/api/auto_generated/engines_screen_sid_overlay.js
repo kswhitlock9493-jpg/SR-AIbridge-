@@ -11,7 +11,7 @@ import apiClient from '../api';
  */
 export async function engines_screen_sid_overlay(sid) {
   try {
-    const url = `/engines/screen/{sid}/overlay`;
+    const url = `/engines/screen/${sid}/overlay`;
     const response = await apiClient.get(url);
     return response;
   } catch (error) {
