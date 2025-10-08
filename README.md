@@ -106,6 +106,19 @@ Once running, access these endpoints:
 | 🛡️ Full Health | http://localhost:8000/health/full | Comprehensive system status |
 | 🔄 WebSocket | ws://localhost:8000/ws/stats | Real-time updates |
 
+### Health API (v1.6.8)
+
+Production health monitoring endpoints:
+
+- **Frontend Health**: `/.netlify/functions/health` - First-party health probe for Netlify + Render
+- **Telemetry Ingest**: `/.netlify/functions/telemetry` (signed) - HMAC-secured event relay for Slack/Discord
+
+**Live Sync Badge:**
+
+![Bridge Sync](https://img.shields.io/endpoint?url=https://sr-aibridge.netlify.app/bridge_sync_badge.json)
+
+The badge reflects real-time health status across both Netlify and Render deployments.
+
 ### Demo Data
 
 Load demo data for testing:

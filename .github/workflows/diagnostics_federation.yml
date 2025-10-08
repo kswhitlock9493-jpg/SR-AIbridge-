@@ -1,0 +1,55 @@
+name: Diagnostics Federation
+
+on:
+  push:
+    branches: [ "main" ]
+  schedule:
+    - cron: "*/30 * * * *"   # every 30 minutes
+  workflow_dispatch:
+
+jobs:
+  federate:
+    runs-on: ubuntu-latest
+    env:
+      TELEMETRY_SIGNING_SECRET: ${{ secrets.TELEMETRY_SIGNING_SECRET }}
+      TELEMETRY_ENDPOINT: "https://sr-aibridge.netlify.app/.netlify/functions/telemetry"
+      RENDER_HEALTH_URL: "https://sr-aibridge.onrender.com/api/health"
+      FRONTEND_HEALTH_URL: "https://sr-aibridge.netlify.app/.netlify/functions/health"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python
+        uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+
+      - name: Check Sync
+        id: sync
+        run: |
+          python3 bridge_backend/scripts/env_sync_monitor.py || true
+
+      - name: Compute Status
+        id: status
+        run: |
+          OUT=$(python3 bridge_backend/scripts/env_sync_monitor.py || true)
+          echo "$OUT"
+          STATUS=$(echo "$OUT" | grep -oE '"status": *"[^"]+"' | cut -d'"' -f4)
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+
+      - name: Update Badge File
+        run: |
+          export BRIDGE_SYNC_STATUS="${{ steps.status.outputs.status }}"
+          node bridge-frontend/scripts/update-badge.js
+
+      - name: Telemetry
+        env:
+          BRIDGE_EVENT_TYPE: "ENV_SYNC"
+          BRIDGE_EVENT_STATUS: "${{ steps.status.outputs.status }}"
+          BRIDGE_EVENT_DETAILS: "Federated diagnostics tick"
+        run: python3 bridge_backend/scripts/report_bridge_event.py
+
+      - name: Deploy Badge (Netlify CLI)
+        if: always()
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: npx netlify deploy --prod --dir=bridge-frontend/dist --message="Diagnostics badge refresh"
