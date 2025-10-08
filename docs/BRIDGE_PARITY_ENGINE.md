@@ -13,6 +13,8 @@ Automated wiring and health audit between backend and frontend.
 ## Output
 `bridge_backend/diagnostics/bridge_parity_report.json` contains counts + severity.
 
+See example report: `bridge_backend/diagnostics/bridge_parity_report_example.json`
+
 ## Benefits
 ✅ Continuous route integrity verification  
 ✅ Immediate triage for mismatches  
