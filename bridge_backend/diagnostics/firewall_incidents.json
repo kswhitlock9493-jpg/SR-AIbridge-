@@ -1,0 +1,50 @@
+{
+  "metadata": {
+    "collected_at": 1759892060,
+    "timestamp": "2025-10-08T02:54:20.792441+00:00",
+    "version": "1.0.0"
+  },
+  "sources": [
+    {
+      "source": "GitHub Status",
+      "status": "error",
+      "error": "HTTPSConnectionPool(host='www.githubstatus.com', port=443): Max retries exceeded with url: /api/v2/incidents.json (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x7fdd7a92bf50>: Failed to resolve 'www.githubstatus.com' ([Errno -5] No address associated with hostname)\"))",
+      "incidents": [],
+      "count": 0
+    },
+    {
+      "source": "npm Registry",
+      "status": "online",
+      "response_time_ms": 247,
+      "incidents": []
+    },
+    {
+      "source": "Render",
+      "status": "error",
+      "error": "HTTPSConnectionPool(host='api.render.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x7fdd79c45460>: Failed to resolve 'api.render.com' ([Errno -5] No address associated with hostname)\"))",
+      "incidents": [
+        {
+          "type": "connectivity",
+          "detail": "HTTPSConnectionPool(host='api.render.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x7fdd79c45460>: Failed to resolve 'api.render.com' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ]
+    },
+    {
+      "source": "Netlify Status",
+      "status": "error",
+      "error": "HTTPSConnectionPool(host='www.netlifystatus.com', port=443): Max retries exceeded with url: /api/v2/status.json (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x7fdd79c45af0>: Failed to resolve 'www.netlifystatus.com' ([Errno -5] No address associated with hostname)\"))",
+      "incidents": [
+        {
+          "type": "connectivity",
+          "detail": "HTTPSConnectionPool(host='www.netlifystatus.com', port=443): Max retries exceeded with url: /api/v2/status.json (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x7fdd79c45af0>: Failed to resolve 'www.netlifystatus.com' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_sources": 4,
+    "sources_online": 1,
+    "sources_error": 3,
+    "total_incidents": 0
+  }
+}

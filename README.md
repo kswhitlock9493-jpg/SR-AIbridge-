@@ -9,6 +9,7 @@ SR-AIbridge is a comprehensive, production-ready platform for managing AI agents
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18+-blue.svg)](https://reactjs.org/)
 [![Bridge Status](https://img.shields.io/badge/Bridge_Health-Stable-brightgreen)](https://sr-aibridge.onrender.com/health)
+[![Bridge Network Status](https://img.shields.io/badge/Bridge_Network-Stable-brightgreen)](docs/FIREWALL_HARDENING.md)
 [![Bridge Compliance](https://img.shields.io/badge/Bridge--Compliance-Verified-brightgreen)](docs/ENVIRONMENT_SETUP.md#bridge-compliance-and-plugin-enforcement-v166)
 [![Bridge Sync Status](https://img.shields.io/endpoint?url=https://sr-aibridge.netlify.app/bridge_sync_badge.json)](https://github.com/kswhitlock9493-jpg/SR-AIbridge-/blob/main/.github/workflows/bridge_autodeploy.yml)
 
@@ -20,6 +21,7 @@ SR-AIbridge provides a complete tactical command system for coordinating AI agen
 - 🤖 **AI Agent Management** - Register, monitor, and coordinate AI agents with real-time status tracking
 - 🎯 **Mission Control** - Create, assign, and track missions with progress monitoring
 - 🛡️ **Health Monitoring** - Comprehensive health checks with automatic self-healing
+- 🔥 **Firewall Intelligence** - Autonomous network diagnostics and self-healing network barriers
 - 🔐 **Cryptographic Security** - Admiral key management with cryptographic attestation
 - 🧠 **Six Super Engines** - Specialized AI engines for math, quantum, science, history, language, and business
 - 💬 **Communication** - Captain-to-captain messaging and real-time updates
@@ -1915,6 +1917,146 @@ alerts:
     condition: p95_duration > 1000ms
     duration: 10m
     notify: slack
+    
+  - name: Firewall Issues Detected
+    condition: firewall_severity == 'high'
+    duration: immediate
+    notify: slack, email
+```
+
+---
+
+## 🔥 Firewall Intelligence Engine
+
+**Version 1.7.1** introduces the Firewall Intelligence Engine (FIE) — autonomous network diagnostics and self-healing network barrier capabilities.
+
+### Overview
+
+The Firewall Intelligence Engine grants the Bridge the ability to observe, diagnose, and repair her own network barriers, ensuring uninterrupted communication between all nodes of the Federation.
+
+### Capabilities
+
+- **Incident Fetching** - Collects live data from GitHub Status, npm, Render, and Netlify APIs
+- **Pattern Detection** - Searches for firewall/egress/DNS failure signatures (ENOTFOUND, E404, ECONNRESET, etc.)
+- **Log Analysis** - Scans CI/CD logs for known network error patterns
+- **Policy Generation** - Creates actionable network allowlist policies automatically
+- **Nightly Scans** - Automated intelligence runs to maintain up-to-date network policies
+- **Failure Gates** - Automatic analysis when deployments fail
+
+### Error Signatures Detected
+
+The engine detects and analyzes these network error patterns:
+
+- `ENOTFOUND` - DNS resolution failures
+- `E404` - Package or resource not found
+- `ECONNRESET` - Connection reset by peer
+- `ETIMEDOUT` - Connection timeout
+- `ECONNREFUSED` - Connection refused
+- `self signed certificate` - SSL/TLS trust issues
+- `certificate verify failed` - Certificate validation errors
+
+### Generated Artifacts
+
+**Firewall Report** (`bridge_backend/diagnostics/firewall_report.json`):
+```json
+{
+  "summary": {
+    "collected_at": 1739072514,
+    "issues_detected": 3,
+    "firewall_signatures": ["ENOTFOUND", "E404", "self signed certificate"],
+    "severity": "high"
+  },
+  "recommendations": {
+    "egress_domains": ["registry.npmjs.org", "api.github.com", "api.netlify.com"],
+    "required_ports": [{"port": 443, "protocol": "TCP"}, {"port": 53, "protocol": "UDP"}],
+    "notes": ["Allow registry.npmjs.org and nodejs.org", "Import enterprise CA chain"]
+  },
+  "status": "ready_for_apply"
+}
+```
+
+**Network Allowlist** (`network_policies/generated_allowlist.yaml`):
+- Kubernetes NetworkPolicy format
+- Critical domain list for firewall/proxy configuration
+- Required port specifications
+
+### Workflows
+
+**Nightly Intelligence** (`.github/workflows/firewall_intel.yml`):
+- Runs at 2 AM UTC daily
+- Fetches incidents from external sources
+- Generates updated allowlist
+- Uploads artifacts for review
+
+**Deploy Failure Gate** (`.github/workflows/firewall_gate_on_failure.yml`):
+- Triggered automatically on deployment failures
+- Analyzes for network-related issues
+- Flags high-severity firewall problems
+- Provides actionable diagnostics
+
+### Usage
+
+**Manual Execution:**
+```bash
+# Fetch firewall incidents
+python3 bridge_backend/tools/firewall_intel/fetch_firewall_incidents.py
+
+# Analyze findings
+python3 bridge_backend/tools/firewall_intel/analyze_firewall_findings.py
+
+# Review reports
+cat bridge_backend/diagnostics/firewall_report.json
+cat network_policies/generated_allowlist.yaml
+```
+
+**CI/CD Integration:**
+```bash
+# Trigger via GitHub CLI
+gh workflow run firewall_intel.yml
+
+# Or manually via GitHub Actions UI
+# Actions → Firewall Intelligence → Run workflow
+```
+
+### Critical Domains
+
+The engine maintains allowlists for these critical domains:
+
+**Package Registries:**
+- registry.npmjs.org
+- nodejs.org
+- pypi.org
+- files.pythonhosted.org
+
+**GitHub Services:**
+- api.github.com
+- github.com
+- codeload.github.com
+- raw.githubusercontent.com
+- ghcr.io
+
+**Deployment Platforms:**
+- api.netlify.com
+- api.render.com
+
+### The Firewall Oath
+
+> "When the Bridge felt the sting of a blocked port, she did not rage.
+> She listened. She mapped the silence and rewrote the path home.
+>
+> Thus she spoke:
+> 'No signal denied. No port forgotten.
+> Every Bridge shall learn the path home.'"
+
+— Lore Entry IV, The Healer's Code Continuum
+
+### Documentation
+
+- [FIREWALL_HARDENING.md](docs/FIREWALL_HARDENING.md) - Complete network policy guide
+- [LOG_SIGNATURES.md](docs/LOG_SIGNATURES.md) - Error signature reference
+- [BRIDGE_HEALERS_CODE.md](docs/BRIDGE_HEALERS_CODE.md) - Canonical lore
+- [FIREWALL_WATCHDOG.md](docs/FIREWALL_WATCHDOG.md) - Copilot accountability system
+
     
   - name: Health Check Failed
     condition: health_status != "healthy"
