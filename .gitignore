@@ -128,3 +128,7 @@ Thumbs.db
 # Network diagnostics report (auto-generated)
 bridge_backend/diagnostics/copilot_network_report.json
 federation_repair_report.json
+
+# v1.8.5 Runtime Telemetry artifacts
+bridge_backend/diagnostics/triage_runtime_metrics.json
+bridge_backend/diagnostics/triage_matrix.ndjson
