@@ -4,6 +4,7 @@
 ![Bridge Network Health](https://img.shields.io/badge/Bridge_Parity_Engine-Active-blue?style=for-the-badge)
 ![Firewall Healer](https://img.shields.io/badge/Firewall_Intelligence-Operational-orange?style=for-the-badge)
 ![Firewall Harmony](https://img.shields.io/badge/Firewall_Harmony-Auto--Recovering-brightgreen?style=for-the-badge)
+![Healer-Net](https://img.shields.io/badge/Healer--Net-Self--Repairing-green?style=for-the-badge)
 
 **A Sovereign Command & Control System for AI Agent Coordination**
 
@@ -18,6 +19,8 @@ SR-AIbridge is a comprehensive, production-ready platform for managing AI agents
 [![Bridge Compliance](https://img.shields.io/badge/Bridge--Compliance-Verified-brightgreen)](docs/ENVIRONMENT_SETUP.md#bridge-compliance-and-plugin-enforcement-v166)
 [![Bridge Sync Status](https://img.shields.io/endpoint?url=https://sr-aibridge.netlify.app/bridge_sync_badge.json)](https://github.com/kswhitlock9493-jpg/SR-AIbridge-/blob/main/.github/workflows/bridge_autodeploy.yml)
 [![Triage Federation](https://img.shields.io/badge/Triage_Federation-Heartbeat-brightgreen)](#)
+[![Bridge Parity](https://img.shields.io/badge/Bridge_Parity-Active-blue)](docs/BRIDGE_PARITY_ENGINE.md)
+[![Diagnostics Federation](https://img.shields.io/badge/Diagnostics-Federated-purple)](docs/HEALER_NET.md)
 
 ## ✨ What is SR-AIbridge?
 
@@ -29,6 +32,7 @@ SR-AIbridge provides a complete tactical command system for coordinating AI agen
 - 🛡️ **Health Monitoring** - Comprehensive health checks with automatic self-healing
 - 🔥 **Firewall Intelligence** - Autonomous network diagnostics and self-healing network barriers
 - 🧘 **Firewall Harmony (v1.7.6)** - Auto-recovering browser automation that survives firewall blocks
+- 🩺 **Healer-Net (v1.7.7)** - Unified diagnostic network that fuses triage, harmony, and auto-repair systems
 - 🔐 **Cryptographic Security** - Admiral key management with cryptographic attestation
 - 🧠 **Six Super Engines** - Specialized AI engines for math, quantum, science, history, language, and business
 - 💬 **Communication** - Captain-to-captain messaging and real-time updates

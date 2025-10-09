@@ -93,3 +93,30 @@ async def api_status_check():
         "uptime": time.process_time(),
         "timestamp": datetime.utcnow().isoformat()
     }
+
+@router.get("/api/bridge/health")
+async def bridge_health_check():
+    """Bridge health endpoint for Healer-Net badge"""
+    import os
+    import json
+    
+    # Try to load the latest healer_net_report.json if it exists
+    report_path = "healer_net_report.json"
+    status = "healthy"
+    
+    if os.path.exists(report_path):
+        try:
+            with open(report_path, 'r') as f:
+                report = json.load(f)
+                if not report.get("summary", {}).get("healthy", True):
+                    status = "issues"
+                elif report.get("summary", {}).get("issues", 0) > 0:
+                    status = "issues"
+        except Exception:
+            status = "unknown"
+    
+    return {
+        "status": status,
+        "service": "SR-AIbridge Healer-Net",
+        "timestamp": datetime.utcnow().isoformat()
+    }
