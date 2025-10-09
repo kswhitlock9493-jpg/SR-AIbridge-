@@ -1,45 +1,30 @@
 # ==========================================
-# SR-AIbridge Netlify Configuration (v1.7.9)
+# SR-AIbridge Netlify Configuration (v1.8.3)
 # ==========================================
 
 [build]
   base    = "bridge-frontend"
-  command = "npm run ci:install && npm run build"
+  command = "npm ci && npm run build"
   publish = "bridge-frontend/dist"
-  functions = "bridge-frontend/netlify/functions"
 
 [build.environment]
-  NODE_VERSION = "20"
-  NPM_FLAGS = "--no-audit --prefer-offline"
-  NPM_CONFIG_PRODUCTION = "false"
-  # Calm secret scan noise but keep it on:
-  SECRETS_SCAN_LOG_LEVEL = "error"
-  # Healer-Net toggles
-  AUTO_REPAIR_MODE = "true"
-  BRIDGE_HEALTH_REPORT = "enabled"
-  DIAGNOSTIC_KEY = "sr-dx-prod-bridge-001"
-  CONFIDENCE_MODE = "enabled"
-  # Existing environment variables
-  VITE_API_BASE = "https://sr-aibridge.onrender.com"
-  REACT_APP_API_URL = "https://sr-aibridge.onrender.com"
-  CASCADE_MODE = "active"
-  BRIDGE_API_URL = "https://sr-aibridge.onrender.com"
-  VAULT_URL = "https://vault.sr-aibridge.com"
-  PUBLIC_API_BASE = "https://sr-aibridge.onrender.com"
-  PUPPETEER_SKIP_DOWNLOAD = "true"
-  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "true"
-  CHROMIUM_DOWNLOAD_ALLOWED = "false"
-  PUPPETEER_CACHE_DIR = "/opt/buildhome/.cache/puppeteer"
-  PLAYWRIGHT_BROWSERS_PATH = "/opt/buildhome/.cache/ms-playwright"
-  CHROMIUM_CHANNEL = "stable"
+  NODE_ENV = "production"
+  # keep scans quiet but enabled in CI instead
+  SECRETS_SCAN_ENABLED = "false"
 
-# SPA routing
+# SPA fallback for client routing
 [[redirects]]
   from = "/*"
   to   = "/index.html"
   status = 200
+  force  = true
 
-# Build image hint (optional, keeps consistency)
-[build.images]
-  node = "20"
+# Example headers (additive)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), camera=(), microphone=()"
 

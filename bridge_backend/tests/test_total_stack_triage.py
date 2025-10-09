@@ -1,5 +1,5 @@
 """
-Test Total-Stack Triage Mesh (v1.8.2)
+Test Total-Stack Triage Mesh (v1.8.3)
 Verifies all workflows, scripts, and documentation are in place
 """
 
@@ -94,6 +94,22 @@ class TestWorkflows:
         assert "env-parity" in workflow["jobs"]
         triggers = workflow.get("on") or workflow.get(True)
         assert triggers["schedule"][0]["cron"] == "0 2 * * *"
+    
+    def test_netlify_config_guard_workflow(self):
+        """Test that netlify_config_guard.yml workflow exists (v1.8.3)"""
+        root = pathlib.Path(__file__).resolve().parents[2]
+        workflow_path = root / ".github" / "workflows" / "netlify_config_guard.yml"
+        
+        assert workflow_path.exists(), "netlify_config_guard.yml should exist"
+        
+        import yaml
+        workflow = yaml.safe_load(workflow_path.read_text())
+        
+        assert workflow["name"] == "Netlify Config Guard & Egress Sync (v1.8.3)"
+        assert "jobs" in workflow
+        assert "guard" in workflow["jobs"]
+        triggers = workflow.get("on") or workflow.get(True)
+        assert "main" in triggers["push"]["branches"]
 
 
 class TestScripts:
@@ -177,6 +193,35 @@ class TestScripts:
         
         assert "def readj" in code
         assert "total_stack_report.json" in code
+    
+    def test_netlify_config_triage_script(self):
+        """Test that netlify_config_triage.py exists (v1.8.3)"""
+        root = pathlib.Path(__file__).resolve().parents[2]
+        script_path = root / ".github" / "scripts" / "netlify_config_triage.py"
+        
+        assert script_path.exists(), "netlify_config_triage.py should exist"
+        
+        code = script_path.read_text()
+        compile(code, str(script_path), 'exec')
+        
+        assert "def validate_toml" in code
+        assert "def normalize_redirects" in code
+        assert "def ensure_headers" in code
+        assert "netlify_config_report.json" in code
+    
+    def test_egress_sync_check_script(self):
+        """Test that egress_sync_check.py exists (v1.8.3)"""
+        root = pathlib.Path(__file__).resolve().parents[2]
+        script_path = root / ".github" / "scripts" / "egress_sync_check.py"
+        
+        assert script_path.exists(), "egress_sync_check.py should exist"
+        
+        code = script_path.read_text()
+        compile(code, str(script_path), 'exec')
+        
+        assert "def probe" in code
+        assert "api.netlify.com" in code
+        assert "api.render.com" in code
 
 
 class TestScriptExecution:
@@ -250,6 +295,29 @@ class TestScriptExecution:
         assert "runtime" in report
         assert "endpoints" in report
         assert "env" in report
+    
+    def test_netlify_config_triage_runs(self):
+        """Test that netlify_config_triage.py executes (v1.8.3)"""
+        root = pathlib.Path(__file__).resolve().parents[2]
+        script_path = root / ".github" / "scripts" / "netlify_config_triage.py"
+        
+        result = subprocess.run(
+            ["python3", str(script_path)],
+            cwd=str(root),
+            capture_output=True,
+            timeout=30
+        )
+        
+        assert result.returncode == 0
+        
+        report_path = root / "bridge_backend" / "diagnostics" / "netlify_config_report.json"
+        assert report_path.exists()
+        
+        report = json.loads(report_path.read_text())
+        assert "toml_issues" in report
+        assert "redirects_fixes" in report
+        assert "headers_created" in report
+        assert "ok" in report
 
 
 class TestDocumentation:
@@ -348,6 +416,22 @@ class TestReportStructure:
         assert "runtime" in report
         assert "endpoints" in report
         assert "env" in report
+    
+    def test_netlify_config_report_structure(self):
+        """Test netlify_config_report.json structure (v1.8.3)"""
+        root = pathlib.Path(__file__).resolve().parents[2]
+        
+        # Generate fresh report
+        script_path = root / ".github" / "scripts" / "netlify_config_triage.py"
+        subprocess.run(["python3", str(script_path)], cwd=str(root), check=True)
+        
+        report_path = root / "bridge_backend" / "diagnostics" / "netlify_config_report.json"
+        report = json.loads(report_path.read_text())
+        
+        assert isinstance(report["toml_issues"], list)
+        assert isinstance(report["redirects_fixes"], list)
+        assert isinstance(report["headers_created"], bool)
+        assert isinstance(report["ok"], bool)
 
 
 class TestIntegration:
