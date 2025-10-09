@@ -6,6 +6,7 @@ Verifies the application is responding before accepting traffic
 import os
 import sys
 import argparse
+import time
 
 def warm_health():
     """Warm up the health endpoint"""
@@ -15,6 +16,15 @@ def warm_health():
         print("[health_probe] requests not installed, skipping warm")
         return 0
     
+    # Try to import telemetry
+    try:
+        from bridge_backend.runtime.telemetry import TELEMETRY
+    except ImportError:
+        try:
+            from runtime.telemetry import TELEMETRY
+        except ImportError:
+            TELEMETRY = None
+    
     base = os.getenv("SELF_BASE", f"http://127.0.0.1:{os.getenv('PORT', '10000')}")
     
     try:
@@ -22,9 +32,16 @@ def warm_health():
         # The actual warming happens after uvicorn starts
         print(f"[health_probe] Health endpoint will be: {base}/api/health")
         print("[health_probe] Warm probe ready")
+        
+        # Record a successful health mark with dummy data
+        if TELEMETRY:
+            TELEMETRY.mark("health", True, ms=0, note="startup_warm")
+        
         return 0
     except Exception as e:
         print(f"[health_probe] Warm failed: {e}")
+        if TELEMETRY:
+            TELEMETRY.mark("health", False, ms=0, note=str(e))
         return 1
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ Verifies outbound network connectivity to critical hosts
 import socket
 import sys
 import argparse
+import time
 
 HOSTS = [
     "api.github.com",
@@ -34,9 +35,25 @@ def main(timeout=6):
     """Check all hosts"""
     print("[egress_canary] Checking network egress...")
     
+    # Try to import telemetry
+    try:
+        from bridge_backend.runtime.telemetry import TELEMETRY
+    except ImportError:
+        try:
+            from runtime.telemetry import TELEMETRY
+        except ImportError:
+            TELEMETRY = None
+    
     failed = []
     for host in HOSTS:
-        if not check_host(host, timeout=timeout):
+        t0 = time.perf_counter()
+        ok = check_host(host, timeout=timeout)
+        ms = int((time.perf_counter() - t0) * 1000)
+        
+        if TELEMETRY:
+            TELEMETRY.mark("egress", ok, ms=ms, note=host)
+        
+        if not ok:
             failed.append(host)
             print(f"[egress_canary] ✗ {host}")
         else:
