@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=22.0.0",
-    "npm": ">=10.0.0"
+    "node": ">=20 <21",
+    "npm": ">=10"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -22,6 +22,7 @@
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.2.1",
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
@@ -36,8 +37,9 @@
   "scripts": {
     "dev": "vite",
     "start": "vite",
-    "prebuild": "python3 ../scripts/validate_netlify_env.py",
+    "prebuild": "python3 scripts/build_triage.py",
     "build": "vite build",
+    "postbuild": "node -e \"console.log('✅ Build complete')\"",
     "postbuild:badge": "node ./scripts/update-badge.js || true",
     "postinstall:chromium": "node -e \"try{require('puppeteer');}catch(e){}; try{require('@playwright/test');}catch(e){}\"",
     "chromium:guard": "node scripts/chromium-guard.mjs",
@@ -45,7 +47,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "repair": "python3 ../scripts/repair_netlify_env.py"
+    "repair": "python3 ../scripts/repair_netlify_env.py",
+    "ci:install": "cross-env NPM_CONFIG_PRODUCTION=false PUPPETEER_SKIP_DOWNLOAD=true PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true npm ci --no-audit --prefer-offline"
   },
   "eslintConfig": {
     "root": true,
