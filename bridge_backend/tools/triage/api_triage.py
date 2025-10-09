@@ -11,8 +11,8 @@ BASE = os.getenv("PUBLIC_API_BASE") or os.getenv("REACT_APP_API_URL") or os.gete
 if BASE and BASE.endswith("/"): BASE = BASE[:-1]
 
 HEALTH_PATHS = [
-    "/api/health", "/api/v1/health", "/healthz",
-    "/api/_meta", "/api/version"
+    "/health", "/health/full", "/api/bridge/health",
+    "/api/status", "/"
 ]
 
 def main():
