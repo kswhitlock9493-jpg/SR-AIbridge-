@@ -1,17 +1,25 @@
 # ==========================================
-# SR-AIbridge Netlify Configuration (v1.7.8)
+# SR-AIbridge Netlify Configuration (v1.7.9)
 # ==========================================
 
 [build]
   base    = "bridge-frontend"
-  publish = "dist"
-  command = "npm run build"
-  functions = "netlify/functions"
+  command = "npm run ci:install && npm run build"
+  publish = "bridge-frontend/dist"
+  functions = "bridge-frontend/netlify/functions"
 
 [build.environment]
   NODE_VERSION = "20"
-  NODE_ENV = "production"
-  SECRETS_SCAN_ENABLED = "false"
+  NPM_FLAGS = "--no-audit --prefer-offline"
+  NPM_CONFIG_PRODUCTION = "false"
+  # Calm secret scan noise but keep it on:
+  SECRETS_SCAN_LOG_LEVEL = "error"
+  # Healer-Net toggles
+  AUTO_REPAIR_MODE = "true"
+  BRIDGE_HEALTH_REPORT = "enabled"
+  DIAGNOSTIC_KEY = "sr-dx-prod-bridge-001"
+  CONFIDENCE_MODE = "enabled"
+  # Existing environment variables
   VITE_API_BASE = "https://sr-aibridge.onrender.com"
   REACT_APP_API_URL = "https://sr-aibridge.onrender.com"
   CASCADE_MODE = "active"
@@ -25,8 +33,13 @@
   PLAYWRIGHT_BROWSERS_PATH = "/opt/buildhome/.cache/ms-playwright"
   CHROMIUM_CHANNEL = "stable"
 
+# SPA routing
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to   = "/index.html"
   status = 200
+
+# Build image hint (optional, keeps consistency)
+[build.images]
+  node = "20"
 
