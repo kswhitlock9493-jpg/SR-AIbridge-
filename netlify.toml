@@ -1,5 +1,5 @@
 # ==========================================
-# SR-AIbridge Netlify Configuration (v1.7.4)
+# SR-AIbridge Netlify Configuration (v1.7.6)
 # ==========================================
 
 [build]
@@ -12,6 +12,12 @@
   NODE_ENV = "production"
   VITE_API_BASE = "https://sr-aibridge.onrender.com"
   REACT_APP_API_URL = "https://sr-aibridge.onrender.com"
+  PUPPETEER_SKIP_DOWNLOAD = "true"
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "true"
+  CHROMIUM_DOWNLOAD_ALLOWED = "false"
+  PUPPETEER_CACHE_DIR = "/opt/buildhome/.cache/puppeteer"
+  PLAYWRIGHT_BROWSERS_PATH = "/opt/buildhome/.cache/ms-playwright"
+  CHROMIUM_CHANNEL = "stable"
 
 [[redirects]]
   from = "/*"

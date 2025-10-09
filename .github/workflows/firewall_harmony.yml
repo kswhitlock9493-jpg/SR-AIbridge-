@@ -1,0 +1,64 @@
+name: Firewall Harmony
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  harmony:
+    runs-on: ubuntu-latest
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: "true"
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
+      CHROMIUM_DOWNLOAD_ALLOWED: "false"
+      CHROMIUM_CHANNEL: "stable"
+      PUPPETEER_CACHE_DIR: ~/.cache/puppeteer
+      PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: bridge-frontend/package-lock.json
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/puppeteer
+            ~/.cache/ms-playwright
+          key: chromium-${{ runner.os }}-${{ hashFiles('bridge-frontend/package-lock.json') }}
+          restore-keys: chromium-${{ runner.os }}-
+
+      - name: Install deps
+        run: npm ci
+        working-directory: bridge-frontend
+
+      - name: Run Chromium Guard
+        run: node scripts/chromium-guard.mjs
+        working-directory: bridge-frontend
+
+      - name: Build project
+        run: npm run build
+        working-directory: bridge-frontend
+
+      - name: Probe diagnostic
+        run: python3 bridge_backend/tools/firewall_intel/chromium_probe.py | tee chromium_probe.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chromium_probe
+          path: chromium_probe.json
+
+      - name: Auto-Repair (Warm cache on fail)
+        if: failure()
+        run: |
+          echo "🔥 Detected failed run — enabling cache-warm repair."
+          export CHROMIUM_DOWNLOAD_ALLOWED=true
+          node scripts/chromium-guard.mjs || true
+          echo "✅ Repair completed; cache should now contain browsers."
+        working-directory: bridge-frontend

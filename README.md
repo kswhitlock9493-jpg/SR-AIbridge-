@@ -3,6 +3,7 @@
 ![Netlify Deploy Status](https://img.shields.io/badge/Netlify_Verified-brightgreen?style=for-the-badge)
 ![Bridge Network Health](https://img.shields.io/badge/Bridge_Parity_Engine-Active-blue?style=for-the-badge)
 ![Firewall Healer](https://img.shields.io/badge/Firewall_Intelligence-Operational-orange?style=for-the-badge)
+![Firewall Harmony](https://img.shields.io/badge/Firewall_Harmony-Auto--Recovering-brightgreen?style=for-the-badge)
 
 **A Sovereign Command & Control System for AI Agent Coordination**
 
@@ -27,6 +28,7 @@ SR-AIbridge provides a complete tactical command system for coordinating AI agen
 - 🎯 **Mission Control** - Create, assign, and track missions with progress monitoring
 - 🛡️ **Health Monitoring** - Comprehensive health checks with automatic self-healing
 - 🔥 **Firewall Intelligence** - Autonomous network diagnostics and self-healing network barriers
+- 🧘 **Firewall Harmony (v1.7.6)** - Auto-recovering browser automation that survives firewall blocks
 - 🔐 **Cryptographic Security** - Admiral key management with cryptographic attestation
 - 🧠 **Six Super Engines** - Specialized AI engines for math, quantum, science, history, language, and business
 - 💬 **Communication** - Captain-to-captain messaging and real-time updates
