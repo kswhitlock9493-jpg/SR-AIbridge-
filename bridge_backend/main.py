@@ -1,4 +1,6 @@
 import sys
+import os
+import time
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -12,6 +14,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Runtime metrics middleware
+try:
+    from bridge_backend.runtime.metrics_middleware import metrics_middleware
+    app.middleware("http")(metrics_middleware)
+except ImportError:
+    try:
+        from runtime.metrics_middleware import metrics_middleware
+        app.middleware("http")(metrics_middleware)
+    except ImportError:
+        pass  # Metrics middleware not available
 
 # Import and add RBAC permission middleware
 try:
@@ -194,29 +207,36 @@ def root():
 @app.get("/api/version")
 def get_version():
     """Return API version and build information"""
-    import os
-    from datetime import datetime
-    
     return {
-        "version": app.version,
+        "version": os.getenv("BRIDGE_VERSION", "2.0.0"),
         "service": "SR-AIbridge Backend",
-        "environment": os.getenv("ENVIRONMENT", "development"),
-        "commit": os.getenv("RENDER_GIT_COMMIT", "unknown")[:8],
-        "timestamp": datetime.utcnow().isoformat() + "Z"
+        "environment": os.getenv("ENVIRONMENT", "production"),
+        "commit": os.getenv("GIT_COMMIT", os.getenv("RENDER_GIT_COMMIT", "unknown"))[:8] if os.getenv("GIT_COMMIT", os.getenv("RENDER_GIT_COMMIT", "unknown")) != "unknown" else "unknown",
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     }
 
 @app.get("/api/routes")
 def list_routes():
     """Return list of available routes for parity checks"""
-    routes = []
+    r = []
     for route in app.router.routes:
-        if hasattr(route, "path") and hasattr(route, "methods"):
-            routes.append({
-                "path": route.path,
-                "methods": list(route.methods or [])
-            })
+        if hasattr(route, "path") and route.path.startswith("/"):
+            methods = sorted(getattr(route, "methods", []))
+            r.append({"path": route.path, "methods": methods})
     
     return {
-        "count": len(routes),
-        "routes": routes
+        "count": len(r),
+        "routes": sorted(r, key=lambda x: x["path"])
     }
+
+@app.get("/api/telemetry")
+def telemetry_snapshot():
+    """Return runtime telemetry snapshot"""
+    try:
+        from bridge_backend.runtime.telemetry import TELEMETRY
+    except ImportError:
+        try:
+            from runtime.telemetry import TELEMETRY
+        except ImportError:
+            return {"error": "Telemetry not available"}
+    return TELEMETRY.snapshot()

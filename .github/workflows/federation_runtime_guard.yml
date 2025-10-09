@@ -1,51 +1,37 @@
-name: Federation Runtime Guard
+name: Federation Runtime Guard v2
 on:
   workflow_dispatch:
   push:
     branches: [ "main" ]
   schedule:
-    - cron: "0 */6 * * *"  # Every 6 hours
+    - cron: "0 */6 * * *"
 
 jobs:
   guard:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - uses: actions/setup-python@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      
-      - name: Install dependencies
-        run: pip install requests
-      
-      - name: Smoke Backend Tests
+
+      - name: Smoke backend with retries
+        run: python .github/scripts/federation/smoke_backend.py
         env:
           BRIDGE_BASE: ${{ secrets.BRIDGE_BASE || 'https://sr-aibridge.onrender.com' }}
-        run: |
-          python .github/scripts/federation/smoke_backend.py --base "$BRIDGE_BASE"
-      
-      - name: Triage Matrix
+
+      - name: Triage matrix with pass/fail budget
+        run: python .github/scripts/federation/triage_matrix.py
         env:
           BRIDGE_BASE: ${{ secrets.BRIDGE_BASE || 'https://sr-aibridge.onrender.com' }}
-          TRIAGE_TOKEN: ${{ secrets.TRIAGE_TOKEN }}
-        run: |
-          if [ -n "$TRIAGE_TOKEN" ]; then
-            python .github/scripts/federation/triage_matrix.py --base "$BRIDGE_BASE" --token "$TRIAGE_TOKEN"
-          else
-            python .github/scripts/federation/triage_matrix.py --base "$BRIDGE_BASE"
-          fi
-      
-      - name: Collect Render Diagnostics on Failure
-        if: failure()
-        env:
-          RENDER_API_TOKEN: ${{ secrets.RENDER_API_TOKEN }}
-          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
-        run: |
-          python .github/scripts/render_collect.py --service "$RENDER_SERVICE_ID" --token "$RENDER_API_TOKEN"
-      
-      - uses: actions/upload-artifact@v4
+
+      - name: Upload triage artifacts
+        uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: federation_runtime_report
-          path: bridge_backend/diagnostics/**
+          name: triage-runtime-artifacts
+          path: |
+            bridge_backend/diagnostics/triage_runtime_metrics.json
+            bridge_backend/diagnostics/triage_matrix.ndjson

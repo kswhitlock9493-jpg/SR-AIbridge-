@@ -8,6 +8,9 @@
 ![Runtime Guard](https://img.shields.io/badge/Runtime_Guard-Active-brightgreen?style=for-the-badge)
 ![Federation Heartbeat](https://img.shields.io/badge/Federation_Heartbeat-Stable-brightgreen?style=for-the-badge)
 ![Render Auto-Repair](https://img.shields.io/badge/Render_Auto--Repair-Enabled-blue?style=for-the-badge)
+![Runtime Stable](https://img.shields.io/badge/Runtime-Stable-brightgreen)
+![Triage Green](https://img.shields.io/badge/Triage-Green-brightgreen)
+![Telemetry Live](https://img.shields.io/badge/Telemetry-Live-brightgreen)
 
 **A Sovereign Command & Control System for AI Agent Coordination**
 

@@ -30,18 +30,33 @@ def wait_for_db(url, timeout):
         print("[wait_for_db] psycopg2 not installed, skipping DB wait")
         return 0
     
+    # Try to import telemetry
+    try:
+        from bridge_backend.runtime.telemetry import TELEMETRY
+    except ImportError:
+        try:
+            from runtime.telemetry import TELEMETRY
+        except ImportError:
+            TELEMETRY = None
+    
     t0 = time.time()
     while time.time() - t0 < timeout:
         try:
             conn = psycopg2.connect(url)
             conn.close()
+            elapsed_ms = int((time.time() - t0) * 1000)
             print("[wait_for_db] DB ready")
+            if TELEMETRY:
+                TELEMETRY.mark("db_ready", True, ms=elapsed_ms, note="postgres_ok")
             return 0
         except Exception as e:
             print(f"[wait_for_db] DB not ready: {e}")
             time.sleep(3)
     
+    elapsed_ms = int((time.time() - t0) * 1000)
     print(f"[wait_for_db] DB not ready after {timeout}s")
+    if TELEMETRY:
+        TELEMETRY.mark("db_ready", False, ms=elapsed_ms, note="timeout_or_conn_error")
     return 1
 
 if __name__ == "__main__":
