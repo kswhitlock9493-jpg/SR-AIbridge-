@@ -23,7 +23,9 @@ def main():
     limit = int(os.getenv("ENDPOINT_TRIAGE_LIMIT", "20"))
     targets = targets[:limit]
 
-    for rel in targets:
+    for item in targets:
+        # Handle both dict format (with 'route' key) and string format
+        rel = item["route"] if isinstance(item, dict) else item
         if not rel.startswith("/"): rel = "/" + rel
         if BASE:
             url = f"{BASE}{rel}"
