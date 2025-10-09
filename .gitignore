@@ -122,3 +122,4 @@ Thumbs.db
 
 # Network diagnostics report (auto-generated)
 bridge_backend/diagnostics/copilot_network_report.json
+federation_repair_report.json
