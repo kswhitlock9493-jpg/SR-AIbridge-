@@ -15,6 +15,7 @@
   "devDependencies": {
     "@netlify/functions": "^2.8.2",
     "@netlify/plugin-lighthouse": "^4.1.0",
+    "@playwright/test": "^1.47.2",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.2",
@@ -29,12 +30,18 @@
     "vite": "^5.2.0",
     "vitest": "^1.4.0"
   },
+  "optionalDependencies": {
+    "puppeteer": "^22.12.0"
+  },
   "scripts": {
     "dev": "vite",
     "start": "vite",
     "prebuild": "python3 ../scripts/validate_netlify_env.py",
     "build": "vite build",
     "postbuild:badge": "node ./scripts/update-badge.js || true",
+    "postinstall:chromium": "node -e \"try{require('puppeteer');}catch(e){}; try{require('@playwright/test');}catch(e){}\"",
+    "chromium:guard": "node scripts/chromium-guard.mjs",
+    "chrome:which": "node scripts/which-chrome.mjs",
     "preview": "vite preview",
     "test": "vitest",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
