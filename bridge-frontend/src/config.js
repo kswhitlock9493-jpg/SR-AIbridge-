@@ -1,20 +1,16 @@
+// Centralized environment gateway
+export const API_BASE = import.meta.env.VITE_API_BASE || "https://sr-aibridge.onrender.com";
+export const BRIDGE_API_URL = import.meta.env.BRIDGE_API_URL || API_BASE;
+export const CASCADE_MODE = import.meta.env.CASCADE_MODE || "active";
+export const VAULT_URL = import.meta.env.VAULT_URL || "https://vault.sr-aibridge.com";
+
 const config = {
-  // API Base URL - configurable via environment variable for Netlify/Render deployments
-  // Support both Vite (VITE_API_BASE) and Create React App (REACT_APP_API_URL) patterns
-  API_BASE_URL: import.meta.env?.VITE_API_BASE || 
-    import.meta.env?.VITE_API_BASE_URL ||
-    (typeof process !== 'undefined' ? process.env.VITE_API_BASE : null) || 
-    (typeof process !== 'undefined' ? process.env.REACT_APP_API_BASE : null) || 
-    (typeof process !== 'undefined' ? process.env.REACT_APP_API_URL : null) || 
-    (import.meta.env?.MODE === 'development' || (typeof process !== 'undefined' && process.env.NODE_ENV === 'development')
-      ? "http://localhost:8000" 
-      : "https://sr-aibridge.onrender.com"),
+  // API Base URL - uses import.meta.env to prevent inlining secrets into dist
+  API_BASE_URL: API_BASE,
   
   // WebSocket Base URL for real-time updates
-  WS_BASE_URL: import.meta.env?.VITE_WS_BASE ||
-    import.meta.env?.VITE_WS_BASE_URL ||
-    (typeof process !== 'undefined' ? process.env.VITE_WS_BASE : null) ||
-    (import.meta.env?.MODE === 'development' || (typeof process !== 'undefined' && process.env.NODE_ENV === 'development')
+  WS_BASE_URL: import.meta.env.VITE_WS_BASE ||
+    (import.meta.env.MODE === 'development'
       ? "ws://localhost:8000"
       : "wss://sr-aibridge.onrender.com")
 };
