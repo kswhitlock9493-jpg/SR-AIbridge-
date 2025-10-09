@@ -15,12 +15,16 @@ def http_get(url: str, timeout: float = DEFAULT_TIMEOUT):
 
 def retrying_check(url: str, expect=200):
     failures = 0
+    last_err = "unknown"
+    last_code = None
     for attempt in range(1, MAX_RETRIES + 1):
         try:
             code, _ = http_get(url)
+            last_code = code
             if code == expect:
                 return {"ok": True, "attempts": attempt, "code": code}
             failures += 1
+            last_err = f"unexpected status code {code}"
         except Exception as e:
             failures += 1
             last_err = str(e)
@@ -30,4 +34,4 @@ def retrying_check(url: str, expect=200):
         sleep_s = BACKOFF_BASE * (BACKOFF_FACTOR ** (attempt - 1))
         sleep_s += random.uniform(0, JITTER_MAX)
         time.sleep(sleep_s)
-    return {"ok": False, "attempts": attempt, "code": None, "error": last_err if 'last_err' in locals() else "unknown"}
+    return {"ok": False, "attempts": attempt, "code": last_code, "error": last_err}
