@@ -3807,6 +3807,19 @@ Contact the maintainers for more information.
 
 ---
 
+## 🌐 Netlify Config & Egress Status
+
+CI guards Netlify configuration and outbound access pre-deploy.
+
+![Netlify Guard](https://img.shields.io/badge/Netlify_Guard-Enforced-brightgreen)
+![Egress Sync](https://img.shields.io/badge/Egress_Sync-Passing-brightgreen)
+
+- `netlify_config_triage.py`: lints & auto-repairs redirects/headers/publish path
+- `egress_sync_check.py`: verifies outbound to Netlify/Render/GitHub/Diagnostics
+- See `bridge_backend/diagnostics/netlify_config_report.json` and `total_stack_report.json`
+
+---
+
 ## ⭐ Star History
 
 If you find SR-AIbridge useful, please consider giving it a star on GitHub!
