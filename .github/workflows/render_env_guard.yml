@@ -1,0 +1,49 @@
+name: Render Env Guard
+on:
+  pull_request:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  envguard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      
+      - name: Lint Render Environment
+        run: |
+          python .github/scripts/render_env_lint.py
+      
+      - name: Validate Start Script Exists
+        run: |
+          if [ ! -f "bridge_backend/runtime/start.sh" ]; then
+            echo "✗ start.sh not found"
+            exit 1
+          fi
+          if [ ! -x "bridge_backend/runtime/start.sh" ]; then
+            echo "✗ start.sh not executable"
+            exit 1
+          fi
+          echo "✓ start.sh exists and is executable"
+      
+      - name: Validate Runtime Scripts
+        run: |
+          scripts=(
+            "bridge_backend/runtime/wait_for_db.py"
+            "bridge_backend/runtime/run_migrations.py"
+            "bridge_backend/runtime/egress_canary.py"
+            "bridge_backend/runtime/health_probe.py"
+          )
+          
+          for script in "${scripts[@]}"; do
+            if [ ! -f "$script" ]; then
+              echo "✗ $script not found"
+              exit 1
+            fi
+            echo "✓ $script exists"
+          done
