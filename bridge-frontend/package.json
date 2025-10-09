@@ -48,7 +48,7 @@
     "test": "vitest",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "repair": "python3 ../scripts/repair_netlify_env.py",
-    "ci:install": "cross-env NPM_CONFIG_PRODUCTION=false npm ci --no-audit --prefer-offline"
+    "ci:install": "cross-env NPM_CONFIG_PRODUCTION=false PUPPETEER_SKIP_DOWNLOAD=true PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true npm ci --no-audit --prefer-offline"
   },
   "eslintConfig": {
     "root": true,
