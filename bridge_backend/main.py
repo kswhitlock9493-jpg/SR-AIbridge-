@@ -190,3 +190,33 @@ async def startup_triage():
 @app.api_route("/", methods=["GET", "HEAD"])
 def root():
     return {"message": "SR-Albridge backend is running"}
+
+@app.get("/api/version")
+def get_version():
+    """Return API version and build information"""
+    import os
+    from datetime import datetime
+    
+    return {
+        "version": app.version,
+        "service": "SR-AIbridge Backend",
+        "environment": os.getenv("ENVIRONMENT", "development"),
+        "commit": os.getenv("RENDER_GIT_COMMIT", "unknown")[:8],
+        "timestamp": datetime.utcnow().isoformat() + "Z"
+    }
+
+@app.get("/api/routes")
+def list_routes():
+    """Return list of available routes for parity checks"""
+    routes = []
+    for route in app.router.routes:
+        if hasattr(route, "path") and hasattr(route, "methods"):
+            routes.append({
+                "path": route.path,
+                "methods": list(route.methods or [])
+            })
+    
+    return {
+        "count": len(routes),
+        "routes": routes
+    }

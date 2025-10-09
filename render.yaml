@@ -2,14 +2,23 @@ services:
   - type: web
     name: sr-aibridge-backend
     env: python
-    buildCommand: "cd bridge_backend && pip install -r requirements.txt"
-    startCommand: "cd bridge_backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
-    healthCheckPath: /health
+    runtime: python
+    plan: starter
+    region: oregon
+    buildCommand: |
+      pip install --upgrade pip
+      cd bridge_backend && pip install -r requirements.txt
+    startCommand: |
+      bash bridge_backend/runtime/start.sh
+    autoDeploy: true
+    healthCheckPath: /api/health
+    healthCheckInterval: 10
+    healthCheckTimeout: 3
     envVars:
       - key: PYTHON_VERSION
-        value: 3.12.3
+        value: 3.11.9
       - key: PORT
-        value: 8000
+        value: 10000
       - key: ENVIRONMENT
         value: production
       - key: DATABASE_TYPE
