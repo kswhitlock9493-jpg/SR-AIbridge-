@@ -171,12 +171,18 @@ app.include_router(diagnostics_timeline_router)
 protocol_storage.load_registry()
 
 # === DB Bootstrap ===
-# DATABASE_URL is validated and normalized by db_url_guard.py in start.sh
+# DATABASE_URL is validated by db_url_guard.py in start.sh
+# Apply same normalization here for consistency
 DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     # Fallback for local development without guard
     print("⚠️  No DATABASE_URL found — falling back to local SQLite.")
     DATABASE_URL = "sqlite+aiosqlite:///./bridge_local.db"
+else:
+    # Normalize postgres:// to postgresql+asyncpg:// (same as db_url_guard)
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+asyncpg://").replace(
+        "postgresql://", "postgresql+asyncpg://"
+    )
 
 try:
     from sqlalchemy.ext.asyncio import create_async_engine
