@@ -213,7 +213,10 @@ async def startup_event():
     
     # Start heartbeat system
     try:
-        from bridge_backend.runtime.heartbeat import start_heartbeat
+        try:
+            from bridge_backend.runtime.heartbeat import start_heartbeat
+        except ImportError:
+            from runtime.heartbeat import start_heartbeat
         await start_heartbeat()
     except Exception as e:
         print(f"⚠️ Heartbeat initialization failed: {e}")
