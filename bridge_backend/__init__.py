@@ -1,3 +1,5 @@
+__version__ = "1.9.6d"
+
 # This file makes bridge_backend a Python package for proper imports.
 
 # Database connection validation on startup

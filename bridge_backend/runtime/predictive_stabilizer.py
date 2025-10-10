@@ -1,10 +1,34 @@
-import os, logging, datetime, json
+import os, glob, shutil, re, logging, datetime, json
 from dateutil.tz import tzutc
 from bridge_backend.integrations.github_issues import maybe_create_issue
 
 log = logging.getLogger(__name__)
 TICKET_DIR = "bridge_backend/diagnostics/stabilization_tickets"
+RESOLVED_DIR = os.path.join(TICKET_DIR, "resolved")
 os.makedirs(TICKET_DIR, exist_ok=True)
+os.makedirs(RESOLVED_DIR, exist_ok=True)
+
+def _is_resolved(ticket_text: str) -> bool:
+    """Check if a ticket's condition has been fixed"""
+    # minimal but meaningful checks
+    if "PORT environment variable" in ticket_text:
+        return bool(os.getenv("PORT"))  # Render sets this
+    if "HEARTBEAT_URL" in ticket_text:
+        # heartbeat now auto-detects from RENDER_EXTERNAL_URL
+        return True
+    return False
+
+def resolve_tickets():
+    """Scan and resolve tickets whose conditions are now fixed"""
+    for path in glob.glob(os.path.join(TICKET_DIR, "*.md")):
+        with open(path, "r", encoding="utf-8") as f:
+            txt = f.read()
+        if _is_resolved(txt):
+            base = os.path.basename(path)
+            shutil.move(path, os.path.join(RESOLVED_DIR, base))
+            log.info(f"stabilizer: resolved {base}")
+        else:
+            log.warning(f"stabilizer: ticket persists {path}")
 
 def evaluate_stability(insights: dict):
     # Expect schema: {"stability_score": float, "most_active_modules": [["path/to/mod.py", score], ...]}

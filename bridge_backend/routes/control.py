@@ -100,3 +100,15 @@ async def trigger_hooks_triage(request: Request):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to run hooks triage: {str(e)}")
+
+
+@router.get("/render-ok", response_model=None)
+def render_ok():
+    """Render health check endpoint"""
+    return {"ok": True}
+
+
+@router.get("/health", response_model=None)
+def health():
+    """Basic health check endpoint"""
+    return {"status": "ok"}

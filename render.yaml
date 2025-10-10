@@ -6,7 +6,7 @@ services:
     plan: starter
     region: oregon
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "uvicorn bridge_backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"
+    startCommand: "bash scripts/start.sh"
     autoDeploy: true
     healthCheckPath: /api/health
     healthCheckInterval: 10
@@ -44,6 +44,9 @@ services:
         value: true
       - key: DEBUG
         value: false
+      - key: ENABLE_BLUEPRINT_ENGINE
+        value: "false"
+      # HEARTBEAT_URL will auto-detect from RENDER_EXTERNAL_URL; leave unset
 
 # SQLite-first deployment - no external database needed
 # Data persists in the container filesystem

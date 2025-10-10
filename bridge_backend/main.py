@@ -34,7 +34,7 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version=os.getenv("APP_VERSION","v1.9.6c"),
+    version="1.9.6d",
     description="Render-safe Port Binding + Response Model Fix + Blueprint Engine Hardening + Self-Healing"
 )
 
