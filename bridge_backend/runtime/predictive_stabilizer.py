@@ -16,6 +16,9 @@ def _is_resolved(ticket_text: str) -> bool:
     if "HEARTBEAT_URL" in ticket_text:
         # heartbeat now auto-detects from RENDER_EXTERNAL_URL
         return True
+    if "405" in ticket_text or "Method Not Allowed" in ticket_text:
+        # v1.9.6e heartbeat auto-detects valid methods
+        return True
     return False
 
 def resolve_tickets():

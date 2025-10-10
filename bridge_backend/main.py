@@ -34,8 +34,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.6d",
-    description="Render-safe Port Binding + Response Model Fix + Blueprint Engine Hardening + Self-Healing"
+    version="1.9.6e",
+    description="Heartbeat Compliance & Method Guard (Final Build) - Intelligent GET/POST/HEAD auto-detection"
 )
 
 # === CORS ===
@@ -195,8 +195,8 @@ async def startup_event():
     
     # Start heartbeat system
     try:
-        from bridge_backend.runtime import heartbeat
-        asyncio.create_task(heartbeat.run())
+        from bridge_backend.runtime.heartbeat import heartbeat_loop
+        asyncio.create_task(heartbeat_loop())
         logger.info("[HEART] heartbeat started")
     except Exception as e:
         logger.warning(f"[HEART] heartbeat failed: {e}")
