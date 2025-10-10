@@ -58,6 +58,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Header synchronization middleware for Netlify ↔ Render parity
+try:
+    from bridge_backend.middleware.headers import HeaderSyncMiddleware
+    app.add_middleware(HeaderSyncMiddleware)
+    logger.info("[MIDDLEWARE] Header sync enabled")
+except ImportError as e:
+    logger.warning(f"[MIDDLEWARE] Header sync not available: {e}")
+
 # Runtime metrics middleware
 try:
     from bridge_backend.runtime.metrics_middleware import metrics_middleware
@@ -155,8 +163,8 @@ async def startup_event():
     
     # Initialize database schema
     try:
-        from bridge_backend.utils.db import init_schema
-        await init_schema()
+        from bridge_backend.db.bootstrap import auto_sync_schema
+        await auto_sync_schema()
         logger.info("[DB] Auto schema sync complete")
     except Exception as e:
         logger.error(f"[DB] Schema initialization failed: {e}")
