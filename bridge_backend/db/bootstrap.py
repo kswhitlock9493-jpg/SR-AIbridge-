@@ -5,11 +5,9 @@ Auto-creates database schemas if missing on startup.
 Ensures seamless deployment without manual migration steps.
 """
 import logging
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import declarative_base
-import os
 
 logger = logging.getLogger(__name__)
+
 
 async def auto_sync_schema():
     """
@@ -20,10 +18,10 @@ async def auto_sync_schema():
     try:
         from bridge_backend.utils.db import engine
         from bridge_backend.models import Base as ModelsBase
-        
+
         async with engine.begin() as conn:
             await conn.run_sync(ModelsBase.metadata.create_all)
-        
+
         logger.info("[DB Bootstrap] ✅ Schema auto-sync complete")
         return True
     except Exception as e:
