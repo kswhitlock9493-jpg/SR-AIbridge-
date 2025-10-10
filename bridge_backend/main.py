@@ -24,8 +24,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.4",
-    description="Unified Render Runtime — Anchorhold Protocol: Full Stabilization + Federation Sync"
+    version="1.9.4a+",
+    description="Unified Render Runtime — Anchorhold Protocol: Full Stabilization + Federation Sync + Import Path Fix"
 )
 
 # === CORS ===
@@ -298,13 +298,13 @@ async def startup_triage():
 
 @app.api_route("/", methods=["GET", "HEAD"])
 async def root():
-    return {"status": "active", "version": "1.9.4", "environment": "production", "protocol": "Anchorhold"}
+    return {"status": "active", "version": "1.9.4a+", "environment": "production", "protocol": "Anchorhold"}
 
 @app.get("/api/version")
 def get_version():
     """Return API version and build information"""
     return {
-        "version": os.getenv("BRIDGE_VERSION", "1.9.4"),
+        "version": os.getenv("BRIDGE_VERSION", "1.9.4a+"),
         "protocol": "Anchorhold",
         "service": "SR-AIbridge Backend",
         "environment": os.getenv("ENVIRONMENT", "production"),
