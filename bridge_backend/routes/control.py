@@ -109,6 +109,7 @@ def render_ok():
 
 
 @router.get("/health", response_model=None)
+@router.post("/health", response_model=None)
 def health():
-    """Basic health check endpoint"""
+    """Basic health check endpoint - supports GET and POST for compatibility"""
     return {"status": "ok"}
