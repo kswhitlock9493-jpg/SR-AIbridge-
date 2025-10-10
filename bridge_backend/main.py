@@ -9,6 +9,10 @@ from importlib import import_module
 
 load_dotenv()
 
+# === Runtime Path Safety Net ===
+# Ensures the app finds local modules even under Render's /opt/render/project/src environment
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 # === Safe Import Guard ===
 def safe_import(module_path: str, alias: str = None):
     """Gracefully attempts to import a module and fallback-log on failure."""
@@ -20,8 +24,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.4",
-    description="Unified Render Runtime — Anchorhold Protocol: Full Stabilization + Federation Sync"
+    version="1.9.4a+",
+    description="Unified Render Runtime — Anchorhold Protocol: Full Stabilization + Federation Sync + Import Path Fix"
 )
 
 # === CORS ===
@@ -202,13 +206,35 @@ except Exception as e:
 
 @app.on_event("startup")
 async def startup_event():
-    print("🚀 Starting SR-AIbridge Runtime Guard...")
+    print("[INIT] 🚀 Starting SR-AIbridge Runtime Guard...")
+    print("[INIT] Python Path Validated")
+    
+    # Import verification
+    try:
+        import logging
+        logging.basicConfig(level=logging.INFO)
+        
+        # Check critical imports
+        critical_modules = [
+            "bridge_backend.models",
+            "bridge_backend.runtime.auto_repair",
+        ]
+        for module in critical_modules:
+            try:
+                import_module(module)
+                logging.info(f"[IMPORT CHECK] {module}: ✅ OK")
+            except Exception as e:
+                logging.error(f"[IMPORT CHECK] {module}: ❌ {e}")
+    except Exception as e:
+        print(f"⚠️ Import diagnostics failed: {e}")
+    
     # Initialize database schema
     async with engine.begin() as conn:
         # Create all tables if they don't exist
-        from models import Base
+        from bridge_backend.models import Base
         await conn.run_sync(Base.metadata.create_all)
-    print("✅ Database schema synchronized successfully.")
+    print("[DB] ✅ Database schema synchronized successfully.")
+    print("[DB] Auto schema sync complete")
     print("✅ Runtime initialized successfully with:", DATABASE_URL)
     
     # Start heartbeat system
@@ -218,6 +244,7 @@ async def startup_event():
         except ImportError:
             from runtime.heartbeat import start_heartbeat
         await start_heartbeat()
+        print("[HEART] Runtime heartbeat initialization complete")
     except Exception as e:
         print(f"⚠️ Heartbeat initialization failed: {e}")
 
@@ -271,13 +298,13 @@ async def startup_triage():
 
 @app.api_route("/", methods=["GET", "HEAD"])
 async def root():
-    return {"status": "active", "version": "1.9.4", "environment": "production", "protocol": "Anchorhold"}
+    return {"status": "active", "version": "1.9.4a+", "environment": "production", "protocol": "Anchorhold"}
 
 @app.get("/api/version")
 def get_version():
     """Return API version and build information"""
     return {
-        "version": os.getenv("BRIDGE_VERSION", "1.9.4"),
+        "version": os.getenv("BRIDGE_VERSION", "1.9.4a+"),
         "protocol": "Anchorhold",
         "service": "SR-AIbridge Backend",
         "environment": os.getenv("ENVIRONMENT", "production"),

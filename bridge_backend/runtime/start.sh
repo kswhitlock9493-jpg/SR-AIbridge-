@@ -5,6 +5,10 @@ export PORT="${PORT:-10000}"
 
 echo "🚀 Starting Bridge Runtime Bootstrap..."
 
+# Verify imports before anything else
+echo "🔍 Verifying critical imports..."
+python3 bridge_backend/runtime/verify_imports.py || echo "⚠️ Import verification had warnings; continuing"
+
 # Run self-repair before anything else
 python3 bridge_backend/runtime/auto_repair.py
 

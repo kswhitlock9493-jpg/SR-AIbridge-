@@ -72,6 +72,11 @@ bridge_backend/api_triage_report.json
 bridge_backend/hooks_triage_report.json
 bridge_backend/ci_cd_report.json
 bridge_backend/unified_timeline.json
+endpoint_report.json
+api_triage_report.json
+hooks_triage_report.json
+ci_cd_report.json
+unified_timeline.json
 bridge_backend/diagnostics/bridge_parity_report.json
 bridge_backend/diagnostics/parity_autofix_report.json
 bridge_backend/diagnostics/deploy_path_triage_report.json
