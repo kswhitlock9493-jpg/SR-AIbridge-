@@ -20,12 +20,22 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="2.0.1",
-    description="Unified Render Runtime — Auto-Provision + Federation Triage"
+    version="1.9.4",
+    description="Unified Render Runtime — Anchorhold Protocol: Full Stabilization + Federation Sync"
 )
 
 # === CORS ===
-origins = ["*"]
+CORS_ALLOW_ORIGINS = os.getenv(
+    "ALLOWED_ORIGINS", 
+    "https://sr-aibridge.netlify.app,https://sr-aibridge.onrender.com"
+).split(",")
+
+# Allow localhost in development
+if os.getenv("ENVIRONMENT", "production") == "development":
+    CORS_ALLOW_ORIGINS.extend(["http://localhost:3000", "http://localhost:5173"])
+
+origins = CORS_ALLOW_ORIGINS if os.getenv("CORS_ALLOW_ALL", "false").lower() != "true" else ["*"]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -193,9 +203,23 @@ except Exception as e:
 @app.on_event("startup")
 async def startup_event():
     print("🚀 Starting SR-AIbridge Runtime Guard...")
+    # Initialize database schema
     async with engine.begin() as conn:
-        await conn.run_sync(lambda _: None)
+        # Create all tables if they don't exist
+        from models import Base
+        await conn.run_sync(Base.metadata.create_all)
+    print("✅ Database schema synchronized successfully.")
     print("✅ Runtime initialized successfully with:", DATABASE_URL)
+    
+    # Start heartbeat system
+    try:
+        try:
+            from bridge_backend.runtime.heartbeat import start_heartbeat
+        except ImportError:
+            from runtime.heartbeat import start_heartbeat
+        await start_heartbeat()
+    except Exception as e:
+        print(f"⚠️ Heartbeat initialization failed: {e}")
 
 # Startup event handler for endpoint triage
 @app.on_event("startup")
@@ -247,13 +271,14 @@ async def startup_triage():
 
 @app.api_route("/", methods=["GET", "HEAD"])
 async def root():
-    return {"status": "active", "version": "2.0.1", "environment": "production"}
+    return {"status": "active", "version": "1.9.4", "environment": "production", "protocol": "Anchorhold"}
 
 @app.get("/api/version")
 def get_version():
     """Return API version and build information"""
     return {
-        "version": os.getenv("BRIDGE_VERSION", "2.0.0"),
+        "version": os.getenv("BRIDGE_VERSION", "1.9.4"),
+        "protocol": "Anchorhold",
         "service": "SR-AIbridge Backend",
         "environment": os.getenv("ENVIRONMENT", "production"),
         "commit": os.getenv("GIT_COMMIT", os.getenv("RENDER_GIT_COMMIT", "unknown"))[:8] if os.getenv("GIT_COMMIT", os.getenv("RENDER_GIT_COMMIT", "unknown")) != "unknown" else "unknown",
@@ -288,4 +313,5 @@ def telemetry_snapshot():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("bridge_backend.main:app", host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("bridge_backend.main:app", host="0.0.0.0", port=port)

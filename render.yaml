@@ -9,7 +9,7 @@ services:
       pip install --upgrade pip
       cd bridge_backend && pip install -r requirements.txt
     startCommand: |
-      bash bridge_backend/runtime/start.sh
+      python -m bridge_backend.main
     autoDeploy: true
     healthCheckPath: /api/health
     healthCheckInterval: 10
@@ -18,7 +18,7 @@ services:
       - key: PYTHON_VERSION
         value: 3.11.9
       - key: PORT
-        value: 10000
+        sync: false
       - key: ENVIRONMENT
         value: production
       - key: DATABASE_TYPE
@@ -42,7 +42,7 @@ services:
       - key: CORS_ALLOW_ALL
         value: false
       - key: ALLOWED_ORIGINS
-        value: https://bridge.netlify.app,https://sr-aibridge.netlify.app
+        value: https://bridge.netlify.app,https://sr-aibridge.netlify.app,https://sr-aibridge.onrender.com
       - key: AUTO_DIAGNOSE
         value: true
       - key: DEBUG
