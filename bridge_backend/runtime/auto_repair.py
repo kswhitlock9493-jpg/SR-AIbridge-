@@ -5,7 +5,31 @@ Verifies and repairs runtime environment for SR-AIbridge v1.9.4
 Anchorhold Protocol: Full stabilization + federation sync
 """
 import os
+import sys
 import asyncio
+import logging
+
+# Add repository root to path for imports (parent of bridge_backend)
+repo_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, repo_root)
+
+logging.basicConfig(level=logging.INFO)
+
+async def verify_imports():
+    """Validate critical imports are available"""
+    print("🔍 Verifying critical imports...")
+    try:
+        from bridge_backend.runtime.verify_imports import check_critical_imports
+        results = check_critical_imports()
+        failed = [m for m, s in results.items() if "❌" in s]
+        if failed:
+            print(f"⚠️  Import validation failed for: {', '.join(failed)}")
+            return False
+        print("✅ All critical imports validated.")
+        return True
+    except Exception as e:
+        print(f"⚠️  Import validation error: {e}")
+        return False
 
 async def verify_runtime():
     """Check runtime environment consistency"""
@@ -23,6 +47,11 @@ async def repair_runtime():
     """Attempt to repair runtime environment"""
     print("🩺 SR-AIbridge v1.9.4 — Anchorhold Protocol")
     print("⚓ Auto-Repair + Schema Sync + Heartbeat Init")
+    
+    # Check imports first
+    import_ok = await verify_imports()
+    if not import_ok:
+        print("⚠️  Import verification incomplete - continuing with caution")
     
     ok = await verify_runtime()
     if not ok:
@@ -45,3 +74,4 @@ async def repair_runtime():
 
 if __name__ == "__main__":
     asyncio.run(repair_runtime())
+
