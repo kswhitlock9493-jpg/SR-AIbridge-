@@ -19,11 +19,17 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # === Safe Import Guard ===
 def safe_import(module_path: str, alias: str = None):
-    """Gracefully attempts to import a module and fallback-log on failure."""
+    """
+    Import a module and never crash the app at boot.
+    If a router module fails to import (e.g., bad response_model typing),
+    we log and skip it so the rest of the app stays up.
+    """
     try:
-        return import_module(module_path)
-    except ModuleNotFoundError:
-        print(f"⚠️  Import failed for {module_path}, skipping...")
+        mod = import_module(module_path)
+        logger.info(f"[IMPORT] {module_path}: ✅")
+        return mod
+    except Exception as e:
+        logger.exception(f"[IMPORT] {module_path}: ❌ {e}")
         return None
 
 app = FastAPI(
@@ -81,116 +87,71 @@ routers = {
 for name, module in routers.items():
     if module and hasattr(module, "router"):
         app.include_router(module.router, prefix=f"/api/{name}", tags=[name.capitalize()])
+    else:
+        logger.warning(f"[ROUTER] Skipping '{name}' (module missing or no 'router').")
 
-# Import and include all routers - using try/except for deployment compatibility
-try:
-    # Relative imports when running from bridge_backend directory
-    from bridge_core.protocols.complex_routes import router as complex_protocols_router
-    from bridge_core.agents.routes import router as agents_router
-    from bridge_core.routes_brain import router as brain_router
-    from bridge_core.activity.routes import router as activity_router
-    from bridge_core.vault.routes import router as vault_router
-    from bridge_core.fleet.routes import router as fleet_router
-    from bridge_core.custody.routes import router as custody_router
-    from bridge_core.console.routes import router as console_router
-    from bridge_core.captains.routes import router as captains_router
-    from bridge_core.guardians.routes import router as guardians_router, guardians_router
-    from bridge_core.engines.autonomy.routes import router as autonomy_router
-    from bridge_core.engines.parser.routes import router as parser_router
-    from bridge_core.engines.recovery.routes import router as recovery_router
-    from bridge_core.engines.routes_filing import router as filing_router
-    from bridge_core.engines.truth.routes import router as truth_router
-    from bridge_core.engines.indoctrination.routes import router as indoctrination_router
-    from bridge_core.engines.agents_foundry.routes import router as agents_foundry_router
-    from bridge_core.engines.speech.routes import router as speech_router
-    from bridge_core.engines.screen.routes import router as screen_router
-    from bridge_core.engines.leviathan.routes import router as leviathan_router
-    from bridge_core.engines.leviathan.routes_solver import router as leviathan_solver_router
-    from bridge_core.engines.creativity.routes import router as creativity_router
-    from bridge_core.engines.cascade.routes import router as cascade_router
-    from bridge_core.engines.blueprint.routes import router as blueprint_router
-    from bridge_core.registry.routes import router as registry_router
-    from bridge_core.protocols import storage as protocol_storage
-    from bridge_core.permissions.routes import router as permissions_router
-    from bridge_core.payments.stripe_webhooks import router as stripe_router
-    from bridge_core.heritage.routes import router as heritage_router
-    from bridge_core.scans.routes import router as scans_router
-    from routes.control import router as control_router
-    from routes.diagnostics_timeline import router as diagnostics_timeline_router
-except ImportError:
-    # Absolute imports when running from parent directory (Render deployment)
-    from bridge_backend.bridge_core.protocols.complex_routes import router as complex_protocols_router
-    from bridge_backend.bridge_core.agents.routes import router as agents_router
-    from bridge_backend.bridge_core.routes_brain import router as brain_router
-    from bridge_backend.bridge_core.activity.routes import router as activity_router
-    from bridge_backend.bridge_core.vault.routes import router as vault_router
-    from bridge_backend.bridge_core.fleet.routes import router as fleet_router
-    from bridge_backend.bridge_core.custody.routes import router as custody_router
-    from bridge_backend.bridge_core.console.routes import router as console_router
-    from bridge_backend.bridge_core.captains.routes import router as captains_router
-    from bridge_backend.bridge_core.guardians.routes import router as guardians_router, guardians_router
-    from bridge_backend.bridge_core.engines.autonomy.routes import router as autonomy_router
-    from bridge_backend.bridge_core.engines.parser.routes import router as parser_router
-    from bridge_backend.bridge_core.engines.recovery.routes import router as recovery_router
-    from bridge_backend.bridge_core.engines.routes_filing import router as filing_router
-    from bridge_backend.bridge_core.engines.truth.routes import router as truth_router
-    from bridge_backend.bridge_core.engines.indoctrination.routes import router as indoctrination_router
-    from bridge_backend.bridge_core.engines.agents_foundry.routes import router as agents_foundry_router
-    from bridge_backend.bridge_core.engines.speech.routes import router as speech_router
-    from bridge_backend.bridge_core.engines.screen.routes import router as screen_router
-    from bridge_backend.bridge_core.engines.leviathan.routes import router as leviathan_router
-    from bridge_backend.bridge_core.engines.leviathan.routes_solver import router as leviathan_solver_router
-    from bridge_backend.bridge_core.engines.creativity.routes import router as creativity_router
-    from bridge_backend.bridge_core.engines.cascade.routes import router as cascade_router
-    from bridge_backend.bridge_core.engines.blueprint.routes import router as blueprint_router
-    from bridge_backend.bridge_core.registry.routes import router as registry_router
-    from bridge_backend.bridge_core.protocols import storage as protocol_storage
-    from bridge_backend.bridge_core.permissions.routes import router as permissions_router
-    from bridge_backend.bridge_core.payments.stripe_webhooks import router as stripe_router
-    from bridge_backend.bridge_core.heritage.routes import router as heritage_router
-    from bridge_backend.bridge_core.scans.routes import router as scans_router
-    from bridge_backend.routes.control import router as control_router
-    from bridge_backend.routes.diagnostics_timeline import router as diagnostics_timeline_router
+# Helper function to safely import and include a router
+def safe_include_router(module_path: str, router_attr: str = "router", **kwargs):
+    """Safely import a module and include its router, with fallback on failure."""
+    module = safe_import(module_path)
+    if module and hasattr(module, router_attr):
+        try:
+            router = getattr(module, router_attr)
+            app.include_router(router, **kwargs)
+            logger.info(f"[ROUTER] Included {module_path}:{router_attr}")
+        except Exception as e:
+            logger.exception(f"[ROUTER] Failed to include {module_path}:{router_attr}: {e}")
+    else:
+        logger.warning(f"[ROUTER] Skipping {module_path}:{router_attr} (not found)")
 
-app.include_router(complex_protocols_router)
-app.include_router(agents_router)
-app.include_router(brain_router)
-app.include_router(activity_router)
-app.include_router(vault_router)
-app.include_router(fleet_router)
-app.include_router(custody_router)
-app.include_router(console_router)
-app.include_router(captains_router)
-app.include_router(guardians_router)
-app.include_router(guardians_router)
-app.include_router(autonomy_router)
-app.include_router(parser_router)
-app.include_router(recovery_router)
-app.include_router(filing_router)
-app.include_router(truth_router)
-app.include_router(indoctrination_router)
-app.include_router(agents_foundry_router)
-app.include_router(speech_router)
-app.include_router(screen_router)
-app.include_router(leviathan_router)
-app.include_router(leviathan_solver_router)
-app.include_router(creativity_router)
-app.include_router(cascade_router)
-app.include_router(blueprint_router)
-app.include_router(registry_router)
-app.include_router(permissions_router)
-app.include_router(stripe_router)
-app.include_router(heritage_router)
-app.include_router(scans_router)
-app.include_router(control_router)
-app.include_router(diagnostics_timeline_router)
+# Import protocol storage separately (not a router)
+protocol_storage = safe_import("bridge_backend.bridge_core.protocols.storage")
+if protocol_storage:
+    try:
+        protocol_storage.load_registry()
+        logger.info("[REGISTRY] Protocol registry loaded")
+    except Exception as e:
+        logger.warning(f"[REGISTRY] Failed to load protocol registry: {e}")
 
-# Load registry from vault at startup
-protocol_storage.load_registry()
+# Import and include all routers individually with safe_import
+safe_include_router("bridge_backend.bridge_core.protocols.complex_routes")
+safe_include_router("bridge_backend.bridge_core.agents.routes")
+safe_include_router("bridge_backend.bridge_core.routes_brain")
+safe_include_router("bridge_backend.bridge_core.activity.routes")
+safe_include_router("bridge_backend.bridge_core.vault.routes")
+safe_include_router("bridge_backend.bridge_core.fleet.routes")
+safe_include_router("bridge_backend.bridge_core.custody.routes")
+safe_include_router("bridge_backend.bridge_core.console.routes")
+safe_include_router("bridge_backend.bridge_core.captains.routes")
+safe_include_router("bridge_backend.bridge_core.guardians.routes")
+safe_include_router("bridge_backend.bridge_core.guardians.routes", "guardians_router")  # duplicate in original
+safe_include_router("bridge_backend.bridge_core.engines.autonomy.routes")
+safe_include_router("bridge_backend.bridge_core.engines.parser.routes")
+safe_include_router("bridge_backend.bridge_core.engines.recovery.routes")
+safe_include_router("bridge_backend.bridge_core.engines.routes_filing")
+safe_include_router("bridge_backend.bridge_core.engines.truth.routes")
+safe_include_router("bridge_backend.bridge_core.engines.indoctrination.routes")
+safe_include_router("bridge_backend.bridge_core.engines.agents_foundry.routes")
+safe_include_router("bridge_backend.bridge_core.engines.speech.routes")
+safe_include_router("bridge_backend.bridge_core.engines.screen.routes")
+safe_include_router("bridge_backend.bridge_core.engines.leviathan.routes")
+safe_include_router("bridge_backend.bridge_core.engines.leviathan.routes_solver")
+safe_include_router("bridge_backend.bridge_core.engines.creativity.routes")
+safe_include_router("bridge_backend.bridge_core.engines.cascade.routes")
+safe_include_router("bridge_backend.bridge_core.engines.blueprint.routes")
+safe_include_router("bridge_backend.bridge_core.registry.routes")
+safe_include_router("bridge_backend.bridge_core.permissions.routes")
+safe_include_router("bridge_backend.bridge_core.payments.stripe_webhooks")
+safe_include_router("bridge_backend.bridge_core.heritage.routes")
+safe_include_router("bridge_backend.bridge_core.scans.routes")
+safe_include_router("bridge_backend.routes.control")
+safe_include_router("bridge_backend.routes.diagnostics_timeline")
 
 @app.on_event("startup")
 async def startup_event():
-    logger.info("[INIT] 🚀 Starting SR-AIbridge Runtime")
+    port = os.getenv("PORT", "10000")
+    logger.info("[BOOT] 🚀 Starting SR-AIbridge Runtime")
+    logger.info(f"[BOOT] Target PORT={port} (Render sets this automatically)")
     
     # Initialize database schema
     try:

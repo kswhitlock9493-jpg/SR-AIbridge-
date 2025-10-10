@@ -4,7 +4,7 @@ from pathlib import Path
 from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from typing import List
+from typing import List, Annotated
 import json
 import uuid
 
@@ -13,17 +13,20 @@ try:
     from bridge_backend.bridge_core.db.db_manager import get_db_session
     from bridge_backend.models import AgentJob, Mission
     from bridge_backend.schemas import AgentJobOut
+    DB_AVAILABLE = True
 except ImportError:
     try:
         from ...db.db_manager import get_db_session
         from ....models import AgentJob, Mission
         from ....schemas import AgentJobOut
+        DB_AVAILABLE = True
     except ImportError:
         # Fallback - will be None if not available
         get_db_session = None
         AgentJob = None
         Mission = None
         AgentJobOut = None
+        DB_AVAILABLE = False
 
 router = APIRouter(prefix="/missions", tags=["missions"])
 
@@ -87,28 +90,39 @@ def create_mission(m: MissionIn, request: Request):
     return {"status": "created", "mission": entry}
 
 
-@router.get("/{mission_id}/jobs", response_model=List[AgentJobOut] if AgentJobOut else list)
-async def get_mission_jobs(
-    mission_id: int,
-    session: AsyncSession = Depends(get_db_session) if get_db_session else None
-):
-    """
-    Get all agent jobs for a specific mission
-    Returns blueprint-generated jobs with status, dependencies, and outputs
-    """
-    if not get_db_session or not AgentJob:
+if DB_AVAILABLE:
+    @router.get("/{mission_id}/jobs", response_model=List[AgentJobOut])
+    async def get_mission_jobs(
+        mission_id: int,
+        db: Annotated[AsyncSession, Depends(get_db_session)]
+    ):
+        """
+        Get all agent jobs for a specific mission
+        Returns blueprint-generated jobs with status, dependencies, and outputs
+        
+        The important part is how `db` is injected:
+        - DO NOT annotate `db` as a pydantic field/type in the response.
+        - DO NOT return AsyncSession.
+        - Keep AsyncSession *only* inside Depends.
+        """
+        try:
+            # Query all jobs for this mission
+            result = await db.execute(
+                select(AgentJob).where(AgentJob.mission_id == mission_id).order_by(AgentJob.task_key)
+            )
+            jobs = result.scalars().all()
+            
+            return jobs
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to get mission jobs: {str(e)}")
+else:
+    @router.get("/{mission_id}/jobs", response_model=list)
+    async def get_mission_jobs(mission_id: int):
+        """
+        Get all agent jobs for a specific mission
+        Database backend not available - returns empty list
+        """
         raise HTTPException(
             status_code=501,
             detail="Blueprint feature requires database backend (not available with JSONL storage)"
         )
-    
-    try:
-        # Query all jobs for this mission
-        result = await session.execute(
-            select(AgentJob).where(AgentJob.mission_id == mission_id).order_by(AgentJob.task_key)
-        )
-        jobs = result.scalars().all()
-        
-        return jobs
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to get mission jobs: {str(e)}")

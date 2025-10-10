@@ -2,8 +2,8 @@
 set -euo pipefail
 export PYTHONPATH="${PYTHONPATH:-.}:$(pwd)"
 
-# Dynamic PORT binding (Render auto-assigns, default to 8000 for local)
-export PORT="${PORT:-8000}"
+# Dynamic PORT binding (Render auto-assigns PORT=10000, default to 10000 for consistency)
+export PORT="${PORT:-10000}"
 
 echo "[INIT] 🚀 Launching SR-AIbridge Runtime..."
 echo "[INIT] Using PORT=${PORT}"
