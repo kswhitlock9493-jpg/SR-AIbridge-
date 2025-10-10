@@ -140,3 +140,7 @@ bridge_backend/diagnostics/triage_matrix.ndjson
 
 # v1.9.5 Self-healing repair logs
 bridge_backend/runtime/.bridge_repair_log
+
+# v1.9.6b Stabilization tickets (auto-generated)
+bridge_backend/diagnostics/stabilization_tickets/*
+!bridge_backend/diagnostics/stabilization_tickets/.gitkeep

@@ -1,15 +1,12 @@
 services:
   - type: web
-    name: sr-aibridge-backend
+    name: SR-AIbridge-
     env: python
     runtime: python
     plan: starter
     region: oregon
-    buildCommand: |
-      pip install --upgrade pip
-      cd bridge_backend && pip install -r requirements.txt
-    startCommand: |
-      python -m bridge_backend.main
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "bash -lc 'uvicorn bridge_backend.main:app --host 0.0.0.0 --port ${PORT}'"
     autoDeploy: true
     healthCheckPath: /api/health
     healthCheckInterval: 10
