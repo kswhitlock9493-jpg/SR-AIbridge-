@@ -11,6 +11,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+ENABLE = os.getenv("ENABLE_BLUEPRINT_ENGINE", "false").lower() == "true"
+
 router = APIRouter(prefix="/blueprint", tags=["blueprint"])
 
 # Defer model imports - they'll be loaded when endpoints are called
@@ -86,6 +88,11 @@ def _ensure_models():
         _import_error = str(e)
         logger.warning(f"[BLUEPRINTS] Models unavailable: {e}")
         return False
+
+
+# In strict mode, demand the model at import time
+if ENABLE and not _ensure_models():
+    raise ImportError("ENABLE_BLUEPRINT_ENGINE=true, but Blueprint model not available")
 
 
 @router.get("/status")

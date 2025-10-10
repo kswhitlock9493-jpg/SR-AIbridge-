@@ -94,6 +94,7 @@ if DB_AVAILABLE:
     @router.get("/{mission_id}/jobs", response_model=List[AgentJobOut])
     async def get_mission_jobs(
         mission_id: int,
+        *,
         db: Annotated[AsyncSession, Depends(get_db_session)]
     ):
         """
