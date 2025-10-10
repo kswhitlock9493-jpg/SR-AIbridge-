@@ -2,12 +2,16 @@ import sys
 import os
 import asyncio
 import time
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from importlib import import_module
 
 load_dotenv()
+
+logging.basicConfig(level=os.getenv("LOG_LEVEL","INFO").upper())
+logger = logging.getLogger(__name__)
 
 # === Runtime Path Safety Net ===
 # Ensures the app finds local modules even under Render's /opt/render/project/src environment
@@ -24,8 +28,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.5",
-    description="Unified Runtime & Autonomic Homeostasis — Self-healing, diagnostics, and federation parity"
+    version=os.getenv("APP_VERSION","v1.9.6b"),
+    description="Predictive Stabilization + Self-Healing + Release Intelligence"
 )
 
 # === CORS ===
@@ -184,81 +188,33 @@ app.include_router(diagnostics_timeline_router)
 # Load registry from vault at startup
 protocol_storage.load_registry()
 
-# === DB Bootstrap ===
-# DATABASE_URL is validated by db_url_guard.py in start.sh
-# Apply same normalization here for consistency
-DATABASE_URL = os.getenv("DATABASE_URL")
-if not DATABASE_URL:
-    # Fallback for local development without guard
-    print("⚠️  No DATABASE_URL found — falling back to local SQLite.")
-    DATABASE_URL = "sqlite+aiosqlite:///./bridge_local.db"
-else:
-    # Normalize postgres:// to postgresql+asyncpg:// (same as db_url_guard)
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+asyncpg://").replace(
-        "postgresql://", "postgresql+asyncpg://"
-    )
-
-try:
-    from sqlalchemy.ext.asyncio import create_async_engine
-    engine = create_async_engine(DATABASE_URL, echo=False, future=True)
-except Exception as e:
-    raise RuntimeError(f"❌ Database engine initialization failed: {e}")
-
 @app.on_event("startup")
 async def startup_event():
-    print("[INIT] 🚀 Starting SR-AIbridge Runtime Guard...")
-    print("[INIT] Python Path Validated")
-    
-    # Import verification
-    try:
-        import logging
-        logging.basicConfig(level=logging.INFO)
-        
-        # Run parity sync for Render ↔ Netlify alignment
-        try:
-            from bridge_backend.runtime.parity import run_parity_sync
-            run_parity_sync()
-        except Exception as e:
-            logging.warning(f"[PARITY] Parity sync failed: {e}")
-        
-        # Check critical imports
-        critical_modules = [
-            "bridge_backend.models",
-            "bridge_backend.runtime.auto_repair",
-        ]
-        for module in critical_modules:
-            try:
-                import_module(module)
-                logging.info(f"[IMPORT CHECK] {module}: ✅ OK")
-            except Exception as e:
-                logging.error(f"[IMPORT CHECK] {module}: ❌ {e}")
-    except Exception as e:
-        print(f"⚠️ Import diagnostics failed: {e}")
+    logger.info("[INIT] 🚀 Starting SR-AIbridge Runtime")
     
     # Initialize database schema
-    async with engine.begin() as conn:
-        # Create all tables if they don't exist
-        from bridge_backend.models import Base
-        await conn.run_sync(Base.metadata.create_all)
-    print("[DB] ✅ Database schema synchronized successfully.")
-    print("[DB] Auto schema sync complete")
-    print("✅ Runtime initialized successfully with:", DATABASE_URL)
+    try:
+        from bridge_backend.utils.db import init_schema
+        await init_schema()
+        logger.info("[DB] Auto schema sync complete")
+    except Exception as e:
+        logger.error(f"[DB] Schema initialization failed: {e}")
+    
+    # Run release intelligence analysis
+    try:
+        from bridge_backend.runtime.release_intel import analyze_and_stabilize
+        analyze_and_stabilize()
+        logger.info("[INTEL] release analysis done")
+    except Exception as e:
+        logger.warning(f"[INTEL] release analysis failed: {e}")
     
     # Start heartbeat system
     try:
-        try:
-            from bridge_backend.runtime.heartbeat import start_heartbeat, ensure_httpx
-        except ImportError:
-            from runtime.heartbeat import start_heartbeat, ensure_httpx
-        
-        # Verify httpx before starting heartbeat
-        if ensure_httpx():
-            print("[HEART] ✅ httpx verified")
-        
-        await start_heartbeat()
-        print("[HEART] Runtime heartbeat initialization complete")
+        from bridge_backend.runtime import heartbeat
+        asyncio.create_task(heartbeat.run())
+        logger.info("[HEART] heartbeat started")
     except Exception as e:
-        print(f"⚠️ Heartbeat initialization failed: {e}")
+        logger.warning(f"[HEART] heartbeat failed: {e}")
 
 # Startup event handler for endpoint triage
 @app.on_event("startup")
@@ -310,7 +266,7 @@ async def startup_triage():
 
 @app.api_route("/", methods=["GET", "HEAD"])
 async def root():
-    return {"status": "active", "version": "1.9.4a+", "environment": "production", "protocol": "Anchorhold"}
+    return {"ok": True, "version": app.version}
 
 @app.get("/api/version")
 def get_version():
