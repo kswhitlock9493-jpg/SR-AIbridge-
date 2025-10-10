@@ -9,7 +9,17 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy import text
 from .models import Base  # ORM Base import
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./vault/bridge.db")
+# DATABASE_URL is validated by db_url_guard.py in start.sh
+# Apply same normalization here for consistency
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    # Fallback for local development without guard
+    DATABASE_URL = "sqlite+aiosqlite:///./vault/bridge.db"
+else:
+    # Normalize postgres:// to postgresql+asyncpg:// (same as db_url_guard)
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+asyncpg://").replace(
+        "postgresql://", "postgresql+asyncpg://"
+    )
 
 engine = create_async_engine(DATABASE_URL, echo=False, future=True)
 SessionLocal = async_sessionmaker(bind=engine, expire_on_commit=False)

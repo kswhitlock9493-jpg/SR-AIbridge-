@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
+export PYTHONPATH="${PYTHONPATH:-.}:$(pwd)"
+export PORT="${PORT:-10000}"
 
 echo "🚀 Starting Bridge Runtime Bootstrap..."
 
 # Run self-repair before anything else
 python3 bridge_backend/runtime/auto_repair.py
+
+echo "🔧 DB URL Guard"
+python3 bridge_backend/runtime/db_url_guard.py
 
 echo "⏳ Waiting for DB readiness..."
 python3 bridge_backend/runtime/wait_for_db.py --timeout 120 || echo "⚠️ DB readiness skipped"
@@ -17,4 +22,4 @@ python3 bridge_backend/runtime/health_probe.py --warm || echo "[warn] health pro
 
 echo "✅ Launching Uvicorn server..."
 # Launch app (uvicorn)
-exec uvicorn bridge_backend.main:app --host 0.0.0.0 --port "${PORT:-10000}"
+exec uvicorn bridge_backend.main:app --host 0.0.0.0 --port "${PORT}"

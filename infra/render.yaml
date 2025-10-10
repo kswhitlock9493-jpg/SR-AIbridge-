@@ -1,15 +1,15 @@
 services:
   - type: web
-    name: sr-aibridge
+    name: sr-aibridge-backend
     env: python
     plan: starter
-    buildCommand: pip install -r requirements.txt
-    startCommand: bash bridge_backend/runtime/start.sh
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "bash bridge_backend/runtime/start.sh"
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.9
+        value: "3.11.9"
       - key: PORT
-        value: 10000
+        value: "10000"
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
