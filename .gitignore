@@ -137,3 +137,6 @@ federation_repair_report.json
 # v1.8.5 Runtime Telemetry artifacts
 bridge_backend/diagnostics/triage_runtime_metrics.json
 bridge_backend/diagnostics/triage_matrix.ndjson
+
+# v1.9.5 Self-healing repair logs
+bridge_backend/runtime/.bridge_repair_log
