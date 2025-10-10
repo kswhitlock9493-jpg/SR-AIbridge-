@@ -12,13 +12,11 @@ if DATABASE_URL and DATABASE_URL.startswith("postgresql://"):
 
 Base = declarative_base()
 
-# Create engine only if DATABASE_URL is set, otherwise it will be created on demand
-if DATABASE_URL:
-    engine: AsyncEngine = create_async_engine(DATABASE_URL, pool_pre_ping=True, echo=False)
-else:
-    # Use SQLite as fallback for local development
+# Create engine only if DATABASE_URL is set, otherwise use SQLite as fallback
+if not DATABASE_URL:
     DATABASE_URL = "sqlite+aiosqlite:///./bridge_local.db"
-    engine: AsyncEngine = create_async_engine(DATABASE_URL, pool_pre_ping=True, echo=False)
+
+engine: AsyncEngine = create_async_engine(DATABASE_URL, pool_pre_ping=True, echo=False)
 
 async def init_schema():
     from bridge_backend.models import Base as ModelsBase  # ensure model import

@@ -10,7 +10,7 @@ from importlib import import_module
 
 load_dotenv()
 
-logging.basicConfig(level=os.getenv("LOG_LEVEL","INFO"))
+logging.basicConfig(level=os.getenv("LOG_LEVEL","INFO").upper())
 logger = logging.getLogger(__name__)
 
 # === Runtime Path Safety Net ===
