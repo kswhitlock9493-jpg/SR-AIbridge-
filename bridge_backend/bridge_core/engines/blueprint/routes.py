@@ -6,33 +6,97 @@ from fastapi import APIRouter, HTTPException, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List
+import os
+import logging
 
-# Import dependencies with both relative and absolute paths for compatibility
-try:
-    from bridge_backend.bridge_core.db.db_manager import get_db_session
-    from bridge_backend.models import Blueprint, AgentJob, Mission
-    from bridge_backend.schemas import BlueprintCreate, BlueprintOut, AgentJobOut
-    from bridge_backend.utils.relay_mailer import relay_mailer
-except ImportError:
-    try:
-        from ....models import Blueprint, AgentJob, Mission
-        from ....schemas import BlueprintCreate, BlueprintOut, AgentJobOut
-        from ....utils.relay_mailer import relay_mailer
-        from ...db.db_manager import get_db_session
-    except ImportError:
-        # Fallback for different import contexts
-        import sys
-        import os
-        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
-        from models import Blueprint, AgentJob, Mission
-        from schemas import BlueprintCreate, BlueprintOut, AgentJobOut
-        from utils.relay_mailer import relay_mailer
-        from bridge_core.db.db_manager import get_db_session
-
-from .blueprint_engine import BlueprintEngine
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/blueprint", tags=["blueprint"])
-engine = BlueprintEngine()
+
+# Defer model imports - they'll be loaded when endpoints are called
+_models_imported = False
+_import_error = None
+
+# Stub dependencies for import-time safety
+def _stub_get_db_session():
+    """Stub dependency - replaced by real one when models load"""
+    raise HTTPException(status_code=503, detail="Blueprint engine not available")
+
+def _stub_model_class():
+    """Stub model class - replaced by real one when models load"""
+    raise HTTPException(status_code=503, detail="Blueprint engine not available")
+
+# Initialize as stubs
+get_db_session = _stub_get_db_session
+BlueprintCreate = _stub_model_class
+BlueprintOut = _stub_model_class
+AgentJobOut = _stub_model_class
+
+def _ensure_models():
+    """Lazy-load models to avoid import-time crashes"""
+    global _models_imported, _import_error, Blueprint, AgentJob, Mission
+    global BlueprintCreate, BlueprintOut, AgentJobOut, relay_mailer, get_db_session, engine
+    
+    if _models_imported:
+        return True
+    
+    if _import_error:
+        return False
+    
+    try:
+        # Import dependencies with both relative and absolute paths for compatibility
+        try:
+            from bridge_backend.bridge_core.db.db_manager import get_db_session as _get_db_session
+            from bridge_backend.models import Blueprint as _Blueprint, AgentJob as _AgentJob, Mission as _Mission
+            from bridge_backend.schemas import BlueprintCreate as _BlueprintCreate, BlueprintOut as _BlueprintOut, AgentJobOut as _AgentJobOut
+            from bridge_backend.utils.relay_mailer import relay_mailer as _relay_mailer
+        except ImportError:
+            try:
+                from ....models import Blueprint as _Blueprint, AgentJob as _AgentJob, Mission as _Mission
+                from ....schemas import BlueprintCreate as _BlueprintCreate, BlueprintOut as _BlueprintOut, AgentJobOut as _AgentJobOut
+                from ....utils.relay_mailer import relay_mailer as _relay_mailer
+                from ...db.db_manager import get_db_session as _get_db_session
+            except ImportError:
+                # Fallback for different import contexts
+                import sys
+                import os as _os
+                sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.dirname(_os.path.dirname(__file__)))))
+                from models import Blueprint as _Blueprint, AgentJob as _AgentJob, Mission as _Mission
+                from schemas import BlueprintCreate as _BlueprintCreate, BlueprintOut as _BlueprintOut, AgentJobOut as _AgentJobOut
+                from utils.relay_mailer import relay_mailer as _relay_mailer
+                from bridge_core.db.db_manager import get_db_session as _get_db_session
+        
+        from .blueprint_engine import BlueprintEngine as _BlueprintEngine
+        
+        # Assign to module-level variables
+        Blueprint = _Blueprint
+        AgentJob = _AgentJob
+        Mission = _Mission
+        BlueprintCreate = _BlueprintCreate
+        BlueprintOut = _BlueprintOut
+        AgentJobOut = _AgentJobOut
+        relay_mailer = _relay_mailer
+        get_db_session = _get_db_session
+        engine = _BlueprintEngine()
+        
+        _models_imported = True
+        logger.info("[BLUEPRINTS] Models imported successfully")
+        return True
+    except Exception as e:
+        _import_error = str(e)
+        logger.warning(f"[BLUEPRINTS] Models unavailable: {e}")
+        return False
+
+
+@router.get("/status")
+def status():
+    """Check if blueprint engine is available"""
+    if _ensure_models():
+        return {"engine": "blueprint", "status": "ok"}
+    raise HTTPException(
+        status_code=503, 
+        detail=f"Blueprint engine disabled (models unavailable: {_import_error})"
+    )
 
 
 def require_role(allowed_roles: List[str]):
@@ -46,7 +110,7 @@ def require_role(allowed_roles: List[str]):
     return dependency
 
 
-@router.post("/draft", response_model=BlueprintOut)
+@router.post("/draft")
 async def draft_blueprint(
     payload: BlueprintCreate,
     session: AsyncSession = Depends(get_db_session),
@@ -58,6 +122,9 @@ async def draft_blueprint(
     Captains and Admirals can create blueprints.
     Returns structured plan with objectives, tasks, dependencies, and success criteria.
     """
+    if not _ensure_models():
+        raise HTTPException(status_code=503, detail="Blueprint engine not available")
+    
     try:
         # Generate plan from brief
         plan = engine.draft(payload.brief)
@@ -92,6 +159,9 @@ async def commit_blueprint(
     
     This locks in the blueprint plan and generates executable agent jobs.
     """
+    if not _ensure_models():
+        raise HTTPException(status_code=503, detail="Blueprint engine not available")
+    
     try:
         # Get blueprint
         result = await session.execute(select(Blueprint).where(Blueprint.id == bp_id))
@@ -144,6 +214,9 @@ async def delete_blueprint(
     
     Includes data relay archival before deletion for audit trail.
     """
+    if not _ensure_models():
+        raise HTTPException(status_code=503, detail="Blueprint engine not available")
+    
     try:
         # Get blueprint
         result = await session.execute(select(Blueprint).where(Blueprint.id == bp_id))
@@ -186,7 +259,7 @@ async def delete_blueprint(
         raise HTTPException(status_code=500, detail=f"Failed to delete blueprint: {str(e)}")
 
 
-@router.get("/{bp_id}", response_model=BlueprintOut)
+@router.get("/{bp_id}")
 async def get_blueprint(
     bp_id: int,
     session: AsyncSession = Depends(get_db_session),
@@ -195,6 +268,9 @@ async def get_blueprint(
     """
     Get a specific blueprint by ID
     """
+    if not _ensure_models():
+        raise HTTPException(status_code=503, detail="Blueprint engine not available")
+    
     try:
         result = await session.execute(select(Blueprint).where(Blueprint.id == bp_id))
         bp = result.scalar_one_or_none()
@@ -209,7 +285,7 @@ async def get_blueprint(
         raise HTTPException(status_code=500, detail=f"Failed to get blueprint: {str(e)}")
 
 
-@router.get("", response_model=List[BlueprintOut])
+@router.get("")
 async def list_blueprints(
     captain: str = Query(None, description="Filter by captain"),
     session: AsyncSession = Depends(get_db_session),
@@ -218,6 +294,9 @@ async def list_blueprints(
     """
     List all blueprints, optionally filtered by captain
     """
+    if not _ensure_models():
+        raise HTTPException(status_code=503, detail="Blueprint engine not available")
+    
     try:
         query = select(Blueprint)
         

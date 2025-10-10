@@ -34,8 +34,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version=os.getenv("APP_VERSION","v1.9.6b"),
-    description="Predictive Stabilization + Self-Healing + Release Intelligence"
+    version=os.getenv("APP_VERSION","v1.9.6c"),
+    description="Render-safe Port Binding + Response Model Fix + Blueprint Engine Hardening + Self-Healing"
 )
 
 # === CORS ===
@@ -146,7 +146,21 @@ safe_include_router("bridge_backend.bridge_core.engines.leviathan.routes")
 safe_include_router("bridge_backend.bridge_core.engines.leviathan.routes_solver")
 safe_include_router("bridge_backend.bridge_core.engines.creativity.routes")
 safe_include_router("bridge_backend.bridge_core.engines.cascade.routes")
-safe_include_router("bridge_backend.bridge_core.engines.blueprint.routes")
+
+# Blueprint engine: gated and import-safe
+if os.getenv("BLUEPRINTS_ENABLED", "false").lower() == "true":
+    bp_mod = safe_import("bridge_backend.bridge_core.engines.blueprint.routes")
+    if bp_mod and hasattr(bp_mod, "router"):
+        try:
+            app.include_router(bp_mod.router)
+            logger.info("[BLUEPRINTS] Enabled and loaded successfully")
+        except Exception as e:
+            logger.exception(f"[BLUEPRINTS] Failed to include router: {e}")
+    else:
+        logger.warning("[BLUEPRINTS] Enabled but routes not loadable; engine skipped.")
+else:
+    logger.info("[BLUEPRINTS] Disabled by default (set BLUEPRINTS_ENABLED=true to enable).")
+
 safe_include_router("bridge_backend.bridge_core.registry.routes")
 safe_include_router("bridge_backend.bridge_core.permissions.routes")
 safe_include_router("bridge_backend.bridge_core.payments.stripe_webhooks")
@@ -154,12 +168,14 @@ safe_include_router("bridge_backend.bridge_core.heritage.routes")
 safe_include_router("bridge_backend.bridge_core.scans.routes")
 safe_include_router("bridge_backend.routes.control")
 safe_include_router("bridge_backend.routes.diagnostics_timeline")
+safe_include_router("bridge_backend.routes.health")  # NEW: /health/ports, /health/runtime
 
 @app.on_event("startup")
 async def startup_event():
-    port = os.getenv("PORT", "10000")
+    from bridge_backend.runtime.ports import resolve_port
+    target = resolve_port()
     logger.info("[BOOT] 🚀 Starting SR-AIbridge Runtime")
-    logger.info(f"[BOOT] Target PORT={port} (Render sets this automatically)")
+    logger.info(f"[BOOT] Target PORT={target} (Render sets $PORT automatically)")
     
     # Initialize database schema
     try:
@@ -277,5 +293,6 @@ def telemetry_snapshot():
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("PORT", 10000))
+    from bridge_backend.runtime.ports import resolve_port
+    port = resolve_port()
     uvicorn.run("bridge_backend.main:app", host="0.0.0.0", port=port)
