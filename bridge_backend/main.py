@@ -1,15 +1,34 @@
 import sys
 import os
+import asyncio
 import time
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+from importlib import import_module
 
-app = FastAPI(title="SR-Albridge Backend", version="2.0.0")
+load_dotenv()
 
-# CORS middleware for all endpoints
+# === Safe Import Guard ===
+def safe_import(module_path: str, alias: str = None):
+    """Gracefully attempts to import a module and fallback-log on failure."""
+    try:
+        return import_module(module_path)
+    except ModuleNotFoundError:
+        print(f"⚠️  Import failed for {module_path}, skipping...")
+        return None
+
+app = FastAPI(
+    title="SR-AIbridge",
+    version="2.0.1",
+    description="Unified Render Runtime — Auto-Provision + Federation Triage"
+)
+
+# === CORS ===
+origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For dev/testing; use specific URLs for production!
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -34,19 +53,26 @@ except ImportError:
 
 app.add_middleware(PermissionMiddleware)
 
+# === Dynamic Router Imports ===
+routers = {
+    "protocols": safe_import("bridge_backend.bridge_core.protocols.routes"),
+    "missions": safe_import("bridge_backend.bridge_core.missions.routes"),
+    "system": safe_import("bridge_backend.bridge_core.system.routes"),
+    "health": safe_import("bridge_backend.bridge_core.health.routes"),
+}
+for name, module in routers.items():
+    if module and hasattr(module, "router"):
+        app.include_router(module.router, prefix=f"/api/{name}", tags=[name.capitalize()])
+
 # Import and include all routers - using try/except for deployment compatibility
 try:
     # Relative imports when running from bridge_backend directory
-    from bridge_core.protocols.routes import router as protocols_router
     from bridge_core.protocols.complex_routes import router as complex_protocols_router
     from bridge_core.agents.routes import router as agents_router
     from bridge_core.routes_brain import router as brain_router
     from bridge_core.activity.routes import router as activity_router
-    from bridge_core.missions.routes import router as missions_router
     from bridge_core.vault.routes import router as vault_router
     from bridge_core.fleet.routes import router as fleet_router
-    from bridge_core.health.routes import router as health_router
-    from bridge_core.system.routes import router as system_router
     from bridge_core.custody.routes import router as custody_router
     from bridge_core.console.routes import router as console_router
     from bridge_core.captains.routes import router as captains_router
@@ -75,16 +101,12 @@ try:
     from routes.diagnostics_timeline import router as diagnostics_timeline_router
 except ImportError:
     # Absolute imports when running from parent directory (Render deployment)
-    from bridge_backend.bridge_core.protocols.routes import router as protocols_router
     from bridge_backend.bridge_core.protocols.complex_routes import router as complex_protocols_router
     from bridge_backend.bridge_core.agents.routes import router as agents_router
     from bridge_backend.bridge_core.routes_brain import router as brain_router
     from bridge_backend.bridge_core.activity.routes import router as activity_router
-    from bridge_backend.bridge_core.missions.routes import router as missions_router
     from bridge_backend.bridge_core.vault.routes import router as vault_router
     from bridge_backend.bridge_core.fleet.routes import router as fleet_router
-    from bridge_backend.bridge_core.health.routes import router as health_router
-    from bridge_backend.bridge_core.system.routes import router as system_router
     from bridge_backend.bridge_core.custody.routes import router as custody_router
     from bridge_backend.bridge_core.console.routes import router as console_router
     from bridge_backend.bridge_core.captains.routes import router as captains_router
@@ -112,16 +134,12 @@ except ImportError:
     from bridge_backend.routes.control import router as control_router
     from bridge_backend.routes.diagnostics_timeline import router as diagnostics_timeline_router
 
-app.include_router(protocols_router)
 app.include_router(complex_protocols_router)
 app.include_router(agents_router)
 app.include_router(brain_router)
 app.include_router(activity_router)
-app.include_router(missions_router)
 app.include_router(vault_router)
 app.include_router(fleet_router)
-app.include_router(health_router)
-app.include_router(system_router)
 app.include_router(custody_router)
 app.include_router(console_router)
 app.include_router(captains_router)
@@ -151,6 +169,25 @@ app.include_router(diagnostics_timeline_router)
 
 # Load registry from vault at startup
 protocol_storage.load_registry()
+
+# === DB Bootstrap (Dual-Mode Fallback) ===
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    print("⚠️  No DATABASE_URL found — falling back to local SQLite.")
+    DATABASE_URL = "sqlite+aiosqlite:///./bridge_local.db"
+
+try:
+    from sqlalchemy.ext.asyncio import create_async_engine
+    engine = create_async_engine(DATABASE_URL, echo=False, future=True)
+except Exception as e:
+    raise RuntimeError(f"❌ Database engine initialization failed: {e}")
+
+@app.on_event("startup")
+async def startup_event():
+    print("🚀 Starting SR-AIbridge Runtime Guard...")
+    async with engine.begin() as conn:
+        await conn.run_sync(lambda _: None)
+    print("✅ Runtime initialized successfully with:", DATABASE_URL)
 
 # Startup event handler for endpoint triage
 @app.on_event("startup")
@@ -201,8 +238,8 @@ async def startup_triage():
     asyncio.create_task(run_triage())
 
 @app.api_route("/", methods=["GET", "HEAD"])
-def root():
-    return {"message": "SR-Albridge backend is running"}
+async def root():
+    return {"status": "active", "version": "2.0.1", "environment": "production"}
 
 @app.get("/api/version")
 def get_version():
@@ -240,3 +277,7 @@ def telemetry_snapshot():
         except ImportError:
             return {"error": "Telemetry not available"}
     return TELEMETRY.snapshot()
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("bridge_backend.main:app", host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
