@@ -170,9 +170,11 @@ app.include_router(diagnostics_timeline_router)
 # Load registry from vault at startup
 protocol_storage.load_registry()
 
-# === DB Bootstrap (Dual-Mode Fallback) ===
+# === DB Bootstrap ===
+# DATABASE_URL is validated and normalized by db_url_guard.py in start.sh
 DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
+    # Fallback for local development without guard
     print("⚠️  No DATABASE_URL found — falling back to local SQLite.")
     DATABASE_URL = "sqlite+aiosqlite:///./bridge_local.db"
 
