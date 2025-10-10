@@ -120,3 +120,47 @@ async def bridge_health_check():
         "service": "SR-AIbridge Healer-Net",
         "timestamp": datetime.utcnow().isoformat()
     }
+
+@router.get("/federation/diagnostics")
+async def federation_diagnostics():
+    """
+    Federation diagnostics endpoint for v1.9.5
+    Returns self-healing status, heartbeat, and federation alignment
+    """
+    import os
+    from pathlib import Path
+    
+    # Check for repair log
+    repair_log_path = Path(__file__).parent.parent.parent / "runtime" / ".bridge_repair_log"
+    repair_history = []
+    if repair_log_path.exists():
+        try:
+            with open(repair_log_path, 'r') as f:
+                # Get last 5 repair entries
+                repair_history = f.readlines()[-5:]
+        except Exception:
+            repair_history = []
+    
+    # Check heartbeat status
+    heartbeat_status = "active"
+    try:
+        from bridge_backend.runtime.heartbeat import ensure_httpx
+        if not ensure_httpx():
+            heartbeat_status = "degraded"
+    except Exception:
+        heartbeat_status = "unknown"
+    
+    # Check parity alignment
+    from bridge_backend.runtime.parity import verify_cors_parity
+    cors_aligned = verify_cors_parity()
+    
+    return {
+        "status": "ok",
+        "heartbeat": heartbeat_status,
+        "self_heal": "ready",
+        "federation": "aligned" if cors_aligned else "checking",
+        "version": "1.9.5",
+        "repair_history_count": len(repair_history),
+        "port": os.getenv("PORT", "8000"),
+        "timestamp": datetime.utcnow().isoformat()
+    }

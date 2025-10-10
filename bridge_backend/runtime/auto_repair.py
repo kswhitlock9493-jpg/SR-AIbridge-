@@ -45,8 +45,8 @@ async def verify_runtime():
 
 async def repair_runtime():
     """Attempt to repair runtime environment"""
-    print("🩺 SR-AIbridge v1.9.4 — Anchorhold Protocol")
-    print("⚓ Auto-Repair + Schema Sync + Heartbeat Init")
+    print("🩺 SR-AIbridge v1.9.5 — Unified Runtime & Autonomic Homeostasis")
+    print("⚓ Auto-Repair + Schema Sync + Heartbeat Init + Parity Alignment")
     
     # Check imports first
     import_ok = await verify_imports()

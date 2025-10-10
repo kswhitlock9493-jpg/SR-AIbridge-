@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 export PYTHONPATH="${PYTHONPATH:-.}:$(pwd)"
-export PORT="${PORT:-10000}"
 
-echo "🚀 Starting Bridge Runtime Bootstrap..."
+# Dynamic PORT binding (Render auto-assigns, default to 8000 for local)
+export PORT="${PORT:-8000}"
+
+echo "[INIT] 🚀 Launching SR-AIbridge Runtime..."
+echo "[INIT] Using PORT=${PORT}"
 
 # Verify imports before anything else
 echo "🔍 Verifying critical imports..."
@@ -24,6 +27,6 @@ python3 bridge_backend/runtime/egress_canary.py --timeout 6 || echo "[warn] egre
 # Warm simple caches / route manifest
 python3 bridge_backend/runtime/health_probe.py --warm || echo "[warn] health probe warm failed; continuing"
 
-echo "✅ Launching Uvicorn server..."
+echo "✅ Launching Uvicorn server on PORT=${PORT}..."
 # Launch app (uvicorn)
 exec uvicorn bridge_backend.main:app --host 0.0.0.0 --port "${PORT}"
