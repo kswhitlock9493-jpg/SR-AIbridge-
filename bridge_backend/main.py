@@ -24,8 +24,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.4a+",
-    description="Unified Render Runtime — Anchorhold Protocol: Full Stabilization + Federation Sync + Import Path Fix"
+    version="1.9.5",
+    description="Unified Runtime & Autonomic Homeostasis — Self-healing, diagnostics, and federation parity"
 )
 
 # === CORS ===
@@ -214,6 +214,13 @@ async def startup_event():
         import logging
         logging.basicConfig(level=logging.INFO)
         
+        # Run parity sync for Render ↔ Netlify alignment
+        try:
+            from bridge_backend.runtime.parity import run_parity_sync
+            run_parity_sync()
+        except Exception as e:
+            logging.warning(f"[PARITY] Parity sync failed: {e}")
+        
         # Check critical imports
         critical_modules = [
             "bridge_backend.models",
@@ -240,9 +247,14 @@ async def startup_event():
     # Start heartbeat system
     try:
         try:
-            from bridge_backend.runtime.heartbeat import start_heartbeat
+            from bridge_backend.runtime.heartbeat import start_heartbeat, ensure_httpx
         except ImportError:
-            from runtime.heartbeat import start_heartbeat
+            from runtime.heartbeat import start_heartbeat, ensure_httpx
+        
+        # Verify httpx before starting heartbeat
+        if ensure_httpx():
+            print("[HEART] ✅ httpx verified")
+        
         await start_heartbeat()
         print("[HEART] Runtime heartbeat initialization complete")
     except Exception as e:
