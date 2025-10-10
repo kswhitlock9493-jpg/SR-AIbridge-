@@ -17,6 +17,21 @@ router = APIRouter(prefix="/blueprint", tags=["blueprint"])
 _models_imported = False
 _import_error = None
 
+# Stub dependencies for import-time safety
+def _stub_get_db_session():
+    """Stub dependency - replaced by real one when models load"""
+    raise HTTPException(status_code=503, detail="Blueprint engine not available")
+
+def _stub_model_class():
+    """Stub model class - replaced by real one when models load"""
+    raise HTTPException(status_code=503, detail="Blueprint engine not available")
+
+# Initialize as stubs
+get_db_session = _stub_get_db_session
+BlueprintCreate = _stub_model_class
+BlueprintOut = _stub_model_class
+AgentJobOut = _stub_model_class
+
 def _ensure_models():
     """Lazy-load models to avoid import-time crashes"""
     global _models_imported, _import_error, Blueprint, AgentJob, Mission
@@ -95,7 +110,7 @@ def require_role(allowed_roles: List[str]):
     return dependency
 
 
-@router.post("/draft", response_model=BlueprintOut)
+@router.post("/draft")
 async def draft_blueprint(
     payload: BlueprintCreate,
     session: AsyncSession = Depends(get_db_session),
@@ -244,7 +259,7 @@ async def delete_blueprint(
         raise HTTPException(status_code=500, detail=f"Failed to delete blueprint: {str(e)}")
 
 
-@router.get("/{bp_id}", response_model=BlueprintOut)
+@router.get("/{bp_id}")
 async def get_blueprint(
     bp_id: int,
     session: AsyncSession = Depends(get_db_session),
@@ -270,7 +285,7 @@ async def get_blueprint(
         raise HTTPException(status_code=500, detail=f"Failed to get blueprint: {str(e)}")
 
 
-@router.get("", response_model=List[BlueprintOut])
+@router.get("")
 async def list_blueprints(
     captain: str = Query(None, description="Filter by captain"),
     session: AsyncSession = Depends(get_db_session),
