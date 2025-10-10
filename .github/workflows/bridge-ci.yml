@@ -1,0 +1,39 @@
+name: Bridge Integrity CI
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pytest
+      
+      - name: Run route sweep validator
+        run: python tools/route_sweep_check.py
+      
+      - name: Run tests
+        env:
+          DATABASE_URL: postgresql+asyncpg://user:pass@localhost/db
+          NETLIFY_ORIGIN: "*"
+        run: pytest -q
+      
+      - name: Lint check
+        run: |
+          pip install flake8
+          flake8 bridge_backend --ignore=E501,W503 --exclude=bridge_backend/tests
+      
+      - name: Success confirmation
+        if: success()
+        run: echo "✅ Bridge Integrity CI passed. Deployment may proceed."
