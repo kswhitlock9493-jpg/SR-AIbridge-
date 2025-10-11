@@ -282,6 +282,34 @@ async def _register_autonomy_link():
             "parity_event": event,
         })
     
+    async def handle_deployment_event(event: Dict[str, Any]):
+        # Autonomy monitors and coordinates deployment events
+        event_type = event.get("event_type", "unknown")
+        platform = event.get("platform", "unknown")
+        
+        # Publish to appropriate genesis topic based on deployment status
+        if event_type in ["success", "completed"]:
+            await genesis_bus.publish("genesis.intent", {
+                "type": "autonomy.deployment_success",
+                "source": "autonomy",
+                "platform": platform,
+                "deployment_event": event,
+            })
+        elif event_type in ["failure", "failed", "error"]:
+            await genesis_bus.publish("genesis.heal", {
+                "type": "autonomy.deployment_failure",
+                "source": "autonomy",
+                "platform": platform,
+                "deployment_event": event,
+            })
+        else:
+            await genesis_bus.publish("genesis.intent", {
+                "type": "autonomy.deployment_update",
+                "source": "autonomy",
+                "platform": platform,
+                "deployment_event": event,
+            })
+    
     # Subscribe to core autonomy events
     genesis_bus.subscribe("deploy.actions", handle_autonomy_action)
     
@@ -298,7 +326,15 @@ async def _register_autonomy_link():
     genesis_bus.subscribe("parity.check", handle_parity_event)
     genesis_bus.subscribe("parity.autofix", handle_parity_event)
     
-    logger.debug("✅ Autonomy linked to Genesis (with triage, federation, and parity integration)")
+    # Subscribe to deployment platform events for monitoring and coordination
+    genesis_bus.subscribe("deploy.netlify", handle_deployment_event)
+    genesis_bus.subscribe("deploy.render", handle_deployment_event)
+    genesis_bus.subscribe("deploy.github", handle_deployment_event)
+    genesis_bus.subscribe("deploy.platform.start", handle_deployment_event)
+    genesis_bus.subscribe("deploy.platform.success", handle_deployment_event)
+    genesis_bus.subscribe("deploy.platform.failure", handle_deployment_event)
+    
+    logger.debug("✅ Autonomy linked to Genesis (with triage, federation, parity, and deployment platform integration)")
 
 
 async def _register_leviathan_link():
