@@ -1957,6 +1957,10 @@ The Firewall Intelligence Engine grants the Bridge the ability to observe, diagn
 - **Pattern Detection** - Searches for firewall/egress/DNS failure signatures (ENOTFOUND, E404, ECONNRESET, etc.)
 - **Log Analysis** - Scans CI/CD logs for known network error patterns
 - **Policy Generation** - Creates actionable network allowlist policies automatically
+- **Autonomous Decision-Making** - Evaluates severity and makes safe autonomous policy decisions
+- **Safety Guardrails** - Enforces strict guardrails (auto-apply only up to medium severity)
+- **Self-Healing** - Automatically applies network policies within safety boundaries
+- **Action Auditing** - Records all autonomous actions in vault for accountability
 - **Nightly Scans** - Automated intelligence runs to maintain up-to-date network policies
 - **Failure Gates** - Automatic analysis when deployments fail
 
@@ -1999,6 +2003,14 @@ The engine detects and analyzes these network error patterns:
 
 ### Workflows
 
+**Firewall Intelligence and Autonomy Engine** (`.github/workflows/firewall_autonomy_engine.yml`):
+- Runs daily at 3 AM UTC
+- Combines intelligence gathering with autonomous decision-making
+- Enforces safety guardrails (auto-apply up to medium severity)
+- Requires human approval for high-severity issues
+- Records all autonomous actions in vault
+- Uploads comprehensive reports and logs
+
 **Nightly Intelligence** (`.github/workflows/firewall_intel.yml`):
 - Runs at 2 AM UTC daily
 - Fetches incidents from external sources
@@ -2013,7 +2025,19 @@ The engine detects and analyzes these network error patterns:
 
 ### Usage
 
-**Manual Execution:**
+**Unified Autonomy Engine (Recommended):**
+```bash
+# Run the full firewall intelligence + autonomy engine
+python3 bridge_backend/tools/firewall_intel/firewall_autonomy_engine.py
+
+# Review autonomy logs
+cat bridge_backend/diagnostics/firewall_autonomy_log.json
+
+# Check vault records
+ls vault/autonomy/firewall_*
+```
+
+**Manual Execution (Individual Components):**
 ```bash
 # Fetch firewall incidents
 python3 bridge_backend/tools/firewall_intel/fetch_firewall_incidents.py
@@ -2028,11 +2052,14 @@ cat network_policies/generated_allowlist.yaml
 
 **CI/CD Integration:**
 ```bash
-# Trigger via GitHub CLI
+# Trigger unified autonomy engine
+gh workflow run firewall_autonomy_engine.yml
+
+# Or trigger basic intelligence scan
 gh workflow run firewall_intel.yml
 
 # Or manually via GitHub Actions UI
-# Actions → Firewall Intelligence → Run workflow
+# Actions → Firewall Intelligence and Autonomy Engine → Run workflow
 ```
 
 ### Critical Domains

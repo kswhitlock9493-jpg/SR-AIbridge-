@@ -1,0 +1,29 @@
+{
+  "session_id": "20251011_061852",
+  "timestamp": "2025-10-11T06:18:53.518598+00:00",
+  "execution_summary": {
+    "actions_executed": 0,
+    "actions_skipped": 0,
+    "actions_failed": 0
+  },
+  "actions_taken": [],
+  "execution_details": {
+    "executed": [],
+    "skipped": [],
+    "failed": []
+  },
+  "guardrails_enforced": {
+    "max_severity_for_auto_apply": "medium",
+    "require_approval_for_high": true,
+    "safe_actions": [
+      "analyze",
+      "report",
+      "recommend"
+    ],
+    "restricted_actions": [
+      "delete",
+      "drop"
+    ],
+    "max_concurrent_tasks": 3
+  }
+}
