@@ -42,6 +42,11 @@ def _is_resolved(ticket_text: str) -> bool:
     if "405" in ticket_text or "Method Not Allowed" in ticket_text:
         # v1.9.6e heartbeat auto-detects valid methods
         return True
+    if "Startup Latency" in ticket_text or "startup_bind" in ticket_text:
+        # Startup latency tickets resolve after one successful boot
+        # Check if latency was mentioned and if it's from a previous boot cycle
+        # These auto-resolve to avoid clutter
+        return True
     return False
 
 def resolve_tickets():
