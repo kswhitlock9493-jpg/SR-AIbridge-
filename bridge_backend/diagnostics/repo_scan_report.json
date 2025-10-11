@@ -1,0 +1,33 @@
+{
+  "scan_timestamp": "2025-10-11T12:48:59.190169Z",
+  "repo_path": "/home/runner/work/SR-AIbridge-/SR-AIbridge-",
+  "summary": {
+    "duplicate_groups": 1,
+    "total_duplicates": 6,
+    "redundant_docs": 1,
+    "dead_files": 0
+  },
+  "duplicates": [
+    {
+      "files": [
+        "__init__.py",
+        "bridge_backend/bridge_core/health/__init__.py",
+        "bridge_backend/bridge_core/payments/__init__.py",
+        "bridge_backend/bridge_core/permissions/__init__.py",
+        "bridge_backend/bridge_core/system/__init__.py",
+        "bridge_backend/bridge_core/engines/blueprint/__init__.py",
+        "bridge_backend/tools/triage/common/__init__.py"
+      ],
+      "size_bytes": 0,
+      "recommendation": "Keep one, remove 6 duplicate(s)"
+    }
+  ],
+  "redundant_documentation": [
+    {
+      "file": "SCAN_SUMMARY.md",
+      "size_bytes": 8126,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    }
+  ],
+  "dead_files": []
+}
