@@ -50,7 +50,7 @@ class EnvSyncAutonomyLink:
         
         try:
             from bridge_backend.genesis.bus import genesis_bus
-            await genesis_bus.emit({
+            await genesis_bus.publish("envsync.drift", {
                 "type": "ENVSYNC_DRIFT_DETECTED",
                 "provider": provider,
                 "diff_count": diff_count,
@@ -70,12 +70,25 @@ class EnvSyncAutonomyLink:
         
         try:
             from bridge_backend.genesis.bus import genesis_bus
-            await genesis_bus.emit({
+            
+            # Emit completion event
+            await genesis_bus.publish("envsync.complete", {
                 "type": "ENVSYNC_COMPLETE",
                 "provider": provider,
                 "applied": applied,
                 "changes": changes
             })
+            
+            # Also emit to deploy.platform.sync for Genesis orchestration integration
+            if applied and changes > 0:
+                await genesis_bus.publish("deploy.platform.sync", {
+                    "type": "PLATFORM_SYNC_PROPAGATED",
+                    "provider": provider,
+                    "variables_synced": changes,
+                    "manifest_version": "Genesis v2.0.1a"
+                })
+                log.info(f"[EnvSync→Genesis] Platform sync propagation event sent for {provider}")
+            
             log.info(f"[EnvSync→Genesis] Sync complete notification sent for {provider}")
         except Exception as e:
             log.warning(f"[EnvSync→Genesis] Failed to notify: {e}")

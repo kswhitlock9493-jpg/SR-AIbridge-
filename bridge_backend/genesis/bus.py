@@ -125,6 +125,11 @@ class GenesisEventBus:
             "deploy.platform.start",
             "deploy.platform.success",
             "deploy.platform.failure",
+            # EnvSync topics for environment synchronization
+            "deploy.platform.sync",
+            "envsync.drift",
+            "envsync.sync",
+            "envsync.complete",
         }
         
         logger.info(f"🌌 Genesis Event Bus initialized (enabled={self._enabled}, strict={self._strict_policy})")

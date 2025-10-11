@@ -1,4 +1,6 @@
 import os
+import logging
+from pathlib import Path
 from typing import Dict, List
 from .config import CONFIG
 from .types import SyncResult, Mode
@@ -7,6 +9,8 @@ from .providers.netlify import NetlifyProvider
 from .providers.base import ProviderBase
 from .diffs import compute_diff
 from .telemetry import ticket
+
+logger = logging.getLogger(__name__)
 
 def _is_included(key: str) -> bool:
     if any(key.startswith(p) for p in CONFIG.exclude_prefixes):
@@ -22,9 +26,61 @@ def _canonical_from_env() -> Dict[str,str]:
             out[k] = v
     return out
 
+def _canonical_from_seed_manifest() -> Dict[str, str]:
+    """
+    Load canonical environment variables from the EnvSync Seed Manifest.
+    This manifest serves as the single source of truth for Genesis v2.0.1a.
+    """
+    manifest_path = Path(__file__).parent.parent.parent.parent / ".genesis" / "envsync_seed_manifest.env"
+    
+    if not manifest_path.exists():
+        logger.warning(f"⚠️ EnvSync Seed Manifest not found at {manifest_path}")
+        return {}
+    
+    canonical = {}
+    try:
+        with open(manifest_path, 'r') as f:
+            for line in f:
+                line = line.strip()
+                # Skip comments and empty lines
+                if not line or line.startswith('#'):
+                    continue
+                # Parse KEY=VALUE format
+                if '=' in line:
+                    key, value = line.split('=', 1)
+                    key = key.strip()
+                    value = value.strip()
+                    # Only include if it passes the filter
+                    if _is_included(key):
+                        canonical[key] = value
+        
+        logger.info(f"✅ Loaded {len(canonical)} variables from EnvSync Seed Manifest")
+    except Exception as e:
+        logger.error(f"❌ Failed to load EnvSync Seed Manifest: {e}")
+        return {}
+    
+    return canonical
+
 # NOTE: for 'vault' or 'file' canonical sources, you can expand here.
 def load_canonical() -> Dict[str,str]:
-    # For now, env is the easiest canonical snapshot + your Vault route can be added later.
+    """
+    Load canonical environment variables based on configured source.
+    
+    Sources (in order of precedence):
+    1. 'file' - Load from EnvSync Seed Manifest
+    2. 'vault' - Load from Bridge Vault (future enhancement)
+    3. 'env' - Load from current environment variables
+    """
+    source = CONFIG.canonical_source
+    
+    if source == "file":
+        # Load from seed manifest file
+        canonical = _canonical_from_seed_manifest()
+        if canonical:
+            return canonical
+        logger.warning("⚠️ Falling back to environment variables")
+    
+    # Default to environment variables
     return _canonical_from_env()
 
 def provider_for(name: str) -> ProviderBase:
