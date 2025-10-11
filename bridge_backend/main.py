@@ -181,6 +181,13 @@ if os.getenv("ARIE_ENABLED", "true").lower() == "true":
 else:
     logger.info("[ARIE] Disabled (set ARIE_ENABLED=true to enable)")
 
+# HXO Nexus v1.9.6p - Central Harmonic Conductor
+if os.getenv("HXO_NEXUS_ENABLED", "true").lower() == "true":
+    safe_include_router("bridge_backend.bridge_core.engines.hxo.routes")
+    logger.info("[HXO NEXUS] v1.9.6p routes enabled - central harmonic conductor active")
+else:
+    logger.info("[HXO NEXUS] Disabled (set HXO_NEXUS_ENABLED=true to enable)")
+
 # HXO Engine v1.9.6n - Hypshard-X Orchestrator
 if os.getenv("HXO_ENABLED", "false").lower() == "true":
     safe_include_router("bridge_backend.engines.hypshard_x.routes")
@@ -254,6 +261,25 @@ async def startup_event():
             logger.info("✅ Genesis framework initialized")
         except Exception as e:
             logger.warning(f"⚠️ Genesis initialization failed (continuing): {e}")
+    
+    # === HXO Nexus Bootstrap ===
+    # Initialize HXO Nexus if enabled
+    if os.getenv("HXO_NEXUS_ENABLED", "true").lower() == "true":
+        try:
+            from bridge_backend.bridge_core.engines.hxo.startup import startup_hxo_nexus
+            from bridge_backend.bridge_core.engines.adapters.hxo_nexus_integration import (
+                initialize_hxo_connectivity
+            )
+            
+            # Start the nexus
+            await startup_hxo_nexus()
+            
+            # Initialize full connectivity
+            await initialize_hxo_connectivity()
+            
+            logger.info("✅ HXO Nexus connectivity initialized")
+        except Exception as e:
+            logger.warning(f"⚠️ HXO Nexus initialization failed (continuing): {e}")
     
     # === TDE-X v2 Orchestrator ===
     # Initialize TDE-X v2 with resumable stages (runs in background)
