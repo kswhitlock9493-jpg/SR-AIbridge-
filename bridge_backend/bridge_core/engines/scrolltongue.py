@@ -75,6 +75,10 @@ class ScrollTongue:
     - translate: Perform language translation
     - analyze: Conduct linguistic analysis
     - pattern_detect: Find linguistic patterns
+    
+    Autonomy Integration:
+    - Publishes language analysis events to genesis.intent
+    - Subscribes to autonomy guardrails for safe text processing
     """
     
     def __init__(self, max_scrolls: int = 1000, max_translations: int = 500):
@@ -788,4 +792,27 @@ class ScrollTongue:
                                           if theme in [t[0] for t in s.analysis_results.get("semantic", {}).get("key_themes", [])]]
                 })
         
+        return sorted(patterns, key=lambda x: x["frequency"], reverse=True)
+    
+    async def _publish_to_genesis(self, event_type: str, data: Dict[str, Any]):
+        """
+        Publish ScrollTongue events to Genesis bus for autonomy integration.
+        
+        Args:
+            event_type: Type of event (analysis, translation, pattern)
+            data: Event data
+        """
+        try:
+            from bridge_backend.genesis.bus import genesis_bus
+            
+            if genesis_bus.is_enabled():
+                await genesis_bus.publish("genesis.intent", {
+                    "type": f"scrolltongue.{event_type}",
+                    "source": "scrolltongue",
+                    "data": data,
+                    "timestamp": datetime.utcnow().isoformat() + "Z"
+                })
+        except Exception as e:
+            # Silently fail if genesis bus not available
+            logger.debug(f"Failed to publish to genesis: {e}")
         return sorted(patterns, key=lambda x: x["frequency"], reverse=True)

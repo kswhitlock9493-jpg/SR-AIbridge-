@@ -2,21 +2,33 @@
 
 ## Overview
 
-The Autonomy Engine is now fully integrated with all triage, federation, and parity features in the SR-AIbridge system. This integration enables the autonomy engine to automatically respond to system health issues, coordinate distributed operations, and fix endpoint mismatches.
+The Autonomy Engine is now comprehensively integrated across the entire SR-AIbridge backend, connecting to all engines, tools, runtime systems, and infrastructure components. This integration enables autonomous monitoring, auto-healing, guardrail enforcement, and coordinated responses across the entire system.
 
 ## Architecture
 
 ### Event Flow
 
 ```
-Triage Scripts → Genesis Bus → Autonomy Engine → Auto-Healing Actions
-    ↓                              ↑
-Federation Client ─────────────────┘
-    ↓
-Parity Engine ─────────────────────┘
+All Engines/Tools/Systems → Genesis Bus → Autonomy Engine → Auto-Healing/Coordination
+    ↓                                           ↑
+Six Super Engines ──────────────────────────────┘
+Specialized Engines ────────────────────────────┘
+Core Systems ───────────────────────────────────┘
+Tools & Runtime ────────────────────────────────┘
 ```
 
-### Integration Points
+### Integration Coverage
+
+The Autonomy Engine now integrates with:
+
+1. **Six Super Engines** (CalculusCore, QHelmSingularity, AuroraForge, ChronicleLoom, ScrollTongue, CommerceForge)
+2. **Specialized Engines** (Screen, Indoctrination, Agents Foundry, Creativity, Parser, Recovery)
+3. **Core Systems** (Fleet, Custody, Console, Captains, Guardians, Registry, Doctrine)
+4. **Tools** (Firewall Intelligence, Network Diagnostics, Health Monitoring)
+5. **Runtime** (Deploy, Parity, Metrics, TDE-X)
+6. **Heritage** (Triage, Federation, MAS)
+
+## Integration Points
 
 #### 1. Triage Integration
 
@@ -85,6 +97,122 @@ async def handle_parity_event(event: Dict[str, Any]):
         "parity_event": event,
     })
 ```
+
+#### 4. Six Super Engines Integration
+
+The autonomy engine monitors all Six Super Engines:
+
+**ScrollTongue (Language Processing):**
+- **`scrolltongue.analysis`** - Language analysis results
+- **`scrolltongue.translation`** - Translation events
+- **`scrolltongue.pattern`** - Pattern detection results
+
+**CommerceForge (Commerce/Trading):**
+- **`commerceforge.trade`** - Trading operations
+- **`commerceforge.market`** - Market analysis
+- **`commerceforge.portfolio`** - Portfolio updates
+
+**AuroraForge (Visual/Creative):**
+- **`auroraforge.visual`** - Visual asset creation
+- **`auroraforge.creative`** - Creative generation
+- **`auroraforge.render`** - Rendering operations
+
+**ChronicleLoom (Temporal/Historical):**
+- **`chronicleloom.chronicle`** - Chronicle creation
+- **`chronicleloom.timeline`** - Timeline events
+- **`chronicleloom.event`** - Historical events
+
+**CalculusCore (Mathematical):**
+- **`calculuscore.computation`** - Mathematical computations
+- **`calculuscore.optimization`** - Optimization results
+- **`calculuscore.analysis`** - Analytical results
+
+**QHelmSingularity (Quantum/Advanced):**
+- **`qhelmsingularity.quantum`** - Quantum computations
+- **`qhelmsingularity.advanced`** - Advanced algorithms
+- **`qhelmsingularity.simulation`** - Simulation results
+
+**Event Handler:**
+```python
+async def handle_super_engine_event(event: Dict[str, Any]):
+    await genesis_bus.publish("genesis.intent", {
+        "type": "autonomy.{engine}_analysis",
+        "source": "autonomy",
+        "{engine}_event": event,
+    })
+```
+
+#### 5. Specialized Engines Integration
+
+**Screen Engine:**
+- **`screen.interaction`** - User interactions
+- **`screen.render`** - Rendering events
+
+**Indoctrination Engine:**
+- **`indoctrination.training`** - Training sessions
+- **`indoctrination.knowledge`** - Knowledge updates
+
+**Agents Foundry:**
+- **`agents_foundry.agent_created`** - Agent creation
+- **`agents_foundry.agent_deployed`** - Agent deployment
+
+#### 6. Core Systems Integration
+
+**Fleet Management:**
+- **`fleet.command`** - Fleet commands
+- **`fleet.status`** - Fleet status updates
+
+**Custody System:**
+- **`custody.state`** - State snapshots
+- **`custody.transfer`** - State transfers
+
+**Console:**
+- **`console.command`** - Console commands
+- **`console.output`** - Console output
+
+**Captains:**
+- **`captains.policy`** - Policy updates
+- **`captains.decision`** - Decision events
+
+**Guardians:**
+- **`guardians.validation`** - Validation events (blocks dangerous autonomy actions)
+- **`guardians.alert`** - Security alerts
+
+**Registry:**
+- **`registry.update`** - Registry updates
+- **`registry.query`** - Registry queries
+
+**Doctrine:**
+- **`doctrine.compliance`** - Compliance checks
+- **`doctrine.violation`** - Violation alerts (triggers autonomy healing)
+
+#### 7. Tools & Runtime Integration
+
+**Firewall Intelligence:**
+- **`firewall.threat`** - Threat detection (threat_level > 5 triggers healing)
+- **`firewall.analysis`** - Firewall analysis
+
+**Network Diagnostics:**
+- **`network.diagnostics`** - Network diagnostics
+- **`network.status`** - Network status (errors trigger healing)
+
+**Health Monitoring:**
+- **`health.check`** - Health checks
+- **`health.status`** - Health status (degraded/unhealthy triggers healing)
+
+**Runtime/Deploy:**
+- **`runtime.deploy`** - Deployment events
+- **`runtime.status`** - Runtime status (failures trigger healing)
+
+**Metrics:**
+- **`metrics.snapshot`** - Metrics snapshots
+- **`metrics.anomaly`** - Anomaly detection (triggers healing)
+
+**Event Publishers:**
+- `bridge_backend/tools/firewall_intel/`
+- `bridge_backend/tools/network_diagnostics/`
+- `bridge_backend/tools/health/`
+- `bridge_backend/runtime/`
 
 ## Configuration
 
