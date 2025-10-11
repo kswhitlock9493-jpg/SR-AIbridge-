@@ -76,8 +76,12 @@ async def issue_cap(
     if not steward.is_enabled():
         raise HTTPException(503, "Steward engine is disabled")
     
+    # Get owner handle from environment
+    import os
+    owner_handle = os.getenv("STEWARD_OWNER_HANDLE", "")
+    
     # Default to owner if no actor provided (for testing)
-    actor = x_actor or steward._Steward__class__.__dict__.get('OWNER_HANDLE', '')
+    actor = x_actor or owner_handle
     
     try:
         cap_token = await steward.issue_cap(
@@ -148,9 +152,10 @@ async def status():
     
     Returns current configuration and state.
     """
+    import os
     return {
         "enabled": steward.is_enabled(),
         "write_enabled": steward.is_write_enabled(),
-        "owner_handle": steward._Steward__class__.__dict__.get('OWNER_HANDLE', ''),
-        "cap_ttl_seconds": steward._Steward__class__.__dict__.get('CAP_TTL_SECONDS', 600)
+        "owner_handle": os.getenv("STEWARD_OWNER_HANDLE", ""),
+        "cap_ttl_seconds": int(os.getenv("STEWARD_CAP_TTL_SECONDS", "600"))
     }
