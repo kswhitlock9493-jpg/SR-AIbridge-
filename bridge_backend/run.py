@@ -1,43 +1,41 @@
 """
-SR-AIbridge v1.9.6i — Render Port Parity Runner with TDB
-Programmatic uvicorn runner with Temporal Deploy Buffer integration
+SR-AIbridge v1.9.7a — TDE-X Hypersharded Deploy Runner
+Programmatic uvicorn runner with TDE-X orchestration
 """
 import os
 import sys
+import asyncio
 import uvicorn
 
 
+async def _boot():
+    """Boot TDE-X orchestrator without blocking server"""
+    from bridge_backend.runtime.tde_x.orchestrator import run_tde_x
+    asyncio.create_task(run_tde_x())
+
+
 def main():
-    """Main entry point for uvicorn with Render PORT binding and TDB support"""
+    """Main entry point for uvicorn with TDE-X integration"""
     app_path = os.environ.get("APP_IMPORT", "bridge_backend.main:app")
-    port_str = os.environ.get("PORT")
     
-    if not port_str:
-        print("[BOOT] ❌ PORT not set. On Render this is injected. Aborting to avoid loop.", file=sys.stderr)
-        sys.exit(1)
-    
-    try:
-        port = int(port_str)
-    except ValueError:
-        print(f"[BOOT] ❌ Invalid PORT value: {port_str!r}", file=sys.stderr)
-        sys.exit(1)
-    
+    # Render injects PORT; default 8000 for local
+    port = int(os.getenv("PORT", "8000"))
     host = os.environ.get("HOST", "0.0.0.0")
     log_level = os.environ.get("LOG_LEVEL", "info").lower()
     
     # Set BRIDGE_PORT for internal logic
     os.environ["BRIDGE_PORT"] = str(port)
     
-    # TDB status
-    tdb_enabled = os.environ.get("TDB_ENABLED", "true").lower() not in ("0", "false", "no")
-    tdb_status = "ENABLED" if tdb_enabled else "DISABLED"
+    print(f"[BOOT] 🚀 Starting SR-AIbridge v1.9.7a with TDE-X")
+    print(f"[BOOT] 🌊 Host: {host}:{port}")
+    print(f"[BOOT] ⚡ TDE-X will orchestrate shards in background")
     
-    print(f"[BOOT] 🚀 Starting uvicorn on {host}:{port} (Render $PORT={port})")
-    print(f"[BOOT] 🌊 Temporal Deploy Buffer: {tdb_status}")
-    if tdb_enabled:
-        print(f"[BOOT] ⚡ Stage 1 will respond to health checks immediately")
-        print(f"[BOOT] 🔧 Stages 2-3 will complete in background")
+    # Prime orchestrator (use new_event_loop to avoid deprecation warning)
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(_boot())
     
+    # Start uvicorn server
     uvicorn.run(app_path, host=host, port=port, log_level=log_level)
 
 

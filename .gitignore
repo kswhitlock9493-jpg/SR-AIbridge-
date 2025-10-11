@@ -154,3 +154,7 @@ bridge_backend/diagnostics/archive/
 bridge_backend/diagnostics/temporal_deploy/*
 bridge_backend/diagnostics/runtime_stage.json
 
+# v1.9.7a TDE-X queue and runtime state (auto-generated)
+bridge_backend/.queue/*
+!bridge_backend/.queue/.gitkeep
+
