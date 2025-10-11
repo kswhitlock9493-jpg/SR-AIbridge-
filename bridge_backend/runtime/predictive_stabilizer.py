@@ -8,6 +8,29 @@ RESOLVED_DIR = os.path.join(TICKET_DIR, "resolved")
 os.makedirs(TICKET_DIR, exist_ok=True)
 os.makedirs(RESOLVED_DIR, exist_ok=True)
 
+def record_proxy_event(event_type: str, detail: str):
+    """Record proxy/CORS events for diagnostics and self-healing"""
+    timestamp = datetime.datetime.now(tzutc()).strftime("%Y%m%dT%H%M%SZ")
+    ticket_name = f"{timestamp}_proxy.md"
+    ticket_path = os.path.join(TICKET_DIR, ticket_name)
+    try:
+        md_content = [
+            "# Proxy Stabilization Ticket\n",
+            f"**Event Type:** {event_type}\n",
+            f"**Details:** {detail}\n",
+            f"**Timestamp:** {timestamp}\n",
+            "\n## Recommended Actions\n",
+            "- Verify CORS configuration in main.py matches Netlify domain",
+            "- Check netlify.toml proxy redirects are properly configured",
+            "- Ensure /health endpoint returns 200 OK from both Netlify and Render",
+            "- Review logs for recursive loop patterns",
+        ]
+        with open(ticket_path, "w") as f:
+            f.write("\n".join(md_content))
+        log.info(f"[STABILIZER] Proxy ticket logged: {ticket_path}")
+    except Exception as e:
+        log.warning(f"[STABILIZER] Failed to log proxy ticket: {e}")
+
 def _is_resolved(ticket_text: str) -> bool:
     """Check if a ticket's condition has been fixed"""
     # minimal but meaningful checks

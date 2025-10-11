@@ -13,6 +13,15 @@ load_dotenv()
 logging.basicConfig(level=os.getenv("LOG_LEVEL","INFO").upper())
 logger = logging.getLogger(__name__)
 
+# === Environment Detection ===
+# Detect runtime environment for platform-specific configuration
+HOST_PLATFORM = os.getenv("HOST_PLATFORM") or (
+    "render" if os.getenv("RENDER") else
+    "netlify" if os.getenv("NETLIFY") else
+    "local"
+)
+logger.info(f"[BOOT] Detected host environment: {HOST_PLATFORM}")
+
 # === Runtime Path Safety Net ===
 # Ensures the app finds local modules even under Render's /opt/render/project/src environment
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -34,11 +43,12 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.6e",
-    description="Heartbeat Compliance & Method Guard (Final Build) - Intelligent GET/POST/HEAD auto-detection"
+    version="1.9.7",
+    description="Frontend Proxy Integration & Environment Awareness - Unified Netlify-to-Render coordination"
 )
 
 # === CORS ===
+# Dynamic CORS handling for Netlify ↔ Render coordination
 CORS_ALLOW_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS", 
     "https://sr-aibridge.netlify.app,https://sr-aibridge.onrender.com"
@@ -47,6 +57,10 @@ CORS_ALLOW_ORIGINS = os.getenv(
 # Allow localhost in development
 if os.getenv("ENVIRONMENT", "production") == "development":
     CORS_ALLOW_ORIGINS.extend(["http://localhost:3000", "http://localhost:5173"])
+
+# Add your-netlify-domain as a placeholder for custom Netlify domains
+if "your-netlify-domain.netlify.app" not in ",".join(CORS_ALLOW_ORIGINS):
+    logger.info("[CORS] Add your custom Netlify domain to ALLOWED_ORIGINS if different from sr-aibridge.netlify.app")
 
 origins = CORS_ALLOW_ORIGINS if os.getenv("CORS_ALLOW_ALL", "false").lower() != "true" else ["*"]
 
