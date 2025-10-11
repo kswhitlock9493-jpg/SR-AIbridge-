@@ -32,3 +32,5 @@ ci_cd_report.json
 # Unified timeline
 unified_timeline.json
 bridge_backend/logs/*.json
+# Ignore environment reconciliation reports
+logs/*.json
