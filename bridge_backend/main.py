@@ -204,14 +204,11 @@ logger.info("[WEBHOOKS] Deployment webhook routes enabled for autonomy integrati
 
 @app.on_event("startup")
 async def startup_event():
-    from bridge_backend.runtime.ports import resolve_port, adaptive_bind_check
+    from bridge_backend.runtime.ports import resolve_port
     from bridge_backend.runtime.startup_watchdog import watchdog
     from bridge_backend.runtime.port_guard import describe_port_env
     from bridge_backend.runtime.deploy_parity import deploy_parity_check
     from bridge_backend.runtime.temporal_deploy import tdb, TDB_ENABLED
-    from bridge_backend.runtime.temporal_stage_manager import (
-        stage_manager, DeploymentStage, StageTask, StageStatus
-    )
     
     # === Genesis Bootstrap ===
     # Initialize Genesis framework if enabled
@@ -230,36 +227,45 @@ async def startup_event():
         except Exception as e:
             logger.warning(f"⚠️ Genesis initialization failed (continuing): {e}")
     
+    # === TDE-X v2 Orchestrator ===
+    # Initialize TDE-X v2 with resumable stages (runs in background)
+    use_tde_v2 = os.getenv("TDE_V2_ENABLED", "true").lower() == "true"
+    if use_tde_v2:
+        try:
+            from bridge_backend.runtime.tde_x.orchestrator_v2 import tde_orchestrator
+            await tde_orchestrator.run()
+            logger.info("✅ TDE-X v2 orchestrator initialized")
+        except Exception as e:
+            logger.warning(f"⚠️ TDE-X v2 initialization failed (continuing): {e}")
+    
     # === STAGE 1: Minimal Health Check (Immediate Render Detection) ===
-    tdb.mark_stage_start(1)
+    if TDB_ENABLED:
+        tdb.mark_stage_start(1)
     
     # Log PORT environment state
     describe_port_env()
     
-    # Adaptive port resolution with prebind monitor
+    # Simple port resolution (no loops)
     target = resolve_port()
     watchdog.mark_port_resolved(target)
     
-    # Check port availability with graceful fallback
-    host = "0.0.0.0"
-    final_port, bind_status = adaptive_bind_check(host, target)
-    
     logger.info("[BOOT] 🚀 Starting SR-AIbridge Runtime")
-    logger.info(f"[BOOT] Adaptive port bind: {bind_status} on {host}:{final_port}")
+    logger.info(f"[BOOT] Port binding: {target}")
     
     if TDB_ENABLED:
         logger.info("[TDB] v1.9.6i Temporal Deploy Buffer activated")
     
     # Mark bind as confirmed for Stage 1
     watchdog.mark_bind_confirmed()
-    tdb.mark_stage_complete(1)
-    
-    # === STAGE 2 & 3: Background Initialization ===
-    # Run heavy initialization in background to avoid Render timeout
     if TDB_ENABLED:
+        tdb.mark_stage_complete(1)
+    
+    # === STAGE 2 & 3: Background Initialization (if using legacy TDB) ===
+    # If TDE-X v2 is disabled, fall back to legacy TDB initialization
+    if not use_tde_v2 and TDB_ENABLED:
         asyncio.create_task(_run_background_stages(app, watchdog, tdb))
-    else:
-        # Legacy synchronous startup (no TDB)
+    elif not use_tde_v2:
+        # Legacy synchronous startup (no TDB, no TDE-X v2)
         await _run_synchronous_startup(app, watchdog)
 
 async def _run_synchronous_startup(app, watchdog):
@@ -467,6 +473,5 @@ def telemetry_snapshot():
 
 if __name__ == "__main__":
     import uvicorn
-    from bridge_backend.runtime.ports import resolve_port
-    port = resolve_port()  # Adaptive resolution with prebind monitor
-    uvicorn.run("bridge_backend.main:app", host="0.0.0.0", port=port)
+    port = int(os.getenv("PORT", "8000"))
+    uvicorn.run("bridge_backend.main:app", host="0.0.0.0", port=port, reload=False)

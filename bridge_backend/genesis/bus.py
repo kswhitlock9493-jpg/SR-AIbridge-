@@ -161,7 +161,47 @@ class GenesisEventBus:
                 "_genesis_seq": self._event_count,
             }
             
+            # Apply Guardians gate check
+            try:
+                from bridge_backend.bridge_core.guardians.gate import guardians_gate
+                allowed, reason = guardians_gate.allow(enriched)
+                if not allowed:
+                    logger.warning(f"🛡️ Guardians blocked event on {topic}: {reason}")
+                    # Emit audit event for blocked action
+                    await self._emit_blocked_event(topic, enriched, reason)
+                    return
+            except Exception as e:
+                logger.error(f"❌ Guardians check failed (allowing event): {e}")
+            
+            # Check for duplicate via persistence
+            dedupe_key = event.get("dedupe_key")
+            if dedupe_key:
+                try:
+                    from bridge_backend.genesis.persistence import genesis_persistence
+                    if await genesis_persistence.is_duplicate(dedupe_key):
+                        logger.debug(f"⏭️ Skipping duplicate event: {dedupe_key}")
+                        return
+                except Exception as e:
+                    logger.error(f"❌ Dedupe check failed (allowing event): {e}")
+            
             self._event_count += 1
+            
+            # Persist event
+            try:
+                from bridge_backend.genesis.persistence import genesis_persistence
+                await genesis_persistence.record_event(
+                    event_id=enriched.get("id", f"event-{self._event_count}"),
+                    topic=topic,
+                    source=enriched.get("source", "unknown"),
+                    kind=enriched.get("kind", "unknown"),
+                    payload=enriched.get("payload", {}),
+                    dedupe_key=dedupe_key,
+                    correlation_id=enriched.get("correlation_id"),
+                    causation_id=enriched.get("causation_id"),
+                    schema=enriched.get("schema", "genesis.event.v1")
+                )
+            except Exception as e:
+                logger.error(f"❌ Event persistence failed (continuing): {e}")
             
             # Store in history for introspection
             if len(self._event_history) >= self._max_crosssignal:
@@ -188,6 +228,31 @@ class GenesisEventBus:
                     logger.error(f"❌ Genesis subscriber error on {topic}: {ex}")
                     if self._trace_level >= 3:
                         logger.exception(ex)
+    
+    async def _emit_blocked_event(self, original_topic: str, event: Dict[str, Any], reason: str):
+        """Emit audit event for blocked action (bypasses guardians)"""
+        try:
+            audit_event = {
+                "id": f"blocked-{event.get('id', 'unknown')}",
+                "type": "guardians.action_blocked",
+                "source": "security.guardians",
+                "original_topic": original_topic,
+                "blocked_event": event,
+                "reason": reason,
+                "_genesis_timestamp": datetime.now(UTC).isoformat().replace('+00:00', 'Z'),
+            }
+            
+            # Directly notify subscribers without re-checking guardians
+            subscribers = self._subs.get("security.guardians.action.blocked", [])
+            for sub in subscribers:
+                try:
+                    result = sub(audit_event)
+                    if asyncio.iscoroutine(result):
+                        await result
+                except Exception as ex:
+                    logger.error(f"❌ Failed to emit blocked event audit: {ex}")
+        except Exception as e:
+            logger.error(f"❌ Failed to create blocked event audit: {e}")
     
     def subscribe(self, topic: str, handler: Callable[[Dict[str, Any]], Any]):
         """
