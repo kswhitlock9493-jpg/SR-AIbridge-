@@ -182,6 +182,16 @@ async def register_all_genesis_links():
         except Exception as e:
             logger.warning(f"Failed to register Heritage/MAS autonomy links: {e}")
         
+        # EnvRecon autonomy integration
+        try:
+            from .envrecon_autonomy_link import envrecon_autonomy_link
+            await envrecon_autonomy_link.register_autonomy_trigger()
+            engines_registered.append("envrecon_autonomy")
+            genesis_introspection.update_health("envrecon", True)
+            logger.info("✅ EnvRecon autonomy link registered")
+        except Exception as e:
+            logger.warning(f"Failed to register EnvRecon autonomy link: {e}")
+        
         logger.info(f"✅ Genesis linkages registered: {', '.join(engines_registered)}")
         
         # Publish initialization complete event

@@ -79,6 +79,13 @@ async def sync_all():
         report["autofixed"] = heal_result.get("healed", [])
         engine.save_report(report)
         
+        # Notify Autonomy engine of heal completion
+        try:
+            from bridge_backend.bridge_core.engines.adapters.envrecon_autonomy_link import envrecon_autonomy_link
+            await envrecon_autonomy_link.notify_heal_complete(heal_result, report)
+        except Exception as e:
+            logger.debug(f"EnvRecon-Autonomy heal notification skipped: {e}")
+        
         return {
             "success": True,
             "report": report,
