@@ -160,6 +160,7 @@ safe_include_router("bridge_backend.bridge_core.engines.leviathan.routes")
 safe_include_router("bridge_backend.bridge_core.engines.leviathan.routes_solver")
 safe_include_router("bridge_backend.bridge_core.engines.creativity.routes")
 safe_include_router("bridge_backend.bridge_core.engines.cascade.routes")
+safe_include_router("bridge_backend.bridge_core.engines.envsync.routes")
 
 # Genesis framework routes
 if os.getenv("GENESIS_MODE", "enabled").lower() == "enabled":
@@ -305,6 +306,24 @@ async def _run_synchronous_startup(app, watchdog):
         watchdog.mark_heartbeat_initialized()
     except Exception as e:
         logger.warning(f"[HEARTBEAT] Failed to initialize: {e}")
+    
+    # EnvSync background scheduler
+    try:
+        from bridge_backend.bridge_core.engines.envsync.tasks import run_scheduled_sync
+        from bridge_backend.bridge_core.engines.envsync.config import CONFIG as ENVSYNC_CONFIG
+        
+        if ENVSYNC_CONFIG.enabled and ENVSYNC_CONFIG.schedule in ("@hourly", "@daily"):
+            async def _envsync_loop():
+                import asyncio
+                while True:
+                    await run_scheduled_sync()
+                    # naive schedule
+                    interval = 3600 if ENVSYNC_CONFIG.schedule == "@hourly" else 86400
+                    await asyncio.sleep(interval)
+            asyncio.create_task(_envsync_loop())
+            logger.info(f"[ENVSYNC] ✅ Scheduled sync enabled ({ENVSYNC_CONFIG.schedule})")
+    except Exception as e:
+        logger.warning(f"[ENVSYNC] Failed to initialize: {e}")
 
 async def _run_background_stages(app, watchdog, tdb):
     """Run Stage 2 and Stage 3 in background for TDB deployment"""
@@ -370,6 +389,25 @@ async def _run_background_stages(app, watchdog, tdb):
     except Exception as e:
         tdb.add_error(3, f"Predictive stabilizer failed: {e}")
         logger.warning(f"[TDB] Predictive stabilizer failed (continuing): {e}")
+    
+    # EnvSync background scheduler
+    try:
+        from bridge_backend.bridge_core.engines.envsync.tasks import run_scheduled_sync
+        from bridge_backend.bridge_core.engines.envsync.config import CONFIG as ENVSYNC_CONFIG
+        
+        if ENVSYNC_CONFIG.enabled and ENVSYNC_CONFIG.schedule in ("@hourly", "@daily"):
+            async def _envsync_loop():
+                import asyncio
+                while True:
+                    await run_scheduled_sync()
+                    # naive schedule
+                    interval = 3600 if ENVSYNC_CONFIG.schedule == "@hourly" else 86400
+                    await asyncio.sleep(interval)
+            asyncio.create_task(_envsync_loop())
+            logger.info(f"[ENVSYNC] ✅ Scheduled sync enabled ({ENVSYNC_CONFIG.schedule})")
+    except Exception as e:
+        tdb.add_error(3, f"EnvSync initialization failed: {e}")
+        logger.warning(f"[TDB] EnvSync initialization failed (continuing): {e}")
     
     tdb.mark_stage_complete(3)
     
