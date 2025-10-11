@@ -43,8 +43,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.6h",
-    description="Final Route Integrity + Port Parity (Render) + Blueprint Export Fix + Pydantic/ResponseModel Hardening + Deploy Parity Engine"
+    version="1.9.6i",
+    description="Temporal Deploy Buffer & Asynchronous Staged Launch - Eliminates Render timeout with 3-stage async deployment"
 )
 
 # === CORS ===
@@ -190,6 +190,13 @@ async def startup_event():
     from bridge_backend.runtime.startup_watchdog import watchdog
     from bridge_backend.runtime.port_guard import describe_port_env
     from bridge_backend.runtime.deploy_parity import deploy_parity_check
+    from bridge_backend.runtime.temporal_deploy import tdb, TDB_ENABLED
+    from bridge_backend.runtime.temporal_stage_manager import (
+        stage_manager, DeploymentStage, StageTask, StageStatus
+    )
+    
+    # === STAGE 1: Minimal Health Check (Immediate Render Detection) ===
+    tdb.mark_stage_start(1)
     
     # Log PORT environment state
     describe_port_env()
@@ -204,6 +211,25 @@ async def startup_event():
     
     logger.info("[BOOT] 🚀 Starting SR-AIbridge Runtime")
     logger.info(f"[BOOT] Adaptive port bind: {bind_status} on {host}:{final_port}")
+    
+    if TDB_ENABLED:
+        logger.info("[TDB] v1.9.6i Temporal Deploy Buffer activated")
+    
+    # Mark bind as confirmed for Stage 1
+    watchdog.mark_bind_confirmed()
+    tdb.mark_stage_complete(1)
+    
+    # === STAGE 2 & 3: Background Initialization ===
+    # Run heavy initialization in background to avoid Render timeout
+    if TDB_ENABLED:
+        asyncio.create_task(_run_background_stages(app, watchdog, tdb))
+    else:
+        # Legacy synchronous startup (no TDB)
+        await _run_synchronous_startup(app, watchdog)
+
+async def _run_synchronous_startup(app, watchdog):
+    """Legacy synchronous startup (when TDB is disabled)"""
+    from bridge_backend.runtime.deploy_parity import deploy_parity_check
     
     # Run deploy parity check
     await deploy_parity_check(app)
@@ -225,16 +251,12 @@ async def startup_event():
     except Exception as e:
         logger.warning(f"[INTEL] release analysis failed: {e}")
     
-    # Mark bind as confirmed (watchdog monitors startup latency)
-    watchdog.mark_bind_confirmed()
-    
     # Get startup metrics
     metrics = watchdog.get_metrics()
     if metrics['bind_time']:
         logger.info(f"[STABILIZER] Startup latency {metrics['bind_time']:.2f}s (tolerance: 6.0s)")
     
-    # Deferred heartbeat - only start after successful bind
-    # This removes race between FastAPI startup and heartbeat scheduler
+    # Deferred heartbeat
     try:
         from bridge_backend.runtime.heartbeat import heartbeat_loop
         asyncio.create_task(heartbeat_loop())
@@ -242,6 +264,81 @@ async def startup_event():
         watchdog.mark_heartbeat_initialized()
     except Exception as e:
         logger.warning(f"[HEARTBEAT] Failed to initialize: {e}")
+
+async def _run_background_stages(app, watchdog, tdb):
+    """Run Stage 2 and Stage 3 in background for TDB deployment"""
+    from bridge_backend.runtime.deploy_parity import deploy_parity_check
+    
+    # === STAGE 2: Core Bootstrap (Background) ===
+    tdb.mark_stage_start(2)
+    
+    # Deploy parity check
+    try:
+        await deploy_parity_check(app)
+    except Exception as e:
+        tdb.add_error(2, f"Deploy parity check failed: {e}")
+        logger.warning(f"[TDB] Deploy parity check failed (continuing): {e}")
+    
+    # Initialize database schema
+    try:
+        from bridge_backend.db.bootstrap import auto_sync_schema
+        await auto_sync_schema()
+        logger.info("[DB] Auto schema sync complete")
+        watchdog.mark_db_synced()
+    except Exception as e:
+        tdb.add_error(2, f"Database sync failed: {e}")
+        logger.warning(f"[TDB] Database sync failed (continuing): {e}")
+    
+    # Run release intelligence analysis
+    try:
+        from bridge_backend.runtime.release_intel import analyze_and_stabilize
+        analyze_and_stabilize()
+        logger.info("[INTEL] release analysis done")
+    except Exception as e:
+        tdb.add_error(2, f"Release intelligence failed: {e}")
+        logger.warning(f"[TDB] Release intelligence failed (continuing): {e}")
+    
+    tdb.mark_stage_complete(2)
+    
+    # === STAGE 3: Federation & Diagnostics Warmup (Background) ===
+    tdb.mark_stage_start(3)
+    
+    # Get startup metrics
+    try:
+        metrics = watchdog.get_metrics()
+        if metrics['bind_time']:
+            logger.info(f"[STABILIZER] Startup latency {metrics['bind_time']:.2f}s (tolerance: 6.0s)")
+    except Exception as e:
+        tdb.add_error(3, f"Watchdog metrics failed: {e}")
+    
+    # Deferred heartbeat
+    try:
+        from bridge_backend.runtime.heartbeat import heartbeat_loop
+        asyncio.create_task(heartbeat_loop())
+        logger.info("[HEARTBEAT] ✅ Initialized")
+        watchdog.mark_heartbeat_initialized()
+    except Exception as e:
+        tdb.add_error(3, f"Heartbeat initialization failed: {e}")
+        logger.warning(f"[TDB] Heartbeat initialization failed (continuing): {e}")
+    
+    # Predictive stabilizer warmup
+    try:
+        from bridge_backend.runtime.predictive_stabilizer import is_live
+        is_live()
+        logger.info("[STABILIZER] Predictive stabilizer initialized")
+    except Exception as e:
+        tdb.add_error(3, f"Predictive stabilizer failed: {e}")
+        logger.warning(f"[TDB] Predictive stabilizer failed (continuing): {e}")
+    
+    tdb.mark_stage_complete(3)
+    
+    # Save diagnostics
+    try:
+        tdb.save_diagnostics()
+    except Exception as e:
+        logger.warning(f"[TDB] Failed to save diagnostics: {e}")
+    
+    logger.info("[TDB] 🎉 All deployment stages complete - system fully ready")
 
 # Startup event handler for endpoint triage
 @app.on_event("startup")

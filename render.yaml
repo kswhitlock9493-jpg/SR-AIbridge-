@@ -46,6 +46,10 @@ services:
         value: false
       - key: ENABLE_BLUEPRINT_ENGINE
         value: "false"
+      - key: TDB_ENABLED
+        value: "true"
+      - key: TDB_STAGE_TIMEOUT
+        value: "120"
       # HEARTBEAT_URL will auto-detect from RENDER_EXTERNAL_URL; leave unset
 
 # SQLite-first deployment - no external database needed
