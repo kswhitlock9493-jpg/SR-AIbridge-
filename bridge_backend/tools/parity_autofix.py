@@ -10,6 +10,7 @@ import json
 import pathlib
 import hashlib
 import time
+import asyncio
 from typing import List, Dict, Set
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -183,6 +184,23 @@ def write_backend_stubs(missing_routes: List[Dict]) -> List[str]:
     
     return stubs
 
+async def publish_autofix_event(report):
+    """Publish parity autofix event to genesis bus for autonomy engine integration"""
+    try:
+        import sys
+        sys.path.insert(0, str(ROOT / "bridge_backend"))
+        from genesis.bus import genesis_bus
+        
+        if genesis_bus.is_enabled():
+            await genesis_bus.publish("parity.autofix", {
+                "type": "parity_autofix",
+                "source": "parity",
+                "report": report,
+            })
+    except Exception as e:
+        # Silently fail if genesis bus not available (e.g., during CI)
+        pass
+
 def run_autofix():
     """Main auto-fix routine."""
     print("🔧 Bridge Parity Auto-Fix Engine v1.7.0")
@@ -269,6 +287,12 @@ def run_autofix():
     print(f"   Pending manual review: {autofix_summary['pending_manual_review']}")
     print(f"   Status: {autofix_summary['status']}")
     print()
+    
+    # Publish event to genesis bus for autonomy integration
+    try:
+        asyncio.run(publish_autofix_event(autofix_report))
+    except Exception:
+        pass  # Ignore errors in event publishing
     
     return autofix_report
 

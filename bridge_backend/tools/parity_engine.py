@@ -4,7 +4,7 @@ Bridge Parity Engine v1.6.9 — with Triage
 Analyzes backend↔frontend parity for SR-AIbridge and classifies issues by severity.
 """
 
-import os, re, json, pathlib, hashlib, time
+import os, re, json, pathlib, hashlib, time, asyncio
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 BACKEND = ROOT / "bridge_backend"
@@ -67,6 +67,23 @@ def triage_issue(route:str,missing_side:str)->dict:
     }[sev]
     return {"route":route,"missing":missing_side,"severity":sev,"hint":hint}
 
+async def publish_parity_event(report):
+    """Publish parity event to genesis bus for autonomy engine integration"""
+    try:
+        import sys
+        sys.path.insert(0, str(ROOT / "bridge_backend"))
+        from genesis.bus import genesis_bus
+        
+        if genesis_bus.is_enabled():
+            await genesis_bus.publish("parity.check", {
+                "type": "parity_check",
+                "source": "parity",
+                "report": report,
+            })
+    except Exception as e:
+        # Silently fail if genesis bus not available (e.g., during CI)
+        pass
+
 def analyze():
     backend=collect_backend_routes()
     frontend=collect_frontend_calls()
@@ -106,6 +123,13 @@ def analyze():
     REPORT.parent.mkdir(parents=True,exist_ok=True)
     with open(REPORT,"w") as f: json.dump(report,f,indent=2)
     print("✅ Bridge Parity & Triage Report →",REPORT)
+    
+    # Publish event to genesis bus for autonomy integration
+    try:
+        asyncio.run(publish_parity_event(report))
+    except Exception:
+        pass  # Ignore errors in event publishing
+    
     return report
 
 if __name__=="__main__": analyze()

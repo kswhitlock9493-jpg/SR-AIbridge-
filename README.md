@@ -11,10 +11,13 @@
 ![Runtime Stable](https://img.shields.io/badge/Runtime-Stable-brightgreen)
 ![Triage Green](https://img.shields.io/badge/Triage-Green-brightgreen)
 ![Telemetry Live](https://img.shields.io/badge/Telemetry-Live-brightgreen)
+![Autonomy Unified](https://img.shields.io/badge/Autonomy-Unified_Integration-purple?style=for-the-badge)
 
 **A Sovereign Command & Control System for AI Agent Coordination**
 
 SR-AIbridge is a comprehensive, production-ready platform for managing AI agents, missions, and autonomous operations. Built with modern async architecture, it features real-time monitoring, self-healing capabilities, cryptographic attestation, and a rich ecosystem of specialized AI engines.
+
+> **🎉 NEW: Unified Autonomy Integration** - The Autonomy Engine is now fully integrated with all triage, federation, and parity systems, enabling automatic response to health issues, distributed coordination, and self-repair across the entire platform. [Learn more →](docs/AUTONOMY_INTEGRATION_QUICK_REF.md)
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
@@ -49,6 +52,7 @@ SR-AIbridge provides a complete tactical command system for coordinating AI agen
 - 🔄 **CI/CD Integration** - Automated deployment and health monitoring
 - 🔁 **Auto-Deploy Mode (v1.6.7)** - Self-sustaining 6-hour redeploy cycles with live sync badges
 - 🔧 **Environment Recovery** - Automatic registry self-healing and dependency management
+- 🔗 **Unified Autonomy Integration (NEW)** - Autonomy engine linked to all triage, federation, and parity systems for comprehensive auto-healing and distributed coordination
 
 ---
 
@@ -225,6 +229,16 @@ This will:
 - **Policy Enforcement** - Configurable thresholds for blocking/flagging
 - **Task Verification** - All autonomous tasks start with verified original code
 - **See:** [Autonomy Originality Integration Guide](docs/AUTONOMY_ORIGINALITY_INTEGRATION.md)
+
+#### 🔗 Unified Autonomy Integration (NEW)
+- **Triage Integration** - Autonomy responds to API, endpoint, and diagnostics triage events
+- **Federation Integration** - Autonomy coordinates with federation heartbeats and distributed events
+- **Parity Integration** - Autonomy auto-fixes parity issues from engine, autofix, and deploy checks
+- **Auto-Healing** - Automatic response to system health issues via `genesis.heal`
+- **Distributed Coordination** - Cross-system synchronization via `genesis.intent`
+- **Event-Driven Architecture** - All systems communicate through Genesis event bus
+- **Self-Repair** - Autonomous fixes for endpoint mismatches and system issues
+- **See:** [Autonomy Integration Quick Reference](docs/AUTONOMY_INTEGRATION_QUICK_REF.md) | [Full Guide](docs/AUTONOMY_INTEGRATION.md) | [System Diagram](docs/AUTONOMY_INTEGRATION_DIAGRAM.md)
 
 ---
 

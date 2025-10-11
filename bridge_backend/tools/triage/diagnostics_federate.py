@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json, pathlib, time, os
+import json, pathlib, time, os, asyncio
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 DIAG = ROOT / "bridge_backend" / "diagnostics"
@@ -16,6 +16,23 @@ MAX_WAIT_S = int(os.getenv("FEDERATION_MAX_WAIT_S", "120"))
 def read_json_safe(path): 
     try: return json.loads(path.read_text())
     except Exception: return {"ok": False, "error": "unreadable"}
+
+async def publish_federation_event(report):
+    """Publish federation event to genesis bus for autonomy engine integration"""
+    try:
+        import sys
+        sys.path.insert(0, str(ROOT / "bridge_backend"))
+        from genesis.bus import genesis_bus
+        
+        if genesis_bus.is_enabled():
+            await genesis_bus.publish("triage.diagnostics", {
+                "type": "diagnostics_federation",
+                "source": "triage",
+                "report": report,
+            })
+    except Exception as e:
+        # Silently fail if genesis bus not available (e.g., during CI)
+        pass
 
 def main():
     DIAG.mkdir(parents=True, exist_ok=True)
@@ -40,6 +57,13 @@ def main():
     report = {"ok": overall_ok, "waited_s": waited, "reports": bundle}
     OUT.write_text(json.dumps(report, indent=2))
     print(json.dumps(report))
+    
+    # Publish event to genesis bus for autonomy integration
+    try:
+        asyncio.run(publish_federation_event(report))
+    except Exception:
+        pass  # Ignore errors in event publishing
+    
     return 0 if overall_ok else 1
 
 if __name__ == "__main__":

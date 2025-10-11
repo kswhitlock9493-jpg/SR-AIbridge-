@@ -37,6 +37,14 @@ class FederationClient:
         await bus.publish("federation.events", event)
         logger.info(f"📤 Task forwarded: {task_id} -> {target_node}")
         
+        # Also publish to genesis bus for autonomy engine integration
+        try:
+            from bridge_backend.genesis.bus import genesis_bus
+            if genesis_bus.is_enabled():
+                await genesis_bus.publish("federation.events", event)
+        except Exception:
+            pass  # Ignore if genesis bus not available
+        
         return {"status": "forwarded", "task_id": task_id}
 
     async def send_heartbeat(self, nodes: List[str] = None):
@@ -51,6 +59,14 @@ class FederationClient:
         
         await bus.publish("federation.events", event)
         logger.debug(f"💓 Heartbeat sent from {self.node_id}")
+        
+        # Also publish to genesis bus for autonomy engine integration
+        try:
+            from bridge_backend.genesis.bus import genesis_bus
+            if genesis_bus.is_enabled():
+                await genesis_bus.publish("federation.heartbeat", event)
+        except Exception:
+            pass  # Ignore if genesis bus not available
 
     async def handle_ack(self, ack_data: Dict[str, Any]):
         """Handle acknowledgment from another node"""
@@ -62,3 +78,11 @@ class FederationClient:
         
         await bus.publish("federation.events", event)
         logger.debug(f"✅ ACK received: {ack_data.get('from_node')}")
+        
+        # Also publish to genesis bus for autonomy engine integration
+        try:
+            from bridge_backend.genesis.bus import genesis_bus
+            if genesis_bus.is_enabled():
+                await genesis_bus.publish("federation.events", event)
+        except Exception:
+            pass  # Ignore if genesis bus not available
