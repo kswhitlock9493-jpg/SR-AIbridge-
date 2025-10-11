@@ -5,12 +5,29 @@ import os
 import json
 import time
 import pathlib
+import asyncio
 from fastapi import FastAPI
 from starlette.responses import JSONResponse
 
 
 _TICKETS = pathlib.Path("bridge_backend/diagnostics/stabilization_tickets")
 _TICKETS.mkdir(parents=True, exist_ok=True)
+
+
+async def publish_parity_event(issues):
+    """Publish deploy parity event to genesis bus for autonomy engine integration"""
+    try:
+        from bridge_backend.genesis.bus import genesis_bus
+        
+        if genesis_bus.is_enabled():
+            await genesis_bus.publish("parity.check", {
+                "type": "deploy_parity",
+                "source": "parity",
+                "issues": issues,
+            })
+    except Exception as e:
+        # Silently fail if genesis bus not available
+        pass
 
 
 async def deploy_parity_check(app: FastAPI):
@@ -49,6 +66,9 @@ async def deploy_parity_check(app: FastAPI):
         ticket = _TICKETS / f"{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}_deploy_parity.json"
         ticket.write_text(json.dumps(payload, indent=2))
         print(f"WARNING:deploy_parity: ⚠️  parity issues; ticket={ticket}")
+        
+        # Publish event to genesis bus for autonomy integration
+        await publish_parity_event(issues)
     else:
         print("INFO:deploy_parity: ✅ parity OK")
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json, pathlib, os
+import json, pathlib, os, asyncio
 from common.utils import retrying_check
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
@@ -8,6 +8,23 @@ PARITY = DIAG / "bridge_parity_report.json"
 OUT = DIAG / "endpoint_triage_report.json"
 
 BASE = os.getenv("PUBLIC_API_BASE") or os.getenv("VITE_API_BASE") or ""
+
+async def publish_triage_event(report):
+    """Publish triage event to genesis bus for autonomy engine integration"""
+    try:
+        import sys
+        sys.path.insert(0, str(ROOT / "bridge_backend"))
+        from genesis.bus import genesis_bus
+        
+        if genesis_bus.is_enabled():
+            await genesis_bus.publish("triage.endpoint", {
+                "type": "endpoint_triage",
+                "source": "triage",
+                "report": report,
+            })
+    except Exception as e:
+        # Silently fail if genesis bus not available (e.g., during CI)
+        pass
 
 def main():
     findings = {"ok": True, "tested": [], "missing": [], "base": BASE}
@@ -41,6 +58,13 @@ def main():
 
     OUT.write_text(json.dumps(findings, indent=2))
     print(json.dumps(findings))
+    
+    # Publish event to genesis bus for autonomy integration
+    try:
+        asyncio.run(publish_triage_event(findings))
+    except Exception:
+        pass  # Ignore errors in event publishing
+    
     return 0 if findings["ok"] else 1
 
 if __name__ == "__main__":

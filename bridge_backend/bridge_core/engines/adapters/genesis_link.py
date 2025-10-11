@@ -219,8 +219,47 @@ async def _register_autonomy_link():
             "action": event,
         })
     
+    async def handle_triage_event(event: Dict[str, Any]):
+        # Autonomy responds to triage findings for auto-healing
+        await genesis_bus.publish("genesis.heal", {
+            "type": "autonomy.triage_response",
+            "source": "autonomy",
+            "triage_event": event,
+        })
+    
+    async def handle_federation_event(event: Dict[str, Any]):
+        # Autonomy coordinates with federation for distributed healing
+        await genesis_bus.publish("genesis.intent", {
+            "type": "autonomy.federation_sync",
+            "source": "autonomy",
+            "federation_event": event,
+        })
+    
+    async def handle_parity_event(event: Dict[str, Any]):
+        # Autonomy auto-fixes parity issues
+        await genesis_bus.publish("genesis.heal", {
+            "type": "autonomy.parity_fix",
+            "source": "autonomy",
+            "parity_event": event,
+        })
+    
+    # Subscribe to core autonomy events
     genesis_bus.subscribe("deploy.actions", handle_autonomy_action)
-    logger.debug("✅ Autonomy linked to Genesis")
+    
+    # Subscribe to triage events for auto-healing
+    genesis_bus.subscribe("triage.api", handle_triage_event)
+    genesis_bus.subscribe("triage.endpoint", handle_triage_event)
+    genesis_bus.subscribe("triage.diagnostics", handle_triage_event)
+    
+    # Subscribe to federation events for distributed coordination
+    genesis_bus.subscribe("federation.events", handle_federation_event)
+    genesis_bus.subscribe("federation.heartbeat", handle_federation_event)
+    
+    # Subscribe to parity events for auto-fixing
+    genesis_bus.subscribe("parity.check", handle_parity_event)
+    genesis_bus.subscribe("parity.autofix", handle_parity_event)
+    
+    logger.debug("✅ Autonomy linked to Genesis (with triage, federation, and parity integration)")
 
 
 async def _register_leviathan_link():

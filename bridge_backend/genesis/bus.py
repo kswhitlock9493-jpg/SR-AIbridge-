@@ -48,6 +48,16 @@ class GenesisEventBus:
             "deploy.facts",
             "deploy.actions",
             "deploy.graph",
+            # Triage topics for autonomy integration
+            "triage.api",
+            "triage.endpoint",
+            "triage.diagnostics",
+            # Federation topics for autonomy integration
+            "federation.events",
+            "federation.heartbeat",
+            # Parity topics for autonomy integration
+            "parity.check",
+            "parity.autofix",
         }
         
         logger.info(f"🌌 Genesis Event Bus initialized (enabled={self._enabled}, strict={self._strict_policy})")
