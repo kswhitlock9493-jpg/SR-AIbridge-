@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "current_stage": 3,
+  "ready": true,
+  "stages": {
+    "stage1": {
+      "complete": true,
+      "duration": 0.10029435157775879
+    },
+    "stage2": {
+      "complete": true,
+      "duration": 0.0005164146423339844
+    },
+    "stage3": {
+      "complete": true,
+      "duration": 0.0004277229309082031
+    }
+  },
+  "total_boot_time": 2.122180938720703,
+  "errors": []
+}

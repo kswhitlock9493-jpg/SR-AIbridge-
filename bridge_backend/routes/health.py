@@ -32,3 +32,17 @@ def health_runtime():
             "BLUEPRINTS_ENABLED": os.getenv("BLUEPRINTS_ENABLED", "false").lower() == "true",
         }
     }
+
+@router.get("/stage")
+def health_stage():
+    """Get current deployment stage status (v1.9.6i TDB)"""
+    try:
+        from ..runtime.temporal_deploy import tdb
+        return {
+            "temporal_deploy_buffer": tdb.get_status()
+        }
+    except Exception as e:
+        return {
+            "error": str(e),
+            "tdb_enabled": os.getenv("TDB_ENABLED", "true").lower() not in ("0", "false", "no")
+        }
