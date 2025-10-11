@@ -6,7 +6,7 @@ services:
     plan: starter
     region: oregon
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "python -m bridge_backend.run"
+    startCommand: "uvicorn bridge_backend.main:app --host 0.0.0.0 --port $PORT"
     autoDeploy: true
     healthCheckPath: /health/live
     healthCheckInterval: 10
