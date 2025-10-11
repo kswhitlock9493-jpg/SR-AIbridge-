@@ -12,6 +12,7 @@ class TaskIn(BaseModel):
     objective: str
     permissions: dict
     mode: str = "screen"
+    verify_originality: bool = True  # Enable anti-copyright & compliance checks by default
 
 class StatusUpdate(BaseModel):
     status: str
@@ -19,7 +20,14 @@ class StatusUpdate(BaseModel):
 
 @router.post("/task")
 def create_task(req: TaskIn):
-    tc = AE.create_task(req.project, req.captain, req.objective, req.permissions, req.mode)
+    tc = AE.create_task(
+        req.project, 
+        req.captain, 
+        req.objective, 
+        req.permissions, 
+        req.mode,
+        req.verify_originality
+    )
     return {"task": tc.__dict__}
 
 @router.post("/task/{task_id}/status")

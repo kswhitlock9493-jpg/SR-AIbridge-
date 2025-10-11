@@ -66,3 +66,86 @@ def test_update_nonexistent_task():
                     json={"status": "failed"})
     assert r.status_code == 404
     assert r.json()["detail"] == "task_not_found"
+
+def test_task_with_originality_check():
+    """Test task creation with originality verification enabled"""
+    r = client.post("/engines/autonomy/task", json={
+        "project": "autonomy",
+        "captain": "OriginCaptain",
+        "objective": "test_originality_check",
+        "permissions": {"read": ["vault"]},
+        "mode": "screen",
+        "verify_originality": True
+    })
+    assert r.status_code == 200
+    task = r.json()["task"]
+    
+    # Check that compliance check was performed
+    assert "compliance_check" in task
+    assert task["compliance_check"] is not None
+    
+    # Check that LOC metrics were collected
+    assert "loc_metrics" in task
+    assert task["loc_metrics"] is not None
+    
+    # Check originality_verified flag
+    assert "originality_verified" in task
+    assert isinstance(task["originality_verified"], bool)
+
+def test_task_without_originality_check():
+    """Test task creation with originality verification disabled"""
+    r = client.post("/engines/autonomy/task", json={
+        "project": "test_project",
+        "captain": "NoCheckCaptain",
+        "objective": "test_without_check",
+        "permissions": {"write": ["logs"]},
+        "mode": "connector",
+        "verify_originality": False
+    })
+    assert r.status_code == 200
+    task = r.json()["task"]
+    
+    # Compliance check should be None when disabled
+    assert task["compliance_check"] is None
+    
+    # LOC metrics should still be collected
+    assert "loc_metrics" in task
+    
+    # Originality should not be verified
+    assert task["originality_verified"] is False
+
+def test_task_compliance_and_loc_metrics():
+    """Test that compliance check and LOC metrics have expected structure"""
+    r = client.post("/engines/autonomy/task", json={
+        "project": "autonomy",
+        "captain": "MetricsCaptain",
+        "objective": "test_metrics_structure",
+        "permissions": {"execute": ["engines"]},
+        "mode": "screen",
+        "verify_originality": True
+    })
+    assert r.status_code == 200
+    task = r.json()["task"]
+    
+    # Verify compliance check structure
+    if task["compliance_check"] is not None:
+        compliance = task["compliance_check"]
+        assert "state" in compliance
+        assert compliance["state"] in ["ok", "flagged", "blocked", "error"]
+        assert "timestamp" in compliance
+        
+        if compliance["state"] != "error":
+            assert "license" in compliance
+            assert "counterfeit" in compliance
+    
+    # Verify LOC metrics structure
+    if task["loc_metrics"] is not None:
+        loc = task["loc_metrics"]
+        assert "timestamp" in loc
+        
+        if "error" not in loc:
+            assert "total_lines" in loc
+            assert "total_files" in loc
+            assert "by_type" in loc
+            assert isinstance(loc["total_lines"], int)
+            assert isinstance(loc["total_files"], int)
