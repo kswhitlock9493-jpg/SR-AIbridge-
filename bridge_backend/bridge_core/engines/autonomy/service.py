@@ -141,7 +141,8 @@ class AutonomyEngine:
 
     def create_task(self, project: str, captain: str, objective: str,
                     permissions: Dict[str, Any], mode: str = "screen",
-                    verify_originality: bool = True) -> TaskContract:
+                    verify_originality: bool = True,
+                    files: Optional[List[str]] = None) -> TaskContract:
         """
         Create a new autonomy task with integrated compliance and LOC checks.
         
@@ -152,6 +153,7 @@ class AutonomyEngine:
             permissions: Permission dictionary
             mode: Task mode (screen/connector/hybrid)
             verify_originality: Run anti-copyright and compliance checks
+            files: Optional list of specific files to scan for compliance
         
         Returns:
             TaskContract with compliance and LOC metrics
@@ -163,7 +165,7 @@ class AutonomyEngine:
         originality_verified = False
         if verify_originality:
             try:
-                compliance_check = self._check_compliance(project)
+                compliance_check = self._check_compliance(project, files)
                 # Task is verified as original if state is "ok"
                 originality_verified = compliance_check["state"] == "ok"
             except Exception as e:
@@ -212,6 +214,60 @@ class AutonomyEngine:
 
     def _seal(self, tc: TaskContract):
         tc.seal_path().write_text(json.dumps(asdict(tc), indent=2))
+
+    def get_compliance_validation(self, task_id: str) -> Optional[Dict]:
+        """
+        Get compliance validation results for a specific task.
+        
+        Args:
+            task_id: Task ID
+            
+        Returns:
+            Compliance validation dict or None if task not found
+        """
+        tc = self._active.get(task_id)
+        if not tc:
+            return None
+        
+        if not tc.compliance_check:
+            return None
+            
+        # Return compliance state with safe_to_proceed flag
+        compliance_state = {
+            "state": tc.compliance_check.get("state", "unknown"),
+            "safe_to_proceed": tc.compliance_check.get("state") in ["ok", "flagged"]
+        }
+        
+        return {
+            "compliance_state": compliance_state,
+            "compliance_check": tc.compliance_check,
+            "originality_verified": tc.originality_verified
+        }
+    
+    def update_task_loc(self, task_id: str) -> Optional[Dict]:
+        """
+        Update LOC metrics for a specific task.
+        
+        Args:
+            task_id: Task ID
+            
+        Returns:
+            Updated LOC metrics or None if task not found
+        """
+        tc = self._active.get(task_id)
+        if not tc:
+            return None
+        
+        try:
+            loc_metrics = self._get_loc_metrics(tc.project)
+            tc.loc_metrics = loc_metrics
+            self._seal(tc)
+            return loc_metrics
+        except Exception as e:
+            return {
+                "error": str(e),
+                "timestamp": datetime.now(timezone.utc).isoformat() + "Z"
+            }
 
     def list_tasks(self) -> list[Dict]:
         return [asdict(t) for t in self._active.values()]
