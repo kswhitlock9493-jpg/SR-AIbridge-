@@ -182,6 +182,18 @@ async def register_all_genesis_links():
         except Exception as e:
             logger.warning(f"Failed to register Heritage/MAS autonomy links: {e}")
         
+        # HXO linkage
+        try:
+            from .hxo_genesis_link import register_hxo_genesis_link
+            await register_hxo_genesis_link()
+            engines_registered.append("hxo")
+            genesis_introspection.update_health("hxo", True)
+        except Exception as e:
+            logger.warning(f"Failed to register HXO link: {e}")
+            engines_registered.append("heritage_mas_autonomy")
+        except Exception as e:
+            logger.warning(f"Failed to register Heritage/MAS autonomy links: {e}")
+        
         # EnvRecon autonomy integration
         try:
             from .envrecon_autonomy_link import envrecon_autonomy_link
