@@ -64,7 +64,7 @@ class ARIEGenesisLink:
         
         try:
             # Run scan with SAFE_EDIT policy
-            from ..models import PolicyType
+            from bridge_backend.engines.arie.models import PolicyType
             summary = self.engine.run(
                 policy=PolicyType.SAFE_EDIT,
                 dry_run=False,
@@ -113,7 +113,7 @@ class ARIEGenesisLink:
                 return
             
             # Apply fixes based on policy in event
-            from ..models import PolicyType
+            from bridge_backend.engines.arie.models import PolicyType
             policy_str = event.get("policy", "SAFE_EDIT")
             policy = PolicyType(policy_str)
             

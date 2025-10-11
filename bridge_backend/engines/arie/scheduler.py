@@ -98,7 +98,7 @@ class ARIEScheduler:
     
     async def _run_scan(self):
         """Execute ARIE scan with SAFE_EDIT policy"""
-        from .models import PolicyType
+        from bridge_backend.engines.arie.models import PolicyType
         
         logger.info("[ARIE Scheduler] Running scheduled integrity scan")
         
