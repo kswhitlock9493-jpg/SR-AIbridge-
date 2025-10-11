@@ -1,19 +1,30 @@
 {
   "stages": {
     "post_boot": {
-      "status": "running",
-      "started_at": "2025-10-11T09:38:58.882645"
+      "status": "completed",
+      "started_at": "2025-10-11T12:14:40.595484",
+      "completed_at": "2025-10-11T12:14:41.599027",
+      "attempts": 1
     },
     "warm_caches": {
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2025-10-11T12:14:41.599595",
+      "completed_at": "2025-10-11T12:14:43.599689",
+      "attempts": 1
     },
     "index_assets": {
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2025-10-11T12:14:43.600343",
+      "completed_at": "2025-10-11T12:14:46.602146",
+      "attempts": 1
     },
     "scan_federation": {
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2025-10-11T12:14:46.603690",
+      "completed_at": "2025-10-11T12:14:48.609349",
+      "attempts": 1
     }
   },
-  "started_at": "2025-10-11T09:38:58.882415",
-  "completed_at": null
+  "started_at": "2025-10-11T12:17:57.177520",
+  "completed_at": "2025-10-11T12:17:57.180693"
 }
