@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 import asyncio
 
-router = APIRouter(prefix="/system", tags=["system"])
+router = APIRouter(tags=["system"])
 
 
 async def verify_seed_secret(secret: str):

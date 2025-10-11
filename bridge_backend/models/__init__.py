@@ -1,17 +1,23 @@
 from .core import Base, User  # re-export
+__all__ = ["Base", "User"]
 
-# Import from models.py (top-level bridge_backend/models.py, not models/core.py)
-try:
-    import sys
-    import os
-    # Add parent directory to path to import from bridge_backend.models
-    parent_dir = os.path.dirname(os.path.dirname(__file__))
-    if parent_dir not in sys.path:
-        sys.path.insert(0, parent_dir)
-    
-    from models import Blueprint, AgentJob, Mission, Agent, Guardian, VaultLog
-    __all__ = ["Base", "User", "Blueprint", "AgentJob", "Mission", "Agent", "Guardian", "VaultLog"]
-except ImportError as e:
-    # Fallback if models.py is not available
-    print(f"WARNING: Could not import models from models.py: {e}")
-    __all__ = ["Base", "User"]
+# Re-export models from top-level models.py if available
+# Use late binding to avoid circular imports at module load time
+def __getattr__(name):
+    """Lazy import for models to avoid circular imports"""
+    if name in ("Blueprint", "AgentJob", "Mission", "Agent", "Guardian", "VaultLog"):
+        try:
+            # Import directly from the models.py module, not bridge_backend.models package
+            import importlib.util
+            import os
+            models_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "models.py")
+            spec = importlib.util.spec_from_file_location("_bridge_models", models_file)
+            if spec and spec.loader:
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+                return getattr(module, name)
+        except (ImportError, AttributeError, FileNotFoundError):
+            pass
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
