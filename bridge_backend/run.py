@@ -30,8 +30,10 @@ def main():
     print(f"[BOOT] 🌊 Host: {host}:{port}")
     print(f"[BOOT] ⚡ TDE-X will orchestrate shards in background")
     
-    # Prime orchestrator
-    asyncio.get_event_loop().run_until_complete(_boot())
+    # Prime orchestrator (use new_event_loop to avoid deprecation warning)
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(_boot())
     
     # Start uvicorn server
     uvicorn.run(app_path, host=host, port=port, log_level=log_level)
