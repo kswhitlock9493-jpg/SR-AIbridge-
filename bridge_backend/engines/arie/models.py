@@ -99,6 +99,11 @@ class ARIEConfig(BaseModel):
     max_patch_backlog: int = Field(default=50, description="Maximum patches to keep in backlog")
     strict_rollback: bool = Field(default=True, description="Strict rollback mode")
     excluded_paths: List[str] = Field(default_factory=list, description="Paths to exclude from scanning")
+    schedule_enabled: bool = Field(default=False, description="Enable scheduled autonomous runs")
+    schedule_interval_hours: int = Field(default=12, description="Interval between scheduled runs in hours")
+    run_on_deploy: bool = Field(default=True, description="Run ARIE on deploy.platform.success events")
+    admiral_only_apply: bool = Field(default=True, description="Require Admiral permission to apply fixes")
+    truth_mandatory: bool = Field(default=True, description="Require Truth Engine certification")
     enabled_analyzers: List[str] = Field(default_factory=list, description="Enabled analyzers (empty = all)")
 
 

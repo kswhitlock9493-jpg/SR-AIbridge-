@@ -500,6 +500,11 @@ class ARIEEngine:
             auto_fix_on_deploy=os.getenv("ARIE_AUTO_FIX_ON_DEPLOY_SUCCESS", "false").lower() == "true",
             max_patch_backlog=int(os.getenv("ARIE_MAX_PATCH_BACKLOG", "50")),
             strict_rollback=os.getenv("ARIE_STRICT_ROLLBACK", "true").lower() == "true",
+            schedule_enabled=os.getenv("ARIE_SCHEDULE_ENABLED", "false").lower() == "true",
+            schedule_interval_hours=int(os.getenv("ARIE_SCHEDULE_INTERVAL_HOURS", "12")),
+            run_on_deploy=os.getenv("ARIE_RUN_ON_DEPLOY", "true").lower() == "true",
+            admiral_only_apply=os.getenv("ARIE_ADMIRAL_ONLY_APPLY", "true").lower() == "true",
+            truth_mandatory=os.getenv("ARIE_TRUTH_MANDATORY", "true").lower() == "true",
         )
     
     def discover(self, paths: Optional[List[str]] = None) -> List[Path]:

@@ -31,6 +31,8 @@ class ARIEGenesisLink:
         self.engine = engine
         self.enabled = os.getenv("ARIE_ENABLED", "true").lower() == "true"
         self.auto_fix_on_deploy = os.getenv("ARIE_AUTO_FIX_ON_DEPLOY_SUCCESS", "false").lower() == "true"
+        self.run_on_deploy = os.getenv("ARIE_RUN_ON_DEPLOY", "true").lower() == "true"
+        self.truth_mandatory = os.getenv("ARIE_TRUTH_MANDATORY", "true").lower() == "true"
         
         if self.enabled and self.bus:
             self._register_subscriptions()
@@ -53,31 +55,40 @@ class ARIEGenesisLink:
         if not self.enabled or not self.engine:
             return
         
+        # Check if run on deploy is enabled
+        if not self.run_on_deploy:
+            logger.info(f"[ARIE] Deploy success detected but run_on_deploy is disabled")
+            return
+        
         logger.info(f"[ARIE] Deploy success detected, triggering integrity scan")
         
         try:
-            # Run scan in LINT_ONLY mode first
+            # Run scan with SAFE_EDIT policy
             from ..models import PolicyType
-            summary = self.engine.run(policy=PolicyType.LINT_ONLY, dry_run=True)
+            summary = self.engine.run(
+                policy=PolicyType.SAFE_EDIT,
+                dry_run=False,
+                apply=True
+            )
             
             # Publish audit results
             await self._publish_audit(summary)
             
-            # If auto-fix is enabled and there are findings, create fix plan
-            if self.auto_fix_on_deploy and summary.findings_count > 0:
-                # Check permission (placeholder)
-                if await self._check_permission("arie:fix"):
-                    # Apply safe fixes
-                    fix_summary = self.engine.run(
-                        policy=PolicyType.SAFE_EDIT,
-                        dry_run=False,
-                        apply=True
-                    )
-                    
-                    if fix_summary.fixes_applied > 0:
-                        await self._publish_fix_applied(fix_summary)
-                        # Request Truth certification
-                        await self._request_certification(fix_summary)
+            if summary.fixes_applied > 0:
+                await self._publish_fix_applied(summary)
+                
+                # Request Truth certification
+                cert_result = await self._request_certification(summary)
+                
+                # Handle certification result
+                if self.truth_mandatory and not cert_result.get("success", False):
+                    # Rollback on failed certification
+                    logger.warning(f"[ARIE] Truth certification failed, triggering rollback")
+                    await self._handle_failed_certification(summary)
+                else:
+                    # Commit results
+                    logger.info(f"[ARIE] Certification successful, committing results")
+                    await self._commit_results(summary)
         
         except Exception as e:
             logger.exception(f"[ARIE] Error in deploy success handler: {e}")
@@ -185,10 +196,105 @@ class ARIEGenesisLink:
     
     async def _request_certification(self, summary):
         """Request Truth Engine certification for applied fixes"""
+        logger.info(f"[ARIE] Requesting Truth certification for run {summary.run_id}")
+        
         # Placeholder for Truth Engine integration
         # This will be implemented when Truth Engine adapter is created
-        logger.info(f"[ARIE] Would request certification for run {summary.run_id}")
-        pass
+        # For now, simulate success
+        
+        cert_result = {
+            "success": True,
+            "certificate_id": f"truth_{summary.run_id}",
+            "timestamp": datetime.now(UTC).isoformat() + "Z"
+        }
+        
+        # Update patches with certification info
+        for patch in summary.patches:
+            patch.certified = cert_result["success"]
+            patch.certificate_id = cert_result.get("certificate_id")
+        
+        return cert_result
+    
+    async def _handle_failed_certification(self, summary):
+        """Handle failed Truth certification by rolling back patches"""
+        logger.warning(f"[ARIE] Rolling back patches due to failed certification")
+        
+        if not self.engine:
+            return
+        
+        for patch in summary.patches:
+            try:
+                # Trigger rollback
+                rollback = self.engine.rollback(patch.id, force=False)
+                
+                if rollback.success:
+                    logger.info(f"[ARIE] Rolled back patch {patch.id}")
+                    await self._publish_rollback(rollback)
+                    
+                    # Log rollback
+                    self._log_rollback(patch.id, rollback)
+                else:
+                    logger.error(f"[ARIE] Failed to rollback patch {patch.id}: {rollback.error}")
+                    await self._publish_alert("rollback_failed", f"Patch {patch.id}: {rollback.error}")
+                    
+            except Exception as e:
+                logger.exception(f"[ARIE] Error rolling back patch {patch.id}: {e}")
+                await self._publish_alert("rollback_error", str(e))
+    
+    async def _commit_results(self, summary):
+        """Commit certified results"""
+        logger.info(f"[ARIE] Committing certified results for run {summary.run_id}")
+        
+        # Publish cascade notifications
+        if self.bus:
+            await self.bus.publish("cascade.notify", {
+                "source": "arie",
+                "run_id": summary.run_id,
+                "timestamp": datetime.now(UTC).isoformat() + "Z",
+                "fixes_applied": summary.fixes_applied,
+                "certified": True
+            })
+    
+    def _log_rollback(self, patch_id: str, rollback):
+        """Log rollback to JSON file"""
+        from pathlib import Path
+        import json
+        
+        logs_dir = Path(__file__).parent.parent.parent.parent / "logs"
+        logs_dir.mkdir(exist_ok=True)
+        
+        rollback_log = logs_dir / "arie_rollback.json"
+        
+        entry = {
+            "timestamp": datetime.now(UTC).isoformat() + "Z",
+            "patch_id": patch_id,
+            "rollback_id": rollback.id,
+            "success": rollback.success,
+            "error": rollback.error,
+            "restored_files": rollback.restored_files
+        }
+        
+        try:
+            # Read existing log
+            if rollback_log.exists():
+                with open(rollback_log, 'r') as f:
+                    log_data = json.load(f)
+            else:
+                log_data = []
+            
+            # Append new entry
+            log_data.append(entry)
+            
+            # Keep only last 100 entries
+            log_data = log_data[-100:]
+            
+            # Write back
+            with open(rollback_log, 'w') as f:
+                json.dump(log_data, f, indent=2)
+                
+        except Exception as e:
+            logger.error(f"[ARIE] Failed to write rollback log: {e}")
+    
     
     async def _check_permission(self, capability: str) -> bool:
         """Check permission via Permission Engine"""

@@ -204,6 +204,14 @@ async def register_all_genesis_links():
         except Exception as e:
             logger.warning(f"Failed to register EnvRecon autonomy link: {e}")
         
+        # ARIE linkage
+        try:
+            await _register_arie_link()
+            engines_registered.append("arie")
+            genesis_introspection.update_health("arie", True)
+        except Exception as e:
+            logger.warning(f"Failed to register ARIE link: {e}")
+        
         logger.info(f"✅ Genesis linkages registered: {', '.join(engines_registered)}")
         
         # Publish initialization complete event
@@ -656,4 +664,32 @@ async def _register_core_systems_autonomy_links():
     genesis_bus.subscribe("doctrine.violation", handle_doctrine_event)
     
     logger.debug("✅ Core Systems linked to Autonomy")
+
+
+async def _register_arie_link():
+    """Register ARIE engine with Genesis and start scheduler"""
+    import os
+    from bridge_backend.genesis.bus import genesis_bus
+    from bridge_backend.engines.arie.core import ARIEEngine
+    from .arie_genesis_link import ARIEGenesisLink
+    from .arie_schedule_link import ARIEScheduleLink
+    
+    # Initialize ARIE engine
+    engine = ARIEEngine()
+    
+    # Create and register ARIE Genesis link
+    arie_link = ARIEGenesisLink(bus=genesis_bus, engine=engine)
+    
+    # Initialize and start scheduler if enabled
+    if os.getenv("ARIE_SCHEDULE_ENABLED", "false").lower() == "true":
+        from bridge_backend.engines.arie.scheduler import ARIEScheduler
+        
+        scheduler = ARIEScheduler(engine=engine, bus=genesis_bus)
+        schedule_link = ARIEScheduleLink(bus=genesis_bus, scheduler=scheduler)
+        
+        # Start scheduler loop
+        await scheduler.start()
+        logger.info("✅ ARIE scheduler started")
+    
+    logger.debug("✅ ARIE linked to Genesis")
 
