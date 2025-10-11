@@ -1,5 +1,31 @@
 # Env Steward v1.9.6l — Quick Reference
 
+## Quick Start
+
+Want to quickly see what environment variables are missing across your deployment platforms?
+
+```bash
+# Enable Steward
+export STEWARD_ENABLED=true
+export STEWARD_OWNER_HANDLE=kswhitlock9493-jpg
+
+# Run the drift report script
+python3 get_env_drift.py > drift_report.json
+
+# Or view the summary only
+python3 get_env_drift.py 2>&1 >/dev/null
+```
+
+The script will:
+1. Connect to Render, Netlify, and GitHub (if credentials configured)
+2. Compare environment variables across all platforms
+3. Output a comprehensive JSON report showing what's missing where
+4. Save the report to `logs/steward_drift_report.json`
+
+See [STEWARD_ENVRECON_INTEGRATION.md](STEWARD_ENVRECON_INTEGRATION.md) for full details.
+
+---
+
 ## Overview
 
 **Env Steward** is an admiral-tier environment orchestration engine that provides:
@@ -107,9 +133,24 @@ POST /api/steward/diff?providers=render,netlify,github&dry_run=true
   "has_drift": false,
   "providers": ["render", "netlify", "github"],
   "changes": [],
+  "missing_in_render": [],
+  "missing_in_netlify": [],
+  "missing_in_github": [],
+  "extra_in_render": [],
+  "extra_in_netlify": [],
+  "conflicts": {},
+  "summary": {
+    "total_keys": 16,
+    "local_count": 16,
+    "render_count": 16,
+    "netlify_count": 16,
+    "github_count": 16
+  },
   "timestamp": "2025-10-11T17:45:00.000000"
 }
 ```
+
+**New in v1.9.6l**: The diff endpoint now integrates with EnvRecon to provide comprehensive environment drift reporting. See [STEWARD_ENVRECON_INTEGRATION.md](STEWARD_ENVRECON_INTEGRATION.md) for details.
 
 ### 3. Create Plan
 
