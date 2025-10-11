@@ -198,6 +198,10 @@ safe_include_router("bridge_backend.routes.control")
 safe_include_router("bridge_backend.routes.diagnostics_timeline")  # Includes TDE-X deploy-parity
 safe_include_router("bridge_backend.routes.health")  # NEW: /health/ports, /health/runtime
 
+# Deployment webhook routes for autonomy engine integration
+safe_include_router("bridge_backend.webhooks.deployment_webhooks")
+logger.info("[WEBHOOKS] Deployment webhook routes enabled for autonomy integration")
+
 @app.on_event("startup")
 async def startup_event():
     from bridge_backend.runtime.ports import resolve_port, adaptive_bind_check

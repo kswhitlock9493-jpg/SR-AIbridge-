@@ -32,6 +32,15 @@ jobs:
           cd bridge-frontend
           npm run build
 
+      - name: Notify Deployment Start
+        run: |
+          python3 bridge_backend/utils/deployment_publisher.py \
+            --platform netlify \
+            --event-type start \
+            --status deploying \
+            --branch main \
+            --message "Auto-deploy via Bridge Auto-Deploy Mode v1.6.7" || echo "⚠️ Event notification skipped"
+
       - name: Verify Backend Health
         run: |
           echo "🔍 Verifying backend health..."
@@ -54,6 +63,27 @@ jobs:
           npm install -g netlify-cli
           cd bridge-frontend
           netlify deploy --prod --dir=dist --message="Auto-redeploy via Bridge Auto-Deploy Mode v1.6.7"
+
+      - name: Notify Deployment Success
+        if: success()
+        run: |
+          python3 bridge_backend/utils/deployment_publisher.py \
+            --platform netlify \
+            --event-type success \
+            --status deployed \
+            --branch main \
+            --deploy-url "https://sr-aibridge.netlify.app" \
+            --message "Deployment successful" || echo "⚠️ Event notification skipped"
+
+      - name: Notify Deployment Failure
+        if: failure()
+        run: |
+          python3 bridge_backend/utils/deployment_publisher.py \
+            --platform netlify \
+            --event-type failure \
+            --status failed \
+            --branch main \
+            --message "Deployment failed" || echo "⚠️ Event notification skipped"
 
       - name: Report to Diagnostics
         run: |

@@ -34,6 +34,16 @@ jobs:
             ${{ secrets.BACKEND_URL ||
             'https://sr-aibridge-backend.onrender.com' }}
 
+      - name: Notify Netlify Deployment Start
+        run: |
+          python3 bridge_backend/utils/deployment_publisher.py \
+            --platform netlify \
+            --event-type start \
+            --status deploying \
+            --branch ${{ github.ref_name }} \
+            --commit-sha ${{ github.sha }} \
+            --message "Deploy from GitHub Actions" || echo "⚠️ Event notification skipped"
+
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
@@ -47,6 +57,29 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         timeout-minutes: 10
+
+      - name: Notify Netlify Deployment Success
+        if: success()
+        run: |
+          python3 bridge_backend/utils/deployment_publisher.py \
+            --platform netlify \
+            --event-type success \
+            --status deployed \
+            --branch ${{ github.ref_name }} \
+            --commit-sha ${{ github.sha }} \
+            --deploy-url "https://sr-aibridge.netlify.app" \
+            --message "Deployment successful" || echo "⚠️ Event notification skipped"
+
+      - name: Notify Netlify Deployment Failure
+        if: failure()
+        run: |
+          python3 bridge_backend/utils/deployment_publisher.py \
+            --platform netlify \
+            --event-type failure \
+            --status failed \
+            --branch ${{ github.ref_name }} \
+            --commit-sha ${{ github.sha }} \
+            --message "Deployment failed" || echo "⚠️ Event notification skipped"
 
       - name: Notify Bridge Diagnostics
         if: success() && github.ref == 'refs/heads/main'
@@ -82,6 +115,16 @@ jobs:
           python3 -m py_compile self_test.py
           echo "✅ Backend Python files validated"
 
+      - name: Notify Render Deployment Start
+        run: |
+          python3 bridge_backend/utils/deployment_publisher.py \
+            --platform render \
+            --event-type start \
+            --status deploying \
+            --branch main \
+            --commit-sha ${{ github.sha }} \
+            --message "Trigger Render deployment" || echo "⚠️ Event notification skipped"
+
       - name: Trigger Render deployment
         run: |
           if [ -n "${{ secrets.RENDER_DEPLOY_HOOK }}" ]; then
@@ -93,6 +136,29 @@ jobs:
             echo "Note: Render will auto-deploy on push to main branch"
           fi
 
+      - name: Notify Render Deployment Success
+        if: success()
+        run: |
+          python3 bridge_backend/utils/deployment_publisher.py \
+            --platform render \
+            --event-type success \
+            --status triggered \
+            --branch main \
+            --commit-sha ${{ github.sha }} \
+            --deploy-url "https://sr-aibridge.onrender.com" \
+            --message "Render deployment triggered successfully" || echo "⚠️ Event notification skipped"
+
+      - name: Notify Render Deployment Failure
+        if: failure()
+        run: |
+          python3 bridge_backend/utils/deployment_publisher.py \
+            --platform render \
+            --event-type failure \
+            --status failed \
+            --branch main \
+            --commit-sha ${{ github.sha }} \
+            --message "Failed to trigger Render deployment" || echo "⚠️ Event notification skipped"
+
   # Build verification job
   verify-build:
     name: Verify Complete Build
@@ -101,6 +167,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Notify GitHub Build Start
+        run: |
+          python3 bridge_backend/utils/deployment_publisher.py \
+            --platform github \
+            --event-type start \
+            --status verifying \
+            --branch ${{ github.ref_name }} \
+            --commit-sha ${{ github.sha }} \
+            --message "Build verification started" || echo "⚠️ Event notification skipped"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -137,3 +213,25 @@ jobs:
           cd bridge_backend
           python3 self_test.py --help
           echo "✅ Self-test script is executable"
+
+      - name: Notify GitHub Build Success
+        if: success()
+        run: |
+          python3 bridge_backend/utils/deployment_publisher.py \
+            --platform github \
+            --event-type success \
+            --status verified \
+            --branch ${{ github.ref_name }} \
+            --commit-sha ${{ github.sha }} \
+            --message "Build verification completed successfully" || echo "⚠️ Event notification skipped"
+
+      - name: Notify GitHub Build Failure
+        if: failure()
+        run: |
+          python3 bridge_backend/utils/deployment_publisher.py \
+            --platform github \
+            --event-type failure \
+            --status failed \
+            --branch ${{ github.ref_name }} \
+            --commit-sha ${{ github.sha }} \
+            --message "Build verification failed" || echo "⚠️ Event notification skipped"

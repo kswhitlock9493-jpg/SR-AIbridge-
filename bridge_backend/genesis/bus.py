@@ -118,6 +118,13 @@ class GenesisEventBus:
             "heritage.agent",
             "heritage.bridge",
             "heal.events",
+            # Deployment platform topics for autonomy integration
+            "deploy.netlify",
+            "deploy.render",
+            "deploy.github",
+            "deploy.platform.start",
+            "deploy.platform.success",
+            "deploy.platform.failure",
         }
         
         logger.info(f"🌌 Genesis Event Bus initialized (enabled={self._enabled}, strict={self._strict_policy})")

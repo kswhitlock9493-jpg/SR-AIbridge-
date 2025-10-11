@@ -65,3 +65,78 @@ def update_task_loc(task_id: str, update: Optional[LOCUpdate] = None):
     if not result:
         raise HTTPException(404, "task_not_found")
     return {"loc_metrics": result}
+
+class DeploymentEvent(BaseModel):
+    """Request model for deployment events"""
+    platform: str  # netlify, render, github
+    event_type: str  # start, success, failure, progress
+    status: str = "unknown"
+    metadata: Optional[dict] = None
+
+@router.post("/deployment/event")
+async def record_deployment_event(event: DeploymentEvent):
+    """
+    Record a deployment event and publish to Genesis bus for autonomy monitoring.
+    This endpoint integrates autonomy engine with Netlify, Render, and GitHub deployments.
+    """
+    try:
+        from bridge_backend.genesis.bus import genesis_bus
+        
+        if not genesis_bus.is_enabled():
+            return {"status": "skipped", "message": "Genesis bus disabled"}
+        
+        from datetime import datetime, UTC
+        
+        # Construct event payload
+        deployment_event = {
+            "platform": event.platform,
+            "event_type": event.event_type,
+            "status": event.status,
+            "timestamp": datetime.now(UTC).isoformat(),
+            "metadata": event.metadata or {}
+        }
+        
+        # Publish to platform-specific topic
+        topic = f"deploy.{event.platform.lower()}"
+        await genesis_bus.publish(topic, deployment_event)
+        
+        # Also publish to generic deployment topic based on event type
+        if event.event_type in ["start", "starting", "initiated"]:
+            await genesis_bus.publish("deploy.platform.start", deployment_event)
+        elif event.event_type in ["success", "completed", "deployed"]:
+            await genesis_bus.publish("deploy.platform.success", deployment_event)
+        elif event.event_type in ["failure", "failed", "error"]:
+            await genesis_bus.publish("deploy.platform.failure", deployment_event)
+        
+        return {
+            "status": "success",
+            "message": f"Deployment event published to {topic}",
+            "event": deployment_event
+        }
+    except Exception as e:
+        raise HTTPException(500, f"Failed to record deployment event: {str(e)}")
+
+@router.get("/deployment/status")
+def get_deployment_status():
+    """Get deployment monitoring status from autonomy engine"""
+    try:
+        from bridge_backend.genesis.bus import genesis_bus
+        
+        return {
+            "genesis_enabled": genesis_bus.is_enabled(),
+            "platforms_monitored": ["netlify", "render", "github"],
+            "topics": [
+                "deploy.netlify",
+                "deploy.render", 
+                "deploy.github",
+                "deploy.platform.start",
+                "deploy.platform.success",
+                "deploy.platform.failure"
+            ],
+            "status": "active" if genesis_bus.is_enabled() else "disabled"
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "error": str(e)
+        }
