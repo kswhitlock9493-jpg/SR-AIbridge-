@@ -1,0 +1,1707 @@
+{
+  "scan_timestamp": "2025-10-11T18:49:47.585420Z",
+  "repo_path": "/home/runner/work/SR-AIbridge-/SR-AIbridge-",
+  "summary": {
+    "total_issues": 304,
+    "frontend_stubs_with_todos": 85,
+    "backend_stub_routes": 7,
+    "incomplete_engines": 1,
+    "missing_route_registrations": 0,
+    "deprecated_warnings": 211
+  },
+  "issues": {
+    "frontend_stubs_with_todos": [
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_screen_sid_offer.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_autonomy_tasks.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_parser_tag_remove.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_parser_list.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/heritage_demo_mode.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_filing_search.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_screen_sid_ice.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/bridge_core_protocols_name.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/bridge_core_protocols_name_policy.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_creativity_search.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/doctrine.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/system_repair.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_autonomy_task.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/permissions_tiers_tier_name.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/custody_sign.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/brain_memories.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_parser_tag_add.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/protocols.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/custody_admiral.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_filing_reassemble.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/console_snapshot.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_truth_bind.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_creativity_list.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/vault_subpath:path.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/custody_admiral_rotate.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/protocols_name_vault.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_parser_ingest.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/api_control_hooks_triage.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/bridge_core_protocols_name_lore.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/scans.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_parser_search.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_truth_find.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/custody_keys_key_name_generate.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/bridge_core_protocols_registry.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_recovery_dispatch_and_ingest.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/brain_export.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/blueprint.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_parser_link.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/scans_scan_id.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/brain_stats.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/payments_stripe_webhook.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_screen_list.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/fleet.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_parser_chunk_sha.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/heritage_demo_modes.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/api_control_rollback.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/protocols_name_activate.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/custody_keys_key_name.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_indoctrination_aid_certify.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_screen_sid_state.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/custody_dock_day_drop.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/permissions_apply_tier.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_screen_start.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/registry_tier_me.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/custody_verify.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_leviathan_solve.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/protocols_name.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_cascade_history.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/brain_verify.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/blueprint_draft.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_screen_sid_overlay.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_cascade_apply.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/blueprint_bp_id.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_creativity_ingest.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_truth_truths.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_speech_tts.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_screen_sid_answer.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/custody_init.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_parser_reassemble.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/permissions_tiers.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/permissions_current.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_filing_file.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/console_summary.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/custody_verify_drop.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/blueprint_bp_id_commit.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_indoctrination_aid_revoke.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_screen_sid.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/custody_keys.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/custody_keys_key_name_rotate.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/bridge_core_protocols_name_invoke.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_speech_stt.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/brain_categories.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/brain.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/engines_truth_cite.js",
+        "issue": "Contains TODO comment for stub review"
+      },
+      {
+        "file": "bridge-frontend/src/api/auto_generated/brain_memories_entry_id.js",
+        "issue": "Contains TODO comment for stub review"
+      }
+    ],
+    "backend_stub_routes": [
+      {
+        "file": "bridge_backend/tools/parity_autofix.py",
+        "line": 114,
+        "pattern": "return.*\"not_implemented\"",
+        "match": "return {{\"status\": \"not_implemented\""
+      },
+      {
+        "file": "bridge_backend/tools/parity_autofix.py",
+        "line": 114,
+        "pattern": "status.*not_implemented",
+        "match": "status\": \"not_implemented"
+      },
+      {
+        "file": "bridge_backend/tools/parity_autofix.py",
+        "line": 101,
+        "pattern": "TODO.*implement.*endpoint",
+        "match": "TODO: Implement this missing backend endpoint"
+      },
+      {
+        "file": "bridge_backend/tools/parity_autofix.py",
+        "line": 114,
+        "pattern": "TODO.*implement.*endpoint",
+        "match": "TODO: Implement this endpoint"
+      },
+      {
+        "file": "bridge_backend/bridge_core/protocols/registry.py",
+        "line": 189,
+        "pattern": "stub.*implementation",
+        "match": "stub implementation"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/blueprint/routes.py",
+        "line": 23,
+        "pattern": "def.*stub_",
+        "match": "def _stub_"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/blueprint/routes.py",
+        "line": 27,
+        "pattern": "def.*stub_",
+        "match": "def _stub_"
+      }
+    ],
+    "incomplete_engines": [
+      {
+        "engine": "adapters",
+        "missing_files": [
+          "routes.py"
+        ]
+      }
+    ],
+    "missing_route_registrations": [],
+    "deprecated_warnings": [
+      {
+        "file": "bridge_backend/schemas.py",
+        "line": 238,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/schemas.py",
+        "line": 246,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/schemas.py",
+        "line": 254,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/db.py",
+        "line": 121,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/db.py",
+        "line": 218,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/db.py",
+        "line": 227,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/prooffoundry.py",
+        "line": 150,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/prooffoundry.py",
+        "line": 211,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/prooffoundry.py",
+        "line": 238,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/prooffoundry.py",
+        "line": 277,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/prooffoundry.py",
+        "line": 287,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/prooffoundry.py",
+        "line": 307,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/prooffoundry.py",
+        "line": 356,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/prooffoundry.py",
+        "line": 391,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/prooffoundry.py",
+        "line": 401,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/prooffoundry.py",
+        "line": 681,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/chroniclevault.py",
+        "line": 156,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/chroniclevault.py",
+        "line": 280,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/chroniclevault.py",
+        "line": 284,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/chroniclevault.py",
+        "line": 321,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/chroniclevault.py",
+        "line": 343,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/chroniclevault.py",
+        "line": 384,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/chroniclevault.py",
+        "line": 438,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/chroniclevault.py",
+        "line": 456,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/entanglecore.py",
+        "line": 148,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/entanglecore.py",
+        "line": 220,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/entanglecore.py",
+        "line": 291,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/entanglecore.py",
+        "line": 319,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/entanglecore.py",
+        "line": 330,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/entanglecore.py",
+        "line": 345,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/entanglecore.py",
+        "line": 390,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/entanglecore.py",
+        "line": 424,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/entanglecore.py",
+        "line": 435,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/entanglecore.py",
+        "line": 473,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/entanglecore.py",
+        "line": 531,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/entanglecore.py",
+        "line": 532,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/federation_client.py",
+        "line": 129,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/federation_client.py",
+        "line": 228,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/federation_client.py",
+        "line": 280,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/federation_client.py",
+        "line": 300,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/federation_client.py",
+        "line": 355,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/federation_client.py",
+        "line": 394,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/federation_client.py",
+        "line": 428,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/federation_client.py",
+        "line": 483,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/federation_client.py",
+        "line": 492,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/claude_watcher.py",
+        "line": 77,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/claude_watcher.py",
+        "line": 97,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/claude_watcher.py",
+        "line": 103,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/claude_watcher.py",
+        "line": 122,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/claude_watcher.py",
+        "line": 156,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/claude_watcher.py",
+        "line": 273,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/claude_watcher.py",
+        "line": 281,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/labyrinthforge.py",
+        "line": 132,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/labyrinthforge.py",
+        "line": 166,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/labyrinthforge.py",
+        "line": 200,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/labyrinthforge.py",
+        "line": 210,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/labyrinthforge.py",
+        "line": 226,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/labyrinthforge.py",
+        "line": 333,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/fault_injector.py",
+        "line": 72,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/fault_injector.py",
+        "line": 161,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/fault_injector.py",
+        "line": 170,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/fault_injector.py",
+        "line": 398,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 92,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 124,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 125,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 134,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 182,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 187,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 221,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 223,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 288,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 297,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 308,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 333,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 344,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 362,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 382,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 407,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 416,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 421,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 435,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 438,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/self_healing_adapter.py",
+        "line": 462,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/registry_payloads.py",
+        "line": 69,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/registry_payloads.py",
+        "line": 72,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/registry_payloads.py",
+        "line": 277,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/registry_payloads.py",
+        "line": 295,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/registry_payloads.py",
+        "line": 379,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/registry_payloads.py",
+        "line": 449,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/registry_payloads.py",
+        "line": 459,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/genesis/persistence.py",
+        "line": 194,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/genesis/persistence.py",
+        "line": 208,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/runtime/temporal_deploy.py",
+        "line": 72,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/runtime/temporal_deploy.py",
+        "line": 124,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/routes/diagnostics_timeline.py",
+        "line": 127,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/routes/control.py",
+        "line": 66,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/src/keys.py",
+        "line": 35,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/src/keys.py",
+        "line": 130,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/src/brain.py",
+        "line": 79,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/src/brain.py",
+        "line": 127,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/src/brain.py",
+        "line": 204,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/src/brain.py",
+        "line": 215,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/src/brain.py",
+        "line": 309,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/src/signer.py",
+        "line": 42,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/src/signer.py",
+        "line": 104,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/src/signer.py",
+        "line": 143,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/src/signer.py",
+        "line": 164,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/db/models.py",
+        "line": 14,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/guardians/gate.py",
+        "line": 143,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/health/routes.py",
+        "line": 30,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/health/routes.py",
+        "line": 59,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/health/routes.py",
+        "line": 82,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/health/routes.py",
+        "line": 95,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/health/routes.py",
+        "line": 105,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/health/routes.py",
+        "line": 132,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/health/routes.py",
+        "line": 176,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/filing.py",
+        "line": 27,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/commerceforge.py",
+        "line": 145,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/commerceforge.py",
+        "line": 219,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/commerceforge.py",
+        "line": 319,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/commerceforge.py",
+        "line": 365,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/commerceforge.py",
+        "line": 405,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/commerceforge.py",
+        "line": 571,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/commerceforge.py",
+        "line": 623,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/scrolltongue.py",
+        "line": 114,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/scrolltongue.py",
+        "line": 191,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/scrolltongue.py",
+        "line": 250,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/scrolltongue.py",
+        "line": 813,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/auroraforge.py",
+        "line": 98,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/qhelmsingularity.py",
+        "line": 105,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/qhelmsingularity.py",
+        "line": 179,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/qhelmsingularity.py",
+        "line": 244,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/qhelmsingularity.py",
+        "line": 320,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/chronicleloom.py",
+        "line": 54,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/chronicleloom.py",
+        "line": 69,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/chronicleloom.py",
+        "line": 112,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/calculuscore.py",
+        "line": 54,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/calculuscore.py",
+        "line": 125,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/calculuscore.py",
+        "line": 203,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/calculuscore.py",
+        "line": 300,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/calculuscore.py",
+        "line": 372,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/protocols/vaulting.py",
+        "line": 41,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/protocols/invoke.py",
+        "line": 23,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/scans/service.py",
+        "line": 38,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/missions/routes.py",
+        "line": 87,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/permissions/store.py",
+        "line": 15,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/console/routes.py",
+        "line": 22,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/system/routes.py",
+        "line": 43,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/system/routes.py",
+        "line": 53,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/recovery/orchestrator.py",
+        "line": 21,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/speech/tts.py",
+        "line": 9,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/speech/stt.py",
+        "line": 9,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/leviathan/solver.py",
+        "line": 46,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/leviathan/service.py",
+        "line": 128,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/creativity/service.py",
+        "line": 14,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/screen/service.py",
+        "line": 15,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/screen/service.py",
+        "line": 110,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/cascade/service.py",
+        "line": 11,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/truth/finder.py",
+        "line": 17,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/truth/utils.py",
+        "line": 15,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/parser/service.py",
+        "line": 18,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/agents_foundry/service.py",
+        "line": 57,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/envsync/telemetry.py",
+        "line": 6,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/adapters/tools_runtime_autonomy_link.py",
+        "line": 216,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/adapters/heritage_mas_autonomy_link.py",
+        "line": 158,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/indoctrination/service.py",
+        "line": 10,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/blueprint/adapters/leviathan_link.py",
+        "line": 121,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/blueprint/adapters/tde_link.py",
+        "line": 73,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/blueprint/adapters/cascade_link.py",
+        "line": 103,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/blueprint/adapters/super_engines_link.py",
+        "line": 149,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/blueprint/adapters/autonomy_link.py",
+        "line": 185,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/blueprint/adapters/utility_engines_link.py",
+        "line": 177,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/engines/blueprint/adapters/truth_link.py",
+        "line": 140,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/federation/live_ws.py",
+        "line": 61,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/federation/live_ws.py",
+        "line": 69,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/federation/federation_client.py",
+        "line": 34,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/federation/federation_client.py",
+        "line": 55,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/federation/federation_client.py",
+        "line": 76,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/mas/adapters.py",
+        "line": 31,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/mas/adapters.py",
+        "line": 36,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/mas/adapters.py",
+        "line": 68,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/mas/adapters.py",
+        "line": 74,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/mas/fault_injector.py",
+        "line": 43,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/mas/fault_injector.py",
+        "line": 55,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/agents/legacy_agents.py",
+        "line": 31,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/agents/legacy_agents.py",
+        "line": 45,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/agents/legacy_agents.py",
+        "line": 70,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/agents/legacy_agents.py",
+        "line": 86,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/demos/mas_demo.py",
+        "line": 25,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/demos/mas_demo.py",
+        "line": 46,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/demos/mas_demo.py",
+        "line": 47,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/demos/mas_demo.py",
+        "line": 48,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/demos/mas_demo.py",
+        "line": 61,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/demos/mas_demo.py",
+        "line": 71,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/demos/federation_demo.py",
+        "line": 24,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/demos/federation_demo.py",
+        "line": 51,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/demos/federation_demo.py",
+        "line": 60,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/demos/shakedown.py",
+        "line": 22,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/demos/shakedown.py",
+        "line": 39,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/bridge_core/heritage/demos/shakedown.py",
+        "line": 47,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/engines/envrecon/core.py",
+        "line": 170,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/engines/steward/models.py",
+        "line": 31,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/engines/steward/models.py",
+        "line": 42,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/engines/steward/models.py",
+        "line": 53,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/tools/triage/deploy_path_triage.py",
+        "line": 34,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/tools/triage/deploy_path_triage.py",
+        "line": 42,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/runtime/tde_x/orchestrator_v2.py",
+        "line": 97,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/runtime/tde_x/orchestrator_v2.py",
+        "line": 110,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/runtime/tde_x/orchestrator_v2.py",
+        "line": 122,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/runtime/tde_x/orchestrator_v2.py",
+        "line": 143,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      },
+      {
+        "file": "bridge_backend/runtime/tde_x/orchestrator_v2.py",
+        "line": 164,
+        "issue": "datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)",
+        "code": "datetime.utcnow()"
+      }
+    ]
+  },
+  "recommendations": [
+    {
+      "priority": "low",
+      "category": "frontend_cleanup",
+      "action": "Remove TODO comments from production-ready auto-generated stubs",
+      "affected_files": 85,
+      "details": "These stubs are functional but contain TODO markers that should be removed"
+    },
+    {
+      "priority": "high",
+      "category": "backend_implementation",
+      "action": "Review and implement backend stub routes",
+      "affected_files": 7,
+      "details": "Backend routes with stub implementations may need proper implementation"
+    },
+    {
+      "priority": "medium",
+      "category": "engine_completion",
+      "action": "Complete missing engine files",
+      "affected_engines": 1,
+      "details": "Some engines are missing expected files (routes.py, __init__.py)"
+    },
+    {
+      "priority": "medium",
+      "category": "deprecation_fix",
+      "action": "Fix deprecated code patterns",
+      "affected_files": 211,
+      "details": "Code uses deprecated patterns that may cause warnings or future failures"
+    }
+  ]
+}
