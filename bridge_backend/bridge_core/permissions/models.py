@@ -32,6 +32,12 @@ class LoggingSettings(BaseModel):
     level: Literal["minimal","standard","verbose"] = "standard"
     retention_days: int = 30
 
+class PushSettings(BaseModel):
+    enabled: bool = False
+    alerts: bool = False
+    updates: bool = False
+    reminders: bool = False
+
 class PermissionSettings(BaseModel):
     captain: str = Field(..., min_length=1)
     tier: Tier = "free"
@@ -41,5 +47,6 @@ class PermissionSettings(BaseModel):
     voice: VoiceSettings = VoiceSettings()
     data: DataSettings = DataSettings()
     logging: LoggingSettings = LoggingSettings()
+    push: PushSettings = PushSettings()
     consent_version: str = "v1.0"
     consent_given: bool = False

@@ -8,6 +8,12 @@ try:
 except ImportError:
     from bridge_backend.bridge_core.engines.cascade.service import CascadeEngine
 
+# Import permission store to check push notification permissions
+try:
+    from bridge_core.permissions.store import load_settings
+except ImportError:
+    from bridge_backend.bridge_core.permissions.store import load_settings
+
 # Simple RBAC matrix
 ROLE_MATRIX = {
     "admiral": {
@@ -102,6 +108,23 @@ class PermissionMiddleware(BaseHTTPMiddleware):
                     status_code=403,
                     content={"detail": "custody_admiral_only"}
                 )
+
+        # Push notification permission gate
+        if request.url.path.startswith("/push/"):
+            # Load user's permission settings
+            settings = load_settings(user.id)
+            if settings and not settings.push.enabled:
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "push_notifications_disabled"}
+                )
+            
+            # Check specific push notification types
+            if request.url.path == "/push/send" and request.method == "POST":
+                if settings:
+                    # Extract notification type from request body if needed
+                    # For now, just check if push is enabled
+                    pass
 
         # Project-specific gate (if autonomy task has restrictions)
         if hasattr(user, "project") and user.project and request.url.path.startswith("/vault/"):
