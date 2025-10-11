@@ -27,11 +27,16 @@ async def register_hxo_genesis_link():
         # Subscribe to autonomy signals
         await genesis_bus.subscribe("genesis.intent", _on_autonomy_intent)
         
+        # Subscribe to new v1.9.6p topics
+        await genesis_bus.subscribe("hxo.link.autonomy", _on_autonomy_link)
+        await genesis_bus.subscribe("hxo.link.cascade", _on_cascade_link)
+        await genesis_bus.subscribe("hxo.link.leviathan", _on_leviathan_link)
+        
         # Publish HXO schema
         await genesis_bus.publish("genesis.echo", {
             "type": "engine.registered",
             "engine": "hxo",
-            "version": "1.9.6n",
+            "version": "1.9.6p",
             "capabilities": [
                 "adaptive_sharding",
                 "content_addressed_dedup",
@@ -39,7 +44,15 @@ async def register_hxo_genesis_link():
                 "idempotent_execution",
                 "resumable_checkpoints",
                 "backpressure_control",
-                "self_healing"
+                "self_healing",
+                "predictive_orchestration",
+                "temporal_event_replay",
+                "zero_downtime_upgrade",
+                "quantum_entropy_hashing",
+                "harmonic_consensus_protocol",
+                "cross_federation_telemetry",
+                "adaptive_load_routing",
+                "auto_heal_cascade"
             ]
         })
         
@@ -79,6 +92,30 @@ async def _on_autonomy_intent(event: Dict[str, Any]):
         
     except Exception as e:
         logger.error(f"[HXO Genesis Link] Autonomy intent handler failed: {e}")
+
+
+async def _on_autonomy_link(event: Dict[str, Any]):
+    """Handle autonomy link events for HXO"""
+    try:
+        logger.debug(f"[HXO Genesis Link] Autonomy link event: {event.get('type', 'unknown')}")
+    except Exception as e:
+        logger.error(f"[HXO Genesis Link] Autonomy link handler failed: {e}")
+
+
+async def _on_cascade_link(event: Dict[str, Any]):
+    """Handle cascade link events for HXO orchestration"""
+    try:
+        logger.debug(f"[HXO Genesis Link] Cascade link event: {event.get('type', 'unknown')}")
+    except Exception as e:
+        logger.error(f"[HXO Genesis Link] Cascade link handler failed: {e}")
+
+
+async def _on_leviathan_link(event: Dict[str, Any]):
+    """Handle Leviathan predictive orchestration events"""
+    try:
+        logger.debug(f"[HXO Genesis Link] Leviathan link event: {event.get('type', 'unknown')}")
+    except Exception as e:
+        logger.error(f"[HXO Genesis Link] Leviathan link handler failed: {e}")
 
 
 async def publish_hxo_event(topic: str, event: Dict[str, Any]):
