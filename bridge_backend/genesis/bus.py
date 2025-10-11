@@ -148,6 +148,19 @@ class GenesisEventBus:
             "arie.fix.applied",
             "arie.fix.rollback",
             "arie.alert",
+            # HXO topics for Hypshard-X Orchestrator
+            "hxo.plan",
+            "hxo.shard.created",
+            "hxo.shard.claimed",
+            "hxo.shard.done",
+            "hxo.shard.failed",
+            "hxo.aggregate.ready",
+            "hxo.aggregate.certify",
+            "hxo.aggregate.finalized",
+            "hxo.aggregate.failed",
+            "hxo.autotune.signal",
+            "hxo.alert",
+            "hxo.audit",
         }
         
         logger.info(f"🌌 Genesis Event Bus initialized (enabled={self._enabled}, strict={self._strict_policy})")

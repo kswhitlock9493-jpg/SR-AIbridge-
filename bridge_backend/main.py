@@ -181,6 +181,13 @@ if os.getenv("ARIE_ENABLED", "true").lower() == "true":
 else:
     logger.info("[ARIE] Disabled (set ARIE_ENABLED=true to enable)")
 
+# HXO Engine v1.9.6n - Hypshard-X Orchestrator
+if os.getenv("HXO_ENABLED", "false").lower() == "true":
+    safe_include_router("bridge_backend.engines.hypshard_x.routes")
+    logger.info("[HXO] v1.9.6n routes enabled - hypshard-x orchestrator active")
+else:
+    logger.info("[HXO] Disabled (set HXO_ENABLED=true to enable)")
+
 # Genesis framework routes
 if os.getenv("GENESIS_MODE", "enabled").lower() == "enabled":
     safe_include_router("bridge_backend.genesis.routes")
