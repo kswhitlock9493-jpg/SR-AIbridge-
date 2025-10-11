@@ -6,7 +6,7 @@ Live telemetry and self-mapping for the Genesis organism
 from typing import Dict, Any, List, Optional
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, UTC
 
 logger = logging.getLogger(__name__)
 
@@ -138,7 +138,7 @@ class GenesisIntrospection:
     
     def _get_timestamp(self) -> str:
         """Get ISO timestamp"""
-        return datetime.utcnow().isoformat() + "Z"
+        return datetime.now(UTC).isoformat().replace('+00:00', 'Z')
 
 
 # Global singleton introspection instance

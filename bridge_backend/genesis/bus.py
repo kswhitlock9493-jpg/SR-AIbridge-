@@ -8,7 +8,7 @@ from collections import defaultdict
 import asyncio
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, UTC
 
 logger = logging.getLogger(__name__)
 
@@ -79,7 +79,7 @@ class GenesisEventBus:
             # Add Genesis metadata
             enriched = {
                 **event,
-                "_genesis_timestamp": datetime.utcnow().isoformat() + "Z",
+                "_genesis_timestamp": datetime.now(UTC).isoformat().replace('+00:00', 'Z'),
                 "_genesis_topic": topic,
                 "_genesis_seq": self._event_count,
             }

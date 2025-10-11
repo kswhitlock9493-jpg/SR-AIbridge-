@@ -154,8 +154,8 @@ class GenesisManifest:
     
     def _get_timestamp(self) -> str:
         """Get ISO timestamp"""
-        from datetime import datetime
-        return datetime.utcnow().isoformat() + "Z"
+        from datetime import datetime, UTC
+        return datetime.now(UTC).isoformat().replace('+00:00', 'Z')
 
 
 # Global singleton manifest instance
