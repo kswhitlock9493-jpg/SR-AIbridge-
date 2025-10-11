@@ -1,8 +1,14 @@
-# v1.9.7c — Genesis Linkage Implementation Guide
+# v1.9.7c — Genesis Linkage Implementation Guide (UNIFIED)
 
 ## Overview
 
-v1.9.7c "Genesis Linkage" unifies all deploy-critical engines (TDE-X, Cascade, Truth, Autonomy, Blueprint) into a single orchestration layer driven by the Blueprint Engine as the source of schema truth and design intent.
+v1.9.7c "Genesis Linkage" unifies **ALL 20 ENGINES** in the SR-AIbridge ecosystem into a single orchestration layer driven by the Blueprint Engine as the source of schema truth and design intent.
+
+### Unified Engines (20 Total)
+- **Core Infrastructure** (6): TDE-X, Blueprint, Cascade, Truth, Autonomy, Parser
+- **Super Engines** (6): CalculusCore, QHelmSingularity, AuroraForge, ChronicleLoom, ScrollTongue, CommerceForge
+- **Orchestration** (1): Leviathan (unified solver)
+- **Utility Engines** (7): Creativity, Indoctrination, Screen, Speech, Recovery, AgentsFoundry, Filing
 
 ## Architecture
 
@@ -51,6 +57,33 @@ v1.9.7c "Genesis Linkage" unifies all deploy-critical engines (TDE-X, Cascade, T
   - `execute_action_with_guardrails(action, rules, facts)` - Execute safe actions
 - **Events Published**: `deploy.actions` with type `action.executed`
 
+#### 5. Blueprint → Leviathan (NEW)
+- **Adapter**: `bridge_backend/bridge_core/engines/blueprint/adapters/leviathan_link.py`
+- **Integration Point**: Solver coordination
+- **Function**:
+  - `get_leviathan_config(manifest)` - Extract Leviathan configuration
+  - `coordinate_super_engines(query)` - Coordinate all 6 super engines
+  - `validate_solver_blueprint(manifest)` - Validate super engine availability
+- **Events Published**: `solver.tasks` with type `super_engines.coordinated`
+
+#### 6. Blueprint → Super Engines (NEW)
+- **Adapter**: `bridge_backend/bridge_core/engines/blueprint/adapters/super_engines_link.py`
+- **Engines**: CalculusCore, QHelmSingularity, AuroraForge, ChronicleLoom, ScrollTongue, CommerceForge
+- **Function**:
+  - `get_super_engines_config(manifest)` - Get all super engine configs
+  - `validate_super_engines(manifest)` - Validate all super engines
+  - `subscribe_super_engines_to_blueprint()` - Subscribe to blueprint updates
+- **Events**: Multiple topics per engine (math.*, quantum.*, creative.*, chronicle.*, language.*, commerce.*)
+
+#### 7. Blueprint → Utility Engines (NEW)
+- **Adapter**: `bridge_backend/bridge_core/engines/blueprint/adapters/utility_engines_link.py`
+- **Engines**: Creativity, Indoctrination, Screen, Speech, Recovery, AgentsFoundry, Filing
+- **Function**:
+  - `get_utility_engines_config(manifest)` - Get all utility engine configs
+  - `validate_utility_engines(manifest)` - Validate all utility engines
+  - `initialize_utility_engines()` - Initialize with blueprint configuration
+- **Events**: Multiple topics per engine (creativity.*, agents.*, screen.*, speech.*, recovery.*, files.*)
+
 ## API Endpoints
 
 All endpoints are prefixed with `/engines/linked` and gated by `LINK_ENGINES` environment variable.
@@ -62,18 +95,25 @@ Get status of all engine linkages.
 ```json
 {
   "enabled": true,
-  "engines": ["tde_x", "blueprint", "cascade", "truth", "autonomy", "parser"],
-  "count": 6,
+  "engines": ["tde_x", "blueprint", "cascade", "truth", "autonomy", "parser", 
+              "leviathan", "calculuscore", "qhelmsingularity", "auroraforge",
+              "chronicleloom", "scrolltongue", "commerceforge", "creativity",
+              "indoctrination", "screen", "speech", "recovery", "agents_foundry", "filing"],
+  "count": 20,
   "validation": {
     "valid": true,
     "errors": [],
-    "engine_count": 6
+    "engine_count": 20
   },
   "linkages": {
     "tde_x": "Blueprint → TDE-X manifest preloading",
     "cascade": "Blueprint → Cascade DAG auto-rebuild",
     "truth": "Blueprint → Truth schema validation",
-    "autonomy": "Blueprint → Autonomy guardrails"
+    "autonomy": "Blueprint → Autonomy guardrails",
+    "parser": "Blueprint → Parser content ingestion",
+    "leviathan": "Blueprint → Leviathan unified solver",
+    "super_engines": "Blueprint → Six Super Engines (CalculusCore, QHelmSingularity, AuroraForge, ChronicleLoom, ScrollTongue, CommerceForge)",
+    "utility_engines": "Blueprint → Utility Engines (Creativity, Indoctrination, Screen, Speech, Recovery, AgentsFoundry, Filing)"
   }
 }
 ```
@@ -119,6 +159,85 @@ Get dependencies and topics for a specific engine.
   "engine": "cascade",
   "dependencies": ["blueprint"],
   "topics": ["deploy.graph", "blueprint.events:update"]
+}
+```
+
+### GET /engines/linked/super-engines/status (NEW)
+Get status of all six super engines.
+
+**Response**:
+```json
+{
+  "validation": {
+    "all_available": true,
+    "available_count": 6,
+    "total_count": 6,
+    "available": ["calculuscore", "qhelmsingularity", "auroraforge", 
+                  "chronicleloom", "scrolltongue", "commerceforge"],
+    "missing": []
+  },
+  "engines": {
+    "calculuscore": {
+      "name": "CalculusCore",
+      "description": "Advanced mathematical and calculus computation engine",
+      "available": true
+    }
+    // ... other super engines
+  },
+  "super_engines": ["calculuscore", "qhelmsingularity", "auroraforge", 
+                    "chronicleloom", "scrolltongue", "commerceforge"]
+}
+```
+
+### GET /engines/linked/utility-engines/status (NEW)
+Get status of all utility engines.
+
+**Response**:
+```json
+{
+  "validation": {
+    "all_available": true,
+    "available_count": 7,
+    "total_count": 7,
+    "available": ["creativity", "indoctrination", "screen", "speech", 
+                  "recovery", "agents_foundry", "filing"],
+    "missing": []
+  },
+  "engines": {
+    "creativity": {
+      "name": "Creativity Bay",
+      "description": "Creative asset ingestion and management engine",
+      "available": true
+    }
+    // ... other utility engines
+  },
+  "utility_engines": ["creativity", "indoctrination", "screen", "speech", 
+                      "recovery", "agents_foundry", "filing"]
+}
+```
+
+### GET /engines/linked/leviathan/status (NEW)
+Get Leviathan solver status and super engine coordination.
+
+**Response**:
+```json
+{
+  "config": {
+    "name": "Leviathan Solver",
+    "description": "Unified solver engine integrating all super engines...",
+    "super_engines": ["calculuscore", "qhelmsingularity", "auroraforge",
+                      "chronicleloom", "scrolltongue", "commerceforge"]
+  },
+  "validation": {
+    "valid": true,
+    "available": ["calculuscore", "qhelmsingularity", "auroraforge",
+                  "chronicleloom", "scrolltongue", "commerceforge"],
+    "missing": [],
+    "total_required": 6,
+    "total_available": 6
+  },
+  "super_engines_coordination": ["calculuscore", "qhelmsingularity", "auroraforge",
+                                 "chronicleloom", "scrolltongue", "commerceforge"]
 }
 ```
 
