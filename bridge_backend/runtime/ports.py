@@ -8,12 +8,28 @@ from typing import Tuple
 
 log = logging.getLogger(__name__)
 DEFAULT_PORT = 8000
-PREBIND_WAIT_SECONDS = 2.5  # Wait for Render's delayed PORT injection
+DEFAULT_PREBIND_WAIT = 2.5  # Default wait for Render's delayed PORT injection
+
+def get_adaptive_prebind_delay() -> float:
+    """
+    Get adaptive pre-bind delay, which can be auto-tuned by the stabilizer
+    based on observed latency patterns
+    """
+    adaptive_delay = os.getenv("ADAPTIVE_PREBIND_DELAY")
+    if adaptive_delay:
+        try:
+            delay = float(adaptive_delay)
+            log.info(f"[PORT] Using adaptive pre-bind delay: {delay:.2f}s")
+            return delay
+        except ValueError:
+            pass
+    return DEFAULT_PREBIND_WAIT
 
 def resolve_port() -> int:
     """
-    Adaptive port resolution with prebind monitor.
-    Waits up to 2.5s for Render's delayed PORT environment variable injection.
+    Adaptive port resolution with auto-tuning prebind monitor.
+    Waits for Render's delayed PORT environment variable injection.
+    Delay is adaptive based on learned latency patterns.
     Returns PORT if set and valid, else defaults to 8000.
     """
     # First attempt - immediate check
@@ -27,10 +43,11 @@ def resolve_port() -> int:
         except ValueError:
             pass
     
-    # Prebind monitor - wait for delayed environment variable injection
-    log.info(f"[PORT] Waiting {PREBIND_WAIT_SECONDS}s for environment variable injection...")
+    # Adaptive prebind monitor - wait for delayed environment variable injection
+    wait_time = get_adaptive_prebind_delay()
+    log.info(f"[PORT] Waiting {wait_time:.2f}s for environment variable injection...")
     start_time = time.time()
-    while time.time() - start_time < PREBIND_WAIT_SECONDS:
+    while time.time() - start_time < wait_time:
         raw = os.getenv("PORT")
         if raw:
             try:
@@ -44,7 +61,7 @@ def resolve_port() -> int:
         time.sleep(0.1)  # Check every 100ms
     
     # Fallback to default
-    log.warning(f"[PORT] No valid PORT detected after {PREBIND_WAIT_SECONDS}s, defaulting to {DEFAULT_PORT}")
+    log.warning(f"[PORT] No valid PORT detected after {wait_time:.2f}s, defaulting to {DEFAULT_PORT}")
     return DEFAULT_PORT
 
 def check_listen(host: str, port: int) -> Tuple[bool, str]:
