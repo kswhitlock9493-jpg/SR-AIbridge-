@@ -324,3 +324,37 @@ class GenesisEventBus:
 
 # Global singleton Genesis bus instance
 genesis_bus = GenesisEventBus()
+
+
+# One-time ARIE integrity hook (triggered on deployment)
+if os.getenv("ARIE_ENABLED", "false").lower() == "true" and os.getenv("GENESIS_ACTIVE", "false").lower() == "true":
+    try:
+        from bridge_backend.engines.arie.core import ARIEEngine
+        from bridge_backend.engines.arie.models import PolicyType
+        
+        logger.info("🔧 Genesis: ARIE one-time integrity hook activated")
+        
+        # Run ARIE with SAFE_EDIT policy
+        engine = ARIEEngine()
+        policy_str = os.getenv("ARIE_POLICY", "SAFE_EDIT")
+        policy = PolicyType(policy_str)
+        
+        summary = engine.run(policy=policy, dry_run=False, apply=True)
+        
+        logger.info(f"✅ ARIE one-time run complete: {summary.findings_count} findings, {summary.fixes_applied} fixes applied")
+        
+        # Publish results to Genesis bus
+        asyncio.run(genesis_bus.publish("arie.audit", {
+            "id": f"arie-genesis-{summary.run_id}",
+            "type": "arie.genesis_hook_complete",
+            "source": "arie.genesis_hook",
+            "run_id": summary.run_id,
+            "findings_count": summary.findings_count,
+            "fixes_applied": summary.fixes_applied,
+            "policy": policy.value,
+        }))
+        
+    except Exception as e:
+        logger.error(f"❌ ARIE genesis hook failed: {e}")
+        # Don't fail deployment if ARIE fails
+        pass
