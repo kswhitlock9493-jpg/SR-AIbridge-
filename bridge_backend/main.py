@@ -161,6 +161,13 @@ safe_include_router("bridge_backend.bridge_core.engines.leviathan.routes_solver"
 safe_include_router("bridge_backend.bridge_core.engines.creativity.routes")
 safe_include_router("bridge_backend.bridge_core.engines.cascade.routes")
 
+# Genesis framework routes
+if os.getenv("GENESIS_MODE", "enabled").lower() == "enabled":
+    safe_include_router("bridge_backend.genesis.routes")
+    logger.info("[GENESIS] API routes enabled")
+else:
+    logger.info("[GENESIS] API routes disabled (set GENESIS_MODE=enabled to enable)")
+
 # Genesis Linkage: unified engine orchestration
 if os.getenv("LINK_ENGINES", "false").lower() == "true":
     safe_include_router("bridge_backend.bridge_core.engines.routes_linked")
@@ -201,6 +208,23 @@ async def startup_event():
     from bridge_backend.runtime.temporal_stage_manager import (
         stage_manager, DeploymentStage, StageTask, StageStatus
     )
+    
+    # === Genesis Bootstrap ===
+    # Initialize Genesis framework if enabled
+    if os.getenv("GENESIS_MODE", "enabled").lower() == "enabled":
+        try:
+            from bridge_backend.genesis.orchestration import genesis_orchestrator
+            from bridge_backend.bridge_core.engines.adapters.genesis_link import register_all_genesis_links
+            
+            # Register all engine linkages
+            await register_all_genesis_links()
+            
+            # Start orchestration loop
+            await genesis_orchestrator.start()
+            
+            logger.info("✅ Genesis framework initialized")
+        except Exception as e:
+            logger.warning(f"⚠️ Genesis initialization failed (continuing): {e}")
     
     # === STAGE 1: Minimal Health Check (Immediate Render Detection) ===
     tdb.mark_stage_start(1)
