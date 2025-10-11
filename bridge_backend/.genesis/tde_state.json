@@ -1,0 +1,19 @@
+{
+  "stages": {
+    "post_boot": {
+      "status": "running",
+      "started_at": "2025-10-11T09:38:58.882645"
+    },
+    "warm_caches": {
+      "status": "pending"
+    },
+    "index_assets": {
+      "status": "pending"
+    },
+    "scan_federation": {
+      "status": "pending"
+    }
+  },
+  "started_at": "2025-10-11T09:38:58.882415",
+  "completed_at": null
+}
