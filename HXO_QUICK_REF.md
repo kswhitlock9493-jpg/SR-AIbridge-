@@ -1,7 +1,7 @@
 # HXO Quick Reference
 
-**Version:** 1.9.6n — Hypshard-X Orchestrator  
-**Purpose:** Infinite shards, finite time — federated autonomy with truth certification
+**Version:** 1.9.6p — HXO Ascendant  
+**Purpose:** Federation Nexus — unified orchestration across all Bridge engines
 
 ---
 
