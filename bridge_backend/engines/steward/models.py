@@ -21,6 +21,13 @@ class DiffReport(BaseModel):
     has_drift: bool
     providers: List[str]
     changes: List[EnvVarChange] = []
+    missing_in_render: List[str] = []
+    missing_in_netlify: List[str] = []
+    missing_in_github: List[str] = []
+    extra_in_render: List[str] = []
+    extra_in_netlify: List[str] = []
+    conflicts: Dict[str, Any] = Field(default_factory=dict)
+    summary: Dict[str, Any] = Field(default_factory=dict)
     timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
 
 
