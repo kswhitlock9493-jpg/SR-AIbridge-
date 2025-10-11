@@ -259,6 +259,54 @@ The EnvRecon-Autonomy link automatically subscribes to deployment success events
 2. Check logs for Genesis bus initialization
 3. Verify Genesis introspection health: `GET /api/genesis/introspection`
 
+## Autonomous Environment Synchronization Pipeline (v1.9.6L)
+
+### New Capabilities
+
+The v1.9.6L release introduces a complete autonomous environment synchronization pipeline that goes beyond drift detection to actively synchronize variables across platforms:
+
+#### Features
+
+1. **Automated GitHub Sync**: Sync variables from Render (canonical source) to GitHub Secrets
+2. **Versioned Snapshots**: Export `.env.sync.json` files for audit and rollback
+3. **Post-Deployment Verification**: Automatically verify parity after syncs
+4. **GitHub Actions Integration**: Workflow runs sync automatically on push to main
+5. **Comprehensive Audit Trails**: Auto-generated `GITHUB_ENV_AUDIT.md` documentation
+
+#### Usage
+
+**Manual Sync:**
+```bash
+# Sync from Render to GitHub
+python3 -m bridge_backend.cli.genesisctl env sync --target github --from render
+
+# Export snapshot
+python3 -m bridge_backend.cli.genesisctl env export --target github --source render
+
+# Verify parity
+python3 -m bridge_backend.diagnostics.verify_env_sync
+```
+
+**Automated Sync:**
+- GitHub Actions workflow `.github/workflows/env-sync.yml` runs on push to main
+- Syncs Render → GitHub automatically
+- Uploads sync reports and audit documentation as artifacts
+
+#### Genesis Events
+
+New event topics published by EnvSync:
+- `envsync.init` - Sync operation initiated
+- `envsync.commit` - Sync completed with no drift
+- `envsync.drift` - Drift detected between platforms
+
+See [Genesis Event Flow](docs/GENESIS_EVENT_FLOW.md) for details.
+
+#### Documentation
+
+- [Autonomous Environment Synchronization Pipeline](docs/ENV_SYNC_AUTONOMOUS_PIPELINE.md)
+- [GitHub Environment Sync Guide](docs/GITHUB_ENV_SYNC_GUIDE.md)
+- [Genesis Event Flow](docs/GENESIS_EVENT_FLOW.md)
+
 ## Next Steps for Full Automation
 
 To enable actual auto-sync (not just reporting):
@@ -278,6 +326,13 @@ To enable actual auto-sync (not just reporting):
 - Drift detection and reporting
 - Genesis event bus integration
 - Deployment-triggered reconciliation
+- **Autonomous Environment Synchronization Pipeline (v1.9.6L)**
+  - Automated sync from Render to GitHub via `genesisctl env sync`
+  - Versioned `.env.sync.json` snapshots via `genesisctl env export`
+  - Post-deployment parity verification via `verify_env_sync.py`
+  - GitHub Actions workflow for automated sync on push to main
+  - Genesis event publishing (envsync.init, envsync.commit, envsync.drift)
+  - Comprehensive audit trail with auto-generated documentation
 - Auto-heal intent logging (what would be fixed)
 - Manual synchronization via API/CLI
 

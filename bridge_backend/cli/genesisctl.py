@@ -10,6 +10,7 @@ import asyncio
 import argparse
 import json
 from pathlib import Path
+from datetime import datetime
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -36,13 +37,58 @@ async def cmd_env_audit():
     return 0
 
 
-async def cmd_env_sync(target=None):
+async def cmd_env_sync(target=None, from_platform=None):
     """Sync environment variables to specified target"""
     engine = EnvReconEngine()
     
-    if target == "render":
+    if target == "github" and from_platform == "render":
+        print("🔄 Syncing to GitHub from Render...")
+        if not hubsync.is_configured():
+            print("❌ GitHub sync not configured. Set GITHUB_TOKEN and GITHUB_REPO.")
+            return 1
+        
+        # Fetch verified Render variables
+        render_vars = await engine.fetch_render_env()
+        if not render_vars:
+            print("❌ Failed to fetch Render environment variables")
+            return 1
+        
+        print(f"✅ Fetched {len(render_vars)} variables from Render")
+        
+        # Get current GitHub secrets
+        github_vars = await engine.fetch_github_secrets()
+        
+        # Determine what needs to be synced
+        missing_in_github = [k for k in render_vars if k not in github_vars]
+        
+        print(f"📊 Sync Analysis:")
+        print(f"  Variables to sync: {len(missing_in_github)}")
+        
+        if missing_in_github:
+            print(f"\n  Missing in GitHub:")
+            for var in missing_in_github[:10]:
+                print(f"    - {var}")
+            if len(missing_in_github) > 10:
+                print(f"    ... and {len(missing_in_github) - 10} more")
+        
+        # Perform the sync using hubsync
+        synced_count = 0
+        for var in missing_in_github:
+            try:
+                success = await hubsync.sync_secret(var, render_vars[var])
+                if success:
+                    synced_count += 1
+            except Exception as e:
+                print(f"⚠️ Failed to sync {var}: {e}")
+        
+        print(f"\n✅ Synced {synced_count}/{len(missing_in_github)} variables to GitHub")
+        
+        # Generate sync report
+        await cmd_env_export(target="github", source="render")
+        
+        return 0
+    elif target == "render":
         print("🔄 Syncing to Render...")
-        # This would use the existing sync provider
         print("⚠️  Direct sync not yet implemented - use audit + manual review")
         return 1
     elif target == "netlify":
@@ -64,13 +110,70 @@ async def cmd_env_sync(target=None):
         # Show what would be synced
         missing = report.get('missing_in_github', [])
         print(f"  Would sync {len(missing)} secrets to GitHub")
-        print("⚠️  Auto-sync requires API implementation")
+        print("💡 Tip: Use --from render to sync from Render to GitHub")
         return 0
     else:
         print("🔄 Syncing all platforms...")
         await cmd_env_audit()
         print("\n✅ Audit complete. Review report and use --target for specific sync.")
         return 0
+
+
+async def cmd_env_export(target=None, source=None):
+    """Export environment sync snapshot to .env.sync.json"""
+    print(f"📤 Exporting environment sync snapshot...")
+    engine = EnvReconEngine()
+    
+    # Determine source and target
+    if not source:
+        source = "render"  # Default to Render as canonical source
+    if not target:
+        target = "github"  # Default to GitHub as sync target
+    
+    # Fetch source environment
+    if source == "render":
+        source_vars = await engine.fetch_render_env()
+    elif source == "netlify":
+        source_vars = await engine.fetch_netlify_env()
+    elif source == "local":
+        source_vars = engine.load_local_env()
+    else:
+        print(f"❌ Unknown source: {source}")
+        return 1
+    
+    if not source_vars:
+        print(f"❌ Failed to fetch variables from {source}")
+        return 1
+    
+    timestamp = datetime.now().isoformat().replace('+00:00', 'Z')
+    
+    sync_snapshot = {
+        "provider": target,
+        "source": source,
+        "synced_at": timestamp,
+        "variables": source_vars
+    }
+    
+    # Save to config directory
+    config_dir = Path(__file__).parent.parent / "config"
+    config_dir.mkdir(parents=True, exist_ok=True)
+    
+    snapshot_path = config_dir / ".env.sync.json"
+    with open(snapshot_path, 'w') as f:
+        json.dump(sync_snapshot, f, indent=2)
+    
+    print(f"✅ Exported {len(source_vars)} variables from {source}")
+    print(f"📄 Snapshot saved to: {snapshot_path}")
+    
+    # Also save to logs for audit trail
+    logs_dir = Path(__file__).parent.parent / "logs"
+    logs_dir.mkdir(parents=True, exist_ok=True)
+    
+    log_snapshot_path = logs_dir / "env_sync_report.json"
+    with open(log_snapshot_path, 'w') as f:
+        json.dump(sync_snapshot, f, indent=2)
+    
+    return 0
 
 
 async def cmd_env_heal():
@@ -119,6 +222,15 @@ def main():
     sync_parser = env_subparsers.add_parser('sync', help='Sync environment variables')
     sync_parser.add_argument('--target', choices=['render', 'netlify', 'github'], 
                             help='Target platform to sync')
+    sync_parser.add_argument('--from', dest='from_platform', choices=['render', 'netlify', 'local'],
+                            help='Source platform to sync from')
+    
+    # env export
+    export_parser = env_subparsers.add_parser('export', help='Export environment sync snapshot')
+    export_parser.add_argument('--target', choices=['render', 'netlify', 'github'],
+                              help='Target platform for export')
+    export_parser.add_argument('--source', choices=['render', 'netlify', 'local'],
+                              help='Source platform to export from')
     
     # env heal
     env_subparsers.add_parser('heal', help='Trigger auto-healing')
@@ -129,7 +241,9 @@ def main():
         if args.env_command == 'audit':
             return asyncio.run(cmd_env_audit())
         elif args.env_command == 'sync':
-            return asyncio.run(cmd_env_sync(args.target))
+            return asyncio.run(cmd_env_sync(args.target, args.from_platform))
+        elif args.env_command == 'export':
+            return asyncio.run(cmd_env_export(args.target, args.source))
         elif args.env_command == 'heal':
             return asyncio.run(cmd_env_heal())
         else:

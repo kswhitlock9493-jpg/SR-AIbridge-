@@ -1,0 +1,155 @@
+name: 🔁 Bridge Env Sync
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  sync:
+    name: Environment Synchronization Pipeline
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🧰 Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      
+      - name: 📦 Install Dependencies
+        run: |
+          pip install httpx python-dotenv pynacl
+      
+      - name: 🔄 Sync Environment Variables
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO: ${{ github.repository }}
+        run: |
+          echo "🔄 Syncing from Render to GitHub..."
+          python3 -m bridge_backend.cli.genesisctl env sync --target github --from render || echo "⚠️ Sync completed with warnings"
+      
+      - name: 📤 Export Sync Snapshot
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+        run: |
+          echo "📤 Exporting sync snapshot..."
+          python3 -m bridge_backend.cli.genesisctl env export --target github --source render
+      
+      - name: 🔍 Verify Environment Parity
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO: ${{ github.repository }}
+        run: |
+          echo "🔍 Running post-sync verification..."
+          python3 -m bridge_backend.diagnostics.verify_env_sync || echo "⚠️ Drift detected - review the parity report"
+      
+      - name: 📊 Upload Sync Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: env_sync_report
+          path: |
+            bridge_backend/logs/env_sync_report.json
+            bridge_backend/logs/env_parity_check.json
+            bridge_backend/config/.env.sync.json
+          retention-days: 30
+      
+      - name: 📝 Generate Audit Documentation
+        if: always()
+        run: |
+          echo "📝 Generating audit documentation..."
+          python3 - <<'EOF'
+          import json
+          import os
+          from datetime import datetime
+          from pathlib import Path
+          
+          # Load reports
+          logs_dir = Path("bridge_backend/logs")
+          docs_dir = Path("docs/audit")
+          docs_dir.mkdir(parents=True, exist_ok=True)
+          
+          sync_report_path = logs_dir / "env_sync_report.json"
+          parity_report_path = logs_dir / "env_parity_check.json"
+          
+          audit_content = f"""# GitHub Environment Sync Log
+
+          **Sync Date:** {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC
+          **Workflow:** {os.getenv('GITHUB_WORKFLOW', 'env-sync')}
+          **Run ID:** {os.getenv('GITHUB_RUN_ID', 'N/A')}
+          **Run Number:** {os.getenv('GITHUB_RUN_NUMBER', 'N/A')}
+          
+          ## Sync Report
+          
+          """
+          
+          if sync_report_path.exists():
+              with open(sync_report_path) as f:
+                  sync_data = json.load(f)
+              
+              audit_content += f"""**Source:** {sync_data.get('source', 'unknown')}
+          **Target:** {sync_data.get('provider', 'unknown')}
+          **Timestamp:** {sync_data.get('synced_at', 'N/A')}
+          **Variables Exported:** {len(sync_data.get('variables', {}))}
+          
+          """
+          
+          if parity_report_path.exists():
+              with open(parity_report_path) as f:
+                  parity_data = json.load(f)
+              
+              has_drift = parity_data.get('has_drift', True)
+              status = "❌ Drift Detected" if has_drift else "✅ No Drift"
+              
+              audit_content += f"""## Parity Verification
+          
+          **Status:** {status}
+          **Verified At:** {parity_data.get('verified_at', 'N/A')}
+          
+          ### Summary
+          
+          - Missing in Render: {len(parity_data.get('missing_in_render', []))}
+          - Missing in Netlify: {len(parity_data.get('missing_in_netlify', []))}
+          - Missing in GitHub: {len(parity_data.get('missing_in_github', []))}
+          - Conflicts: {len(parity_data.get('conflicts', {}))}
+          
+          """
+              
+              if parity_data.get('missing_in_github'):
+                  audit_content += "\n### Variables Missing in GitHub\n\n"
+                  for var in parity_data['missing_in_github'][:20]:
+                      audit_content += f"- {var}\n"
+                  if len(parity_data['missing_in_github']) > 20:
+                      audit_content += f"\n... and {len(parity_data['missing_in_github']) - 20} more\n"
+          
+          audit_content += f"""
+          ---
+          
+          **Genesis Event ID:** envsync.commit:{os.getenv('GITHUB_SHA', 'unknown')[:7]}
+          """
+          
+          # Save audit document
+          audit_path = docs_dir / "GITHUB_ENV_AUDIT.md"
+          with open(audit_path, 'w') as f:
+              f.write(audit_content)
+          
+          print(f"✅ Audit documentation saved to {audit_path}")
+          EOF
+      
+      - name: 📤 Upload Audit Documentation
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: env_sync_audit
+          path: docs/audit/GITHUB_ENV_AUDIT.md
+          retention-days: 90
