@@ -152,6 +152,71 @@ class GenesisManifest:
         except Exception as e:
             logger.error(f"❌ Failed to sync from Blueprint Registry: {e}")
     
+    def register_envsync_manifest(self) -> Dict[str, Any]:
+        """
+        Register the EnvSync Seed Manifest with Genesis manifest system.
+        This enables Genesis to track and orchestrate environment synchronization.
+        
+        Returns:
+            Dictionary containing manifest metadata
+        """
+        try:
+            manifest_path = os.path.join(
+                os.path.dirname(__file__), 
+                "..", 
+                ".genesis", 
+                "envsync_seed_manifest.env"
+            )
+            
+            if not os.path.exists(manifest_path):
+                logger.warning(f"⚠️ EnvSync Seed Manifest not found at {manifest_path}")
+                return {}
+            
+            # Parse manifest metadata from header comments
+            metadata = {
+                "version": "Genesis v2.0.1a",
+                "purpose": "Enables Render <-> Netlify variable synchronization",
+                "auto_propagate": True,
+                "sync_targets": ["render", "netlify"],
+                "canonical": True,
+                "managed_by": "Genesis Orchestration Layer",
+            }
+            
+            # Count variables in manifest
+            var_count = 0
+            with open(manifest_path, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('#') and '=' in line:
+                        var_count += 1
+            
+            # Register EnvSync as an engine
+            envsync_schema = {
+                "genesis_role": "Environment Synchronization - maintains platform parity",
+                "version": metadata["version"],
+                "manifest_path": manifest_path,
+                "variable_count": var_count,
+                "sync_targets": metadata["sync_targets"],
+                "auto_propagate": metadata["auto_propagate"],
+                "topics": ["envsync.drift", "envsync.sync", "envsync.complete", "deploy.platform.sync"],
+                "dependencies": ["genesis", "autonomy"],
+            }
+            
+            self.register_engine("envsync", envsync_schema)
+            
+            logger.info(f"✅ Registered EnvSync Seed Manifest ({var_count} variables) with Genesis")
+            
+            return {
+                "registered": True,
+                "manifest_path": manifest_path,
+                "metadata": metadata,
+                "variable_count": var_count,
+            }
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to register EnvSync manifest: {e}")
+            return {"registered": False, "error": str(e)}
+    
     def _get_timestamp(self) -> str:
         """Get ISO timestamp"""
         from datetime import datetime, UTC
