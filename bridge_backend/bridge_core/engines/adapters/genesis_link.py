@@ -143,6 +143,45 @@ async def register_all_genesis_links():
         except Exception as e:
             logger.warning(f"Failed to register Recovery link: {e}")
         
+        # Super Engines autonomy integration
+        try:
+            from .super_engines_autonomy_link import register_super_engines_autonomy_links
+            await register_super_engines_autonomy_links()
+            engines_registered.append("super_engines_autonomy")
+            genesis_introspection.update_health("super_engines", True)
+        except Exception as e:
+            logger.warning(f"Failed to register Super Engines autonomy links: {e}")
+        
+        # Specialized engines autonomy integration
+        try:
+            await _register_specialized_engines_autonomy_links()
+            engines_registered.append("specialized_engines_autonomy")
+        except Exception as e:
+            logger.warning(f"Failed to register Specialized Engines autonomy links: {e}")
+        
+        # Core systems autonomy integration
+        try:
+            await _register_core_systems_autonomy_links()
+            engines_registered.append("core_systems_autonomy")
+        except Exception as e:
+            logger.warning(f"Failed to register Core Systems autonomy links: {e}")
+        
+        # Tools and runtime autonomy integration
+        try:
+            from .tools_runtime_autonomy_link import register_tools_runtime_autonomy_links
+            await register_tools_runtime_autonomy_links()
+            engines_registered.append("tools_runtime_autonomy")
+        except Exception as e:
+            logger.warning(f"Failed to register Tools/Runtime autonomy links: {e}")
+        
+        # Heritage and MAS autonomy integration
+        try:
+            from .heritage_mas_autonomy_link import register_heritage_mas_autonomy_links
+            await register_heritage_mas_autonomy_links()
+            engines_registered.append("heritage_mas_autonomy")
+        except Exception as e:
+            logger.warning(f"Failed to register Heritage/MAS autonomy links: {e}")
+        
         logger.info(f"✅ Genesis linkages registered: {', '.join(engines_registered)}")
         
         # Publish initialization complete event
@@ -420,3 +459,143 @@ async def _register_recovery_link():
         })
     
     logger.debug("✅ Recovery linked to Genesis")
+
+
+async def _register_specialized_engines_autonomy_links():
+    """Register autonomy integration for specialized engines"""
+    from bridge_backend.genesis.bus import genesis_bus
+    
+    # Screen engine autonomy link
+    async def handle_screen_event(event: Dict[str, Any]):
+        await genesis_bus.publish("genesis.intent", {
+            "type": "autonomy.screen_interaction",
+            "source": "autonomy",
+            "screen_event": event,
+        })
+    
+    # Indoctrination engine autonomy link
+    async def handle_indoctrination_event(event: Dict[str, Any]):
+        await genesis_bus.publish("genesis.intent", {
+            "type": "autonomy.indoctrination_training",
+            "source": "autonomy",
+            "indoctrination_event": event,
+        })
+    
+    # Agents Foundry autonomy link
+    async def handle_agents_foundry_event(event: Dict[str, Any]):
+        await genesis_bus.publish("genesis.intent", {
+            "type": "autonomy.agents_foundry_deployment",
+            "source": "autonomy",
+            "agents_foundry_event": event,
+        })
+    
+    # Subscribe to specialized engine topics
+    genesis_bus.subscribe("screen.interaction", handle_screen_event)
+    genesis_bus.subscribe("screen.render", handle_screen_event)
+    genesis_bus.subscribe("indoctrination.training", handle_indoctrination_event)
+    genesis_bus.subscribe("indoctrination.knowledge", handle_indoctrination_event)
+    genesis_bus.subscribe("agents_foundry.agent_created", handle_agents_foundry_event)
+    genesis_bus.subscribe("agents_foundry.agent_deployed", handle_agents_foundry_event)
+    
+    logger.debug("✅ Specialized Engines linked to Autonomy")
+
+
+async def _register_core_systems_autonomy_links():
+    """Register autonomy integration for core systems"""
+    from bridge_backend.genesis.bus import genesis_bus
+    
+    # Fleet autonomy link
+    async def handle_fleet_event(event: Dict[str, Any]):
+        await genesis_bus.publish("genesis.intent", {
+            "type": "autonomy.fleet_command",
+            "source": "autonomy",
+            "fleet_event": event,
+        })
+    
+    # Custody autonomy link
+    async def handle_custody_event(event: Dict[str, Any]):
+        await genesis_bus.publish("genesis.fact", {
+            "type": "autonomy.custody_state",
+            "source": "autonomy",
+            "custody_event": event,
+        })
+    
+    # Console autonomy link
+    async def handle_console_event(event: Dict[str, Any]):
+        await genesis_bus.publish("genesis.intent", {
+            "type": "autonomy.console_command",
+            "source": "autonomy",
+            "console_event": event,
+        })
+    
+    # Captains autonomy link
+    async def handle_captains_event(event: Dict[str, Any]):
+        await genesis_bus.publish("genesis.intent", {
+            "type": "autonomy.captains_policy",
+            "source": "autonomy",
+            "captains_event": event,
+        })
+    
+    # Guardians autonomy link - special handling for safety
+    async def handle_guardians_event(event: Dict[str, Any]):
+        # Guardians validate autonomy actions
+        event_type = event.get("type", "")
+        
+        # Block dangerous patterns
+        if "recursive" in str(event).lower() or "destructive" in str(event).lower():
+            logger.warning(f"⚠️ Guardian blocked potentially dangerous autonomy action: {event_type}")
+            await genesis_bus.publish("genesis.heal", {
+                "type": "autonomy.action_blocked",
+                "source": "guardians",
+                "blocked_event": event,
+            })
+            return
+        
+        await genesis_bus.publish("genesis.intent", {
+            "type": "autonomy.guardians_validation",
+            "source": "autonomy",
+            "guardians_event": event,
+        })
+    
+    # Registry autonomy link
+    async def handle_registry_event(event: Dict[str, Any]):
+        await genesis_bus.publish("genesis.fact", {
+            "type": "autonomy.registry_update",
+            "source": "autonomy",
+            "registry_event": event,
+        })
+    
+    # Doctrine autonomy link
+    async def handle_doctrine_event(event: Dict[str, Any]):
+        # Doctrine violations trigger autonomy healing
+        if event.get("type") == "violation":
+            await genesis_bus.publish("genesis.heal", {
+                "type": "autonomy.doctrine_violation",
+                "source": "autonomy",
+                "doctrine_event": event,
+            })
+        else:
+            await genesis_bus.publish("genesis.fact", {
+                "type": "autonomy.doctrine_compliance",
+                "source": "autonomy",
+                "doctrine_event": event,
+            })
+    
+    # Subscribe to core system topics
+    genesis_bus.subscribe("fleet.command", handle_fleet_event)
+    genesis_bus.subscribe("fleet.status", handle_fleet_event)
+    genesis_bus.subscribe("custody.state", handle_custody_event)
+    genesis_bus.subscribe("custody.transfer", handle_custody_event)
+    genesis_bus.subscribe("console.command", handle_console_event)
+    genesis_bus.subscribe("console.output", handle_console_event)
+    genesis_bus.subscribe("captains.policy", handle_captains_event)
+    genesis_bus.subscribe("captains.decision", handle_captains_event)
+    genesis_bus.subscribe("guardians.validation", handle_guardians_event)
+    genesis_bus.subscribe("guardians.alert", handle_guardians_event)
+    genesis_bus.subscribe("registry.update", handle_registry_event)
+    genesis_bus.subscribe("registry.query", handle_registry_event)
+    genesis_bus.subscribe("doctrine.compliance", handle_doctrine_event)
+    genesis_bus.subscribe("doctrine.violation", handle_doctrine_event)
+    
+    logger.debug("✅ Core Systems linked to Autonomy")
+
