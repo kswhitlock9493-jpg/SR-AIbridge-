@@ -150,3 +150,7 @@ bridge_backend/diagnostics/boot_history.json
 bridge_backend/diagnostics/daily_reports/*
 bridge_backend/diagnostics/archive/
 
+# v1.9.6i Temporal Deploy Buffer diagnostics (auto-generated)
+bridge_backend/diagnostics/temporal_deploy/*
+bridge_backend/diagnostics/runtime_stage.json
+
