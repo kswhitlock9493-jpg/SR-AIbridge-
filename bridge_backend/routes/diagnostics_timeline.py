@@ -7,6 +7,14 @@ from pathlib import Path
 
 router = APIRouter(prefix="/api/diagnostics", tags=["diagnostics"])
 
+
+@router.get("/deploy-parity")
+async def get_deploy_parity():
+    """Get deploy parity diagnostics from stabilization tickets"""
+    from bridge_backend.runtime.deploy_parity import diagnostics_parity
+    return await diagnostics_parity()
+
+
 @router.get("/timeline")
 async def get_diagnostics_timeline(limit: int = 50):
     """Return recent Bridge diagnostics as timeline data."""

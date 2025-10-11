@@ -5,6 +5,13 @@ from ..runtime.ports import resolve_port, check_listen
 
 router = APIRouter(prefix="/health", tags=["health"])
 
+
+@router.get("/live")
+def health_live():
+    """Liveness probe for Render health checks"""
+    return {"status": "ok", "alive": True}
+
+
 @router.get("/ports")
 def health_ports():
     env_port = os.getenv("PORT")
