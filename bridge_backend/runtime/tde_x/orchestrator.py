@@ -21,6 +21,20 @@ async def run_tde_x() -> List[Any]:
     """
     logger.info("[TDE-X] 🚀 Orchestrator starting...")
     
+    # Preload Blueprint manifest for shard validation
+    manifest = None
+    try:
+        from ...bridge_core.engines.blueprint.adapters import tde_link
+        manifest = await tde_link.preload_manifest()
+        logger.info("[TDE-X] 📋 Blueprint manifest preloaded")
+        
+        # Validate shards against manifest
+        for shard_name in ["bootstrap", "runtime", "diagnostics"]:
+            if not tde_link.validate_shard(shard_name, manifest):
+                logger.warning(f"[TDE-X] ⚠️ Shard '{shard_name}' validation warning")
+    except Exception as e:
+        logger.warning(f"[TDE-X] Could not preload manifest: {e}")
+    
     # Run core shards in parallel; diagnostics only enqueues work
     bootstrap_task = asyncio.create_task(bootstrap.run())
     runtime_task = asyncio.create_task(runtime.run())

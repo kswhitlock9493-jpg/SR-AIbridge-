@@ -43,8 +43,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.7a",
-    description="TDE-X: Hypersharded Deploy + Federation + Sovereign Post-Deploy - Eliminates Render timeout with parallel shard execution"
+    version="1.9.7c",
+    description="v1.9.7c Genesis Linkage: TDE-X + Cascade + Truth + Autonomy + Blueprint unified orchestration"
 )
 
 # === CORS ===
@@ -160,6 +160,13 @@ safe_include_router("bridge_backend.bridge_core.engines.leviathan.routes")
 safe_include_router("bridge_backend.bridge_core.engines.leviathan.routes_solver")
 safe_include_router("bridge_backend.bridge_core.engines.creativity.routes")
 safe_include_router("bridge_backend.bridge_core.engines.cascade.routes")
+
+# Genesis Linkage: unified engine orchestration
+if os.getenv("LINK_ENGINES", "false").lower() == "true":
+    safe_include_router("bridge_backend.bridge_core.engines.routes_linked")
+    logger.info("[LINKAGE] Engine linkage enabled")
+else:
+    logger.info("[LINKAGE] Engine linkage disabled (set LINK_ENGINES=true to enable)")
 
 # Blueprint engine: gated and import-safe
 if os.getenv("BLUEPRINTS_ENABLED", "false").lower() == "true":
