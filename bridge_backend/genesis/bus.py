@@ -135,6 +135,13 @@ class GenesisEventBus:
             "envrecon.audit",
             "envrecon.heal",
             "envrecon.sync",
+            # Steward topics for admiral-tier environment orchestration
+            "steward.intent",
+            "steward.plan",
+            "steward.apply",
+            "steward.result",
+            "steward.rollback",
+            "steward.cap.issued",
         }
         
         logger.info(f"🌌 Genesis Event Bus initialized (enabled={self._enabled}, strict={self._strict_policy})")

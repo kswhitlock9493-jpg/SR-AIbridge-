@@ -167,6 +167,13 @@ safe_include_router("bridge_backend.engines.envrecon.routes")
 safe_include_router("bridge_backend.engines.envrecon.ui", router_attr="ui_router")
 logger.info("[ENVRECON] v2.0.2 routes enabled - cross-platform environment reconciliation active")
 
+# Steward Engine v1.9.6l - Admiral-tier environment orchestration
+if os.getenv("STEWARD_ENABLED", "false").lower() == "true":
+    safe_include_router("bridge_backend.engines.steward.routes")
+    logger.info("[STEWARD] v1.9.6l routes enabled - admiral-tier environment orchestration active")
+else:
+    logger.info("[STEWARD] Disabled (set STEWARD_ENABLED=true to enable)")
+
 # Genesis framework routes
 if os.getenv("GENESIS_MODE", "enabled").lower() == "enabled":
     safe_include_router("bridge_backend.genesis.routes")
