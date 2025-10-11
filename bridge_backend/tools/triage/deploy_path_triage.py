@@ -31,7 +31,7 @@ def generate_badge(status: str):
     badge = f"![Netlify Deploy Status](https://img.shields.io/badge/Netlify_{status}-{color}?style=for-the-badge)"
     BADGE_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(BADGE_FILE, "w") as f:
-        f.write(f"# Netlify Health Badge\n\n{badge}\n\nUpdated: {datetime.datetime.utcnow().isoformat()} UTC\n")
+        f.write(f"# Netlify Health Badge\n\n{badge}\n\nUpdated: {datetime.datetime.now(timezone.utc).isoformat()} UTC\n")
     return badge
 
 def verify_and_heal():
@@ -39,7 +39,7 @@ def verify_and_heal():
     status = "verified" if exists else "rebuilt" if run_build() else "failed"
 
     report = {
-        "timestamp": datetime.datetime.utcnow().isoformat(),
+        "timestamp": datetime.datetime.now(timezone.utc).isoformat(),
         "frontend": str(FRONTEND),
         "dist": str(DIST),
         "status": status,

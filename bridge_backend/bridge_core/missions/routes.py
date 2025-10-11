@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Query, Request, Depends
 from pydantic import BaseModel
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List, Annotated
@@ -84,7 +84,7 @@ def create_mission(m: MissionIn, request: Request):
         "captain": captain,
         "role": m.role,
         "status": "pending",
-        "created_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds") + "Z",
     }
     _write_mission(entry)
     return {"status": "created", "mission": entry}

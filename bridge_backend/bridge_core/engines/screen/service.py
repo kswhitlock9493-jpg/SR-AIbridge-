@@ -2,7 +2,7 @@ from __future__ import annotations
 from pathlib import Path
 from dataclasses import dataclass, asdict
 from typing import Dict, Any, Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid, json
 
 VAULT_DIR = Path("vault") / "screen"
@@ -12,7 +12,7 @@ OVER_DIR = VAULT_DIR / "overlays"
 for d in (SESS_DIR, SIG_DIR, OVER_DIR): d.mkdir(parents=True, exist_ok=True)
 
 def now_iso() -> str:
-    return datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    return datetime.now(timezone.utc).isoformat(timespec="seconds") + "Z"
 
 @dataclass
 class Session:
@@ -107,6 +107,6 @@ class ScreenEngine:
           ]
         }
         """
-        path = OVER_DIR / f"{sid}.{datetime.utcnow().timestamp():.0f}.json"
+        path = OVER_DIR / f"{sid}.{datetime.now(timezone.utc).timestamp():.0f}.json"
         path.write_text(json.dumps(overlay, indent=2), encoding="utf-8")
         return {"ok": True, "sid": sid, "path": str(path)}

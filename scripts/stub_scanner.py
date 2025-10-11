@@ -9,7 +9,7 @@ import json
 import re
 from pathlib import Path
 from typing import Dict, List, Set
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class StubScanner:
@@ -169,7 +169,7 @@ class StubScanner:
         
         # Look for common deprecation issues
         deprecated_patterns = [
-            (r'datetime\.utcnow\(\)', 'datetime.utcnow() is deprecated, use datetime.now(datetime.UTC)'),
+            (r'datetime\.utcnow\(\)', 'datetime.now(timezone.utc) is deprecated, use datetime.now(datetime.UTC)'),
         ]
         
         py_files = list(backend_path.glob("**/*.py"))
@@ -202,7 +202,7 @@ class StubScanner:
         total_issues = sum(len(v) for v in self.issues.values())
         
         report = {
-            "scan_timestamp": datetime.utcnow().isoformat() + "Z",
+            "scan_timestamp": datetime.now(timezone.utc).isoformat() + "Z",
             "repo_path": str(self.repo_path),
             "summary": {
                 "total_issues": total_issues,

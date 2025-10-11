@@ -1,5 +1,5 @@
 import json, hashlib, os
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Tuple
 
@@ -35,7 +35,7 @@ def run_combined_scan(root: str, changed_files: List[str], pr: int|None, commit:
         "pr": pr, "commit": commit,
         "license": lic,
         "counterfeit": cf,
-        "meta": {"timestamp": datetime.utcnow().isoformat()+"Z"}
+        "meta": {"timestamp": datetime.now(timezone.utc).isoformat()+"Z"}
     }
     
     # Policy evaluation

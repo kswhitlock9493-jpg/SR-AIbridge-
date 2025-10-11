@@ -1,5 +1,5 @@
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid, json
 
 try:
@@ -18,7 +18,7 @@ class RecoveryOrchestrator:
         self.parser = ParserEngine()
 
     def _vault_log(self, obj: dict, kind: str):
-        stamp = datetime.utcnow().isoformat() + "Z"
+        stamp = datetime.now(timezone.utc).isoformat() + "Z"
         obj["timestamp"] = stamp
         obj["kind"] = kind
         fid = f"{kind}_{uuid.uuid4().hex}.json"

@@ -6,7 +6,7 @@ import os
 import sqlite3
 import json
 from typing import Dict, Any, List, Optional, Tuple
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from dataclasses import dataclass
 from contextlib import contextmanager
 
@@ -76,7 +76,7 @@ class BrainLedger:
             conn.execute("""
                 INSERT OR IGNORE INTO brain_metadata (key, value) 
                 VALUES ('initialized_at', ?)
-            """, (datetime.utcnow().isoformat(),))
+            """, (datetime.now(timezone.utc).isoformat(),))
             
             conn.execute("""
                 INSERT OR IGNORE INTO brain_metadata (key, value) 
@@ -124,7 +124,7 @@ class BrainLedger:
                 "category": category,
                 "classification": classification,
                 "metadata": metadata,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             }
             
             signed_envelope = self.signer.sign_payload(payload)
@@ -201,7 +201,7 @@ class BrainLedger:
             # Merge with existing metadata
             current_meta = json.loads(current.metadata) if isinstance(current.metadata, str) else current.metadata
             current_meta.update(metadata)
-            current_meta["last_modified"] = datetime.utcnow().isoformat()
+            current_meta["last_modified"] = datetime.now(timezone.utc).isoformat()
             updates["metadata"] = json.dumps(current_meta)
         
         if not updates:
@@ -212,7 +212,7 @@ class BrainLedger:
             payload = {
                 "entry_id": entry_id,
                 "updates": updates,
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "operation": "update"
             }
             
@@ -306,7 +306,7 @@ class BrainLedger:
         memories = self.search_memories(category=category, classification=classification, limit=10000)
         
         export_data = {
-            "export_timestamp": datetime.utcnow().isoformat(),
+            "export_timestamp": datetime.now(timezone.utc).isoformat(),
             "export_type": "sovereign_brain_dump",
             "filters": {
                 "category": category,

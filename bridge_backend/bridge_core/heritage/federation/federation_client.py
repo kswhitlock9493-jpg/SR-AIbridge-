@@ -5,7 +5,7 @@ Simplified federation with event bus integration
 
 import logging
 from typing import Dict, Any, List
-from datetime import datetime
+from datetime import datetime, timezone
 from ..event_bus import bus
 
 logger = logging.getLogger(__name__)
@@ -31,7 +31,7 @@ class FederationClient:
             "payload": payload,
             "source_node": self.node_id,
             "target_node": target_node or "auto",
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
         
         await bus.publish("federation.events", event)
@@ -52,7 +52,7 @@ class FederationClient:
         event = {
             "kind": "federation.heartbeat",
             "node_id": self.node_id,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "status": "online",
             "nodes": nodes or []
         }
@@ -73,7 +73,7 @@ class FederationClient:
         event = {
             "kind": "federation.ack",
             "payload": ack_data,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
         
         await bus.publish("federation.events", event)

@@ -6,7 +6,7 @@ Bridge-local WebSocket for real-time event streaming
 import logging
 from typing import Set
 from fastapi import WebSocket, WebSocketDisconnect
-from datetime import datetime
+from datetime import datetime, timezone
 from ..event_bus import bus
 
 logger = logging.getLogger(__name__)
@@ -58,7 +58,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 await bus.publish("fault.events", {
                     "kind": "fault.config",
                     "config": data.get("cfg", {}),
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now(timezone.utc).isoformat()
                 })
             
             elif data.get("type") == "demo.start":
@@ -66,7 +66,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 await bus.publish("demo.events", {
                     "kind": "demo.start",
                     "mode": data.get("mode"),
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now(timezone.utc).isoformat()
                 })
     
     except WebSocketDisconnect:

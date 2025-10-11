@@ -9,7 +9,7 @@ import json
 import random
 import math
 import cmath
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional, Union, Tuple
 from dataclasses import dataclass
 from enum import Enum
@@ -145,7 +145,7 @@ class EntangleCore:
         Returns:
             QuantumQubit: The qubit in superposition state
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if qubit_id is None:
             qubit_id = f"q_{int(start_time.timestamp() * 1000)}"
@@ -217,7 +217,7 @@ class EntangleCore:
         Returns:
             EntanglementResult: Results of the entanglement operation
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         operation_id = f"entangle_{int(start_time.timestamp() * 1000)}"
         
         # Validate qubits exist
@@ -288,7 +288,7 @@ class EntangleCore:
             fidelity = self._calculate_entanglement_fidelity(qubit1, qubit2, bell_state)
             
             # Calculate execution time
-            end_time = datetime.utcnow()
+            end_time = datetime.now(timezone.utc)
             execution_time = (end_time - start_time).total_seconds() * 1000
             
             # Create result
@@ -316,7 +316,7 @@ class EntangleCore:
         except Exception as e:
             logger.error(f"❌ Entanglement failed: {str(e)}")
             
-            execution_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+            execution_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
             
             return EntanglementResult(
                 operation_id=operation_id,
@@ -327,7 +327,7 @@ class EntangleCore:
                 execution_time_ms=execution_time,
                 quantum_state=QuantumState.DECOHERENT,
                 bell_state="none",
-                timestamp=datetime.utcnow()
+                timestamp=datetime.now(timezone.utc)
             )
 
     def collapse(self, qubit_id: str, 
@@ -342,7 +342,7 @@ class EntangleCore:
         Returns:
             EntanglementResult: Results of the collapse/measurement
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         operation_id = f"collapse_{int(start_time.timestamp() * 1000)}"
         
         if qubit_id not in self.qubits:
@@ -387,7 +387,7 @@ class EntangleCore:
             qubit.last_updated = start_time
             
             # Calculate execution time
-            end_time = datetime.utcnow()
+            end_time = datetime.now(timezone.utc)
             execution_time = (end_time - start_time).total_seconds() * 1000
             
             # Calculate measurement fidelity
@@ -421,7 +421,7 @@ class EntangleCore:
         except Exception as e:
             logger.error(f"❌ Collapse failed for {qubit_id}: {str(e)}")
             
-            execution_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+            execution_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
             
             return EntanglementResult(
                 operation_id=operation_id,
@@ -432,7 +432,7 @@ class EntangleCore:
                 execution_time_ms=execution_time,
                 quantum_state=QuantumState.DECOHERENT,
                 bell_state="error",
-                timestamp=datetime.utcnow()
+                timestamp=datetime.now(timezone.utc)
             )
 
     def get_qubit(self, qubit_id: str) -> Optional[QuantumQubit]:
@@ -470,7 +470,7 @@ class EntangleCore:
             "entanglement_pairs": len(self.entanglement_pairs),
             "decoherence_rate": self.decoherence_rate,
             "system_entropy": self._calculate_system_entropy(),
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
 
     def get_metrics(self) -> Dict[str, Any]:
@@ -528,8 +528,8 @@ class EntangleCore:
                     entangled_qubit.amplitude_1 = complex(1, 0)
                     entangled_qubit.state = QubitState.ONE
                 
-                entangled_qubit.measurement_history.append((datetime.utcnow(), entangled_result))
-                entangled_qubit.last_updated = datetime.utcnow()
+                entangled_qubit.measurement_history.append((datetime.now(timezone.utc), entangled_result))
+                entangled_qubit.last_updated = datetime.now(timezone.utc)
                 
                 collapsed_qubits.append(entangled_id)
         

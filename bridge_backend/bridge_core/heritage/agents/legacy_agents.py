@@ -5,7 +5,7 @@ Heritage bridge agent implementations
 
 import logging
 from typing import Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 from ..event_bus import bus
 from .profiles import PRIM_PROFILE, CLAUDE_PROFILE
 
@@ -28,7 +28,7 @@ class PrimAnchor:
             "kind": "anchor.narration",
             "agent": "prim",
             "event": event,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "memory_index": len(self.memory)
         }
         
@@ -42,7 +42,7 @@ class PrimAnchor:
             "kind": "anchor.integrity_check",
             "agent": "prim",
             "passed": True,  # Simplified
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
         
         await bus.publish("anchor.events", integrity_result)
@@ -67,7 +67,7 @@ class ClaudeAnchor:
             "event": event,
             "insights": ["Pattern detected", "Nominal behavior"],
             "confidence": 0.85,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
         
         self.analysis_history.append(analysis)
@@ -83,7 +83,7 @@ class ClaudeAnchor:
             "agent": "claude",
             "context": context,
             "new_strategy": "optimized_approach",
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
         
         await bus.publish("anchor.events", adaptation)

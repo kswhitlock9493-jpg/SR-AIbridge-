@@ -7,7 +7,7 @@ import asyncio
 import logging
 import random
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional, Callable, Union
 from enum import Enum
 from dataclasses import dataclass
@@ -69,7 +69,7 @@ class FaultInjector:
             'total_messages': 0,
             'faults_injected': 0,
             'faults_by_type': {fault_type.value: 0 for fault_type in FaultType},
-            'last_reset': datetime.utcnow()
+            'last_reset': datetime.now(timezone.utc)
         }
         self.message_queue: List[Any] = []  # For reordering
         self.pending_messages: Dict[str, Any] = {}  # For delays
@@ -158,7 +158,7 @@ class FaultInjector:
             ),
             'enabled': self.enabled,
             'active_faults': len([c for c in self.fault_configs.values() if c.enabled]),
-            'current_time': datetime.utcnow().isoformat()
+            'current_time': datetime.now(timezone.utc).isoformat()
         }
     
     def reset_statistics(self):
@@ -167,7 +167,7 @@ class FaultInjector:
             'total_messages': 0,
             'faults_injected': 0,
             'faults_by_type': {fault_type.value: 0 for fault_type in FaultType},
-            'last_reset': datetime.utcnow()
+            'last_reset': datetime.now(timezone.utc)
         }
         logger.info("📊 Fault injection statistics reset")
     
@@ -395,5 +395,5 @@ class FaultInjector:
     
     def _generate_message_id(self, message: Any) -> str:
         """Generate a unique message ID"""
-        content = str(message) + str(datetime.utcnow().timestamp())
+        content = str(message) + str(datetime.now(timezone.utc).timestamp())
         return hashlib.md5(content.encode()).hexdigest()[:8]

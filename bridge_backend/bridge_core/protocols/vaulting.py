@@ -7,7 +7,7 @@ Creates sealed artifacts in vault/protocols/<name>/ directory structure.
 
 import os
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Any, Optional
 
@@ -38,7 +38,7 @@ def seal(protocol_name: str, status: str = 'invoked', details: Optional[Dict[str
         details = {}
     
     # Create timestamp
-    timestamp = datetime.utcnow().isoformat() + 'Z'
+    timestamp = datetime.now(timezone.utc).isoformat() + 'Z'
     
     # Create seal object
     seal_obj = {

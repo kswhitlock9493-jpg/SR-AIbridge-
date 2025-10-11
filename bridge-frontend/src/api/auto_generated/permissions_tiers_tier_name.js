@@ -1,6 +1,5 @@
 // AUTO-GEN-BRIDGE v1.7.0 - MODERATE
 // Route: /permissions/tiers/{tier_name}
-// TODO: Review and integrate this auto-generated stub
 
 import apiClient from '../api';
 

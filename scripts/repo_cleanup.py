@@ -8,7 +8,7 @@ import os
 import json
 import shutil
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class RepoCleanup:
@@ -114,7 +114,7 @@ class RepoCleanup:
     def generate_cleanup_report(self) -> dict:
         """Generate cleanup summary report"""
         return {
-            "cleanup_timestamp": datetime.utcnow().isoformat() + "Z",
+            "cleanup_timestamp": datetime.now(timezone.utc).isoformat() + "Z",
             "dry_run": self.dry_run,
             "summary": {
                 "removed_files": len(self.removed_files),

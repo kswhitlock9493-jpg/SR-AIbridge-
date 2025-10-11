@@ -6,7 +6,7 @@ Provides comprehensive text analysis, translation, and linguistic pattern recogn
 
 import logging
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
@@ -111,7 +111,7 @@ class ScrollTongue:
         Returns:
             Dict containing scroll data and initial analysis
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if len(self.scrolls) >= self.max_scrolls:
             logger.warning("⚠️ Maximum scrolls reached")
@@ -188,7 +188,7 @@ class ScrollTongue:
         Returns:
             Dict containing translation results
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if len(self.translations) >= self.max_translations:
             # Remove oldest translations
@@ -247,7 +247,7 @@ class ScrollTongue:
         Returns:
             Dict containing detailed analysis results
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if scroll_id not in self.scrolls:
             return {"error": f"Scroll {scroll_id} not found"}
@@ -810,7 +810,7 @@ class ScrollTongue:
                     "type": f"scrolltongue.{event_type}",
                     "source": "scrolltongue",
                     "data": data,
-                    "timestamp": datetime.utcnow().isoformat() + "Z"
+                    "timestamp": datetime.now(timezone.utc).isoformat() + "Z"
                 })
         except Exception as e:
             # Silently fail if genesis bus not available

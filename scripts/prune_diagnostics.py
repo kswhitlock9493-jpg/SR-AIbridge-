@@ -2,7 +2,7 @@
 import os
 import requests
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 def prune_old_diagnostics():
     bridge_url = os.getenv("BRIDGE_URL")
@@ -17,7 +17,7 @@ def prune_old_diagnostics():
         data = r.json()
         data.sort(key=lambda d: d.get("meta", {}).get("timestamp",""), reverse=True)
 
-        cutoff = datetime.utcnow() - timedelta(days=30)
+        cutoff = datetime.now(timezone.utc) - timedelta(days=30)
         to_delete = [d["id"] for i,d in enumerate(data)
                      if (i >= 50) or (datetime.fromisoformat(d["meta"]["timestamp"].replace("Z","")) < cutoff)]
 
@@ -36,7 +36,7 @@ def prune_old_diagnostics():
             "source": "GitHubAction",
             "meta": {
                 "environment": "CI/CD",
-                "timestamp": datetime.utcnow().isoformat()+"Z",
+                "timestamp": datetime.now(timezone.utc).isoformat()+"Z",
                 "diagnostics": {"deleted_count": len(to_delete)}
             }
         }

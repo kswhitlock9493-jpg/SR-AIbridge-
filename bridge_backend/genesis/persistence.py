@@ -9,7 +9,7 @@ import sqlite3
 import asyncio
 from pathlib import Path
 from typing import Dict, Any, Optional, List
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from contextlib import asynccontextmanager
 
 logger = logging.getLogger(__name__)
@@ -191,7 +191,7 @@ class GenesisPersistence:
                 """,
                 (
                     event_id,
-                    (ts or datetime.utcnow()).isoformat(),
+                    (ts or datetime.now(timezone.utc)).isoformat(),
                     topic,
                     source,
                     kind,
@@ -205,7 +205,7 @@ class GenesisPersistence:
             
             # Record dedupe key if provided
             if dedupe_key:
-                expires_at = datetime.utcnow() + timedelta(seconds=GENESIS_DEDUP_TTL_SECS)
+                expires_at = datetime.now(timezone.utc) + timedelta(seconds=GENESIS_DEDUP_TTL_SECS)
                 cursor.execute(
                     "INSERT OR REPLACE INTO genesis_dedupe (dedupe_key, event_id, expires_at) VALUES (?, ?, ?)",
                     (dedupe_key, event_id, expires_at.isoformat())

@@ -181,5 +181,5 @@ def _validate_facts_for_action(action: Dict[str, Any], facts: Dict[str, Any]) ->
 
 def _get_timestamp() -> str:
     """Get ISO timestamp"""
-    from datetime import datetime
-    return datetime.utcnow().isoformat() + "Z"
+    from datetime import datetime, timezone
+    return datetime.now(timezone.utc).isoformat() + "Z"

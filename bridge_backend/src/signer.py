@@ -5,7 +5,7 @@ Secure transaction signing with verification and attestation
 import json
 import hashlib
 from typing import Dict, Any, Optional, Tuple
-from datetime import datetime
+from datetime import datetime, timezone
 from nacl.signing import SigningKey, VerifyKey
 from nacl.encoding import Base64Encoder
 from nacl.exceptions import BadSignatureError
@@ -39,7 +39,7 @@ class AtomicSigner:
             "payload": payload,
             "metadata": {
                 "signer": signer_name,
-                "signed_at": datetime.utcnow().isoformat(),
+                "signed_at": datetime.now(timezone.utc).isoformat(),
                 "payload_hash": payload_hash,
                 "signature_version": "1.0"
             }
@@ -101,7 +101,7 @@ class AtomicSigner:
         """Create a manifest for multiple items"""
         manifest = {
             "type": manifest_type,
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
             "items": items,
             "item_count": len(items),
             "manifest_hash": None
@@ -140,7 +140,7 @@ class BatchSigner:
     def sign_batch(self, payloads: list, signer_name: str = "admiral") -> Dict[str, Any]:
         """Sign multiple payloads as a batch"""
         batch_id = hashlib.sha256(
-            f"{datetime.utcnow().isoformat()}{len(payloads)}".encode('utf-8')
+            f"{datetime.now(timezone.utc).isoformat()}{len(payloads)}".encode('utf-8')
         ).hexdigest()[:16]
         
         signed_items = []
@@ -161,7 +161,7 @@ class BatchSigner:
         # Create batch manifest
         batch_manifest = {
             "batch_id": batch_id,
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
             "items": signed_items,
             "item_count": len(signed_items),
             "signer": signer_name

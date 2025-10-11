@@ -1,13 +1,13 @@
 from pathlib import Path
 import json, uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, List
 
 VAULT = Path("vault") / "indoctrination"
 VAULT.mkdir(parents=True, exist_ok=True)
 
 def now_iso():
-    return datetime.utcnow().isoformat() + "Z"
+    return datetime.now(timezone.utc).isoformat() + "Z"
 
 class IndoctrinationEngine:
     def __init__(self, vault_dir: Path = VAULT):

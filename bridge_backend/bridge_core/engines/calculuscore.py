@@ -5,7 +5,7 @@ Extends ProofFoundry with specialized calculus capabilities
 """
 
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional, Tuple
 import sympy as sp
 from sympy import symbols, diff, integrate, limit, series, solve, oo
@@ -51,7 +51,7 @@ class CalculusCore(ProofFoundry):
         Returns:
             Dict containing derivative results
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if equation_id not in self.equations:
             return {"error": f"Equation {equation_id} not found"}
@@ -122,7 +122,7 @@ class CalculusCore(ProofFoundry):
         Returns:
             Dict containing integration results
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if equation_id not in self.equations:
             return {"error": f"Equation {equation_id} not found"}
@@ -200,7 +200,7 @@ class CalculusCore(ProofFoundry):
         Returns:
             Dict containing limit analysis results
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if equation_id not in self.equations:
             return {"error": f"Equation {equation_id} not found"}
@@ -297,7 +297,7 @@ class CalculusCore(ProofFoundry):
         Returns:
             Dict containing series expansion results
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if equation_id not in self.equations:
             return {"error": f"Equation {equation_id} not found"}
@@ -369,7 +369,7 @@ class CalculusCore(ProofFoundry):
         Returns:
             Dict containing optimization results
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if equation_id not in self.equations:
             return {"error": f"Equation {equation_id} not found"}

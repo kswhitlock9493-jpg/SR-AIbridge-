@@ -6,7 +6,7 @@ Provides methodical scientific exploration capabilities for the SR-AIbridge syst
 
 import logging
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional, Union
 from dataclasses import dataclass
 from enum import Enum
@@ -129,7 +129,7 @@ class LabyrinthForge:
         Returns:
             ScientificHypothesis: The proposed hypothesis ready for testing
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         hypothesis_id = f"hyp_{int(start_time.timestamp() * 1000)}"
         
         hypothesis = ScientificHypothesis(
@@ -163,7 +163,7 @@ class LabyrinthForge:
         Returns:
             ExperimentResult: Results of the experimental testing
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if hypothesis_id not in self.hypotheses:
             raise ValueError(f"Hypothesis {hypothesis_id} not found")
@@ -197,7 +197,7 @@ class LabyrinthForge:
             # Generate observations
             observations = self._generate_observations(hypothesis, result_data, success)
             
-            execution_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+            execution_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
             
             result = ExperimentResult(
                 experiment_id=experiment_id,
@@ -207,7 +207,7 @@ class LabyrinthForge:
                 confidence_score=confidence_score,
                 observations=observations,
                 execution_time_ms=execution_time,
-                timestamp=datetime.utcnow()
+                timestamp=datetime.now(timezone.utc)
             )
             
             # Store results
@@ -223,7 +223,7 @@ class LabyrinthForge:
                 self.metrics["failed_experiments"] += 1
                 hypothesis.status = ExperimentStatus.FAILED
                 
-            self.metrics["last_experiment"] = datetime.utcnow()
+            self.metrics["last_experiment"] = datetime.now(timezone.utc)
             self._update_average_confidence()
             
             logger.info(f"🧪 Experiment completed: {experiment_id} (Success: {success})")
@@ -330,7 +330,7 @@ class LabyrinthForge:
             "variables_tested": variables,
             "measurements": {},
             "conditions": {},
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
         
         # Generate synthetic measurements based on hypothesis type

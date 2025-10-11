@@ -8,7 +8,7 @@ import asyncio
 import logging
 import time
 from typing import Dict, Any, Optional, Callable
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +69,7 @@ class TemporalDeployBuffer:
         self.errors.append({
             "stage": stage,
             "error": error,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         })
         logger.warning(f"[TDB] Stage {stage} error: {error}")
         
@@ -121,7 +121,7 @@ class TemporalDeployBuffer:
     def save_diagnostics(self, path: str = "bridge_backend/diagnostics/temporal_deploy"):
         """Save deployment diagnostics to file"""
         os.makedirs(path, exist_ok=True)
-        timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         filename = os.path.join(path, f"deploy_{timestamp}.json")
         
         import json

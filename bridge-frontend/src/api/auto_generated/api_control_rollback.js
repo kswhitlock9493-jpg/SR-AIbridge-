@@ -1,6 +1,5 @@
 // AUTO-GEN-BRIDGE v1.7.0 - CRITICAL
 // Route: /api/control/rollback
-// TODO: Review and integrate this auto-generated stub
 
 import apiClient from '../api';
 

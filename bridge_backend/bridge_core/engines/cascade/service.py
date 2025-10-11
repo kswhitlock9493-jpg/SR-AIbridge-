@@ -1,14 +1,14 @@
 from __future__ import annotations
 import json
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, Optional
 
 VAULT_CASCADE = Path("vault") / "cascade"
 VAULT_CASCADE.mkdir(parents=True, exist_ok=True)
 
 def now_iso() -> str:
-    return datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    return datetime.now(timezone.utc).isoformat(timespec="seconds") + "Z"
 
 class CascadeEngine:
     def __init__(self, vault_dir: Path = VAULT_CASCADE):

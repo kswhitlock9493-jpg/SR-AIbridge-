@@ -6,7 +6,7 @@ Provides comprehensive historical tracking and replay capabilities for the SR-AI
 
 import logging
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Any, Optional, Union
 from dataclasses import dataclass, asdict
 from enum import Enum
@@ -153,7 +153,7 @@ class ChronicleVault:
         Returns:
             HistoricalRecord: The created historical record
         """
-        timestamp = datetime.utcnow()
+        timestamp = datetime.now(timezone.utc)
         record_id = self._generate_record_id(source, timestamp)
         
         # Calculate data checksum for integrity
@@ -277,11 +277,11 @@ class ChronicleVault:
         Returns:
             ReplayResult: Results of the replay operation
         """
-        replay_start = datetime.utcnow()
+        replay_start = datetime.now(timezone.utc)
         replay_id = f"replay_{int(replay_start.timestamp() * 1000)}"
         
         if end_time is None:
-            end_time = datetime.utcnow()
+            end_time = datetime.now(timezone.utc)
         
         logger.info(f"🔄 Starting replay {replay_id} from {start_time} to {end_time}")
         
@@ -318,7 +318,7 @@ class ChronicleVault:
                     errors.append(error_msg)
                     logger.warning(f"⚠️ {error_msg}")
             
-            replay_end = datetime.utcnow()
+            replay_end = datetime.now(timezone.utc)
             duration_ms = (replay_end - replay_start).total_seconds() * 1000
             
             result = ReplayResult(
@@ -340,7 +340,7 @@ class ChronicleVault:
             
         except Exception as e:
             logger.error(f"❌ Replay failed: {str(e)}")
-            replay_end = datetime.utcnow()
+            replay_end = datetime.now(timezone.utc)
             duration_ms = (replay_end - replay_start).total_seconds() * 1000
             
             return ReplayResult(
@@ -381,7 +381,7 @@ class ChronicleVault:
             **self.metrics,
             "current_record_count": len(self.records),
             "index_sizes": {k: len(v) for k, v in self.record_index["by_type"].items()},
-            "retention_cutoff": datetime.utcnow() - timedelta(days=self.retention_days)
+            "retention_cutoff": datetime.now(timezone.utc) - timedelta(days=self.retention_days)
         }
 
     def _generate_record_id(self, source: str, timestamp: datetime) -> str:
@@ -435,7 +435,7 @@ class ChronicleVault:
 
     def _cleanup_old_records(self):
         """Remove old records based on retention policy"""
-        cutoff_date = datetime.utcnow() - timedelta(days=self.retention_days)
+        cutoff_date = datetime.now(timezone.utc) - timedelta(days=self.retention_days)
         old_records = []
         
         for record_id, record in self.records.items():
@@ -453,7 +453,7 @@ class ChronicleVault:
         
         if old_records:
             logger.info(f"🧹 Cleaned up {len(old_records)} old records")
-            self.metrics["last_cleanup"] = datetime.utcnow()
+            self.metrics["last_cleanup"] = datetime.now(timezone.utc)
 
     def _remove_from_indexes(self, record: HistoricalRecord):
         """Remove record from all indexes"""

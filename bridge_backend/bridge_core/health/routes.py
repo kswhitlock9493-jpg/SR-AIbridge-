@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request
-from datetime import datetime
+from datetime import datetime, timezone
 import os
 
 router = APIRouter(tags=["health"])
@@ -27,7 +27,7 @@ async def health_check(request: Request):
         "message": "Bridge link established and synchronized",
         "service": "SR-AIbridge",
         "version": "1.9.7",
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     }
     
     # Add role context
@@ -56,7 +56,7 @@ async def full_health_check(request: Request):
             "status": "healthy",
             "service": "SR-AIbridge",
             "version": "2.0.0",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "scope": "global",
             "components": {
                 "database": {"status": "ok", "details": "All connections healthy"},
@@ -79,7 +79,7 @@ async def full_health_check(request: Request):
             "status": "pass",
             "service": "SR-AIbridge",
             "version": "2.0.0",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "scope": "local",
             "self_test": "pass",
             "note": "Captain view: Local self-test result only. Contact Admiral for global status."
@@ -92,7 +92,7 @@ async def status_check():
     return {
         "status": "OK",
         "uptime": time.process_time(),
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
 @router.get("/api/status")
@@ -102,7 +102,7 @@ async def api_status_check():
     return {
         "status": "OK",
         "uptime": time.process_time(),
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
 @router.get("/api/bridge/health")
@@ -129,7 +129,7 @@ async def bridge_health_check():
     return {
         "status": status,
         "service": "SR-AIbridge Healer-Net",
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
 @router.get("/federation/diagnostics")
@@ -173,5 +173,5 @@ async def federation_diagnostics():
         "version": "1.9.5",
         "repair_history_count": len(repair_history),
         "port": os.getenv("PORT", "8000"),
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     }

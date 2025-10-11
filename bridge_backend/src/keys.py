@@ -9,7 +9,7 @@ from nacl.signing import SigningKey, VerifyKey
 from nacl.encoding import Base64Encoder, RawEncoder
 from nacl.exceptions import BadSignatureError
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class SovereignKeys:
@@ -32,7 +32,7 @@ class SovereignKeys:
         # Create keypair metadata
         keypair_data = {
             "name": name,
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
             "signing_key": signing_key.encode(encoder=Base64Encoder).decode('utf-8'),
             "verify_key": verify_key.encode(encoder=Base64Encoder).decode('utf-8'),
             "public_key_hex": verify_key.encode(encoder=RawEncoder).hex()
@@ -127,7 +127,7 @@ class SovereignKeys:
         old_key_file = os.path.join(self.key_dir, f"{old_name}_keypair.json")
         archived_file = None
         if os.path.exists(old_key_file):
-            timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+            timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
             archived_file = os.path.join(self.key_dir, f"{old_name}_archived_{timestamp}.json")
             os.rename(old_key_file, archived_file)
         

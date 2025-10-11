@@ -8,7 +8,7 @@ import sys
 import json
 import time
 import gzip
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 router = APIRouter(prefix="/api/control", tags=["control"])
@@ -63,7 +63,7 @@ async def trigger_rollback(request: Request):
             "meta": {
                 "environment": "Netlify",
                 "trigger": "Manual",
-                "timestamp": datetime.utcnow().isoformat()+"Z",
+                "timestamp": datetime.now(timezone.utc).isoformat()+"Z",
                 "diagnostics": {"rollback_id": last_success["id"]}
             }
         }

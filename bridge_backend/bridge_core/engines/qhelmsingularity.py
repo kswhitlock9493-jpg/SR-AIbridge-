@@ -7,7 +7,7 @@ Extends EntangleCore with quantum helm and spacetime navigation
 import logging
 import math
 import cmath
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
@@ -102,7 +102,7 @@ class QHelmSingularity(EntangleCore):
         Returns:
             Dict containing navigation route and analysis
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if len(self.quantum_routes) >= 100:  # Prevent memory overflow
             # Remove oldest routes
@@ -176,7 +176,7 @@ class QHelmSingularity(EntangleCore):
         Returns:
             Dict containing manifested singularity data
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if len(self.singularities) >= self.max_singularities:
             logger.warning("⚠️ Maximum singularities reached")
@@ -241,7 +241,7 @@ class QHelmSingularity(EntangleCore):
         Returns:
             Dict containing spacetime fold results
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         # Calculate fold parameters
         fold_distance = self._calculate_spacetime_distance(fold_origin, fold_destination)
@@ -317,7 +317,7 @@ class QHelmSingularity(EntangleCore):
         Returns:
             Dict containing helm control results
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         old_position = self.helm_position
         

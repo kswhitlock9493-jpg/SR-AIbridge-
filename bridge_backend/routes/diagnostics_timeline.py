@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Request
-from datetime import datetime
+from datetime import datetime, timezone
 import os
 import requests
 import json
@@ -124,6 +124,6 @@ async def submit_diagnostics(request: Request):
     try:
         payload = await request.json() if request.headers.get("content-type") == "application/json" else {}
         print(f'📡 Bridge Diagnostics Received: {payload}')
-        return {"status": "received", "time": datetime.utcnow().isoformat()}
+        return {"status": "received", "time": datetime.now(timezone.utc).isoformat()}
     except Exception as err:
         return {"status": "error", "message": str(err)}

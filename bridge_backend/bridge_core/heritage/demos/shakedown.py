@@ -4,7 +4,7 @@ Shakedown Demo - System stress test
 
 import logging
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 from ..event_bus import bus
 
 logger = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ async def run_shakedown():
     # Publish start event
     await bus.publish("demo.events", {
         "kind": "demo.shakedown.start",
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     })
     
     # Simulate various events
@@ -36,7 +36,7 @@ async def run_shakedown():
             "kind": "heritage.shakedown.event",
             "event_number": i + 1,
             "payload": event,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         })
         await asyncio.sleep(0.5)
     
@@ -44,7 +44,7 @@ async def run_shakedown():
     await bus.publish("demo.events", {
         "kind": "demo.shakedown.complete",
         "events_processed": len(events),
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     })
     
     logger.info("✅ Shakedown demo completed")

@@ -1,5 +1,5 @@
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 from .registry import get_entry
 
@@ -20,7 +20,7 @@ def invoke_protocol(name: str, payload: dict) -> dict:
     if not entry:
         return {"error": "protocol_not_found"}
 
-    ts = datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    ts = datetime.now(timezone.utc).isoformat(timespec="seconds") + "Z"
     seal = {
         "protocol": name,
         "timestamp": ts,
