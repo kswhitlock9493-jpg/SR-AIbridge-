@@ -43,7 +43,7 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.7c",
+    version="1.9.6k",
     description="v1.9.7c Genesis Linkage: TDE-X + Cascade + Truth + Autonomy + Blueprint unified orchestration"
 )
 

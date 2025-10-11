@@ -8,7 +8,6 @@ def rollback_netlify():
     token = os.getenv("NETLIFY_AUTH_TOKEN")
     site_id = os.getenv("NETLIFY_SITE_ID")
     bridge_url = os.getenv("BRIDGE_URL")
-    webhook = os.getenv("BRIDGE_SLACK_WEBHOOK")
 
     if not token or not site_id:
         print("❌ Missing Netlify credentials.")
@@ -44,8 +43,7 @@ def rollback_netlify():
                         "diagnostics": {"rollback_id": last_success["id"]}
                     }
                 }, timeout=10)
-            if webhook:
-                requests.post(webhook, json={"text": f"♻️ Rolled back to deploy `{last_success['id']}`"}, timeout=5)
+            # External Slack notifications removed in v1.9.6k - Genesis handles all telemetry internally
         else:
             print(f"❌ Rollback failed: {res.status_code} {res.text}")
     except Exception as e:
