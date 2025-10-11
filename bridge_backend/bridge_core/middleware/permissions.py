@@ -25,6 +25,9 @@ ROLE_MATRIX = {
         "blueprint:create": True,
         "blueprint:commit": True,
         "blueprint:delete": True,
+        "steward.read": True,  # Can read steward status
+        "steward.cap.issue": True,  # Can issue capability tokens
+        "steward.write": True,  # Can apply environment changes
     },
     "captain": {
         "admin": False,
@@ -92,6 +95,14 @@ class PermissionMiddleware(BaseHTTPMiddleware):
                 status_code=403,
                 content={"detail": "agents_locked_free"}
             )
+
+        # Steward is Admiral-only
+        if request.url.path.startswith("/api/steward"):
+            if role != "admiral":
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "steward_admiral_only"}
+                )
 
         # Role-based gate
         perms = ROLE_MATRIX.get(role, {})
