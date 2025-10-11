@@ -99,7 +99,7 @@ class BlueprintRegistry:
             },
             "autonomy": {
                 "name": "Autonomy Engine",
-                "description": "Self-healing and optimization engine with guardrails",
+                "description": "Self-healing and optimization engine with integrated anti-copyright and compliance checking",
                 "schema": {
                     "task_executor": {
                         "purpose": "Execute autonomous tasks within blueprint constraints",
@@ -110,10 +110,20 @@ class BlueprintRegistry:
                         "purpose": "Enforce safety policies from blueprint",
                         "inputs": ["blueprint_policies"],
                         "outputs": ["policy_enforced", "actions_allowed"]
+                    },
+                    "compliance_check": {
+                        "purpose": "Verify code originality and license compliance",
+                        "inputs": ["project_files", "scan_policy"],
+                        "outputs": ["compliance_state", "license_report", "counterfeit_report"]
+                    },
+                    "loc_metrics": {
+                        "purpose": "Track lines of code metrics per project",
+                        "inputs": ["project_path"],
+                        "outputs": ["total_lines", "total_files", "by_type"]
                     }
                 },
                 "topics": ["deploy.actions"],
-                "dependencies": ["blueprint", "truth"]
+                "dependencies": ["blueprint", "truth", "compliance_scan"]
             },
             "parser": {
                 "name": "Parser Engine",
@@ -366,6 +376,29 @@ class BlueprintRegistry:
                     }
                 },
                 "topics": ["files.operations"],
+                "dependencies": []
+            },
+            "compliance_scan": {
+                "name": "Compliance Scan Engine",
+                "description": "Anti-copyright and license compliance verification engine",
+                "schema": {
+                    "license_detection": {
+                        "purpose": "Identify licenses in code files via SPDX tags and signatures",
+                        "inputs": ["files", "root_path"],
+                        "outputs": ["license_report", "counts_by_license"]
+                    },
+                    "counterfeit_detection": {
+                        "purpose": "Detect code clones using shingling-based similarity",
+                        "inputs": ["target_file", "corpus_path"],
+                        "outputs": ["similarity_score", "match_path"]
+                    },
+                    "policy_enforcement": {
+                        "purpose": "Evaluate compliance state based on thresholds",
+                        "inputs": ["license_report", "counterfeit_report", "policy"],
+                        "outputs": ["compliance_state", "violations"]
+                    }
+                },
+                "topics": ["compliance.scans", "compliance.reports"],
                 "dependencies": []
             }
         }
