@@ -43,8 +43,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.7",
-    description="Frontend Proxy Integration & Environment Awareness - Unified Netlify-to-Render coordination"
+    version="1.9.6f",
+    description="Render Bind & Startup Stability Patch - Adaptive port binding with deferred heartbeat and predictive watchdog"
 )
 
 # === CORS ===
@@ -186,16 +186,26 @@ safe_include_router("bridge_backend.routes.health")  # NEW: /health/ports, /heal
 
 @app.on_event("startup")
 async def startup_event():
-    from bridge_backend.runtime.ports import resolve_port
+    from bridge_backend.runtime.ports import resolve_port, adaptive_bind_check
+    from bridge_backend.runtime.startup_watchdog import watchdog
+    
+    # Adaptive port resolution with prebind monitor
     target = resolve_port()
+    watchdog.mark_port_resolved(target)
+    
+    # Check port availability with graceful fallback
+    host = "0.0.0.0"
+    final_port, bind_status = adaptive_bind_check(host, target)
+    
     logger.info("[BOOT] 🚀 Starting SR-AIbridge Runtime")
-    logger.info(f"[BOOT] Target PORT={target} (Render sets $PORT automatically)")
+    logger.info(f"[BOOT] Adaptive port bind: {bind_status} on {host}:{final_port}")
     
     # Initialize database schema
     try:
         from bridge_backend.db.bootstrap import auto_sync_schema
         await auto_sync_schema()
         logger.info("[DB] Auto schema sync complete")
+        watchdog.mark_db_synced()
     except Exception as e:
         logger.error(f"[DB] Schema initialization failed: {e}")
     
@@ -207,13 +217,23 @@ async def startup_event():
     except Exception as e:
         logger.warning(f"[INTEL] release analysis failed: {e}")
     
-    # Start heartbeat system
+    # Mark bind as confirmed (watchdog monitors startup latency)
+    watchdog.mark_bind_confirmed()
+    
+    # Get startup metrics
+    metrics = watchdog.get_metrics()
+    if metrics['bind_time']:
+        logger.info(f"[STABILIZER] Startup latency {metrics['bind_time']:.2f}s (tolerance: 6.0s)")
+    
+    # Deferred heartbeat - only start after successful bind
+    # This removes race between FastAPI startup and heartbeat scheduler
     try:
         from bridge_backend.runtime.heartbeat import heartbeat_loop
         asyncio.create_task(heartbeat_loop())
-        logger.info("[HEART] heartbeat started")
+        logger.info("[HEARTBEAT] ✅ Initialized")
+        watchdog.mark_heartbeat_initialized()
     except Exception as e:
-        logger.warning(f"[HEART] heartbeat failed: {e}")
+        logger.warning(f"[HEARTBEAT] Failed to initialize: {e}")
 
 # Startup event handler for endpoint triage
 @app.on_event("startup")
@@ -308,5 +328,5 @@ def telemetry_snapshot():
 if __name__ == "__main__":
     import uvicorn
     from bridge_backend.runtime.ports import resolve_port
-    port = resolve_port()
+    port = resolve_port()  # Adaptive resolution with prebind monitor
     uvicorn.run("bridge_backend.main:app", host="0.0.0.0", port=port)
