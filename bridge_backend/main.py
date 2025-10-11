@@ -181,9 +181,8 @@ safe_include_router("bridge_backend.bridge_core.payments.stripe_webhooks")
 safe_include_router("bridge_backend.bridge_core.heritage.routes")
 safe_include_router("bridge_backend.bridge_core.scans.routes")
 safe_include_router("bridge_backend.routes.control")
-safe_include_router("bridge_backend.routes.diagnostics_timeline")
+safe_include_router("bridge_backend.routes.diagnostics_timeline")  # Includes TDE-X deploy-parity
 safe_include_router("bridge_backend.routes.health")  # NEW: /health/ports, /health/runtime
-safe_include_router("bridge_backend.diagnostics.deploy_parity.routes")  # TDE-X deploy parity
 
 @app.on_event("startup")
 async def startup_event():

@@ -10,9 +10,51 @@ router = APIRouter(prefix="/api/diagnostics", tags=["diagnostics"])
 
 @router.get("/deploy-parity")
 async def get_deploy_parity():
-    """Get deploy parity diagnostics from stabilization tickets"""
-    from bridge_backend.runtime.deploy_parity import diagnostics_parity
-    return await diagnostics_parity()
+    """
+    Get deployment parity state (TDE-X v1.9.7a)
+    Returns current shard states + background queue status
+    """
+    try:
+        from bridge_backend.runtime.tde_x.queue import queue
+        from pathlib import Path
+        
+        # Get queue status
+        queue_depth = queue.get_depth()
+        
+        # Check for shard completion markers (simplified)
+        # In production, this would track actual shard outcomes
+        shards_complete = {
+            "bootstrap": True,  # If we're serving this endpoint, bootstrap succeeded
+            "runtime": True,    # Same for runtime
+            "diagnostics": queue_depth == 0  # Diagnostics complete when queue is empty
+        }
+        
+        # Get ticket count
+        ticket_dir = Path("bridge_backend/diagnostics/stabilization_tickets")
+        ticket_count = len(list(ticket_dir.glob("*.md"))) if ticket_dir.exists() else 0
+        
+        return {
+            "status": "ok",
+            "version": "1.9.7a",
+            "shards": shards_complete,
+            "queue": {
+                "depth": queue_depth,
+                "active": queue_depth > 0
+            },
+            "tickets": {
+                "count": ticket_count,
+                "has_issues": ticket_count > 0
+            }
+        }
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"[Deploy Parity] Error: {e}")
+        return {
+            "status": "error",
+            "error": str(e),
+            "version": "1.9.7a"
+        }
 
 
 @router.get("/timeline")

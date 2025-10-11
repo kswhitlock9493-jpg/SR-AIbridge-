@@ -1,3 +1,0 @@
-"""
-Deploy Parity diagnostics module
-"""
