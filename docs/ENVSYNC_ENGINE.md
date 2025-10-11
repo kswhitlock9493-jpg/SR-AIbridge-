@@ -31,12 +31,35 @@ EnvSync Engine
 │   ├── Update (changed vars)
 │   ├── Delete (optional)
 │   └── Noop (unchanged)
-└── Sync Orchestrator
-    ├── Fetch from providers
-    ├── Compute diff vs canonical
-    ├── Apply changes (dry-run or enforce)
-    └── Report telemetry
+├── Sync Orchestrator
+│   ├── Fetch from providers
+│   ├── Compute diff vs canonical
+│   ├── Apply changes (dry-run or enforce)
+│   └── Report telemetry
+└── Genesis & Autonomy Integration
+    ├── Genesis Bus event notifications
+    ├── Autonomy-triggered syncs
+    └── Coordinated secret rotation
 ```
+
+### Genesis Bus Integration
+
+EnvSync emits events to the Genesis Bus for system-wide coordination:
+
+- `ENVSYNC_DRIFT_DETECTED`: When provider variables differ from canonical
+- `ENVSYNC_COMPLETE`: After sync operations complete
+
+Other engines can subscribe to these events and react accordingly.
+
+### Autonomy Engine Integration
+
+The Autonomy engine can trigger EnvSync operations:
+
+- On-demand sync requests
+- Secret rotation workflows
+- Automated drift remediation
+
+EnvSync registers itself as an autonomous task, allowing the Autonomy orchestrator to manage sync scheduling and error handling.
 
 ## Configuration
 

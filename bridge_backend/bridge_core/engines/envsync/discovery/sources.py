@@ -19,11 +19,11 @@ async def from_secret_files(name: str) -> Optional[str]:
     return None
 
 async def from_vault(name: str) -> Optional[str]:
-    # expects Bridge Vault route: GET /bridge/vault/secret?key=NAME  (token-less in same process)
+    # expects Bridge Vault route: GET /vault/secret?key=NAME  (token-less in same process)
     # if your vault requires auth, wire here (we're in the backend).
     try:
         async with httpx.AsyncClient(timeout=5.0) as client:
-            r = await client.get("http://localhost:8000/bridge/vault/secret", params={"key": name})
+            r = await client.get("http://localhost:8000/vault/secret", params={"key": name})
             if r.status_code == 200:
                 data = r.json()
                 return data.get("value")

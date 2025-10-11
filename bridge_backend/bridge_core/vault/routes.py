@@ -1,10 +1,34 @@
 from fastapi import APIRouter, HTTPException, Request
 from pathlib import Path
 import json
+import os
 
 router = APIRouter(prefix="/vault", tags=["vault"])
 
 VAULT_ROOT = Path("vault")
+
+@router.get("/secret")
+def get_secret(key: str, request: Request = None):
+    """
+    Get a secret value by key for internal use (e.g., EnvSync token discovery)
+    This endpoint is designed for backend-to-backend communication.
+    For production, add authentication as needed.
+    """
+    # For now, this checks environment variables
+    # You can extend this to read from secure vault storage
+    value = os.getenv(key)
+    if value:
+        return {"value": value}
+    
+    # Optionally check vault files
+    secrets_path = VAULT_ROOT / "secrets" / f"{key}.secret"
+    if secrets_path.exists():
+        try:
+            return {"value": secrets_path.read_text().strip()}
+        except Exception:
+            pass
+    
+    raise HTTPException(status_code=404, detail="secret_not_found")
 
 @router.get("")
 def list_vault(request: Request):

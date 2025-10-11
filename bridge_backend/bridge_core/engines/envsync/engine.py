@@ -56,6 +56,20 @@ async def sync_provider(name: str, mode: Mode="enforce") -> SyncResult:
         except Exception as e:
             errors.append(str(e))
             ticket(f"EnvSync failure: {name}", f"Error applying: {e}")
+    
+    # Notify Autonomy & Genesis of drift or completion
+    try:
+        from bridge_backend.bridge_core.engines.adapters.envsync_autonomy_link import envsync_autonomy_link
+        
+        changed = [d for d in diff if d["op"] in ("create","update","delete")]
+        if changed or errors:
+            await envsync_autonomy_link.notify_drift_detected(name, len(changed), errors)
+        
+        if mode == "enforce":
+            await envsync_autonomy_link.notify_sync_complete(name, applied, len(changed))
+    except Exception:
+        # Link is optional; don't fail if Autonomy/Genesis not available
+        pass
 
     return {
         "provider": name,
