@@ -141,6 +141,10 @@ class HubSync:
         logger.info(f"🤝 HubSync complete - {len(results['created'])} secrets synced")
         
         return results
+    
+    async def sync_secret(self, secret_name: str, secret_value: str) -> bool:
+        """Alias for create_or_update_secret for consistency"""
+        return await self.create_or_update_secret(secret_name, secret_value)
 
 
 # Singleton instance
