@@ -6,16 +6,16 @@ services:
     plan: starter
     region: oregon
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "bash scripts/start.sh"
+    startCommand: "python -m bridge_backend.run"
     autoDeploy: true
-    healthCheckPath: /api/health
+    healthCheckPath: /health/live
     healthCheckInterval: 10
     healthCheckTimeout: 3
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
       - key: PORT
-        sync: false
+        sync: false  # Render sets this automatically at runtime
       - key: ENVIRONMENT
         value: production
       - key: DATABASE_TYPE

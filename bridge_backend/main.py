@@ -43,8 +43,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.6f",
-    description="Render Bind & Startup Stability Patch - Adaptive port binding with deferred heartbeat and predictive watchdog"
+    version="1.9.6h",
+    description="Final Route Integrity + Port Parity (Render) + Blueprint Export Fix + Pydantic/ResponseModel Hardening + Deploy Parity Engine"
 )
 
 # === CORS ===
@@ -188,6 +188,11 @@ safe_include_router("bridge_backend.routes.health")  # NEW: /health/ports, /heal
 async def startup_event():
     from bridge_backend.runtime.ports import resolve_port, adaptive_bind_check
     from bridge_backend.runtime.startup_watchdog import watchdog
+    from bridge_backend.runtime.port_guard import describe_port_env
+    from bridge_backend.runtime.deploy_parity import deploy_parity_check
+    
+    # Log PORT environment state
+    describe_port_env()
     
     # Adaptive port resolution with prebind monitor
     target = resolve_port()
@@ -199,6 +204,9 @@ async def startup_event():
     
     logger.info("[BOOT] 🚀 Starting SR-AIbridge Runtime")
     logger.info(f"[BOOT] Adaptive port bind: {bind_status} on {host}:{final_port}")
+    
+    # Run deploy parity check
+    await deploy_parity_check(app)
     
     # Initialize database schema
     try:

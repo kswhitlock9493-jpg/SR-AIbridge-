@@ -5,10 +5,17 @@ import hmac
 import hashlib
 import subprocess
 import sys
+import json
+import time
+import gzip
 from datetime import datetime
 from pathlib import Path
 
 router = APIRouter(prefix="/api/control", tags=["control"])
+
+# Stabilization tickets directory
+TICKETS = Path("bridge_backend/diagnostics/stabilization_tickets")
+TICKETS.mkdir(parents=True, exist_ok=True)
 
 def verify_signature(request: Request):
     """Verify Bridge control requests using HMAC secret"""
@@ -113,3 +120,34 @@ def render_ok():
 def health():
     """Basic health check endpoint - supports GET and POST for compatibility"""
     return {"status": "ok"}
+
+
+@router.post("/incidents/replay/{ticket_id}")
+async def replay_incident(ticket_id: str):
+    """Replay a specific incident from stabilization tickets"""
+    path = TICKETS / ticket_id
+    if not path.exists():
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    
+    try:
+        data = json.loads(path.read_text())
+        # Log the replay attempt
+        print(f"INFO:control: Replaying incident ticket {ticket_id}")
+        return {"status": "replayed", "ticket": ticket_id, "data": data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to replay incident: {str(e)}")
+
+
+def sweep_old_tickets(hours=72):
+    """Sweep and compress old stabilization tickets"""
+    cutoff = time.time() - hours * 3600
+    compressed = 0
+    for f in TICKETS.glob("*.json"):
+        if f.stat().st_mtime < cutoff:
+            gz = f.with_suffix(".json.gz")
+            with gzip.open(gz, "wb") as z:
+                z.write(f.read_bytes())
+            f.unlink(missing_ok=True)
+            compressed += 1
+    return compressed
+
