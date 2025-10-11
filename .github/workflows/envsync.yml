@@ -1,0 +1,16 @@
+name: EnvSync After Merge
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  envsync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call EnvSync (Render + Netlify)
+        run: |
+          curl -sS -X POST "$BRIDGE_BASE_URL/envsync/apply-all" -H "Authorization: Bearer $BRIDGE_ENVSYNC_TOKEN" || echo "⚠️ EnvSync call failed (may need auth setup)"
+        env:
+          BRIDGE_BASE_URL: ${{ secrets.BRIDGE_BASE_URL || 'https://sr-aibridge.onrender.com' }}
+          BRIDGE_ENVSYNC_TOKEN: ${{ secrets.BRIDGE_ENVSYNC_TOKEN || '' }}
