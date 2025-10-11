@@ -1,5 +1,34 @@
 # SR-AIbridge — Release Intelligence & Self-Heal
 
+## What's new in v1.9.6f (Latest)
+
+**Render Bind & Startup Stability Patch (Final)**
+
+- **Adaptive Port Binding:** 2.5s prebind monitor waits for Render's delayed `PORT` injection
+- **Graceful Rebind Fallback:** Auto-falls back to `:8000` if target port unavailable
+- **Deferred Heartbeat:** Launches only after confirmed Uvicorn bind (eliminates race conditions)
+- **Predictive Watchdog:** Monitors startup latency, creates diagnostic tickets if > 6s
+- **Self-Healing Diagnostics:** Auto-resolves old tickets, persistent metric logging
+- **Enhanced Logging:** `[STABILIZER]` prefix for all startup metrics
+- **No More Timeouts:** Eliminates Render pre-deploy failures and false shutdown states
+
+### Migration from v1.9.6b → v1.9.6f
+No breaking changes. Simply deploy - all enhancements are backward compatible.
+
+### Expected Logs
+```
+[PORT] Resolved immediately: 10000
+[BOOT] Adaptive port bind: ok on 0.0.0.0:10000
+[STABILIZER] Startup latency 2.43s (tolerance: 6.0s)
+[HEARTBEAT] ✅ Initialized
+```
+
+### Health Check
+- `GET /` returns `{ ok: true, version: "1.9.6f" }`
+- No `Pre-deploy has failed` or `Timed out` messages
+
+---
+
 ## What's new in v1.9.6b
 - Render port binding via `$PORT` (no more port-scan timeouts).
 - Auto DB schema sync on startup (SQLAlchemy create_all).
