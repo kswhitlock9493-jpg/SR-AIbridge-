@@ -149,3 +149,91 @@ def test_task_compliance_and_loc_metrics():
             assert "by_type" in loc
             assert isinstance(loc["total_lines"], int)
             assert isinstance(loc["total_files"], int)
+
+def test_get_compliance_validation_endpoint():
+    """Test GET /task/{id}/compliance endpoint"""
+    # Create a task first
+    r = client.post("/engines/autonomy/task", json={
+        "project": "autonomy",
+        "captain": "ComplianceCaptain",
+        "objective": "test_compliance_endpoint",
+        "permissions": {"read": ["vault"]},
+        "mode": "screen",
+        "verify_originality": True
+    })
+    assert r.status_code == 200
+    task_id = r.json()["task"]["id"]
+    
+    # Get compliance validation
+    r = client.get(f"/engines/autonomy/task/{task_id}/compliance")
+    assert r.status_code == 200
+    validation = r.json()["compliance_validation"]
+    
+    # Verify structure
+    assert "compliance_state" in validation
+    assert "compliance_check" in validation
+    assert "originality_verified" in validation
+    
+    # Verify compliance_state has required fields
+    assert "state" in validation["compliance_state"]
+    assert "safe_to_proceed" in validation["compliance_state"]
+    assert isinstance(validation["originality_verified"], bool)
+
+def test_update_task_loc_endpoint():
+    """Test POST /task/{id}/loc endpoint"""
+    # Create a task first
+    r = client.post("/engines/autonomy/task", json={
+        "project": "autonomy",
+        "captain": "LOCCaptain",
+        "objective": "test_loc_endpoint",
+        "permissions": {"read": ["vault"]},
+        "mode": "screen"
+    })
+    assert r.status_code == 200
+    task_id = r.json()["task"]["id"]
+    
+    # Update LOC metrics
+    r = client.post(f"/engines/autonomy/task/{task_id}/loc", json={})
+    assert r.status_code == 200
+    loc_metrics = r.json()["loc_metrics"]
+    
+    # Verify structure
+    assert "timestamp" in loc_metrics
+    if "error" not in loc_metrics:
+        assert "total_lines" in loc_metrics
+        assert "total_files" in loc_metrics
+        assert "by_type" in loc_metrics
+
+def test_task_with_files_parameter():
+    """Test task creation with specific files parameter"""
+    r = client.post("/engines/autonomy/task", json={
+        "project": "autonomy",
+        "captain": "FilesCaptain",
+        "objective": "test_files_param",
+        "permissions": {"read": ["vault"]},
+        "mode": "screen",
+        "verify_originality": True,
+        "files": ["bridge_backend/bridge_core/engines/autonomy/service.py"]
+    })
+    assert r.status_code == 200
+    task = r.json()["task"]
+    
+    # Verify compliance check was performed
+    assert "compliance_check" in task
+    assert task["compliance_check"] is not None
+    
+    # When specific files are provided, they should be scanned
+    if task["compliance_check"]["state"] != "error":
+        assert "license" in task["compliance_check"]
+        # Should have scanned the specific file
+        assert len(task["compliance_check"]["license"]["files"]) >= 1
+
+def test_compliance_validation_not_found():
+    """Test GET compliance validation for non-existent task"""
+    r = client.get("/engines/autonomy/task/fake-task-id/compliance")
+    assert r.status_code == 404
+
+def test_update_loc_not_found():
+    """Test POST LOC update for non-existent task"""
+    r = client.post("/engines/autonomy/task/fake-task-id/loc", json={})
+    assert r.status_code == 404
