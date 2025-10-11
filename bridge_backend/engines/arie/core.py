@@ -648,7 +648,7 @@ class ARIEEngine:
         
         # Save patch to journal
         patch_file = self.patch_dir / f"{patch_id}.json"
-        patch_file.write_text(json.dumps(patch.dict(), indent=2))
+        patch_file.write_text(json.dumps(patch.model_dump(), indent=2))
         
         return patch
     
