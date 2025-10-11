@@ -3,7 +3,7 @@ import json, uuid, time, os
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, asdict, field
-from datetime import datetime
+from datetime import datetime, timezone
 
 VAULT = Path("vault/autonomy")
 VAULT.mkdir(parents=True, exist_ok=True)
@@ -93,7 +93,7 @@ class AutonomyEngine:
             "state": state,
             "license": lic,
             "counterfeit": cf,
-            "timestamp": datetime.utcnow().isoformat() + "Z"
+            "timestamp": datetime.now(timezone.utc).isoformat() + "Z"
         }
 
     def _get_loc_metrics(self, project: str) -> Dict:
@@ -109,7 +109,7 @@ class AutonomyEngine:
                 "total_lines": 0,
                 "total_files": 0,
                 "by_type": {},
-                "timestamp": datetime.utcnow().isoformat() + "Z"
+                "timestamp": datetime.now(timezone.utc).isoformat() + "Z"
             }
         
         # Simple LOC counter for project
@@ -136,7 +136,7 @@ class AutonomyEngine:
             "total_lines": total_lines,
             "total_files": total_files,
             "by_type": by_type,
-            "timestamp": datetime.utcnow().isoformat() + "Z"
+            "timestamp": datetime.now(timezone.utc).isoformat() + "Z"
         }
 
     def create_task(self, project: str, captain: str, objective: str,
@@ -171,7 +171,7 @@ class AutonomyEngine:
                 compliance_check = {
                     "state": "error",
                     "error": str(e),
-                    "timestamp": datetime.utcnow().isoformat() + "Z"
+                    "timestamp": datetime.now(timezone.utc).isoformat() + "Z"
                 }
         
         # Get LOC metrics
@@ -182,7 +182,7 @@ class AutonomyEngine:
             # Log error but don't block task creation
             loc_metrics = {
                 "error": str(e),
-                "timestamp": datetime.utcnow().isoformat() + "Z"
+                "timestamp": datetime.now(timezone.utc).isoformat() + "Z"
             }
         
         tc = TaskContract(
@@ -192,7 +192,7 @@ class AutonomyEngine:
             mode=mode,
             permissions=permissions,
             objective=objective,
-            created_at=datetime.utcnow().isoformat() + "Z",
+            created_at=datetime.now(timezone.utc).isoformat() + "Z",
             compliance_check=compliance_check,
             loc_metrics=loc_metrics,
             originality_verified=originality_verified
