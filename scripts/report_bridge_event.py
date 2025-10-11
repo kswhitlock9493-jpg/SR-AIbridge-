@@ -5,22 +5,13 @@ import json
 from datetime import datetime
 
 def notify_slack(event_type, status, message=None):
-    """Optional webhook notification (Slack/Discord compatible)."""
-    webhook_url = os.getenv("BRIDGE_SLACK_WEBHOOK")
-    if not webhook_url:
-        print("⚠️ No webhook configured; skipping Slack notification.")
-        return
-
-    text = f"*{event_type}* — `{status}`"
-    if message:
-        text += f"\n{message}"
-
-    payload = {"text": text}
-    try:
-        resp = requests.post(webhook_url, json=payload, timeout=5)
-        print("✅ Slack notified." if resp.ok else f"⚠️ Slack error {resp.status_code}")
-    except Exception as e:
-        print(f"❌ Slack notification failed: {e}")
+    """DEPRECATED: External Slack notifications removed in v1.9.6k.
+    
+    All notifications now route through internal Genesis event bus.
+    This function is kept for backwards compatibility but does nothing.
+    """
+    # External Slack/Discord webhooks removed - Genesis handles all telemetry internally
+    pass
 
 def collect_repair_diagnostics():
     """Read repair log or return default diagnostics."""

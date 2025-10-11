@@ -4,6 +4,8 @@
 
 This document describes the environment variable setup and deployment alignment between Render (backend) and Netlify (frontend) for the SR-AIbridge project.
 
+**Version**: v1.9.6k - Sovereign Environment (External monitoring removed)
+
 ## Environment Variable Reference
 
 | Variable | Purpose | Platform | Safe for Frontend? |
@@ -14,13 +16,14 @@ This document describes the environment variable setup and deployment alignment 
 | `LOG_LEVEL` | Adjusts verbosity of logs (info, debug, warn) | Render | ✅ Yes |
 | `FEDERATION_SYNC_KEY` | Sync token for multi-agent federation | Both | ❌ No (secret) |
 | `CASCADE_MODE` | Controls agent cascade and learning mode | Both | ✅ Yes |
-| `DATADOG_API_KEY` | Optional logging/metrics (Datadog integration) | Both | ❌ No (secret) |
-| `DATADOG_REGION` | Region configuration for Datadog metrics | Both | ✅ Yes |
 | `REACT_APP_API_URL` | Frontend-facing API route for production builds | Netlify | ✅ Yes |
 | `VITE_API_BASE` | Base path for Vite/React during build time | Netlify | ✅ Yes |
 | `VAULT_URL` | Used for secure token vault interactions | Both | ✅ Yes |
 | `PUBLIC_API_BASE` | Public API base path | Netlify | ✅ Yes |
-| `AUTO_DIAGNOSE` | Enable automatic diagnostics | Both | ✅ Yes |
+| `AUTO_DIAGNOSE` | Enable automatic diagnostics (internal Genesis only) | Both | ✅ Yes |
+| `DIAGNOSE_WEBHOOK_URL` | Internal diagnostics webhook endpoint | Render | ❌ No (internal) |
+
+**Note**: External monitoring variables (DATADOG_*, BRIDGE_SLACK_WEBHOOK, WATCHDOG_ENABLED) removed in v1.9.6k. All telemetry now handled by internal Genesis, Autonomy, Cascade, and Truth engines.
 
 ## Render Setup
 
@@ -56,16 +59,13 @@ CASCADE_MODE=production
 # Logging
 LOG_LEVEL=info
 
-# Monitoring (Optional)
-DATADOG_API_KEY=<YOUR_DATADOG_KEY>
-DATADOG_REGION=us
-
 # CORS
 CORS_ALLOW_ALL=false
 ALLOWED_ORIGINS=https://bridge.netlify.app,https://sr-aibridge.netlify.app
 
-# Diagnostics
+# Diagnostics (Internal Genesis telemetry only)
 AUTO_DIAGNOSE=true
+DIAGNOSE_WEBHOOK_URL=https://sr-aibridge.onrender.com/api/diagnostics/hook
 DEBUG=false
 ```
 
@@ -101,11 +101,10 @@ BRIDGE_API_URL=https://sr-aibridge.onrender.com
 CASCADE_MODE=production
 VAULT_URL=https://sr-aibridge.netlify.app/api/vault
 
-# Federation & Monitoring
+# Federation
 FEDERATION_SYNC_KEY=<SAME_AS_RENDER>
-DATADOG_REGION=us
 
-# Diagnostics
+# Diagnostics (Internal Genesis telemetry only)
 AUTO_DIAGNOSE=true
 ```
 
@@ -311,17 +310,19 @@ Variables safe for frontend (can be exposed in builds):
 - `PUBLIC_API_BASE=/api`
 - `CASCADE_MODE=production`
 - `VAULT_URL=https://bridge.netlify.app/api/vault`
-- `DATADOG_REGION=us`
 - `BRIDGE_API_URL=https://sr-aibridge.onrender.com`
 - `VITE_API_BASE=https://sr-aibridge.onrender.com`
 - `REACT_APP_API_URL=https://sr-aibridge.onrender.com`
+- `AUTO_DIAGNOSE=true`
 
 Variables **never** safe for frontend:
 - `DATABASE_URL` (contains credentials)
 - `FEDERATION_SYNC_KEY` (secret sync key)
-- `DATADOG_API_KEY` (monitoring credential)
 - `SECRET_KEY` (encryption key)
+- `DIAGNOSE_WEBHOOK_URL` (internal endpoint)
 - Any password or token
+
+**Note**: External monitoring variables (DATADOG_API_KEY, BRIDGE_SLACK_WEBHOOK) removed in v1.9.6k.
 
 ## Troubleshooting
 

@@ -39,11 +39,7 @@ class Settings:
     CASCADE_MODE: str = os.getenv("CASCADE_MODE", "development")
     FEDERATION_SYNC_KEY: str = os.getenv("FEDERATION_SYNC_KEY", "")
     
-    # Optional Monitoring
-    DATADOG_API_KEY: str = os.getenv("DATADOG_API_KEY", "")
-    DATADOG_REGION: str = os.getenv("DATADOG_REGION", "us")
-    
-    # Deploy Diagnostics
+    # Deploy Diagnostics (v1.9.6k - External monitoring removed, Genesis handles all telemetry)
     AUTO_DIAGNOSE: bool = os.getenv("AUTO_DIAGNOSE", "true").lower() == "true"
     DIAGNOSE_WEBHOOK_URL: str = os.getenv("DIAGNOSE_WEBHOOK_URL", "")
     

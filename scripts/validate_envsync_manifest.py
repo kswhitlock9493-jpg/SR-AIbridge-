@@ -188,7 +188,6 @@ class ManifestValidator:
             "DB_ENABLED",
             "HEALTH_ENABLED",
             "FEDERATION_ENABLED",
-            "WATCHDOG_ENABLED",
             "PREDICTIVE_STABILIZER_ENABLED",
             "GENESIS_PERSISTENCE_ENABLED",
         ]
@@ -201,7 +200,6 @@ class ManifestValidator:
             "HEALTH_STATUS_OK",
             "FEDERATION_DISCOVERY_INTERVAL",
             "FEDERATION_SYNC_INTERVAL",
-            "WATCHDOG_INTERVAL",
             "GENESIS_ECHO_DEPTH_LIMIT",
         ]
         

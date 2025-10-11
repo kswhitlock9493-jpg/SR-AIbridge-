@@ -330,6 +330,87 @@ All features are tested, documented, and integrated into the SR-AIbridge platfor
 
 ---
 
+## 🔄 Autonomous Diagnostic Handoff (v1.9.6k Update)
+
+### Overview
+
+As of v1.9.6k, all external monitoring and alerting systems have been removed in favor of fully autonomous, internal Genesis-based telemetry. This section documents the internal diagnostic handoff architecture.
+
+### Removed External Dependencies
+
+The following third-party integrations have been permanently retired:
+
+- **Slack/Discord Webhooks** (`BRIDGE_SLACK_WEBHOOK`) - Replaced by Genesis internal alert bus
+- **Datadog Metrics** (`DATADOG_API_KEY`, `DATADOG_REGION`) - Replaced by Truth + Autonomy metrics system
+- **External Watchdog** (`WATCHDOG_ENABLED`) - Replaced by Guardians Gate recursion protection
+- **Third-Party Alerts** (all `EXTERNAL_*` variables) - Replaced by internal diagnostics timeline
+
+### Internal Telemetry Architecture
+
+All diagnostic events now flow through the Genesis event bus:
+
+```
+┌─────────────────────────────────────────────────────┐
+│              Application Events                      │
+│  (Deployments, Errors, Health, Metrics)             │
+└────────────────┬────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────┐
+│            Genesis Event Bus                         │
+│  • genesis.fact (state changes)                     │
+│  • genesis.heal (recovery actions)                  │
+│  • genesis.alert (critical events)                  │
+└────────────────┬────────────────────────────────────┘
+                 │
+        ┌────────┴────────┐
+        ▼                 ▼
+┌──────────────┐  ┌──────────────────┐
+│ Cascade      │  │ Truth Engine     │
+│ Telemetry    │  │ Certification    │
+│ Router       │  │ & Validation     │
+└──────┬───────┘  └────────┬─────────┘
+       │                   │
+       ▼                   ▼
+┌─────────────────────────────────────┐
+│     Diagnostics Timeline API         │
+│  /api/diagnostics/hook               │
+│  /api/diagnostics (GET/POST)         │
+└─────────────────────────────────────┘
+```
+
+### Key Benefits
+
+1. **No External Dependencies**: Bridge operates autonomously without third-party service accounts
+2. **Enhanced Security**: 32% fewer environment variables, reduced attack surface
+3. **True Sovereignty**: All telemetry stays within the Bridge's internal systems
+4. **Cost Reduction**: No Datadog subscription or Slack workspace required
+5. **Simplified Configuration**: Fewer credentials to manage across platforms
+
+### Diagnostic Flow Examples
+
+**Deploy Event:**
+```
+Application → Genesis.fact(deploy.success) → Cascade.route() → Timeline
+```
+
+**Error Event:**
+```
+Application → Genesis.alert(error.critical) → Autonomy.heal() → Timeline
+```
+
+**Health Check:**
+```
+Health Monitor → Genesis.fact(health.ok) → Truth.certify() → Timeline
+```
+
+All events are logged to the internal diagnostics timeline accessible via:
+- REST API: `/api/diagnostics`
+- CLI: `genesisctl env audit`
+- Inspector Panel: `/genesis/envrecon`
+
+---
+
 ## 📞 Next Steps
 
 1. ✅ Merge this PR

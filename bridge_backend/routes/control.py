@@ -35,7 +35,6 @@ async def trigger_rollback(request: Request):
 
     token = os.getenv("NETLIFY_AUTH_TOKEN")
     site_id = os.getenv("NETLIFY_SITE_ID")
-    webhook = os.getenv("BRIDGE_SLACK_WEBHOOK")
     bridge_url = os.getenv("BRIDGE_URL")
 
     if not token or not site_id:
@@ -56,7 +55,7 @@ async def trigger_rollback(request: Request):
         if res.status_code != 200:
             raise HTTPException(status_code=500, detail=f"Rollback failed: {res.text}")
 
-        # log to diagnostics
+        # log to diagnostics - Genesis handles all telemetry internally (v1.9.6k)
         diag_payload = {
             "type": "DEPLOYMENT_ROLLBACK",
             "status": "success",
@@ -71,9 +70,7 @@ async def trigger_rollback(request: Request):
         if bridge_url:
             requests.post(f"{bridge_url.rstrip('/')}/api/diagnostics", json=diag_payload, timeout=10)
 
-        # Slack notify
-        if webhook:
-            requests.post(webhook, json={"text": f"♻️ Manual rollback triggered from Bridge Dashboard. Restored deploy `{last_success['id']}`"}, timeout=5)
+        # External Slack notifications removed in v1.9.6k - Genesis handles all telemetry internally
 
         return {"message": "Rollback successful", "rollback_id": last_success["id"]}
     except Exception as e:
