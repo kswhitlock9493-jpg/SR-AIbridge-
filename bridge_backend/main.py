@@ -43,8 +43,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.6k",
-    description="v1.9.7c Genesis Linkage: TDE-X + Cascade + Truth + Autonomy + Blueprint unified orchestration"
+    version="1.9.6m",
+    description="v1.9.6m ARIE: Autonomous Repository Integrity Engine with Genesis + TDE-X + Cascade + Truth + Autonomy + Blueprint unified orchestration"
 )
 
 # === CORS ===
@@ -173,6 +173,13 @@ if os.getenv("STEWARD_ENABLED", "false").lower() == "true":
     logger.info("[STEWARD] v1.9.6l routes enabled - admiral-tier environment orchestration active")
 else:
     logger.info("[STEWARD] Disabled (set STEWARD_ENABLED=true to enable)")
+
+# ARIE Engine v1.9.6m - Autonomous Repository Integrity Engine
+if os.getenv("ARIE_ENABLED", "true").lower() == "true":
+    safe_include_router("bridge_backend.engines.arie.routes")
+    logger.info("[ARIE] v1.9.6m routes enabled - autonomous repository integrity active")
+else:
+    logger.info("[ARIE] Disabled (set ARIE_ENABLED=true to enable)")
 
 # Genesis framework routes
 if os.getenv("GENESIS_MODE", "enabled").lower() == "enabled":

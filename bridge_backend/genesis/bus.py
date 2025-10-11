@@ -142,6 +142,12 @@ class GenesisEventBus:
             "steward.result",
             "steward.rollback",
             "steward.cap.issued",
+            # ARIE topics for autonomous repository integrity
+            "arie.audit",
+            "arie.fix.intent",
+            "arie.fix.applied",
+            "arie.fix.rollback",
+            "arie.alert",
         }
         
         logger.info(f"🌌 Genesis Event Bus initialized (enabled={self._enabled}, strict={self._strict_policy})")
