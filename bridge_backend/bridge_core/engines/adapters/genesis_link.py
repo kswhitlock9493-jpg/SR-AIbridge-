@@ -174,6 +174,14 @@ async def register_all_genesis_links():
         except Exception as e:
             logger.warning(f"Failed to register Tools/Runtime autonomy links: {e}")
         
+        # Heritage and MAS autonomy integration
+        try:
+            from .heritage_mas_autonomy_link import register_heritage_mas_autonomy_links
+            await register_heritage_mas_autonomy_links()
+            engines_registered.append("heritage_mas_autonomy")
+        except Exception as e:
+            logger.warning(f"Failed to register Heritage/MAS autonomy links: {e}")
+        
         logger.info(f"✅ Genesis linkages registered: {', '.join(engines_registered)}")
         
         # Publish initialization complete event

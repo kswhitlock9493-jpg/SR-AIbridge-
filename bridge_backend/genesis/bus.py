@@ -110,6 +110,14 @@ class GenesisEventBus:
             "runtime.status",
             "metrics.snapshot",
             "metrics.anomaly",
+            # Heritage and MAS topics
+            "mas.agent",
+            "mas.coordination",
+            "mas.task",
+            "mas.failure",
+            "heritage.agent",
+            "heritage.bridge",
+            "heal.events",
         }
         
         logger.info(f"🌌 Genesis Event Bus initialized (enabled={self._enabled}, strict={self._strict_policy})")
