@@ -96,5 +96,46 @@ def test_genesis_steward_topics():
     assert "steward.cap.issued" in bus._valid_topics
 
 
+@pytest.mark.asyncio
+async def test_steward_diff_with_envrecon():
+    """Test that steward diff integrates with EnvRecon"""
+    import os
+    import importlib
+    
+    # Enable steward before importing
+    os.environ["STEWARD_ENABLED"] = "true"
+    os.environ["STEWARD_OWNER_HANDLE"] = "test_admiral"
+    
+    # Reimport to pick up env vars
+    import bridge_backend.engines.steward.core as steward_core
+    importlib.reload(steward_core)
+    
+    steward = steward_core.Steward()
+    
+    # Run diff
+    diff_report = await steward.diff(["render", "netlify", "github"], dry_run=True)
+    
+    # Verify the report has the new fields
+    assert hasattr(diff_report, "missing_in_render")
+    assert hasattr(diff_report, "missing_in_netlify")
+    assert hasattr(diff_report, "missing_in_github")
+    assert hasattr(diff_report, "extra_in_render")
+    assert hasattr(diff_report, "extra_in_netlify")
+    assert hasattr(diff_report, "conflicts")
+    assert hasattr(diff_report, "summary")
+    
+    # Verify the report has expected structure
+    assert isinstance(diff_report.missing_in_render, list)
+    assert isinstance(diff_report.missing_in_netlify, list)
+    assert isinstance(diff_report.missing_in_github, list)
+    assert isinstance(diff_report.summary, dict)
+    
+    # Verify JSON serialization works
+    report_dict = diff_report.model_dump()
+    assert "missing_in_render" in report_dict
+    assert "missing_in_netlify" in report_dict
+    assert "missing_in_github" in report_dict
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

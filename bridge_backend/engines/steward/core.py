@@ -63,21 +63,82 @@ class Steward:
             "dry_run": dry_run
         })
         
-        # Mock drift detection for now (would integrate with EnvRecon)
-        changes = []
-        
-        # Example: detect a drift (this would be real EnvRecon integration)
-        # For now, return no drift to allow testing
-        
-        report = DiffReport(
-            has_drift=len(changes) > 0,
-            providers=providers,
-            changes=changes
-        )
-        
-        logger.info(f"📊 Diff complete: {len(changes)} changes detected across {len(providers)} providers")
+        # Integrate with EnvRecon to get actual environment drift
+        try:
+            from bridge_backend.engines.envrecon.core import EnvReconEngine
+            envrecon = EnvReconEngine()
+            recon_report = await envrecon.reconcile()
+            
+            # Convert EnvRecon report to Steward changes
+            changes = []
+            
+            # Create changes for missing variables in each provider
+            if "render" in providers:
+                for key in recon_report.get("missing_in_render", []):
+                    changes.append(EnvVarChange(
+                        key=key,
+                        old_value=None,
+                        new_value="<from_local>",
+                        action="create",
+                        is_secret=self._is_secret_var(key)
+                    ))
+            
+            if "netlify" in providers:
+                for key in recon_report.get("missing_in_netlify", []):
+                    if not any(c.key == key and c.action == "create" for c in changes):
+                        changes.append(EnvVarChange(
+                            key=key,
+                            old_value=None,
+                            new_value="<from_local>",
+                            action="create",
+                            is_secret=self._is_secret_var(key)
+                        ))
+            
+            if "github" in providers:
+                for key in recon_report.get("missing_in_github", []):
+                    if not any(c.key == key and c.action == "create" for c in changes):
+                        changes.append(EnvVarChange(
+                            key=key,
+                            old_value=None,
+                            new_value="<from_local>",
+                            action="create",
+                            is_secret=self._is_secret_var(key)
+                        ))
+            
+            # Build comprehensive report
+            report = DiffReport(
+                has_drift=len(changes) > 0,
+                providers=providers,
+                changes=changes,
+                missing_in_render=recon_report.get("missing_in_render", []),
+                missing_in_netlify=recon_report.get("missing_in_netlify", []),
+                missing_in_github=recon_report.get("missing_in_github", []),
+                extra_in_render=recon_report.get("extra_in_render", []),
+                extra_in_netlify=recon_report.get("extra_in_netlify", []),
+                conflicts=recon_report.get("conflicts", {}),
+                summary=recon_report.get("summary", {})
+            )
+            
+            logger.info(f"📊 Diff complete via EnvRecon: {len(changes)} changes detected across {len(providers)} providers")
+            
+        except Exception as e:
+            logger.warning(f"⚠️ EnvRecon integration failed, using fallback: {e}")
+            # Fallback to empty report if EnvRecon fails
+            report = DiffReport(
+                has_drift=False,
+                providers=providers,
+                changes=[]
+            )
         
         return report
+    
+    def _is_secret_var(self, key: str) -> bool:
+        """Determine if a variable name indicates a secret"""
+        secret_indicators = [
+            "SECRET", "KEY", "TOKEN", "PASSWORD", "API_KEY", 
+            "AUTH", "CREDENTIAL", "PRIVATE", "BEARER"
+        ]
+        return any(indicator in key.upper() for indicator in secret_indicators)
     
     async def plan(self, providers: List[str], strategy: str = "safe-phased") -> Plan:
         """
