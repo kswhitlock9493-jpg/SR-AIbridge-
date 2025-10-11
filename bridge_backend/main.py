@@ -43,8 +43,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.6i",
-    description="Temporal Deploy Buffer & Asynchronous Staged Launch - Eliminates Render timeout with 3-stage async deployment"
+    version="1.9.7a",
+    description="TDE-X: Hypersharded Deploy + Federation + Sovereign Post-Deploy - Eliminates Render timeout with parallel shard execution"
 )
 
 # === CORS ===
@@ -183,6 +183,7 @@ safe_include_router("bridge_backend.bridge_core.scans.routes")
 safe_include_router("bridge_backend.routes.control")
 safe_include_router("bridge_backend.routes.diagnostics_timeline")
 safe_include_router("bridge_backend.routes.health")  # NEW: /health/ports, /health/runtime
+safe_include_router("bridge_backend.diagnostics.deploy_parity.routes")  # TDE-X deploy parity
 
 @app.on_event("startup")
 async def startup_event():
