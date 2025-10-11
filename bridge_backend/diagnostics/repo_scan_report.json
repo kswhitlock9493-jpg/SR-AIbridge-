@@ -1,0 +1,257 @@
+{
+  "scan_timestamp": "2025-10-11T12:42:31.793939Z",
+  "repo_path": "/home/runner/work/SR-AIbridge-/SR-AIbridge-",
+  "summary": {
+    "duplicate_groups": 2,
+    "total_duplicates": 7,
+    "redundant_docs": 38,
+    "dead_files": 6
+  },
+  "duplicates": [
+    {
+      "files": [
+        "__init__.py",
+        "bridge_backend/bridge_core/health/__init__.py",
+        "bridge_backend/bridge_core/payments/__init__.py",
+        "bridge_backend/bridge_core/permissions/__init__.py",
+        "bridge_backend/bridge_core/system/__init__.py",
+        "bridge_backend/bridge_core/engines/blueprint/__init__.py",
+        "bridge_backend/tools/triage/common/__init__.py"
+      ],
+      "size_bytes": 0,
+      "recommendation": "Keep one, remove 6 duplicate(s)"
+    },
+    {
+      "files": [
+        "bridge_backend/dock_day_exports/test_export/public_keys.json",
+        "bridge_backend/dock_day_exports/final_demo/public_keys.json"
+      ],
+      "size_bytes": 237,
+      "recommendation": "Keep one, remove 1 duplicate(s)"
+    }
+  ],
+  "redundant_documentation": [
+    {
+      "file": "INTEGRATION_COMPLETE.md",
+      "size_bytes": 7054,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "DOCKDAY_SUMMARY.md",
+      "size_bytes": 4458,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "PR_SUMMARY.md",
+      "size_bytes": 8522,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "V196I_SUMMARY.md",
+      "size_bytes": 12761,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "TASK_COMPLETE_SUMMARY.md",
+      "size_bytes": 5700,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "DEPLOYMENT_CHECKLIST_v196b.md",
+      "size_bytes": 7372,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "OPERATION_GENESIS_SUMMARY.md",
+      "size_bytes": 6320,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "V196I_IMPLEMENTATION_COMPLETE.md",
+      "size_bytes": 11751,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "V197C_IMPLEMENTATION_COMPLETE.md",
+      "size_bytes": 7219,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "V196B_IMPLEMENTATION_SUMMARY.md",
+      "size_bytes": 7459,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "CHECKLIST_COMPLETION_SUMMARY.md",
+      "size_bytes": 8844,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "V195_IMPLEMENTATION_COMPLETE.md",
+      "size_bytes": 11239,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "GENESIS_V2_0_2_IMPLEMENTATION_SUMMARY.md",
+      "size_bytes": 11521,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "QUICK_VERIFICATION_SUMMARY.md",
+      "size_bytes": 4447,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "V196_FINAL_IMPLEMENTATION.md",
+      "size_bytes": 5900,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "V196D_IMPLEMENTATION_COMPLETE.md",
+      "size_bytes": 5351,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "IMPLEMENTATION_SUMMARY.md",
+      "size_bytes": 7605,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "V2_IMPLEMENTATION_COMPLETE.md",
+      "size_bytes": 12643,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "DEPLOYMENT_CHECKLIST_v196i.md",
+      "size_bytes": 7066,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "V196E_IMPLEMENTATION.md",
+      "size_bytes": 2630,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "ANCHORHOLD_PR_SUMMARY.md",
+      "size_bytes": 5495,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "V196F_IMPLEMENTATION.md",
+      "size_bytes": 11231,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "GENESIS_V2_0_1A_IMPLEMENTATION.md",
+      "size_bytes": 7905,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "PROJECT_LOC_SUMMARY.md",
+      "size_bytes": 2356,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "V196C_IMPLEMENTATION_COMPLETE.md",
+      "size_bytes": 7970,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "PARITY_ENGINE_RUN_SUMMARY.md",
+      "size_bytes": 5325,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "V196G_IMPLEMENTATION.md",
+      "size_bytes": 7690,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "AUTONOMY_BACKEND_INTEGRATION_SUMMARY.md",
+      "size_bytes": 9504,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "AUTONOMY_DEPLOYMENT_COMPLETE.md",
+      "size_bytes": 13729,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "GENESIS_V2_0_1_IMPLEMENTATION_COMPLETE.md",
+      "size_bytes": 15181,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "AUTONOMY_INTEGRATION_COMPLETE.md",
+      "size_bytes": 9146,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "COMPLIANCE_IMPLEMENTATION_SUMMARY.md",
+      "size_bytes": 7469,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "ENGINE_INTEGRATION_SUMMARY.md",
+      "size_bytes": 5624,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "V196B_IMPLEMENTATION_COMPLETE.md",
+      "size_bytes": 9132,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "UNIFICATION_COMPLETE.md",
+      "size_bytes": 10081,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "V196H_IMPLEMENTATION_COMPLETE.md",
+      "size_bytes": 8281,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "V198_ENVSYNC_IMPLEMENTATION.md",
+      "size_bytes": 11412,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    },
+    {
+      "file": "TDE_X_IMPLEMENTATION_SUMMARY.md",
+      "size_bytes": 8207,
+      "recommendation": "Archive or remove if content is captured elsewhere"
+    }
+  ],
+  "dead_files": [
+    {
+      "file": "verify_v196b.py",
+      "size_bytes": 6551,
+      "recommendation": "Remove if no longer needed"
+    },
+    {
+      "file": "verify_v196f.py",
+      "size_bytes": 2586,
+      "recommendation": "Remove if no longer needed"
+    },
+    {
+      "file": "validate_anchorhold.py",
+      "size_bytes": 4628,
+      "recommendation": "Remove if no longer needed"
+    },
+    {
+      "file": "verify_autonomy_deployment.py",
+      "size_bytes": 7171,
+      "recommendation": "Remove if no longer needed"
+    },
+    {
+      "file": "verify_autonomy_integration.py",
+      "size_bytes": 6385,
+      "recommendation": "Remove if no longer needed"
+    },
+    {
+      "file": "verify_communication.py",
+      "size_bytes": 5476,
+      "recommendation": "Remove if no longer needed"
+    }
+  ]
+}
