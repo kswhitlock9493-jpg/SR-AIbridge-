@@ -1,12 +1,21 @@
 from fastapi import APIRouter, Request
 from datetime import datetime
+import os
 
 router = APIRouter(tags=["health"])
+
+# Detect host platform for environment awareness
+HOST_PLATFORM = os.getenv("HOST_PLATFORM") or (
+    "render" if os.getenv("RENDER") else
+    "netlify" if os.getenv("NETLIFY") else
+    "local"
+)
 
 @router.get("/health")
 async def health_check(request: Request):
     """
     Basic health check for load balancers and monitoring
+    Universal OK from either host with environment awareness
     Role-based: Captains see local only, Admiral sees global
     """
     user = getattr(request.state, "user", None)
@@ -14,8 +23,10 @@ async def health_check(request: Request):
     
     response = {
         "status": "ok",
+        "host": HOST_PLATFORM,
+        "message": "Bridge link established and synchronized",
         "service": "SR-AIbridge",
-        "version": "2.0.0",
+        "version": "1.9.7",
         "timestamp": datetime.utcnow().isoformat()
     }
     
