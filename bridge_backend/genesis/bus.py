@@ -148,6 +148,9 @@ class GenesisEventBus:
             "arie.fix.applied",
             "arie.fix.rollback",
             "arie.alert",
+            "arie.schedule.tick",
+            "arie.schedule.summary",
+            "arie.schedule.manual",
             # HXO topics for Hypshard-X Orchestrator
             "hxo.plan",
             "hxo.shard.created",

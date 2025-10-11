@@ -263,22 +263,137 @@ bus.subscribe("arie.alert", async def on_alert(evt):
 
 ---
 
+### arie.schedule.tick
+
+**Purpose**: Signal scheduled ARIE run (v1.9.6o)
+
+**Event Structure**:
+```json
+{
+  "timestamp": "ISO 8601",
+  "interval_hours": "integer"
+}
+```
+
+**Subscribers**:
+- Monitoring systems
+- Genesis introspection
+- Audit logs
+
+**Example**:
+```python
+bus.subscribe("arie.schedule.tick", async def on_tick(evt):
+    logger.info(f"ARIE scheduled run started at {evt['timestamp']}")
+)
+```
+
+---
+
+### arie.schedule.summary
+
+**Purpose**: Report summary of scheduled ARIE run (v1.9.6o)
+
+**Event Structure**:
+```json
+{
+  "run_id": "string",
+  "timestamp": "ISO 8601",
+  "findings_count": "integer",
+  "fixes_applied": "integer",
+  "fixes_failed": "integer",
+  "certification_status": "string|null",
+  "duration_seconds": "float"
+}
+```
+
+**Subscribers**:
+- Monitoring dashboards
+- Trend analysis
+- Genesis introspection
+
+**Example**:
+```python
+bus.subscribe("arie.schedule.summary", async def on_summary(evt):
+    metrics.record("arie.scheduled_run", {
+        "findings": evt["findings_count"],
+        "fixes": evt["fixes_applied"],
+        "duration": evt["duration_seconds"]
+    })
+)
+```
+
+---
+
+### arie.schedule.manual
+
+**Purpose**: Report manually triggered ARIE run (v1.9.6o)
+
+**Event Structure**:
+```json
+{
+  "timestamp": "ISO 8601",
+  "requester": "string",
+  "run_id": "string",
+  "success": "boolean"
+}
+```
+
+**Subscribers**:
+- Audit logs
+- Access tracking
+
+**Example**:
+```python
+bus.subscribe("arie.schedule.manual", async def on_manual(evt):
+    audit_log.record("arie_manual_trigger", {
+        "requester": evt["requester"],
+        "run_id": evt["run_id"]
+    })
+)
+```
+
+---
+
 ## Integration Patterns
 
-### Post-Deploy Flow
+### Post-Deploy Flow (v1.9.6o)
 
 ```
 deploy.platform.success
     ↓
+arie.scan (SAFE_EDIT policy)
+    ↓
 arie.audit (scan results)
     ↓
-arie.fix.intent (if auto-fix enabled)
+arie.fix.applied (if fixes made)
     ↓
-arie.fix.applied
+truth.certify (certification request)
     ↓
-truth.verify (certification request)
+  ├─ success → arie.audit (certified)
+  └─ failure → arie.fix.rollback → arie.alert
     ↓
-cascade.run (post-fix flows)
+cascade.notify (post-certification)
+```
+
+### Autonomous Scheduled Flow (v1.9.6o)
+
+```
+RRULE:FREQ=HOURLY;INTERVAL=12 (Genesis internal timer)
+    ↓
+arie.schedule.tick
+    ↓
+arie.scan (SAFE_EDIT policy)
+    ↓
+arie.audit
+    ↓
+arie.fix.applied (if fixes made)
+    ↓
+truth.certify
+    ↓
+  ├─ success → commit results
+  └─ failure → auto-rollback & alert
+    ↓
+arie.schedule.summary
 ```
 
 ### Manual Heal Flow
@@ -293,12 +408,12 @@ arie.fix.applied
 truth.verify
 ```
 
-### Failed Certification Flow
+### Failed Certification Flow (v1.9.6o)
 
 ```
 truth.failed (certification failed)
     ↓
-arie.fix.rollback (auto-rollback)
+arie.fix.rollback (auto-rollback if ARIE_TRUTH_MANDATORY=true)
     ↓
 arie.alert (notify failure)
 ```
