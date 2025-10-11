@@ -162,6 +162,11 @@ safe_include_router("bridge_backend.bridge_core.engines.creativity.routes")
 safe_include_router("bridge_backend.bridge_core.engines.cascade.routes")
 safe_include_router("bridge_backend.bridge_core.engines.envsync.routes")
 
+# EnvRecon Engine v2.0.2 - Genesis cross-platform reconciliation
+safe_include_router("bridge_backend.engines.envrecon.routes")
+safe_include_router("bridge_backend.engines.envrecon.ui")
+logger.info("[ENVRECON] v2.0.2 routes enabled - cross-platform environment reconciliation active")
+
 # Genesis framework routes
 if os.getenv("GENESIS_MODE", "enabled").lower() == "enabled":
     safe_include_router("bridge_backend.genesis.routes")
