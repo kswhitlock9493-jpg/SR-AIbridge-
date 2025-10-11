@@ -93,6 +93,22 @@ class AutoHealEngine:
                 }
             )
             logger.info("✅ Heal event emitted to Genesis bus")
+            
+            # Also emit to envrecon-specific topic
+            from bridge_backend.genesis.bus import genesis_bus
+            await genesis_bus.publish("envrecon.heal", {
+                "type": "ENVRECON_HEAL_INITIATED",
+                "source": "envrecon.autoheal",
+                "report_summary": {
+                    "missing_render": len(report.get("missing_in_render", [])),
+                    "missing_netlify": len(report.get("missing_in_netlify", [])),
+                    "missing_github": len(report.get("missing_in_github", [])),
+                    "conflicts": len(report.get("conflicts", {}))
+                },
+                "timestamp": report.get("timestamp"),
+                "autoheal_depth": self.current_depth
+            })
+            logger.info("✅ EnvRecon heal event emitted to Genesis bus")
         except ImportError:
             logger.debug("Genesis adapters not available, skipping event emission")
         except Exception as e:

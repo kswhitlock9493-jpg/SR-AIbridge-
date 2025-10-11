@@ -130,6 +130,11 @@ class GenesisEventBus:
             "envsync.drift",
             "envsync.sync",
             "envsync.complete",
+            # EnvRecon topics for cross-platform reconciliation
+            "envrecon.drift",
+            "envrecon.audit",
+            "envrecon.heal",
+            "envrecon.sync",
         }
         
         logger.info(f"🌌 Genesis Event Bus initialized (enabled={self._enabled}, strict={self._strict_policy})")

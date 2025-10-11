@@ -182,6 +182,14 @@ class EnvReconEngine:
         
         logger.info(f"✅ EnvRecon audit complete - {len(all_keys)} total variables analyzed")
         
+        # Notify Autonomy engine via adapter
+        try:
+            from bridge_backend.bridge_core.engines.adapters.envrecon_autonomy_link import envrecon_autonomy_link
+            await envrecon_autonomy_link.notify_reconciliation_complete(report)
+            await envrecon_autonomy_link.notify_drift_detected(report)
+        except Exception as e:
+            logger.debug(f"EnvRecon-Autonomy link notification skipped: {e}")
+        
         return report
     
     def save_report(self, report: Dict[str, Any]):
