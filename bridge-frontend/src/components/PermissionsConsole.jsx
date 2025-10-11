@@ -136,6 +136,16 @@ export default function PermissionsConsole({ captain="Kyle" }) {
               onChange={e=>onToggle("logging.retention_days", Number(e.target.value)||30)} />
           </div>
         </div>
+
+        <div className="card">
+          <h4>Push Notifications</h4>
+          <label><input type="checkbox"
+            checked={settings.push.enabled}
+            onChange={e=>onToggle("push.enabled", e.target.checked)} /> Enabled</label>
+          <label style={{display:"block"}}><input type="checkbox" checked={settings.push.alerts} onChange={e=>onToggle("push.alerts", e.target.checked)} /> Alerts</label>
+          <label style={{display:"block"}}><input type="checkbox" checked={settings.push.updates} onChange={e=>onToggle("push.updates", e.target.checked)} /> Updates</label>
+          <label style={{display:"block"}}><input type="checkbox" checked={settings.push.reminders} onChange={e=>onToggle("push.reminders", e.target.checked)} /> Reminders</label>
+        </div>
       </section>
 
       <div className="card" style={{marginTop:12}}>

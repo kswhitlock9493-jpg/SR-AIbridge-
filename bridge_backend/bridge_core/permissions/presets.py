@@ -1,4 +1,4 @@
-from .models import PermissionSettings, AutonomySettings, LocationSettings, ScreenSettings, VoiceSettings, DataSettings, LoggingSettings
+from .models import PermissionSettings, AutonomySettings, LocationSettings, ScreenSettings, VoiceSettings, DataSettings, LoggingSettings, PushSettings
 
 def preset_for_tier(captain: str, tier: str) -> PermissionSettings:
     # conservative defaults per tier
@@ -11,6 +11,7 @@ def preset_for_tier(captain: str, tier: str) -> PermissionSettings:
             voice=VoiceSettings(stt=True, tts=True),
             data=DataSettings(email=True, drive=True, docs=True, chats=True),
             logging=LoggingSettings(level="standard", retention_days=90),
+            push=PushSettings(enabled=True, alerts=True, updates=True, reminders=True),
             consent_version="v1.0", consent_given=False
         )
     if tier == "pro":
@@ -22,6 +23,7 @@ def preset_for_tier(captain: str, tier: str) -> PermissionSettings:
             voice=VoiceSettings(stt=True, tts=True),
             data=DataSettings(email=True, drive=True, docs=True, chats=False),
             logging=LoggingSettings(level="standard", retention_days=60),
+            push=PushSettings(enabled=True, alerts=True, updates=True, reminders=False),
             consent_version="v1.0", consent_given=False
         )
     # free
@@ -33,5 +35,6 @@ def preset_for_tier(captain: str, tier: str) -> PermissionSettings:
         voice=VoiceSettings(stt=True, tts=False),
         data=DataSettings(email=False, drive=False, docs=True, chats=False),
         logging=LoggingSettings(level="minimal", retention_days=30),
+        push=PushSettings(enabled=False, alerts=False, updates=False, reminders=False),
         consent_version="v1.0", consent_given=False
     )

@@ -15,6 +15,7 @@ SCHEMA = {
   "voice": {"stt": "bool", "tts": "bool"},
   "data": {"email": "bool", "drive": "bool", "docs": "bool", "chats": "bool"},
   "logging": {"level": ["minimal","standard","verbose"], "retention_days": "int"},
+  "push": {"enabled": "bool", "alerts": "bool", "updates": "bool", "reminders": "bool"},
   "consent": {"consent_version": "str", "consent_given": "bool"}
 }
 

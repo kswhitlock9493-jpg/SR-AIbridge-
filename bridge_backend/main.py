@@ -197,6 +197,7 @@ else:
 
 safe_include_router("bridge_backend.bridge_core.registry.routes")
 safe_include_router("bridge_backend.bridge_core.permissions.routes")
+safe_include_router("bridge_backend.bridge_core.engines.push_notifications")
 safe_include_router("bridge_backend.bridge_core.payments.stripe_webhooks")
 safe_include_router("bridge_backend.bridge_core.heritage.routes")
 safe_include_router("bridge_backend.bridge_core.scans.routes")
