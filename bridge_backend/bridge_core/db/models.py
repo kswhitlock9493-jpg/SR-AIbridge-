@@ -1,6 +1,6 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text
-from datetime import datetime
+from datetime import datetime, timezone
 
 class Base(DeclarativeBase):
     pass
@@ -11,7 +11,7 @@ class Mission(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(200))
     status: Mapped[str] = mapped_column(String(50), default="pending")
-    created_at: Mapped[str] = mapped_column(String(50), default=lambda: datetime.utcnow().isoformat() + "Z")
+    created_at: Mapped[str] = mapped_column(String(50), default=lambda: datetime.now(timezone.utc).isoformat() + "Z")
 
 class Log(Base):
     __tablename__ = "logs"

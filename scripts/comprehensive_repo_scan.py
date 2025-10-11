@@ -9,7 +9,7 @@ import hashlib
 import json
 from pathlib import Path
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Set, Tuple
 
 # Directories to exclude from scanning
@@ -129,7 +129,7 @@ class RepoScanner:
     def generate_report(self) -> Dict:
         """Generate comprehensive scan report"""
         report = {
-            "scan_timestamp": datetime.utcnow().isoformat() + "Z",
+            "scan_timestamp": datetime.now(timezone.utc).isoformat() + "Z",
             "repo_path": str(self.repo_path),
             "summary": {
                 "duplicate_groups": len(self.duplicate_groups),

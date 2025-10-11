@@ -4,7 +4,7 @@ MAS Demo - Multi-Agent System healing demonstration
 
 import logging
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 from ..event_bus import bus
 from ..mas.adapters import BridgeMASAdapter, SelfHealingMASAdapter
 from ..mas.fault_injector import FaultInjector
@@ -22,7 +22,7 @@ async def run_mas():
     # Publish start event
     await bus.publish("demo.events", {
         "kind": "demo.mas.start",
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     })
     
     # Create MAS components
@@ -43,9 +43,9 @@ async def run_mas():
     
     # Send test messages
     test_messages = [
-        {"event_type": "task.start", "task_id": "mas-1", "timestamp": datetime.utcnow().isoformat()},
-        {"event_type": "task.progress", "task_id": "mas-1", "timestamp": datetime.utcnow().isoformat()},
-        {"event_type": "task.complete", "task_id": "mas-1", "timestamp": datetime.utcnow().isoformat()},
+        {"event_type": "task.start", "task_id": "mas-1", "timestamp": datetime.now(timezone.utc).isoformat()},
+        {"event_type": "task.progress", "task_id": "mas-1", "timestamp": datetime.now(timezone.utc).isoformat()},
+        {"event_type": "task.complete", "task_id": "mas-1", "timestamp": datetime.now(timezone.utc).isoformat()},
         {"bad": "message"},  # This will trigger healing
     ]
     
@@ -58,7 +58,7 @@ async def run_mas():
             "message_number": i + 1,
             "message": msg,
             "log_size": len(log),
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         })
         
         await asyncio.sleep(0.3)
@@ -68,7 +68,7 @@ async def run_mas():
         "kind": "demo.mas.complete",
         "messages_processed": len(test_messages),
         "log_entries": len(log),
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     })
     
     logger.info("✅ MAS healing demo completed")

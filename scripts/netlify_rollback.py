@@ -2,7 +2,7 @@
 import os
 import requests
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 
 def rollback_netlify():
     token = os.getenv("NETLIFY_AUTH_TOKEN")
@@ -39,7 +39,7 @@ def rollback_netlify():
                     "source": "GitHubAction",
                     "meta": {
                         "environment": "CI/CD",
-                        "timestamp": datetime.utcnow().isoformat()+"Z",
+                        "timestamp": datetime.now(timezone.utc).isoformat()+"Z",
                         "diagnostics": {"rollback_id": last_success["id"]}
                     }
                 }, timeout=10)

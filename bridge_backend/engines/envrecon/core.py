@@ -6,7 +6,7 @@ Autonomous environment reconciliation across Render, Netlify, GitHub, and local 
 import os
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional
 from pathlib import Path
 from dotenv import dotenv_values
@@ -167,7 +167,7 @@ class EnvReconEngine:
             "extra_in_netlify": extra_in_netlify,
             "conflicts": conflicts,
             "autofixed": [],  # Populated by auto-heal
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat() + "Z",
             "summary": {
                 "total_keys": len(all_keys),
                 "local_count": len(local),

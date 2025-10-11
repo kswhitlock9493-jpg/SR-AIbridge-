@@ -9,7 +9,7 @@ import re
 import json
 from pathlib import Path
 from typing import Dict, List, Set
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class EnvVarScanner:
@@ -141,7 +141,7 @@ class EnvVarScanner:
         missing_other = self.missing_vars - missing_api - missing_deployment
         
         report = {
-            "scan_timestamp": datetime.utcnow().isoformat() + "Z",
+            "scan_timestamp": datetime.now(timezone.utc).isoformat() + "Z",
             "summary": {
                 "total_required": len(self.required_vars),
                 "configured": len(self.configured_vars),

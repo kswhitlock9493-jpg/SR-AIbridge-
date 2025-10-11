@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
-from datetime import datetime
+from datetime import datetime, timezone
 import os
 import asyncio
 
@@ -40,7 +40,7 @@ async def seed_bootstrap(secret: str, _verified: bool = Depends(verify_seed_secr
 @router.get("/metrics")
 def system_metrics():
     """Return basic runtime metrics (stub until Prometheus integration)."""
-    now = datetime.utcnow().isoformat() + "Z"
+    now = datetime.now(timezone.utc).isoformat() + "Z"
     return {
         "timestamp": now,
         "uptime": "mock-uptime",
@@ -50,7 +50,7 @@ def system_metrics():
 @router.post("/repair")
 def system_repair():
     """Trigger a mock system repair operation."""
-    return {"status": "repair_started", "time": datetime.utcnow().isoformat() + "Z"}
+    return {"status": "repair_started", "time": datetime.now(timezone.utc).isoformat() + "Z"}
 
 @router.get("/diagnostics")
 def system_diagnostics():

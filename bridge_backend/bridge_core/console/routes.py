@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from datetime import datetime
+from datetime import datetime, timezone
 
 try:
     from bridge_core.protocols.registry import list_registry
@@ -19,7 +19,7 @@ def snapshot():
     - timestamp
     """
     return {
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat() + "Z",
         "protocols": list_registry(),
         "guardians": GUARDIANS,
         "status": "ok",

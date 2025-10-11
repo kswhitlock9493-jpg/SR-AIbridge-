@@ -1,12 +1,12 @@
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid, json
 
 VAULT_DIR = Path("vault/speech/stt")
 VAULT_DIR.mkdir(parents=True, exist_ok=True)
 
 def now_iso():
-    return datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    return datetime.now(timezone.utc).isoformat(timespec="seconds") + "Z"
 
 class STTEngine:
     def __init__(self, vault=VAULT_DIR):

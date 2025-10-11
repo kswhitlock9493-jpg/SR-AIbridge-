@@ -4,7 +4,7 @@ Separated from SQLAlchemy models for clean architecture
 """
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 # === Guardian Schemas ===
@@ -235,7 +235,7 @@ class SuccessResponse(BaseModel):
     status: str = "success"
     message: str
     data: Optional[Dict[str, Any]] = None
-    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
 class ErrorResponse(BaseModel):
@@ -243,7 +243,7 @@ class ErrorResponse(BaseModel):
     status: str = "error"
     error: str
     message: Optional[str] = None
-    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     self_heal_available: bool = True
 
 
@@ -251,7 +251,7 @@ class ListResponse(BaseModel):
     """Generic list response schema"""
     status: str = "success"
     count: int
-    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
 # === Blueprint Schemas ===

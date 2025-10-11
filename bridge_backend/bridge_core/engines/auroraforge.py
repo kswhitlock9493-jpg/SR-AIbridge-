@@ -6,7 +6,7 @@ Provides comprehensive visual synthesis, artistic creation, and multimedia proce
 
 import logging
 import random
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
@@ -95,7 +95,7 @@ class AuroraForge:
         Returns:
             Dict containing visual asset data and metadata
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if len(self.assets) >= self.max_assets:
             logger.warning("⚠️ Maximum assets reached")

@@ -12,7 +12,7 @@ import os
 import asyncio
 import logging
 from typing import Dict, Any, Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 import json
 
@@ -94,7 +94,7 @@ class TDEOrchestrator:
         except Exception as e:
             logger.warning(f"⚠️ Failed to emit orchestrator start event: {e}")
         
-        self._state["started_at"] = datetime.utcnow().isoformat()
+        self._state["started_at"] = datetime.now(timezone.utc).isoformat()
         self._save_state()
         
         # Run stages sequentially in background
@@ -107,7 +107,7 @@ class TDEOrchestrator:
         for stage_name in self._stages:
             await self._run_stage(stage_name)
         
-        self._state["completed_at"] = datetime.utcnow().isoformat()
+        self._state["completed_at"] = datetime.now(timezone.utc).isoformat()
         self._save_state()
         
         # Emit completion
@@ -119,7 +119,7 @@ class TDEOrchestrator:
                 payload={
                     "stages": {k: v["status"] for k, v in self._state["stages"].items()},
                     "duration_secs": (
-                        datetime.utcnow() - 
+                        datetime.now(timezone.utc) - 
                         datetime.fromisoformat(self._state["started_at"])
                     ).total_seconds() if self._state["started_at"] else None
                 }
@@ -140,7 +140,7 @@ class TDEOrchestrator:
         
         # Mark as running
         stage["status"] = StageStatus.RUNNING
-        stage["started_at"] = datetime.utcnow().isoformat()
+        stage["started_at"] = datetime.now(timezone.utc).isoformat()
         self._save_state()
         
         # Emit stage started
@@ -161,7 +161,7 @@ class TDEOrchestrator:
             
             # Mark as completed
             stage["status"] = StageStatus.COMPLETED
-            stage["completed_at"] = datetime.utcnow().isoformat()
+            stage["completed_at"] = datetime.now(timezone.utc).isoformat()
             stage["attempts"] = stage.get("attempts", 0) + 1
             self._save_state()
             

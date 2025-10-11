@@ -2,7 +2,7 @@
 import os
 import requests
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 def notify_slack(event_type, status, message=None):
     """DEPRECATED: External Slack notifications removed in v1.9.6k.
@@ -35,7 +35,7 @@ def build_payload(event_type, status, source, diagnostics=None):
         "meta": {
             "environment": "CI/CD",
             "trigger": "GitHubAction",
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat() + "Z",
             "diagnostics": diagnostics or {}
         }
     }

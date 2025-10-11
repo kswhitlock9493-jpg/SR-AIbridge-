@@ -6,7 +6,7 @@ Provides comprehensive market simulation, trade optimization, and economic analy
 
 import logging
 import random
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
@@ -142,7 +142,7 @@ class CommerceForge:
         Returns:
             Dict containing asset data and market analysis
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if len(self.assets) >= self.max_assets:
             logger.warning("⚠️ Maximum assets reached")
@@ -216,7 +216,7 @@ class CommerceForge:
         Returns:
             Dict containing trade execution results
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if len(self.orders) >= self.max_orders:
             # Clean up old completed orders
@@ -316,7 +316,7 @@ class CommerceForge:
         Returns:
             Dict containing market analysis results
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if asset_id not in self.assets:
             return {"error": f"Asset {asset_id} not found"}
@@ -362,7 +362,7 @@ class CommerceForge:
         Returns:
             Dict containing optimization recommendations
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if portfolio_id not in self.portfolios:
             return {"error": f"Portfolio {portfolio_id} not found"}
@@ -402,7 +402,7 @@ class CommerceForge:
     def create_portfolio(self, name: str, initial_cash: float = 100000.0,
                         risk_level: str = "moderate") -> Dict[str, Any]:
         """Create a new trading portfolio"""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if len(self.portfolios) >= self.max_portfolios:
             logger.warning("⚠️ Maximum portfolios reached")
@@ -568,7 +568,7 @@ class CommerceForge:
         """Update asset price history"""
         if asset_id in self.assets:
             asset = self.assets[asset_id]
-            timestamp = datetime.utcnow().isoformat()
+            timestamp = datetime.now(timezone.utc).isoformat()
             asset.price_history.append((timestamp, new_price))
             asset.current_price = new_price
             
@@ -620,7 +620,7 @@ class CommerceForge:
             return 0.0
         
         # Find price from hours ago (simplified)
-        target_time = datetime.utcnow() - timedelta(hours=hours)
+        target_time = datetime.now(timezone.utc) - timedelta(hours=hours)
         
         # Use the oldest available price if not enough history
         old_price = asset.price_history[0][1]

@@ -6,7 +6,7 @@ Provides comprehensive mathematical analysis capabilities for the SR-AIbridge sy
 
 import logging
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional, Union
 from dataclasses import dataclass
 from enum import Enum
@@ -147,7 +147,7 @@ class ProofFoundry:
         Returns:
             MathematicalEquation: The inscribed equation ready for manipulation
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         equation_id = f"eq_{int(start_time.timestamp() * 1000)}"
         
         try:
@@ -208,7 +208,7 @@ class ProofFoundry:
         Returns:
             ProofResult: Results of the proof attempt
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if equation_id not in self.equations:
             raise ValueError(f"Equation {equation_id} not found")
@@ -235,7 +235,7 @@ class ProofFoundry:
                 raise ValueError(f"Unknown proof method: {proof_method}")
             
             # Calculate computation time
-            end_time = datetime.utcnow()
+            end_time = datetime.now(timezone.utc)
             computation_time = (end_time - start_time).total_seconds() * 1000
             
             # Create proof result
@@ -274,7 +274,7 @@ class ProofFoundry:
             logger.error(f"❌ Proof failed for {equation_id}: {str(e)}")
             equation.status = ProofStatus.ERROR
             
-            computation_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+            computation_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
             
             return ProofResult(
                 proof_id=proof_id,
@@ -284,7 +284,7 @@ class ProofFoundry:
                 success=False,
                 computation_time_ms=computation_time,
                 proof_method=proof_method,
-                timestamp=datetime.utcnow(),
+                timestamp=datetime.now(timezone.utc),
                 confidence=0.0
             )
 
@@ -304,7 +304,7 @@ class ProofFoundry:
         Returns:
             ProofResult: Solutions and solving process
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         if equation_id not in self.equations:
             raise ValueError(f"Equation {equation_id} not found")
@@ -353,7 +353,7 @@ class ProofFoundry:
                 steps.append("No solutions found")
             
             # Calculate computation time
-            end_time = datetime.utcnow()
+            end_time = datetime.now(timezone.utc)
             computation_time = (end_time - start_time).total_seconds() * 1000
             
             # Create result
@@ -388,7 +388,7 @@ class ProofFoundry:
         except Exception as e:
             logger.error(f"❌ Solve failed for {equation_id}: {str(e)}")
             
-            computation_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+            computation_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
             
             return ProofResult(
                 proof_id=solve_id,
@@ -398,7 +398,7 @@ class ProofFoundry:
                 success=False,
                 computation_time_ms=computation_time,
                 proof_method=f"solve_{solution_type}",
-                timestamp=datetime.utcnow(),
+                timestamp=datetime.now(timezone.utc),
                 confidence=0.0
             )
 
@@ -678,4 +678,4 @@ class ProofFoundry:
                 (current_avg * (total_computations - 1) + computation_time) / total_computations
             )
         
-        self.metrics["last_computation"] = datetime.utcnow()
+        self.metrics["last_computation"] = datetime.now(timezone.utc)

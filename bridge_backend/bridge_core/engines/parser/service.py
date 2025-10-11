@@ -2,7 +2,7 @@ from __future__ import annotations
 from pathlib import Path
 from dataclasses import dataclass, asdict
 from typing import List, Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 import hashlib, json, re
 
 PARSER_ROOT = Path("vault") / "parser"
@@ -15,7 +15,7 @@ META_DIR.mkdir(parents=True, exist_ok=True)
 PARSER_ROOT.mkdir(parents=True, exist_ok=True)
 
 def _now() -> str:
-    return datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    return datetime.now(timezone.utc).isoformat(timespec="seconds") + "Z"
 
 def _sha256(text: str) -> str:
     h = hashlib.sha256(); h.update(text.encode("utf-8", "ignore")); return h.hexdigest()

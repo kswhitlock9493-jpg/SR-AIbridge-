@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass, asdict
 from typing import Dict, Any, Optional, List
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 import json, uuid
 
 VAULT_ROOT = Path("vault")
@@ -54,7 +54,7 @@ STARTER_ARCHETYPES: Dict[str, Dict[str, Any]] = {
 }
 
 def now_iso() -> str:
-    return datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    return datetime.now(timezone.utc).isoformat(timespec="seconds") + "Z"
 
 @dataclass
 class AgentManifest:

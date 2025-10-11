@@ -5,7 +5,7 @@ Integrates existing MAS components with the event bus
 
 import logging
 from typing import Dict, Any, Callable
-from datetime import datetime
+from datetime import datetime, timezone
 from ..event_bus import bus
 
 logger = logging.getLogger(__name__)
@@ -28,12 +28,12 @@ class BridgeMASAdapter:
         await bus.publish("bridge.events", {
             "kind": "heritage.mas.event",
             "payload": event,
-            "timestamp": event.get("timestamp", datetime.utcnow().isoformat())
+            "timestamp": event.get("timestamp", datetime.now(timezone.utc).isoformat())
         })
         
         # Write to order log
         self.order_write({
-            "timestamp": event.get("timestamp", datetime.utcnow().isoformat()),
+            "timestamp": event.get("timestamp", datetime.now(timezone.utc).isoformat()),
             "type": event.get("event_type"),
             "task_id": event.get("task_id"),
             "agent": event.get("agent"),
@@ -65,13 +65,13 @@ class SelfHealingMASAdapter:
                 "kind": "heal.resend_request",
                 "original_message": message,
                 "reason": "validation_failed",
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             })
             
             # Write resend request
             self.mas.order_write({
                 "type": "resend_request",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "reason": "validation_failed"
             })
             return

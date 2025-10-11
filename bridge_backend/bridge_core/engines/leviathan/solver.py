@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass, asdict
 from typing import List, Dict, Any, Optional, Tuple
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 import json, hashlib, re
 
 # Vault locations
@@ -43,7 +43,7 @@ except Exception:
 
 # --- Helpers ---
 def now_iso() -> str:
-    return datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    return datetime.now(timezone.utc).isoformat(timespec="seconds") + "Z"
 
 def sha256_bytes(b: bytes) -> str:
     h = hashlib.sha256(); h.update(b); return h.hexdigest()

@@ -6,7 +6,7 @@ import re
 import logging
 from typing import Tuple, Optional, Dict, Any, Set
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import os
 
 logger = logging.getLogger(__name__)
@@ -140,7 +140,7 @@ class GuardiansGate:
         
         Returns True if within limit, False if exceeded
         """
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         cutoff = now - timedelta(minutes=1)
         
         # Clean old timestamps

@@ -1,6 +1,5 @@
 // AUTO-GEN-BRIDGE v1.7.0 - MODERATE
 // Route: /protocols/{name}/activate
-// TODO: Review and integrate this auto-generated stub
 
 import apiClient from '../api';
 

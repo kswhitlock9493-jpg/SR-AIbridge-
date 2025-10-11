@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 import json, hashlib, re
 from typing import Iterable, List, Dict, Any, Optional, Tuple
 
@@ -12,7 +12,7 @@ PARSER_LEDGER = PARSER_DIR / "ledger.jsonl"  # {sha, bytes, source, ts}
 PARSER_CHUNKS_DIR = PARSER_DIR / "chunks"    # optional subdir; we also accept flat files
 
 def now_iso() -> str:
-    return datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    return datetime.now(timezone.utc).isoformat(timespec="seconds") + "Z"
 
 def sha256_text(t: str) -> str:
     h = hashlib.sha256(); h.update(t.encode("utf-8", "ignore")); return h.hexdigest()

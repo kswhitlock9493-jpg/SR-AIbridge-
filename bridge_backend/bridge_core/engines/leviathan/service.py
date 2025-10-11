@@ -125,7 +125,7 @@ class LeviathanEngine:
         try:
             return dt.datetime.fromisoformat(ts.replace("Z", "+00:00"))
         except Exception:
-            return dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc)
+            return dt.datetime.now(timezone.utc).replace(tzinfo=dt.timezone.utc)
 
     # -----------------------------
     # Public search

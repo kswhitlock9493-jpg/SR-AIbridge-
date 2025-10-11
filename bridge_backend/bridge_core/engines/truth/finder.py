@@ -4,7 +4,7 @@ from .utils import (
     load_parser_ledger, load_chunk_text, sentences_from_text,
     now_iso, sha256_text, TRUTH_DIR, write_jsonl
 )
-from datetime import datetime
+from datetime import datetime, timezone
 
 CANDIDATES_LOG = TRUTH_DIR / "candidates.jsonl"
 
@@ -14,7 +14,7 @@ def _score(ts: str, freq: int) -> float:
         t = datetime.fromisoformat(ts.replace("Z",""))
     except Exception:
         return float(freq)
-    age_days = max(0.0, (datetime.utcnow() - t).total_seconds() / 86400.0)
+    age_days = max(0.0, (datetime.now(timezone.utc) - t).total_seconds() / 86400.0)
     rec = max(0.0, 1.0 - (age_days / 30.0))  # 30d horizon
     return freq + rec
 

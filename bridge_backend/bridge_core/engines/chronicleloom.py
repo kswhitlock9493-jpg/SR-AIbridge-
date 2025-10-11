@@ -5,7 +5,7 @@ Extends ChronicleVault with enhanced temporal weaving capabilities
 """
 
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional
 
 from ..chroniclevault import ChronicleVault
@@ -51,7 +51,7 @@ class ChronicleLoom(ChronicleVault):
             logger.warning("⚠️ Maximum narrative threads reached")
             return {"error": "Thread limit exceeded"}
         
-        thread_id = f"thread_{int(datetime.utcnow().timestamp() * 1000)}"
+        thread_id = f"thread_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
         
         # Gather chronicles for weaving
         woven_chronicles = []
@@ -66,7 +66,7 @@ class ChronicleLoom(ChronicleVault):
             "title": thread_title,
             "narrative_type": narrative_type,
             "chronicles": woven_chronicles,
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
             "thread_length": len(woven_chronicles),
             "temporal_span": self._calculate_temporal_span(woven_chronicles),
             "pattern_strength": self._calculate_pattern_strength(woven_chronicles)
@@ -109,7 +109,7 @@ class ChronicleLoom(ChronicleVault):
             "pattern_type": pattern_type,
             "story_paths": story_paths,
             "path_count": len(story_paths),
-            "generated_at": datetime.utcnow().isoformat()
+            "generated_at": datetime.now(timezone.utc).isoformat()
         }
         
         # Cache the pattern for future use

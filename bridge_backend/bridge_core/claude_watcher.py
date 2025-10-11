@@ -5,7 +5,7 @@ Monitors system events and provides intelligent analysis for decision making
 
 import logging
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, asdict
 from enum import Enum
@@ -74,7 +74,7 @@ class ClaudeWatcher:
             'total_events': 0,
             'events_by_type': {event_type.value: 0 for event_type in EventType},
             'events_by_severity': {severity.value: 0 for severity in Severity},
-            'last_cleanup': datetime.utcnow()
+            'last_cleanup': datetime.now(timezone.utc)
         }
         
         logger.info("🔍 ClaudeWatcher initialized - Event monitoring active")
@@ -94,13 +94,13 @@ class ClaudeWatcher:
         Returns:
             SystemEvent: The created event with recommendations
         """
-        event_id = f"{event_type.value}_{datetime.utcnow().timestamp()}"
+        event_id = f"{event_type.value}_{datetime.now(timezone.utc).timestamp()}"
         
         event = SystemEvent(
             event_id=event_id,
             event_type=event_type,
             severity=severity,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(timezone.utc),
             source=source,
             description=description,
             data=data or {},
@@ -119,7 +119,7 @@ class ClaudeWatcher:
     def get_recent_events(self, hours: int = 1, event_type: EventType = None, 
                          severity: Severity = None) -> List[SystemEvent]:
         """Get recent events with optional filtering"""
-        cutoff = datetime.utcnow() - timedelta(hours=hours)
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
         
         filtered_events = [
             event for event in self.events
@@ -153,7 +153,7 @@ class ClaudeWatcher:
             'high_priority_events': len(high_events),
             'recommendations': recommendations,
             'event_trend': self._calculate_event_trend(),
-            'last_analysis': datetime.utcnow().isoformat(),
+            'last_analysis': datetime.now(timezone.utc).isoformat(),
             'metrics': self.metrics
         }
     
@@ -270,7 +270,7 @@ class ClaudeWatcher:
     
     def _cleanup_old_events(self):
         """Remove events older than retention period"""
-        cutoff = datetime.utcnow() - timedelta(hours=self.retention_hours)
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=self.retention_hours)
         original_count = len(self.events)
         
         self.events = [event for event in self.events if event.timestamp >= cutoff]
@@ -278,4 +278,4 @@ class ClaudeWatcher:
         cleaned_count = original_count - len(self.events)
         if cleaned_count > 0:
             logger.debug(f"🧹 Cleaned up {cleaned_count} old events")
-            self.metrics['last_cleanup'] = datetime.utcnow()
+            self.metrics['last_cleanup'] = datetime.now(timezone.utc)

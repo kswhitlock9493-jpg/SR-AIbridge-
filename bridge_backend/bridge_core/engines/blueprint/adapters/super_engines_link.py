@@ -145,5 +145,5 @@ def get_engine_capabilities(engine_name: str, manifest: Dict[str, Any]) -> Dict[
 
 def _get_timestamp() -> str:
     """Get ISO timestamp"""
-    from datetime import datetime
-    return datetime.utcnow().isoformat() + "Z"
+    from datetime import datetime, timezone
+    return datetime.now(timezone.utc).isoformat() + "Z"

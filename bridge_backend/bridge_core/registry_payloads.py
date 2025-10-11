@@ -3,7 +3,7 @@ Registry Payloads - Default agent registry payloads
 Provides standardized payload structures for agent registration and management
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional
 from enum import Enum
 
@@ -66,10 +66,10 @@ def create_agent_payload(agent_type: AgentType, name: str,
         "status": AgentStatus.STANDBY.value,
         "location": location or "Unknown",
         "health_score": 100.0,
-        "created_at": datetime.utcnow().isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat(),
         "metadata": {
             "agent_class": agent_type.value,
-            "initialization_time": datetime.utcnow().isoformat(),
+            "initialization_time": datetime.now(timezone.utc).isoformat(),
             "version": "2.0.0"
         }
     }
@@ -274,7 +274,7 @@ current_registry_payloads = {
             "classification": "operational",
             "metadata": {
                 "system_version": "2.0.0",
-                "initialization_time": datetime.utcnow().isoformat(),
+                "initialization_time": datetime.now(timezone.utc).isoformat(),
                 "components_initialized": [
                     "agent_registry",
                     "mission_control",
@@ -292,7 +292,7 @@ current_registry_payloads = {
             "classification": "tactical",
             "metadata": {
                 "protocol_version": "3.1",
-                "last_updated": datetime.utcnow().isoformat(),
+                "last_updated": datetime.now(timezone.utc).isoformat(),
                 "approval_authority": "Fleet Command"
             }
         },
@@ -376,7 +376,7 @@ current_registry_payloads = {
     
     "metadata": {
         "version": "2.0.0",
-        "created_at": datetime.utcnow().isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat(),
         "registry_type": "sr_aibridge_standard",
         "total_agents": 6,
         "total_mission_templates": 4,
@@ -446,7 +446,7 @@ def update_agent_health(agent_name: str, health_score: float) -> bool:
     for agent in current_registry_payloads["agents"]:
         if agent["name"] == agent_name:
             agent["health_score"] = max(0.0, min(100.0, health_score))
-            agent["metadata"]["last_health_update"] = datetime.utcnow().isoformat()
+            agent["metadata"]["last_health_update"] = datetime.now(timezone.utc).isoformat()
             return True
     return False
 
@@ -456,6 +456,6 @@ def update_agent_status(agent_name: str, status: AgentStatus) -> bool:
     for agent in current_registry_payloads["agents"]:
         if agent["name"] == agent_name:
             agent["status"] = status.value
-            agent["metadata"]["last_status_update"] = datetime.utcnow().isoformat()
+            agent["metadata"]["last_status_update"] = datetime.now(timezone.utc).isoformat()
             return True
     return False

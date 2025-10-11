@@ -4,7 +4,7 @@ Federation Demo - Cross-bridge communication
 
 import logging
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 from ..event_bus import bus
 from ..federation.federation_client import FederationClient
 
@@ -21,7 +21,7 @@ async def run_federation():
     # Publish start event
     await bus.publish("demo.events", {
         "kind": "demo.federation.start",
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     })
     
     # Create federation client
@@ -48,7 +48,7 @@ async def run_federation():
             "kind": "heritage.federation.operation",
             "operation_number": i + 1,
             "operation_type": op_type,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         })
         
         await asyncio.sleep(0.5)
@@ -57,7 +57,7 @@ async def run_federation():
     await bus.publish("demo.events", {
         "kind": "demo.federation.complete",
         "operations_completed": len(operations),
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     })
     
     logger.info("✅ Federation demo completed")

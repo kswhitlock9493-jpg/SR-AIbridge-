@@ -6,7 +6,7 @@ Simplified version integrated with event bus
 import random
 import logging
 from typing import Dict, Any, Callable
-from datetime import datetime
+from datetime import datetime, timezone
 from ..event_bus import bus
 
 logger = logging.getLogger(__name__)
@@ -40,7 +40,7 @@ class FaultInjector:
             await bus.publish("fault.events", {
                 "kind": "fault.drop",
                 "message_id": message.get("task_id", "unknown"),
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             })
             logger.warning(f"💥 Dropped message: {message.get('task_id')}")
             return  # Don't write
@@ -52,7 +52,7 @@ class FaultInjector:
             await bus.publish("fault.events", {
                 "kind": "fault.corrupt",
                 "message_id": message.get("task_id", "unknown"),
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             })
             logger.warning(f"💥 Corrupted message: {message.get('task_id')}")
         

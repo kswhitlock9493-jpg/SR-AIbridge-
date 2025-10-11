@@ -1,5 +1,5 @@
 import os, json, hashlib
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Any
 
 VAULT_DIR = "vault/filing"
@@ -24,7 +24,7 @@ class FilingEngine:
             "sha": sha,
             "tags": tags,
             "source": source,
-            "created_at": datetime.utcnow().isoformat() + "Z",
+            "created_at": datetime.now(timezone.utc).isoformat() + "Z",
             "bytes": len(content.encode()),
         }
         with open(LEDGER_PATH, "a", encoding="utf-8") as log:

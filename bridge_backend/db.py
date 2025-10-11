@@ -7,7 +7,7 @@ import logging
 import asyncio
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator, List, Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.exc import SQLAlchemyError, OperationalError
 from models import Base, Guardian, VaultLog, Mission, Agent
@@ -118,7 +118,7 @@ class DatabaseManager:
     
     async def health_check(self) -> Dict[str, Any]:
         """Comprehensive database health check with self-healing"""
-        check_time = datetime.utcnow()
+        check_time = datetime.now(timezone.utc)
         
         try:
             async with self.get_session() as session:
@@ -215,7 +215,7 @@ class DatabaseManager:
             return {
                 "status": "success" if success else "partial",
                 "actions_taken": heal_actions,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             }
             
         except Exception as e:
@@ -224,7 +224,7 @@ class DatabaseManager:
                 "status": "failed",
                 "actions_taken": heal_actions,
                 "error": str(e),
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             }
     
     async def _ensure_default_guardian(self) -> Dict[str, Any]:

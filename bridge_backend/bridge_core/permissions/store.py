@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 from typing import Optional
 from .models import PermissionSettings
@@ -12,7 +12,7 @@ SETTINGS_DIR.mkdir(parents=True, exist_ok=True)
 PERM_DIR.mkdir(parents=True, exist_ok=True)
 
 def now_iso():
-    return datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    return datetime.now(timezone.utc).isoformat(timespec="seconds") + "Z"
 
 def settings_path(captain: str) -> Path:
     return SETTINGS_DIR / f"{captain}.json"

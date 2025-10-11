@@ -6,7 +6,7 @@ Provides intelligent recovery and adaptation capabilities for multi-agent system
 import asyncio
 import logging
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Any, Optional, Callable, Union
 from enum import Enum
 from dataclasses import dataclass
@@ -89,7 +89,7 @@ class SelfHealingMASAdapter:
             'failed_heals': 0,
             'healing_by_strategy': {strategy.value: 0 for strategy in HealingStrategy},
             'average_healing_time': 0.0,
-            'last_reset': datetime.utcnow()
+            'last_reset': datetime.now(timezone.utc)
         }
         
         # Initialize default healing strategies
@@ -121,8 +121,8 @@ class SelfHealingMASAdapter:
                 current_message=message,
                 status=MessageStatus.PENDING,
                 attempts=0,
-                created_at=datetime.utcnow(),
-                last_attempt=datetime.utcnow(),
+                created_at=datetime.now(timezone.utc),
+                last_attempt=datetime.now(timezone.utc),
                 errors=[],
                 healing_attempts=[],
                 metadata={'message_type': message_type}
@@ -131,7 +131,7 @@ class SelfHealingMASAdapter:
         record = self.message_records[message_id]
         record.status = MessageStatus.PROCESSING
         record.attempts += 1
-        record.last_attempt = datetime.utcnow()
+        record.last_attempt = datetime.now(timezone.utc)
         
         try:
             # Validate message if validator provided
@@ -179,12 +179,12 @@ class SelfHealingMASAdapter:
                                    if r.status == MessageStatus.PENDING]),
             'failed_messages': len([r for r in self.message_records.values() 
                                   if r.status == MessageStatus.FAILED]),
-            'current_time': datetime.utcnow().isoformat()
+            'current_time': datetime.now(timezone.utc).isoformat()
         }
     
     def cleanup_old_records(self, hours: int = 24):
         """Clean up old message records"""
-        cutoff = datetime.utcnow() - timedelta(hours=hours)
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
         old_records = [
             msg_id for msg_id, record in self.message_records.items()
             if record.created_at < cutoff and record.status in [
@@ -218,9 +218,9 @@ class SelfHealingMASAdapter:
         
         for strategy in strategies:
             try:
-                start_time = datetime.utcnow()
+                start_time = datetime.now(timezone.utc)
                 result = await self._apply_healing_strategy(strategy, record, validator)
-                healing_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+                healing_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
                 
                 if result.success:
                     record.status = MessageStatus.COMPLETED
@@ -285,7 +285,7 @@ class SelfHealingMASAdapter:
     async def _retry_strategy(self, record: MessageRecord, 
                             validator: Optional[Callable] = None) -> HealingResult:
         """Simple retry strategy - try processing the original message again"""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         try:
             # Add small delay to avoid immediate retry
@@ -294,7 +294,7 @@ class SelfHealingMASAdapter:
             # Validate the original message again
             if validator:
                 if await self._safe_validate(record.original_message, validator):
-                    healing_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+                    healing_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
                     return HealingResult(
                         success=True,
                         strategy_used=HealingStrategy.RETRY,
@@ -305,7 +305,7 @@ class SelfHealingMASAdapter:
                     )
             else:
                 # No validator, assume retry succeeded
-                healing_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+                healing_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
                 return HealingResult(
                     success=True,
                     strategy_used=HealingStrategy.RETRY,
@@ -330,7 +330,7 @@ class SelfHealingMASAdapter:
     async def _reconstruction_strategy(self, record: MessageRecord,
                                      validator: Optional[Callable] = None) -> HealingResult:
         """Attempt to reconstruct corrupted message"""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         try:
             # Basic reconstruction strategies
@@ -341,7 +341,7 @@ class SelfHealingMASAdapter:
                 try:
                     reconstructed = json.loads(message)
                     if validator and await self._safe_validate(reconstructed, validator):
-                        healing_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+                        healing_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
                         return HealingResult(
                             success=True,
                             strategy_used=HealingStrategy.RECONSTRUCTION,
@@ -359,7 +359,7 @@ class SelfHealingMASAdapter:
                 cleaned = ''.join(char for char in message if ord(char) >= 32)
                 if cleaned != message and validator:
                     if await self._safe_validate(cleaned, validator):
-                        healing_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+                        healing_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
                         return HealingResult(
                             success=True,
                             strategy_used=HealingStrategy.RECONSTRUCTION,
@@ -379,7 +379,7 @@ class SelfHealingMASAdapter:
                 
                 if reconstructed and validator:
                     if await self._safe_validate(reconstructed, validator):
-                        healing_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+                        healing_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
                         return HealingResult(
                             success=True,
                             strategy_used=HealingStrategy.RECONSTRUCTION,
@@ -404,7 +404,7 @@ class SelfHealingMASAdapter:
     async def _fallback_strategy(self, record: MessageRecord,
                                validator: Optional[Callable] = None) -> HealingResult:
         """Fallback to a default/safe message"""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         # Create a minimal safe message based on message type
         message_type = record.metadata.get('message_type', 'default')
@@ -413,12 +413,12 @@ class SelfHealingMASAdapter:
             'default': {'status': 'ok', 'message': 'fallback_response'},
             'agent_status': {'agent_id': 'unknown', 'status': 'unknown', 'health': 0.5},
             'mission_update': {'mission_id': 'unknown', 'status': 'pending', 'progress': 0},
-            'system_event': {'event': 'fallback', 'timestamp': datetime.utcnow().isoformat()}
+            'system_event': {'event': 'fallback', 'timestamp': datetime.now(timezone.utc).isoformat()}
         }
         
         fallback_message = fallback_messages.get(message_type, fallback_messages['default'])
         
-        healing_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+        healing_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
         
         return HealingResult(
             success=True,
@@ -432,10 +432,10 @@ class SelfHealingMASAdapter:
     async def _bypass_strategy(self, record: MessageRecord,
                              validator: Optional[Callable] = None) -> HealingResult:
         """Bypass validation and return the message as-is"""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         # Return the message without validation
-        healing_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+        healing_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
         
         return HealingResult(
             success=True,
@@ -459,7 +459,7 @@ class SelfHealingMASAdapter:
     
     def _generate_message_id(self, message: Any) -> str:
         """Generate a unique message ID"""
-        content = str(message) + str(datetime.utcnow().timestamp())
+        content = str(message) + str(datetime.now(timezone.utc).timestamp())
         return hashlib.md5(content.encode()).hexdigest()[:12]
     
     def _update_average_healing_time(self, healing_time_ms: float):

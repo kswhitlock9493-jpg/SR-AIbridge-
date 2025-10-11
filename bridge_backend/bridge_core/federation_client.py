@@ -7,7 +7,7 @@ import asyncio
 import logging
 import json
 import aiohttp
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Any, Optional, Callable
 from enum import Enum
 from dataclasses import dataclass, asdict
@@ -126,7 +126,7 @@ class FederationClient:
             'tasks_received': 0,
             'tasks_completed': 0,
             'tasks_failed': 0,
-            'federation_uptime': datetime.utcnow(),
+            'federation_uptime': datetime.now(timezone.utc),
             'last_discovery': None
         }
         
@@ -225,7 +225,7 @@ class FederationClient:
             payload=payload,
             source_bridge=self.node_id,
             target_bridge=target_bridge,
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(timezone.utc),
             deadline=deadline,
             attempts=0,
             max_attempts=self.max_task_attempts,
@@ -277,7 +277,7 @@ class FederationClient:
                 'result': result,
                 'task_id': task.task_id,
                 'completed_by': self.node_id,
-                'completed_at': datetime.utcnow().isoformat()
+                'completed_at': datetime.now(timezone.utc).isoformat()
             }
             
         except Exception as e:
@@ -297,7 +297,7 @@ class FederationClient:
         
         heartbeat = HeartbeatSignal(
             node_id=self.node_id,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(timezone.utc),
             status=BridgeStatus.ONLINE,
             load_score=await self._calculate_load_score(),
             active_tasks=len(self.pending_tasks),
@@ -352,7 +352,7 @@ class FederationClient:
             # Send our heartbeat back
             our_heartbeat = HeartbeatSignal(
                 node_id=self.node_id,
-                timestamp=datetime.utcnow(),
+                timestamp=datetime.now(timezone.utc),
                 status=BridgeStatus.ONLINE,
                 load_score=await self._calculate_load_score(),
                 active_tasks=len(self.pending_tasks),
@@ -391,7 +391,7 @@ class FederationClient:
             'completed_tasks': len(self.completed_tasks),
             'statistics': self.stats,
             'bridge_nodes': [node.to_dict() for node in online_nodes],
-            'last_update': datetime.utcnow().isoformat()
+            'last_update': datetime.now(timezone.utc).isoformat()
         }
     
     async def _heartbeat_loop(self):
@@ -425,7 +425,7 @@ class FederationClient:
             except Exception as e:
                 logger.warning(f"⚠️ Failed to discover bridge at {endpoint}: {e}")
         
-        self.stats['last_discovery'] = datetime.utcnow()
+        self.stats['last_discovery'] = datetime.now(timezone.utc)
     
     async def _select_target_bridge(self, task_type: str, priority: TaskPriority) -> Optional[str]:
         """Select the best bridge for forwarding a task"""
@@ -480,7 +480,7 @@ class FederationClient:
     
     async def _check_node_timeouts(self):
         """Check for offline nodes and update their status"""
-        timeout_threshold = datetime.utcnow() - timedelta(seconds=self.node_timeout)
+        timeout_threshold = datetime.now(timezone.utc) - timedelta(seconds=self.node_timeout)
         
         for node in self.bridge_nodes.values():
             if node.last_heartbeat < timeout_threshold and node.status == BridgeStatus.ONLINE:
@@ -489,5 +489,5 @@ class FederationClient:
     
     def _generate_task_id(self, task_type: str, payload: Dict[str, Any]) -> str:
         """Generate unique task ID"""
-        content = f"{task_type}_{json.dumps(payload, sort_keys=True)}_{datetime.utcnow().timestamp()}"
+        content = f"{task_type}_{json.dumps(payload, sort_keys=True)}_{datetime.now(timezone.utc).timestamp()}"
         return hashlib.md5(content.encode()).hexdigest()[:16]

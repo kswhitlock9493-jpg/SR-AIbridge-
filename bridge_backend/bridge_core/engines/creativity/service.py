@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, asdict
 import json, uuid, hashlib
@@ -11,7 +11,7 @@ CREATIVITY_DIR.mkdir(parents=True, exist_ok=True)
 ASSETS_DIR = CREATIVITY_DIR  # Alias for compatibility
 
 def now_iso() -> str:
-    return datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    return datetime.now(timezone.utc).isoformat(timespec="seconds") + "Z"
 
 def sha256_text(t: str) -> str:
     return hashlib.sha256(t.encode("utf-8", "ignore")).hexdigest()

@@ -4,7 +4,7 @@ Pydantic models for Env Steward
 
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class EnvVarChange(BaseModel):
@@ -28,7 +28,7 @@ class DiffReport(BaseModel):
     extra_in_netlify: List[str] = []
     conflicts: Dict[str, Any] = Field(default_factory=dict)
     summary: Dict[str, Any] = Field(default_factory=dict)
-    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
 class Plan(BaseModel):
@@ -39,7 +39,7 @@ class Plan(BaseModel):
     phases: List[Dict[str, Any]] = []
     mutation_window_id: Optional[str] = None
     certified: bool = False
-    created_at: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
 class ApplyResult(BaseModel):
@@ -50,7 +50,7 @@ class ApplyResult(BaseModel):
     change_counts: Dict[str, int] = Field(default_factory=dict)
     rollback_ref: Optional[str] = None
     errors: List[str] = []
-    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
 class PlanRequest(BaseModel):
