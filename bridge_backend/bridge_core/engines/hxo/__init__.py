@@ -4,13 +4,14 @@ Central harmonic conductor for all engine connectivity
 Version: 1.9.6p "HXO Ascendant"
 """
 
-from .nexus import HXONexus, get_nexus_instance
+from .nexus import HXONexus, get_nexus_instance, initialize_nexus
 from .hypshard import HypShardV3Manager
 from .security import QuantumEntropyHasher, HarmonicConsensusProtocol
 
 __all__ = [
     "HXONexus",
     "get_nexus_instance",
+    "initialize_nexus",
     "HypShardV3Manager",
     "QuantumEntropyHasher",
     "HarmonicConsensusProtocol",
