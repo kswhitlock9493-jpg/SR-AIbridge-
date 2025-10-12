@@ -176,6 +176,13 @@ class GenesisEventBus:
             "envrecon.audit",
             "envrecon.heal",
             "envrecon.sync",
+            # EnvMirror topics for GitHub ↔ Render ↔ Netlify sync (v1.9.6x)
+            "envmirror.sync.start",
+            "envmirror.sync.complete",
+            "envmirror.audit",
+            # EnvDuo topics for ARIE + EnvRecon hybrid audit (v1.9.6x)
+            "envduo.audit",
+            "envduo.heal",
             # Steward topics for admiral-tier environment orchestration
             "steward.intent",
             "steward.plan",
