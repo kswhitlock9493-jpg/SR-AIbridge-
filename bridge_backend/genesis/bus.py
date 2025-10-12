@@ -195,6 +195,11 @@ class GenesisEventBus:
             "hxo.autotune.signal",
             "hxo.alert",
             "hxo.audit",
+            # TDE orchestrator topics (v1.9.6q)
+            "deploy.tde.orchestrator.completed",
+            "deploy.tde.orchestrator.failed",
+            # Autonomy tuning signal (v1.9.6q)
+            "autonomy.tuning.signal",
         }
         
         logger.info(f"🌌 Genesis Event Bus initialized (enabled={self._enabled}, strict={self._strict_policy})")
@@ -358,6 +363,19 @@ class GenesisEventBus:
 
 # Global singleton Genesis bus instance
 genesis_bus = GenesisEventBus()
+
+
+def ensure_topic(topic: str) -> None:
+    """
+    Ensure a topic is registered in the Genesis bus.
+    Used to dynamically add topics that may not be in the initial registry.
+    
+    Args:
+        topic: Topic name to ensure exists
+    """
+    if topic not in genesis_bus._valid_topics:
+        genesis_bus._valid_topics.add(topic)
+        logger.debug(f"📡 Genesis topic registered: {topic}")
 
 
 # One-time ARIE integrity hook (triggered on deployment)

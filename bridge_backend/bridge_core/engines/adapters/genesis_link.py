@@ -5,8 +5,31 @@ Universal adapter to connect all engines to Genesis event bus
 
 from typing import Dict, Any
 import logging
+from ...utils.async_tools import maybe_await
 
 logger = logging.getLogger(__name__)
+
+
+async def register_hxo_links(genesis_bus, hxo) -> None:
+    """
+    Register HXO links with Genesis bus (v1.9.6q idempotent + async-safe).
+    
+    Args:
+        genesis_bus: Genesis event bus instance
+        hxo: HXO engine instance
+    """
+    from .hxo_genesis_link import HXOGenesisLink
+    from .hxo_autonomy_link import HXOAutonomyLink
+    
+    try:
+        await HXOGenesisLink(genesis_bus, hxo).register()
+    except Exception:
+        logger.exception("Failed registering HXO⇄Genesis link")
+
+    try:
+        await HXOAutonomyLink(genesis_bus, hxo).wire()
+    except Exception:
+        logger.exception("Failed registering HXO⇄Autonomy link")
 
 
 async def register_all_genesis_links():
@@ -190,9 +213,6 @@ async def register_all_genesis_links():
             genesis_introspection.update_health("hxo", True)
         except Exception as e:
             logger.warning(f"Failed to register HXO link: {e}")
-            engines_registered.append("heritage_mas_autonomy")
-        except Exception as e:
-            logger.warning(f"Failed to register Heritage/MAS autonomy links: {e}")
         
         # EnvRecon autonomy integration
         try:

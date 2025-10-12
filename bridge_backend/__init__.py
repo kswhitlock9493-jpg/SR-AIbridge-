@@ -1,4 +1,4 @@
-__version__ = "1.9.6d"
+__version__ = "1.9.6q"
 
 # This file makes bridge_backend a Python package for proper imports.
 
