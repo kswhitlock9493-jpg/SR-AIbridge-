@@ -170,3 +170,6 @@ bridge_backend/.genesis/tde_state.json
 # v1.9.6x GitHub Environment Hook state (auto-generated)
 logs/github_envhook_state.json
 logs/github_envhook_triggers.log
+
+# v1.9.7g Umbra Lattice Memory (auto-generated)
+.umbra/
