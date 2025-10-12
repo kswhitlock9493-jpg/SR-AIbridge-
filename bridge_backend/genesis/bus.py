@@ -103,6 +103,12 @@ class GenesisEventBus:
             "umbra.pipeline.repaired",
             "umbra.echo.recorded",
             "umbra.memory.learned",
+            # Umbra Lattice Memory topics (v1.9.7g)
+            "umbra.lattice.recorded",
+            "umbra.lattice.certified",
+            "umbra.lattice.cert_failed",
+            "umbra.lattice.snapshot",
+            "umbra.lattice.bloom",
             "truth.certify.cognitive",
             "hxo.echo.sync",
             "doctrine.violation",

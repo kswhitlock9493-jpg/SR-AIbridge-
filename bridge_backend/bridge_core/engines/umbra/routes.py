@@ -12,6 +12,7 @@ from .core import UmbraCore
 from .memory import UmbraMemory
 from .predictive import UmbraPredictive
 from .echo import UmbraEcho
+from .lattice import UmbraLattice
 
 logger = logging.getLogger(__name__)
 
@@ -64,12 +65,14 @@ def get_umbra_engines():
     core = UmbraCore(memory=memory, truth=truth, genesis_bus=genesis_bus)
     predictive = UmbraPredictive(memory=memory, core=core)
     echo = UmbraEcho(memory=memory, truth=truth, genesis_bus=genesis_bus)
+    lattice = UmbraLattice(truth=truth, genesis_bus=genesis_bus)
     
     return {
         "core": core,
         "memory": memory,
         "predictive": predictive,
-        "echo": echo
+        "echo": echo,
+        "lattice": lattice
     }
 
 
@@ -325,11 +328,119 @@ async def get_status():
     
     return {
         "status": "active",
-        "version": "1.9.7e",
+        "version": "1.9.7g",
         "engines": {
             "core": engines["core"].enabled,
             "memory": engines["memory"].enabled,
             "predictive": engines["predictive"].enabled,
-            "echo": engines["echo"].enabled
+            "echo": engines["echo"].enabled,
+            "lattice": engines["lattice"].enabled
         }
     }
+
+
+# === Lattice Endpoints ===
+
+@router.get("/lattice/summary")
+async def lattice_summary(since: Optional[str] = None):
+    """
+    Get Umbra Lattice summary
+    
+    **RBAC**: Admiral, Captain, Observer
+    """
+    engines = get_umbra_engines()
+    lattice = engines["lattice"]
+    
+    try:
+        await lattice.initialize()
+        summary = await lattice.get_summary(since=since)
+        return summary
+    except Exception as e:
+        logger.error(f"Umbra Lattice summary error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/lattice/mermaid")
+async def lattice_mermaid(since: Optional[str] = None):
+    """
+    Get Umbra Lattice mermaid graph
+    
+    **RBAC**: Admiral, Captain
+    """
+    engines = get_umbra_engines()
+    lattice = engines["lattice"]
+    
+    try:
+        await lattice.initialize()
+        mermaid = await lattice.mermaid(since=since)
+        return {
+            "mermaid": mermaid,
+            "since": since or "all"
+        }
+    except Exception as e:
+        logger.error(f"Umbra Lattice mermaid error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/lattice/export")
+async def lattice_export(since: Optional[str] = None):
+    """
+    Export Umbra Lattice snapshot
+    
+    **RBAC**: Admiral only
+    """
+    engines = get_umbra_engines()
+    lattice = engines["lattice"]
+    
+    try:
+        await lattice.initialize()
+        snapshot = await lattice.export_snapshot(since=since)
+        return {
+            "status": "exported",
+            "snapshot": snapshot.model_dump(mode='json'),
+            "path": f".umbra/snapshots/snapshot_{snapshot.ts.strftime('%Y%m%d_%H%M%S')}.json"
+        }
+    except Exception as e:
+        logger.error(f"Umbra Lattice export error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/lattice/bloom")
+async def lattice_bloom():
+    """
+    Run Umbra Lattice bloom analysis
+    
+    **RBAC**: Admiral, Captain
+    """
+    engines = get_umbra_engines()
+    lattice = engines["lattice"]
+    
+    try:
+        await lattice.initialize()
+        results = await lattice.bloom()
+        return {
+            "status": "complete",
+            "analysis": results
+        }
+    except Exception as e:
+        logger.error(f"Umbra Lattice bloom error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/lattice/stats")
+async def lattice_stats():
+    """
+    Get Umbra Lattice storage statistics
+    
+    **RBAC**: Admiral, Captain, Observer
+    """
+    engines = get_umbra_engines()
+    lattice = engines["lattice"]
+    
+    try:
+        await lattice.initialize()
+        stats = await lattice.storage.get_stats()
+        return stats
+    except Exception as e:
+        logger.error(f"Umbra Lattice stats error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

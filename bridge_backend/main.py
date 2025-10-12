@@ -43,8 +43,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.7f",
-    description="v1.9.7f Cascade Synchrony: Universal Healing Protocol - Self-Healing, Self-Learning, Self-Reflective Intelligence"
+    version="1.9.7g",
+    description="v1.9.7g Lattice Memory Bloom: Neural Changelog - Self-Healing, Self-Learning, Self-Reflective Intelligence"
 )
 
 # === CORS ===
@@ -202,10 +202,10 @@ if os.getenv("HXO_NEXUS_ENABLED", "true").lower() == "true":
 else:
     logger.info("[HXO NEXUS] Disabled (set HXO_NEXUS_ENABLED=true to enable)")
 
-# Umbra Cognitive Stack v1.9.7d - Self-Healing, Self-Learning Intelligence
+# Umbra Cognitive Stack v1.9.7g - Self-Healing, Self-Learning Intelligence + Lattice Memory
 if os.getenv("UMBRA_ENABLED", "true").lower() == "true":
     safe_include_router("bridge_backend.bridge_core.engines.umbra.routes")
-    logger.info("[UMBRA] v1.9.7d routes enabled - cognitive stack active (Core, Memory, Predictive, Echo)")
+    logger.info("[UMBRA] v1.9.7g routes enabled - cognitive stack active (Core, Memory, Predictive, Echo, Lattice)")
 else:
     logger.info("[UMBRA] Disabled (set UMBRA_ENABLED=true to enable)")
 

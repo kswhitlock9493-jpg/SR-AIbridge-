@@ -241,6 +241,16 @@ async def register_all_genesis_links():
         except Exception as e:
             logger.warning(f"Failed to register Chimera link: {e}")
         
+        # Umbra Lattice linkage (v1.9.7g)
+        try:
+            from .umbra_genesis_link import subscribe_umbra_to_genesis
+            await subscribe_umbra_to_genesis()
+            engines_registered.append("umbra_lattice")
+            genesis_introspection.update_health("umbra", True)
+            logger.info("✅ Umbra Lattice Genesis link registered")
+        except Exception as e:
+            logger.warning(f"Failed to register Umbra Lattice link: {e}")
+        
         logger.info(f"✅ Genesis linkages registered: {', '.join(engines_registered)}")
         
         # Publish initialization complete event
