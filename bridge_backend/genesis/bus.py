@@ -118,6 +118,18 @@ class GenesisEventBus:
             "hxo.heal.trigger",
             "hxo.heal.complete",
             "hxo.status.summary",
+            # Chimera Deployment Engine topics (v1.9.7c)
+            "deploy.initiated",
+            "deploy.heal.intent",
+            "deploy.heal.complete",
+            "deploy.certified",
+            "chimera.simulate.start",
+            "chimera.simulate.complete",
+            "chimera.deploy.start",
+            "chimera.deploy.complete",
+            "chimera.certify.start",
+            "chimera.certify.complete",
+            "chimera.rollback.triggered",
             # Tools and runtime topics
             "firewall.threat",
             "firewall.analysis",
