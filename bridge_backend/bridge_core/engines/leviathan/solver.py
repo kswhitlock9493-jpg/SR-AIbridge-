@@ -443,3 +443,43 @@ def solve(payload: SolveRequest) -> Dict[str, Any]:
         "tasks": tasks,
         "proof": proof
     }
+
+
+def predict_deployment_success(context: Dict[str, Any]) -> float:
+    """
+    Predict deployment success probability based on context
+    
+    Args:
+        context: Dictionary with action, fail_streak, report_status
+        
+    Returns:
+        Predicted success probability (0.0 to 1.0)
+    """
+    action = context.get("action", "")
+    fail_streak = context.get("fail_streak", 0)
+    report_status = context.get("report_status", "")
+    
+    # Base success rates by action type
+    base_rates = {
+        "REPAIR_CONFIG": 0.85,
+        "REPAIR_CODE": 0.80,
+        "SYNC_ENVS": 0.90,
+        "RETRY": 0.70,
+        "ROLLBACK": 0.95,
+        "CREATE_SECRET": 0.88,
+        "REGENERATE_CONFIG": 0.82,
+        "SYNC_AND_CERTIFY": 0.75,
+    }
+    
+    base_prob = base_rates.get(action, 0.5)
+    
+    # Adjust for fail streak (each failure reduces probability)
+    streak_penalty = min(0.3, fail_streak * 0.1)
+    
+    # Adjust for report status
+    status_bonus = 0.1 if report_status == "success" else 0.0
+    
+    predicted = max(0.0, min(1.0, base_prob - streak_penalty + status_bonus))
+    
+    return predicted
+

@@ -160,3 +160,4 @@ bridge_backend/.queue/*
 !bridge_backend/.queue/.gitkeep
 
 bridge_backend/.genesis/tde_state.json
+.bridge/
