@@ -237,6 +237,18 @@ class GenesisEventBus:
             "autonomy.circuit.closed",
             "deploy.netlify.preview_failed",
             "arie.deprecated.detected",
+            # Chimera Oracle & Hydra v2 topics (v1.9.7i)
+            "deploy.plan",
+            "deploy.simulate",
+            "deploy.certificate",
+            "deploy.execute",
+            "deploy.guard.netlify",
+            "deploy.fallback.render",
+            "deploy.outcome.success",
+            "deploy.outcome.failure",
+            "env.audit",
+            "env.heal.intent",
+            "env.heal.applied",
         }
         
         logger.info(f"🌌 Genesis Event Bus initialized (enabled={self._enabled}, strict={self._strict_policy})")
