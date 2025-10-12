@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-GenesisCtl - EnvRecon CLI Commands
-Command-line interface for environment reconciliation and synchronization
+GenesisCtl - Genesis Framework CLI Commands
+Command-line interface for Genesis orchestration, engine activation, and environment reconciliation
 """
 
 import sys
@@ -203,13 +203,93 @@ async def cmd_env_heal():
     return 0
 
 
+def cmd_engines_enable_true():
+    """Activate all engines with RBAC + Truth Certification"""
+    print("🚀 Activating all Bridge engines...")
+    print("=" * 80)
+    
+    try:
+        from genesis.activation import activate_all_engines
+        
+        # Run activation
+        report = activate_all_engines()
+        
+        # Print report
+        print(report.report())
+        
+        # Save report to logs
+        logs_dir = Path(__file__).parent.parent / "logs"
+        logs_dir.mkdir(parents=True, exist_ok=True)
+        
+        report_path = logs_dir / "engine_activation_report.json"
+        with open(report_path, 'w') as f:
+            json.dump(report.to_dict(), f, indent=2)
+        
+        print(f"\n📄 Detailed report saved to: {report_path}")
+        
+        return 0
+    except Exception as e:
+        print(f"❌ Failed to activate engines: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
+
+
+def cmd_engines_status():
+    """Get current activation status of all engines"""
+    print("📊 Engine Activation Status")
+    print("=" * 80)
+    
+    try:
+        from genesis.activation import get_activation_status
+        
+        status = get_activation_status()
+        
+        print(f"\n📈 Summary:")
+        print(f"  Total Engines: {status['summary']['total']}")
+        print(f"  Active: {status['summary']['active']}")
+        print(f"  Inactive: {status['summary']['inactive']}")
+        print("")
+        
+        # Group by category
+        categories = {}
+        for engine in status['engines']:
+            cat = engine['category']
+            if cat not in categories:
+                categories[cat] = []
+            categories[cat].append(engine)
+        
+        # Print by category
+        for category, engines in sorted(categories.items()):
+            print(f"🔧 {category.upper()} Engines:")
+            for engine in engines:
+                status_icon = "✅" if engine['enabled'] else "⏹️"
+                print(f"  {status_icon} {engine['name']} ({engine['role']})")
+            print("")
+        
+        return 0
+    except Exception as e:
+        print(f"❌ Failed to get engine status: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
+
+
 def main():
     """Main CLI entry point"""
     parser = argparse.ArgumentParser(
-        description="GenesisCtl - Environment Reconciliation CLI"
+        description="GenesisCtl - Genesis Framework CLI"
     )
     
     subparsers = parser.add_subparsers(dest='command', help='Command to run')
+    
+    # engines_enable_true command
+    subparsers.add_parser('engines_enable_true', 
+                         help='Activate all engines with RBAC + Truth Certification')
+    
+    # engines_status command
+    subparsers.add_parser('engines_status',
+                         help='Get current activation status of all engines')
     
     # env command
     env_parser = subparsers.add_parser('env', help='Environment management commands')
@@ -237,7 +317,11 @@ def main():
     
     args = parser.parse_args()
     
-    if args.command == 'env':
+    if args.command == 'engines_enable_true':
+        return cmd_engines_enable_true()
+    elif args.command == 'engines_status':
+        return cmd_engines_status()
+    elif args.command == 'env':
         if args.env_command == 'audit':
             return asyncio.run(cmd_env_audit())
         elif args.env_command == 'sync':

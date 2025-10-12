@@ -10,6 +10,7 @@ from .bus import GenesisEventBus, genesis_bus
 from .manifest import GenesisManifest
 from .introspection import GenesisIntrospection
 from .orchestration import GenesisOrchestrator
+from .activation import activate_all_engines, get_activation_status, ActivationReport
 
 __all__ = [
     "GenesisEventBus",
@@ -17,4 +18,7 @@ __all__ = [
     "GenesisManifest",
     "GenesisIntrospection",
     "GenesisOrchestrator",
+    "activate_all_engines",
+    "get_activation_status",
+    "ActivationReport",
 ]
