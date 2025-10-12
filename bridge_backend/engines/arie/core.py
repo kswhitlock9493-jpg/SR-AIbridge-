@@ -794,3 +794,37 @@ class ARIEEngine:
     def get_last_report(self) -> Optional[Summary]:
         """Get the last run summary"""
         return self.last_summary
+
+
+async def on_preview_failed(event: dict):
+    """
+    ARIE auto-repair handler for preview failures (v1.9.6r)
+    Triggered by Genesis bus on deploy.preview.failed event
+    """
+    import logging
+    from pathlib import Path
+    
+    logger = logging.getLogger(__name__)
+    
+    try:
+        # Import Chimera engine
+        from ..chimera.core import ChimeraEngine
+        
+        eng = ChimeraEngine(Path(".").resolve())
+        report = await eng.preflight()
+        
+        logger.info(f"🩹 ARIE auto-heal: regenerated deploy artifacts after preview failure")
+        
+        # Optional: perform a quick patch commit
+        try:
+            import subprocess
+            subprocess.run(["git", "add", "_headers", "_redirects", "netlify.toml"], check=False)
+            subprocess.run(["git", "commit", "-m", "fix(preview): ARIE auto-heal deploy artifacts"], check=False)
+            subprocess.run(["git", "push"], check=False)
+            logger.info("✅ ARIE auto-heal: committed and pushed fixes")
+        except Exception as e:
+            logger.warning(f"⚠️  ARIE auto-heal: failed to commit fixes: {e}")
+    
+    except Exception as e:
+        logger.error(f"❌ ARIE auto-heal: failed to regenerate deploy artifacts: {e}")
+

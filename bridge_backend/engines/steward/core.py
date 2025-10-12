@@ -8,6 +8,7 @@ import os
 import secrets
 import time
 import logging
+from pathlib import Path
 from .models import DiffReport, Plan, ApplyResult, EnvVarChange
 
 logger = logging.getLogger(__name__)
@@ -17,6 +18,17 @@ STEWARD_ENABLED = os.getenv("STEWARD_ENABLED", "false").lower() == "true"
 WRITE_ENABLED = os.getenv("STEWARD_WRITE_ENABLED", "false").lower() == "true"
 OWNER_HANDLE = os.getenv("STEWARD_OWNER_HANDLE", "")
 CAP_TTL_SECONDS = int(os.getenv("STEWARD_CAP_TTL_SECONDS", "600"))
+
+# Publish directory detection (v1.9.6r)
+DIST_GUESS = ["frontend/dist", "frontend/build", "apps/web/out", "dist", "build", "bridge-frontend/dist"]
+
+
+def detect_publish_dir(root: Path) -> str:
+    """Auto-detect publish directory for deployment"""
+    for d in DIST_GUESS:
+        if (root / d).exists():
+            return d
+    return "frontend/build"
 
 
 class Steward:

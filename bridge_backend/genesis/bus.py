@@ -130,6 +130,16 @@ class GenesisEventBus:
             "chimera.certify.start",
             "chimera.certify.complete",
             "chimera.rollback.triggered",
+            # Chimera Preflight topics (v1.9.6r)
+            "chimera.preflight.start",
+            "chimera.preflight.ok",
+            "chimera.preflight.fail",
+            "chimera.deploy.heal.intent",
+            "chimera.deploy.heal.applied",
+            "chimera.deploy.heal.rollback",
+            "deploy.preview.requested",
+            "deploy.preview.failed",
+            "deploy.preview.requeued",
             # Tools and runtime topics
             "firewall.threat",
             "firewall.analysis",

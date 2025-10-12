@@ -232,6 +232,15 @@ async def register_all_genesis_links():
         except Exception as e:
             logger.warning(f"Failed to register ARIE link: {e}")
         
+        # Chimera linkage (v1.9.6r)
+        try:
+            from .chimera_genesis_link import register
+            await register()
+            engines_registered.append("chimera")
+            genesis_introspection.update_health("chimera", True)
+        except Exception as e:
+            logger.warning(f"Failed to register Chimera link: {e}")
+        
         logger.info(f"✅ Genesis linkages registered: {', '.join(engines_registered)}")
         
         # Publish initialization complete event

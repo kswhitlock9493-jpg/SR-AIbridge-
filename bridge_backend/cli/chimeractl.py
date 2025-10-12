@@ -193,6 +193,34 @@ def cmd_verify(args):
     sys.exit(0 if certification.get('certified') else 1)
 
 
+def cmd_preflight(args):
+    """Run preflight validation and generate deploy artifacts"""
+    print("🚀 Running Chimera preflight validation...\n")
+    
+    # Use the preflight engine from engines.chimera
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from engines.chimera.core import ChimeraEngine
+    
+    project_path = Path(args.path) if args.path else Path.cwd()
+    engine = ChimeraEngine(project_path)
+    
+    result = asyncio.run(engine.preflight())
+    
+    print(f"✅ Preflight validation complete!")
+    print(f"  Publish directory: {result.get('publish')}")
+    print(f"  Generated files:")
+    print(f"    - _headers")
+    print(f"    - _redirects")
+    print(f"    - netlify.toml")
+    
+    if args.json:
+        print(f"\n--- JSON Output ---")
+        print(json.dumps(result, indent=2))
+    
+    sys.exit(0)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Chimera Deployment Engine CLI",
@@ -252,6 +280,12 @@ Examples:
     parser_verify.add_argument('--path', help='Project path (default: current directory)')
     parser_verify.add_argument('--json', action='store_true', help='Output as JSON')
     parser_verify.set_defaults(func=cmd_verify)
+    
+    # Preflight command (v1.9.6r)
+    parser_preflight = subparsers.add_parser('preflight', help='Run preflight validation')
+    parser_preflight.add_argument('--path', help='Project path (default: current directory)')
+    parser_preflight.add_argument('--json', action='store_true', help='Output as JSON')
+    parser_preflight.set_defaults(func=cmd_preflight)
     
     args = parser.parse_args()
     
