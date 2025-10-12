@@ -179,15 +179,19 @@ EnvScribe publishes to Genesis Bus:
 
 ### Published Events
 
-- `envscribe.scan.completed` — Scan finished successfully
-- `envscribe.audit.completed` — Full audit completed
-- `envscribe.certified` — Truth Engine certification received
+All EnvScribe events use the `genesis.echo` topic with distinct event types:
 
-### Subscribed Events
+- `ENVSCRIBE_SCAN_COMPLETE` — Scan finished successfully
+- `ENVSCRIBE_AUDIT_COMPLETE` — Full audit completed  
+- `ENVSCRIBE_CERTIFIED` — Truth Engine certification received
 
-- `deploy.platform.success` — Triggers re-scan after deployment
-- `envrecon.audit.completed` — Integrates EnvRecon verification data
-- `truth.certify.env` — Truth Engine certification requests
+### Event Integration
+
+EnvScribe integrates with the Genesis ecosystem through:
+
+- **genesis.echo** — Publishes audit completion and telemetry data
+- **genesis.heal** — Can trigger environment healing workflows
+- **deploy.platform.success** — Listens for deployment events (via EnvRecon)
 
 All results cascade into **Steward**, **ARIE**, and **HXO** for visibility and adaptive learning.
 

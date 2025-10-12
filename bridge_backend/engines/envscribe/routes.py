@@ -179,7 +179,7 @@ async def _notify_genesis_scan_complete(report: Any):
     try:
         from bridge_backend.genesis.bus import genesis_bus
         
-        await genesis_bus.publish("envscribe.scan.completed", {
+        await genesis_bus.publish("genesis.echo", {
             "type": "ENVSCRIBE_SCAN_COMPLETE",
             "source": "envscribe.core",
             "total_keys": report.summary.total_keys,
@@ -225,7 +225,7 @@ async def _request_truth_certification(report: Any) -> Dict[str, Any]:
             # Publish certification event to Genesis
             try:
                 from bridge_backend.genesis.bus import genesis_bus
-                await genesis_bus.publish("envscribe.certified", {
+                await genesis_bus.publish("genesis.echo", {
                     "type": "ENVSCRIBE_CERTIFIED",
                     "source": "truth.engine",
                     "certificate_id": result.get("certificate_id"),
