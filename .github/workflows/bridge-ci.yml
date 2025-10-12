@@ -37,3 +37,18 @@ jobs:
       - name: Success confirmation
         if: success()
         run: echo "✅ Bridge Integrity CI passed. Deployment may proceed."
+  
+  emit-incidents-on-fail:
+    if: ${{ failure() }}
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - name: Emit Netlify preview incident (if present)
+        run: |
+          curl -s -X POST "$API_BASE/api/autonomy/incident" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $AUTONOMY_API_TOKEN" \
+            -d '{"kind":"deploy.netlify.preview_failed","source":"github","details":{"run_id":"${{ github.run_id }}"}}' || true
+    env:
+      API_BASE: ${{ vars.PUBLIC_API_BASE || 'https://sr-aibridge.onrender.com' }}
+      AUTONOMY_API_TOKEN: ${{ secrets.AUTONOMY_API_TOKEN }}

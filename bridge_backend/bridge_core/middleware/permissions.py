@@ -28,6 +28,8 @@ ROLE_MATRIX = {
         "steward.read": True,  # Can read steward status
         "steward.cap.issue": True,  # Can issue capability tokens
         "steward.write": True,  # Can apply environment changes
+        "autonomy:operate": True,  # Can operate autonomy engine
+        "autonomy:configure": True,  # Can configure autonomy settings
     },
     "captain": {
         "admin": False,
@@ -72,7 +74,13 @@ class PermissionMiddleware(BaseHTTPMiddleware):
             class MockUser:
                 def __init__(self, uid):
                     self.id = uid
-                    self.role = "captain"  # default role
+                    # Determine role from user_id for testing
+                    if "admiral" in uid.lower():
+                        self.role = "admiral"
+                    elif "captain" in uid.lower():
+                        self.role = "captain"
+                    else:
+                        self.role = "captain"  # default role
                     self.project = None
             
             user = MockUser(user_id)
@@ -102,6 +110,14 @@ class PermissionMiddleware(BaseHTTPMiddleware):
                 return JSONResponse(
                     status_code=403,
                     content={"detail": "steward_admiral_only"}
+                )
+        
+        # Autonomy is Admiral-only
+        if request.url.path.startswith("/api/autonomy"):
+            if role != "admiral":
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "autonomy_admiral_only"}
                 )
 
         # Role-based gate
