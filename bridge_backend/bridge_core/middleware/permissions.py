@@ -119,6 +119,22 @@ class PermissionMiddleware(BaseHTTPMiddleware):
                     status_code=403,
                     content={"detail": "autonomy_admiral_only"}
                 )
+        
+        # Umbra Echo write operations are Admiral-only (v1.9.7d)
+        if request.url.path.startswith("/api/umbra/echo") and request.method in ["POST", "PUT", "DELETE"]:
+            if role != "admiral":
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "umbra_echo_admiral_only"}
+                )
+        
+        # Umbra repair/preventive operations are Admiral-only (v1.9.7d)
+        if request.url.path.startswith("/api/umbra/repair") or request.url.path.startswith("/api/umbra/predict/prevent"):
+            if role != "admiral":
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "umbra_repair_admiral_only"}
+                )
 
         # Role-based gate
         perms = ROLE_MATRIX.get(role, {})
