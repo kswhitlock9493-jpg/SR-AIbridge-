@@ -232,7 +232,7 @@ class HXONexus:
         
         for topic in topics:
             try:
-                await self._genesis_bus.subscribe(topic, self._handle_event)
+                self._genesis_bus.subscribe(topic, self._handle_event)
                 self._genesis_subscriptions.append(topic)
                 logger.debug(f"Subscribed to topic: {topic}")
             except Exception as e:
@@ -399,8 +399,16 @@ def get_nexus_instance() -> HXONexus:
     return _nexus_instance
 
 
-async def initialize_nexus():
-    """Initialize the global HXO Nexus instance"""
+async def initialize_nexus(bus=None):
+    """
+    Initialize the global HXO Nexus instance
+    
+    Args:
+        bus: Optional Genesis bus instance (not currently used, for future compatibility)
+    
+    Returns:
+        HXONexus: The initialized nexus instance
+    """
     nexus = get_nexus_instance()
     await nexus.initialize()
     return nexus

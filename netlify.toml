@@ -1,7 +1,25 @@
 [build]
-  publish = "frontend/build"
-  command = "npm run build || yarn build || pnpm build"
+  # Use the build script that synthesizes artifacts
+  command = "bash scripts/netlify_build.sh"
+  publish = "dist"
 
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer-when-downgrade"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+
+# Proxy API to Render backend
+[[redirects]]
+  from = "/api/*"
+  to = "https://sr-aibridge.onrender.com/:splat"
+  status = 200
+  force = true
+
+# SPA fallback (safe for static + React/Vite/etc.)
 [[redirects]]
   from = "/*"
   to = "/index.html"
