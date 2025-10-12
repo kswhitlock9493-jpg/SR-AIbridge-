@@ -41,21 +41,25 @@ async def run_all():
 
     # ARIE (config scan)
     try:
-        from bridge_backend.engines.arie.core import ARIEngine
+        from bridge_backend.engines.arie.core import ARIEEngine
         
-        ar = ARIEngine()
+        ar = ARIEEngine()
         cfg = await ar.scan_environment_config()
-        results["arie_config_scan"] = cfg.summary if hasattr(cfg, "summary") else str(cfg)
+        results["arie_config_scan"] = cfg.get("summary", str(cfg)) if hasattr(cfg, "get") else str(cfg)
     except Exception as e:
         results["arie_error"] = str(e)
 
     # Steward diff view materialization
     try:
-        from bridge_backend.engines.steward.core import StewardEngine
+        from bridge_backend.engines.steward.core import Steward
         
-        ste = StewardEngine()
-        await ste.render_env_diff_snapshot()
-        results["steward_env_viz"] = "ok"
+        ste = Steward()
+        # Check if the method exists before calling
+        if hasattr(ste, "render_env_diff_snapshot"):
+            await ste.render_env_diff_snapshot()
+            results["steward_env_viz"] = "ok"
+        else:
+            results["steward_env_viz"] = "method not found"
     except Exception as e:
         results["steward_error"] = str(e)
 
