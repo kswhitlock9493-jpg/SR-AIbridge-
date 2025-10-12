@@ -43,8 +43,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.6m",
-    description="v1.9.6m ARIE: Autonomous Repository Integrity Engine with Genesis + TDE-X + Cascade + Truth + Autonomy + Blueprint unified orchestration"
+    version="1.9.6w",
+    description="v1.9.6w engines_enable_true: Permanent Full Activation Protocol - All engines active under RBAC & Truth"
 )
 
 # === CORS ===
@@ -175,7 +175,7 @@ else:
     logger.info("[ENVSCRIBE] Disabled (set ENVSCRIBE_ENABLED=true to enable)")
 
 # Steward Engine v1.9.6l - Admiral-tier environment orchestration
-if os.getenv("STEWARD_ENABLED", "false").lower() == "true":
+if os.getenv("STEWARD_ENABLED", "true").lower() == "true":
     safe_include_router("bridge_backend.engines.steward.routes")
     logger.info("[STEWARD] v1.9.6l routes enabled - admiral-tier environment orchestration active")
 else:
@@ -203,7 +203,7 @@ else:
     logger.info("[HXO NEXUS] Disabled (set HXO_NEXUS_ENABLED=true to enable)")
 
 # HXO Engine v1.9.6n - Hypshard-X Orchestrator
-if os.getenv("HXO_ENABLED", "false").lower() == "true":
+if os.getenv("HXO_ENABLED", "true").lower() == "true":
     safe_include_router("bridge_backend.engines.hypshard_x.routes")
     logger.info("[HXO] v1.9.6n routes enabled - hypshard-x orchestrator active")
 else:
@@ -217,14 +217,14 @@ else:
     logger.info("[GENESIS] API routes disabled (set GENESIS_MODE=enabled to enable)")
 
 # Genesis Linkage: unified engine orchestration
-if os.getenv("LINK_ENGINES", "false").lower() == "true":
+if os.getenv("LINK_ENGINES", "true").lower() == "true":
     safe_include_router("bridge_backend.bridge_core.engines.routes_linked")
     logger.info("[LINKAGE] Engine linkage enabled")
 else:
     logger.info("[LINKAGE] Engine linkage disabled (set LINK_ENGINES=true to enable)")
 
 # Blueprint engine: gated and import-safe
-if os.getenv("BLUEPRINTS_ENABLED", "false").lower() == "true":
+if os.getenv("BLUEPRINTS_ENABLED", "true").lower() == "true":
     bp_mod = safe_import("bridge_backend.bridge_core.engines.blueprint.routes")
     if bp_mod and hasattr(bp_mod, "router"):
         try:
@@ -258,6 +258,17 @@ async def startup_event():
     from bridge_backend.runtime.port_guard import describe_port_env
     from bridge_backend.runtime.deploy_parity import deploy_parity_check
     from bridge_backend.runtime.temporal_deploy import tdb, TDB_ENABLED
+    
+    # === engines_enable_true: Permanent Full Activation Protocol ===
+    # Check if engines_enable_true flag is set (default: true)
+    if os.getenv("ENGINES_ENABLE_TRUE", "true").lower() == "true":
+        try:
+            from bridge_backend.genesis import activate_all_engines
+            logger.info("🚀 [GENESIS] engines_enable_true flag detected - activating all engines")
+            report = activate_all_engines()
+            logger.info(f"✅ [GENESIS] Engine activation complete: {report.engines_activated}/{report.engines_total} engines active")
+        except Exception as e:
+            logger.warning(f"⚠️ [GENESIS] Engine activation check failed (continuing): {e}")
     
     # === Genesis Bootstrap ===
     # Initialize Genesis framework if enabled
