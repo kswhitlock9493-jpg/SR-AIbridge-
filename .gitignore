@@ -166,3 +166,7 @@ bridge_backend/.queue/*
 
 bridge_backend/.genesis/tde_state.json
 .bridge/
+
+# v1.9.6x GitHub Environment Hook state (auto-generated)
+logs/github_envhook_state.json
+logs/github_envhook_triggers.log
