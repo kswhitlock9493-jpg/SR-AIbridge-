@@ -98,6 +98,13 @@ class GenesisEventBus:
             "registry.update",
             "registry.query",
             "doctrine.compliance",
+            # Umbra Cognitive Stack topics (v1.9.7d)
+            "umbra.anomaly.detected",
+            "umbra.pipeline.repaired",
+            "umbra.echo.recorded",
+            "umbra.memory.learned",
+            "truth.certify.cognitive",
+            "hxo.echo.sync",
             "doctrine.violation",
             # HXO Nexus topics for connectivity
             "hxo.nexus.initialized",
