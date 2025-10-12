@@ -52,7 +52,7 @@ class UmbraMemory:
         try:
             with open(MEMORY_FILE, 'w') as f:
                 json.dump({
-                    "version": "1.9.7d",
+                    "version": "1.9.7e",
                     "updated_at": datetime.now(timezone.utc).isoformat(),
                     "experiences": self.experiences
                 }, f, indent=2)
@@ -199,6 +199,65 @@ class UmbraMemory:
             "patterns": patterns,
             "learned_at": datetime.now(timezone.utc).isoformat()
         }
+    
+    async def record_netlify_event(self, event_type: str, data: Dict[str, Any], intent: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Record Netlify-related event with intent classification
+        
+        Args:
+            event_type: Type of event (e.g., 'config_edit', 'deploy', 'validation')
+            data: Event data
+            intent: Classified intent ('repair', 'optimize', 'bypass')
+            
+        Returns:
+            Memory entry
+        """
+        if not self.enabled:
+            return {"error": "Memory disabled"}
+        
+        # Auto-classify intent if not provided
+        if not intent:
+            intent = self._classify_netlify_intent(event_type, data)
+        
+        # Prepare Netlify-specific entry
+        netlify_data = {
+            **data,
+            "intent": intent,
+            "event_type": event_type
+        }
+        
+        # Record with netlify_event category
+        entry = await self.record("netlify_event", netlify_data)
+        
+        logger.info(f"🌐 Recorded Netlify {event_type} with intent: {intent}")
+        
+        return entry
+    
+    def _classify_netlify_intent(self, event_type: str, data: Dict[str, Any]) -> str:
+        """
+        Classify Netlify event intent
+        
+        Args:
+            event_type: Type of event
+            data: Event data
+            
+        Returns:
+            Classified intent: 'repair', 'optimize', 'bypass'
+        """
+        # Check for repair indicators
+        if "fix" in str(data).lower() or "repair" in str(data).lower():
+            return "repair"
+        
+        # Check for bypass indicators
+        if "skip" in str(data).lower() or "bypass" in str(data).lower():
+            return "bypass"
+        
+        # Check for validation failures (repair intent)
+        if data.get("status") == "failed" or data.get("error"):
+            return "repair"
+        
+        # Default to optimize for improvements
+        return "optimize"
     
     def get_metrics(self) -> Dict[str, Any]:
         """Get memory metrics"""

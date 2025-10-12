@@ -325,7 +325,7 @@ async def get_status():
     
     return {
         "status": "active",
-        "version": "1.9.7d",
+        "version": "1.9.7e",
         "engines": {
             "core": engines["core"].enabled,
             "memory": engines["memory"].enabled,
