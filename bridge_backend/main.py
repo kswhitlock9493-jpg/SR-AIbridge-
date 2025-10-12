@@ -43,8 +43,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.7d",
-    description="v1.9.7d Project Umbra Ascendant: Self-Healing, Self-Learning, Self-Reflective Intelligence"
+    version="1.9.7f",
+    description="v1.9.7f Cascade Synchrony: Universal Healing Protocol - Self-Healing, Self-Learning, Self-Reflective Intelligence"
 )
 
 # === CORS ===
@@ -254,9 +254,17 @@ safe_include_router("bridge_backend.routes.control")
 safe_include_router("bridge_backend.routes.diagnostics_timeline")  # Includes TDE-X deploy-parity
 safe_include_router("bridge_backend.routes.health")  # NEW: /health/ports, /health/runtime
 
+# Forge v1.9.7f - Cascade Synchrony routes
+if os.getenv("FORGE_MODE", "disabled").lower() == "enabled":
+    safe_include_router("bridge_backend.forge.routes")
+    logger.info("[FORGE] v1.9.7f routes enabled - Cascade Synchrony protocol active")
+else:
+    logger.info("[FORGE] Disabled (set FORGE_MODE=enabled to enable)")
+
 # Deployment webhook routes for autonomy engine integration
 safe_include_router("bridge_backend.webhooks.deployment_webhooks")
 logger.info("[WEBHOOKS] Deployment webhook routes enabled for autonomy integration")
+
 
 @app.on_event("startup")
 async def startup_event():
@@ -293,6 +301,19 @@ async def startup_event():
             logger.info("✅ Genesis framework initialized")
         except Exception as e:
             logger.warning(f"⚠️ Genesis initialization failed (continuing): {e}")
+    
+    # === Forge Integration Bootstrap ===
+    # Initialize GitHub Forge introspection and engine integration
+    if os.getenv("FORGE_MODE", "disabled").lower() == "enabled":
+        try:
+            from bridge_backend.forge import forge_integrate_engines
+            
+            logger.info("🔥 [Forge] Starting Cascade Synchrony integration")
+            result = forge_integrate_engines()
+            
+            logger.info(f"✅ [Forge] Integration complete: {result.get('integration_count', 0)} engines integrated")
+        except Exception as e:
+            logger.warning(f"⚠️ [Forge] Integration failed (continuing): {e}")
     
     # === HXO Nexus Bootstrap ===
     # Initialize HXO Nexus if enabled
