@@ -210,6 +210,13 @@ class GenesisEventBus:
             "deploy.tde.orchestrator.failed",
             # Autonomy tuning signal (v1.9.6q)
             "autonomy.tuning.signal",
+            # Autonomy Decision Layer topics (v1.9.6s)
+            "autonomy.heal.applied",
+            "autonomy.heal.error",
+            "autonomy.circuit.open",
+            "autonomy.circuit.closed",
+            "deploy.netlify.preview_failed",
+            "arie.deprecated.detected",
         }
         
         logger.info(f"🌌 Genesis Event Bus initialized (enabled={self._enabled}, strict={self._strict_policy})")

@@ -181,6 +181,13 @@ if os.getenv("ARIE_ENABLED", "true").lower() == "true":
 else:
     logger.info("[ARIE] Disabled (set ARIE_ENABLED=true to enable)")
 
+# Autonomy Decision Layer v1.9.6s - Self-healing CI/CD loop
+if os.getenv("AUTONOMY_ENABLED", "true").lower() == "true":
+    safe_include_router("bridge_backend.engines.autonomy.routes")
+    logger.info("[AUTONOMY] v1.9.6s routes enabled - autonomous decision layer active")
+else:
+    logger.info("[AUTONOMY] Disabled (set AUTONOMY_ENABLED=true to enable)")
+
 # HXO Nexus v1.9.6p - Central Harmonic Conductor
 if os.getenv("HXO_NEXUS_ENABLED", "true").lower() == "true":
     safe_include_router("bridge_backend.bridge_core.engines.hxo.routes")

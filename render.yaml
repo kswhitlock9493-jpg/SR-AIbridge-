@@ -6,8 +6,9 @@ services:
     plan: starter
     region: oregon
     buildCommand: "pip install -r requirements.txt"
-    preDeployCommand: "python3 -m bridge_backend.cli.chimeractl simulate --platform render --auto-heal || true"
+    preDeployCommand: "python3 -m bridge_backend.cli.chimeractl validate --fail-soft || true"
     startCommand: "uvicorn bridge_backend.main:app --host 0.0.0.0 --port $PORT"
+    postDeployCommand: "python3 -m bridge_backend.engines.envrecon.cli audit --emit || true"
     autoDeploy: true
     healthCheckPath: /health/live
     healthCheckInterval: 10
@@ -57,6 +58,15 @@ services:
       - key: CHIMERA_SIM_TIMEOUT
         value: "300"
       - key: CHIMERA_HEAL_MAX_ATTEMPTS
+        value: "3"
+      # Autonomy Decision Layer (v1.9.6s)
+      - key: AUTONOMY_ENABLED
+        value: "true"
+      - key: AUTONOMY_MAX_ACTIONS_PER_HOUR
+        value: "6"
+      - key: AUTONOMY_COOLDOWN_MINUTES
+        value: "5"
+      - key: AUTONOMY_FAIL_STREAK_TRIP
         value: "3"
       # HEARTBEAT_URL will auto-detect from RENDER_EXTERNAL_URL; leave unset
 
