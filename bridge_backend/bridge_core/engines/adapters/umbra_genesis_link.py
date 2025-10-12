@@ -1,6 +1,6 @@
 """
 Umbra Genesis Link Adapter
-Subscribes Umbra Lattice to Genesis event topics
+Subscribes Umbra Lattice and Triage Mesh to Genesis event topics
 """
 
 import logging
@@ -8,6 +8,148 @@ from typing import Dict, Any
 from datetime import datetime, UTC
 
 logger = logging.getLogger(__name__)
+
+# Global instances
+umbra_triage_core = None
+
+
+async def register_umbra_triage():
+    """
+    Register Umbra Triage Mesh with Genesis bus
+    Handles triage signal topics and heal coordination
+    """
+    global umbra_triage_core
+    
+    try:
+        from bridge_backend.genesis.bus import genesis_bus
+        from bridge_backend.engines.umbra.core import UmbraTriageCore
+        
+        if not genesis_bus.is_enabled():
+            logger.info("[Umbra Triage Genesis Link] Genesis bus disabled")
+            return
+        
+        umbra_triage_core = UmbraTriageCore()
+        
+        if not umbra_triage_core.enabled:
+            logger.info("[Umbra Triage Genesis Link] Umbra Triage disabled")
+            return
+        
+        # Subscribe to triage signal topics
+        await genesis_bus.subscribe("triage.signal.build", on_build_signal)
+        await genesis_bus.subscribe("triage.signal.deploy", on_deploy_signal)
+        await genesis_bus.subscribe("triage.signal.runtime", on_runtime_signal)
+        await genesis_bus.subscribe("triage.signal.api", on_api_signal)
+        await genesis_bus.subscribe("triage.signal.webhook", on_webhook_signal)
+        
+        # Subscribe to heal events
+        await genesis_bus.subscribe("genesis.heal", on_heal_request)
+        
+        # Subscribe to deploy failure events
+        await genesis_bus.subscribe("deploy.preview.failed", on_deploy_failed)
+        await genesis_bus.subscribe("deploy.signals", on_deploy_event)
+        
+        logger.info("✅ Umbra Triage Mesh registered with Genesis")
+        
+    except Exception as e:
+        logger.error(f"❌ Failed to register Umbra Triage: {e}")
+
+
+async def on_build_signal(event: Dict[str, Any]):
+    """Handle build signal"""
+    if umbra_triage_core:
+        await umbra_triage_core.ingest_signal({
+            "kind": "build",
+            "source": event.get("source", "unknown"),
+            "message": event.get("message", "Build signal"),
+            "severity": event.get("severity", "info"),
+            "metadata": event.get("metadata", {})
+        })
+
+
+async def on_deploy_signal(event: Dict[str, Any]):
+    """Handle deploy signal"""
+    if umbra_triage_core:
+        await umbra_triage_core.ingest_signal({
+            "kind": "deploy",
+            "source": event.get("source", "unknown"),
+            "message": event.get("message", "Deploy signal"),
+            "severity": event.get("severity", "info"),
+            "metadata": event.get("metadata", {})
+        })
+
+
+async def on_runtime_signal(event: Dict[str, Any]):
+    """Handle runtime signal"""
+    if umbra_triage_core:
+        await umbra_triage_core.ingest_signal({
+            "kind": "runtime",
+            "source": event.get("source", "unknown"),
+            "message": event.get("message", "Runtime signal"),
+            "severity": event.get("severity", "info"),
+            "metadata": event.get("metadata", {})
+        })
+
+
+async def on_api_signal(event: Dict[str, Any]):
+    """Handle API signal"""
+    if umbra_triage_core:
+        await umbra_triage_core.ingest_signal({
+            "kind": "api",
+            "source": event.get("source", "unknown"),
+            "message": event.get("message", "API signal"),
+            "severity": event.get("severity", "info"),
+            "metadata": event.get("metadata", {})
+        })
+
+
+async def on_webhook_signal(event: Dict[str, Any]):
+    """Handle webhook signal"""
+    if umbra_triage_core:
+        await umbra_triage_core.ingest_signal({
+            "kind": "webhook",
+            "source": event.get("source", "unknown"),
+            "message": event.get("message", "Webhook signal"),
+            "severity": event.get("severity", "info"),
+            "metadata": event.get("metadata", {})
+        })
+
+
+async def on_heal_request(event: Dict[str, Any]):
+    """Handle heal request"""
+    if umbra_triage_core:
+        await umbra_triage_core.ingest_signal({
+            "kind": "runtime",
+            "source": event.get("subsystem", "unknown"),
+            "message": f"Heal request from {event.get('subsystem', 'unknown')}",
+            "severity": "warning",
+            "metadata": {"heal_request": True, "error": event.get("error", {})}
+        })
+
+
+async def on_deploy_failed(event: Dict[str, Any]):
+    """Handle deploy failure"""
+    if umbra_triage_core:
+        await umbra_triage_core.ingest_signal({
+            "kind": "deploy",
+            "source": event.get("platform", "unknown"),
+            "message": f"Deploy failed: {event.get('reason', 'unknown')}",
+            "severity": "critical",
+            "metadata": event
+        })
+
+
+async def on_deploy_event(event: Dict[str, Any]):
+    """Handle general deploy events"""
+    if umbra_triage_core:
+        event_type = event.get("type", "")
+        if "fail" in event_type.lower() or "error" in event_type.lower():
+            await umbra_triage_core.ingest_signal({
+                "kind": "deploy",
+                "source": event.get("source", "unknown"),
+                "message": f"Deploy event: {event_type}",
+                "severity": "critical" if "fail" in event_type.lower() else "warning",
+                "metadata": event
+            })
 
 
 async def subscribe_umbra_to_genesis():

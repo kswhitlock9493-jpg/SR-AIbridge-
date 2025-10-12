@@ -265,6 +265,18 @@ else:
 safe_include_router("bridge_backend.webhooks.deployment_webhooks")
 logger.info("[WEBHOOKS] Deployment webhook routes enabled for autonomy integration")
 
+# Umbra Triage Mesh webhook routes (v1.9.7k)
+if os.getenv("UMBRA_ENABLED", "true").lower() == "true":
+    safe_include_router("bridge_backend.webhooks.render")
+    safe_include_router("bridge_backend.webhooks.netlify")
+    safe_include_router("bridge_backend.webhooks.github")
+    logger.info("[WEBHOOKS] Umbra triage webhook routes enabled (Render, Netlify, GitHub)")
+
+# Umbra Triage Mesh routes (v1.9.7k)
+if os.getenv("UMBRA_ENABLED", "true").lower() == "true":
+    safe_include_router("bridge_backend.engines.umbra.routes")
+    logger.info("[UMBRA TRIAGE] v1.9.7k routes enabled - unified triage mesh active")
+
 
 @app.on_event("startup")
 async def startup_event():
