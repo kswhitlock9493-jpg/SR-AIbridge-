@@ -1,18 +1,45 @@
 """
 HXO Autonomy Link Adapter
 Connects HXO to Autonomy engine for self-healing and auto-tuning
+v1.9.6q - Decoupled signal-based implementation (no direct imports)
 """
 
+from __future__ import annotations
 import logging
-from typing import Dict, Any
-from datetime import datetime, UTC
+from ...utils.async_tools import maybe_await
 
 logger = logging.getLogger(__name__)
 
+AUTONOMY_TUNE_TOPIC = "autonomy.tuning.signal"
 
-async def notify_autotune_signal(signal_data: Dict[str, Any]):
+class HXOAutonomyLink:
+    def __init__(self, bus, hxo):
+        self.bus = bus
+        self.hxo = hxo
+        self._wired = False
+
+    async def wire(self) -> None:
+        if self._wired:
+            return
+        # forward HXO's internal autotune pulses to Genesis
+        await maybe_await(self.hxo.on_autotune(self._emit_tune))
+        self._wired = True
+        logger.info("[HXO-Autonomy Link] ✅ Link established (signal via Genesis topic)")
+
+    async def _emit_tune(self, payload: dict) -> None:
+        await maybe_await(self.bus.publish(AUTONOMY_TUNE_TOPIC, {
+            "type": "AUTONOMY_TUNE",
+            "source": "hxo",
+            "payload": payload,
+        }))
+
+
+# Legacy function-based API kept for backward compatibility
+async def notify_autotune_signal(signal_data: dict):
     """
     Notify Autonomy of auto-tune signals from HXO.
+    
+    DEPRECATED: Use HXOAutonomyLink class instead.
     
     Args:
         signal_data: Auto-tune signal data
@@ -23,6 +50,7 @@ async def notify_autotune_signal(signal_data: Dict[str, Any]):
             - suggested_action: Suggested corrective action
     """
     try:
+        from datetime import datetime, UTC
         from bridge_backend.genesis.bus import genesis_bus
         
         if not genesis_bus.is_enabled():
@@ -53,6 +81,7 @@ async def request_healing(plan_id: str, stage_id: str, reason: str):
         reason: Reason for healing request
     """
     try:
+        from datetime import datetime, UTC
         from bridge_backend.genesis.bus import genesis_bus
         
         if not genesis_bus.is_enabled():
@@ -100,7 +129,7 @@ async def notify_shard_hotspot(plan_id: str, stage_id: str, cas_id: str, latency
         logger.error(f"[HXO Autonomy Link] Failed to notify shard hotspot: {e}")
 
 
-async def apply_tuning_recommendation(recommendation: Dict[str, Any]) -> bool:
+async def apply_tuning_recommendation(recommendation: dict) -> bool:
     """
     Apply tuning recommendation from Autonomy.
     
@@ -132,3 +161,4 @@ async def apply_tuning_recommendation(recommendation: Dict[str, Any]) -> bool:
     except Exception as e:
         logger.error(f"[HXO Autonomy Link] Failed to apply tuning recommendation: {e}")
         return False
+
