@@ -155,6 +155,11 @@ bridge_backend/diagnostics/archive/
 bridge_backend/diagnostics/temporal_deploy/*
 bridge_backend/diagnostics/runtime_stage.json
 
+# v1.9.6u EnvScribe generated files (auto-generated)
+bridge_backend/diagnostics/envscribe_*.env
+bridge_backend/diagnostics/envscribe_*.txt
+bridge_backend/diagnostics/envscribe_report.json
+
 # v1.9.7a TDE-X queue and runtime state (auto-generated)
 bridge_backend/.queue/*
 !bridge_backend/.queue/.gitkeep
