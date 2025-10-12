@@ -43,6 +43,13 @@ class Settings:
     AUTO_DIAGNOSE: bool = os.getenv("AUTO_DIAGNOSE", "true").lower() == "true"
     DIAGNOSE_WEBHOOK_URL: str = os.getenv("DIAGNOSE_WEBHOOK_URL", "")
     
+    # Engine Enable Flags (v1.9.6r - Autonomous engines enabled by default)
+    ARIE_ENABLED: bool = os.getenv("ARIE_ENABLED", "true").lower() == "true"
+    ENVRECON_ENABLED: bool = os.getenv("ENVRECON_ENABLED", "true").lower() == "true"
+    STEWARD_ENABLED: bool = os.getenv("STEWARD_ENABLED", "true").lower() == "true"
+    CHIMERA_ENABLED: bool = os.getenv("CHIMERA_ENABLED", "true").lower() == "true"
+    HXO_ENABLED: bool = os.getenv("HXO_ENABLED", "true").lower() == "true"
+    
     # CORS Configuration
     CORS_ALLOW_ALL: bool = os.getenv("CORS_ALLOW_ALL", "false").lower() == "true"
     ALLOWED_ORIGINS: List[str] = os.getenv(
