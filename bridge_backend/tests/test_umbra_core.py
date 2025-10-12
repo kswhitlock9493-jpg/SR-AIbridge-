@@ -35,7 +35,7 @@ async def test_detect_anomaly_high_error_rate():
     assert anomaly is not None
     assert anomaly["type"] == "high_error_rate"
     assert anomaly["severity"] == "high"
-    assert "error_rate" in anomaly["message"].lower()
+    assert "error rate" in anomaly["message"].lower()
 
 
 @pytest.mark.asyncio

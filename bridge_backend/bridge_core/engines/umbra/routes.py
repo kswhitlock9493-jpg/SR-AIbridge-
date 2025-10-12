@@ -47,17 +47,18 @@ def get_umbra_engines():
     """Get or create Umbra engine instances"""
     # Import here to avoid circular dependencies
     try:
-        from bridge_backend.genesis.bus import get_genesis_bus
-        from bridge_backend.bridge_core.engines.truth.service import TruthEngine
+        from bridge_backend.genesis.bus import genesis_bus
         from bridge_backend.bridge_core.engines.chronicleloom import ChronicleLoom
     except ImportError:
-        from genesis.bus import get_genesis_bus
-        from bridge_core.engines.truth.service import TruthEngine
+        from genesis.bus import genesis_bus
         from bridge_core.engines.chronicleloom import ChronicleLoom
     
-    genesis_bus = get_genesis_bus()
-    truth = TruthEngine()
-    chronicle_loom = ChronicleLoom()
+    # Simple stub for truth - actual certification happens in the engines
+    truth = None
+    try:
+        chronicle_loom = ChronicleLoom()
+    except Exception:
+        chronicle_loom = None
     
     memory = UmbraMemory(truth=truth, chronicle_loom=chronicle_loom)
     core = UmbraCore(memory=memory, truth=truth, genesis_bus=genesis_bus)

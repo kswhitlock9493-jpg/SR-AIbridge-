@@ -43,8 +43,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.6w",
-    description="v1.9.6w engines_enable_true: Permanent Full Activation Protocol - All engines active under RBAC & Truth"
+    version="1.9.7d",
+    description="v1.9.7d Project Umbra Ascendant: Self-Healing, Self-Learning, Self-Reflective Intelligence"
 )
 
 # === CORS ===
@@ -201,6 +201,13 @@ if os.getenv("HXO_NEXUS_ENABLED", "true").lower() == "true":
     logger.info("[HXO NEXUS] v1.9.6p routes enabled - central harmonic conductor active")
 else:
     logger.info("[HXO NEXUS] Disabled (set HXO_NEXUS_ENABLED=true to enable)")
+
+# Umbra Cognitive Stack v1.9.7d - Self-Healing, Self-Learning Intelligence
+if os.getenv("UMBRA_ENABLED", "true").lower() == "true":
+    safe_include_router("bridge_backend.bridge_core.engines.umbra.routes")
+    logger.info("[UMBRA] v1.9.7d routes enabled - cognitive stack active (Core, Memory, Predictive, Echo)")
+else:
+    logger.info("[UMBRA] Disabled (set UMBRA_ENABLED=true to enable)")
 
 # HXO Engine v1.9.6n - Hypshard-X Orchestrator
 if os.getenv("HXO_ENABLED", "true").lower() == "true":

@@ -59,18 +59,40 @@ async def test_predict_issue_with_patterns():
 @pytest.mark.asyncio
 async def test_predict_issue_no_patterns():
     """Test prediction with no learned patterns"""
-    memory = UmbraMemory()
-    predictive = UmbraPredictive(memory=memory)
+    # Create a fresh memory with no data
+    import tempfile
+    import os
+    from pathlib import Path
     
-    telemetry = {
-        "error_rate": 0.05,
-        "response_time": 100
-    }
+    # Use a temporary file for this test
+    temp_dir = tempfile.mkdtemp()
+    temp_memory_file = Path(temp_dir) / "test_memory.json"
     
-    prediction = await predictive.predict_issue(telemetry)
+    # Temporarily override the memory file path
+    from bridge_backend.bridge_core.engines.umbra import memory as memory_module
+    original_path = memory_module.MEMORY_FILE
+    memory_module.MEMORY_FILE = temp_memory_file
     
-    # Should return None with no patterns
-    assert prediction is None
+    try:
+        memory = UmbraMemory()
+        predictive = UmbraPredictive(memory=memory)
+        
+        telemetry = {
+            "error_rate": 0.05,
+            "response_time": 100
+        }
+        
+        prediction = await predictive.predict_issue(telemetry)
+        
+        # Should return None with no patterns
+        assert prediction is None
+    finally:
+        # Restore original path
+        memory_module.MEMORY_FILE = original_path
+        # Cleanup
+        if temp_memory_file.exists():
+            os.remove(temp_memory_file)
+        os.rmdir(temp_dir)
 
 
 @pytest.mark.asyncio
