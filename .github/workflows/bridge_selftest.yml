@@ -1,0 +1,53 @@
+name: Bridge Autonomy Diagnostic Pulse
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 */72 * * *"  # every 72 hours
+  workflow_dispatch:  # manual trigger
+
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+
+jobs:
+  run-bridge-selftest:
+    name: Run Bridge Self-Test + Auto-Heal
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🧩 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 📦 Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 🧠 Run Self-Test Diagnostic Pulse
+        run: |
+          echo "Initiating Bridge Autonomy Diagnostic Pulse..."
+          python3 -m bridge_backend.cli.genesisctl self_test_full --heal
+        env:
+          ENGINES_ENABLE_TRUE: "true"
+          RBAC_ENFORCED: "true"
+          TRUTH_CERTIFICATION: "true"
+          AUTO_HEAL_ON: "true"
+          GENESIS_MODE: "enabled"
+          SELFTEST_ENABLED: "true"
+
+      - name: 🧾 Upload Diagnostic Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bridge_selftest_report
+          path: bridge_backend/logs/selftest_reports/
+          retention-days: 30

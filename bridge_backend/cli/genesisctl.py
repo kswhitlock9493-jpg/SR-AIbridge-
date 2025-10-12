@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from engines.envrecon.core import EnvReconEngine
 from engines.envrecon.hubsync import hubsync
 from engines.envrecon.autoheal import autoheal
+from engines.selftest.core import SelfTestController
 
 
 async def cmd_env_audit():
@@ -275,6 +276,48 @@ def cmd_engines_status():
         return 1
 
 
+async def cmd_self_test_full(heal: bool = True):
+    """Run full Bridge self-test diagnostic pulse"""
+    print("🧠 Bridge Autonomy Diagnostic Pulse")
+    print("=" * 80)
+    
+    try:
+        controller = SelfTestController()
+        report = await controller.run_full_test(heal=heal)
+        
+        # Print summary
+        summary = report.get("summary", {})
+        print(f"\n📊 Test Results:")
+        print(f"  Status: {summary.get('status', 'Unknown')}")
+        print(f"  Total Engines: {summary.get('engines_total', 0)}")
+        print(f"  Verified: {summary.get('engines_verified', 0)}")
+        print(f"  Auto-Heal Invocations: {summary.get('autoheal_invocations', 0)}")
+        print(f"  Runtime: {summary.get('runtime_ms', 0)} ms")
+        
+        # Print events
+        events = report.get("events", [])
+        if events:
+            print(f"\n📋 Events:")
+            for event in events[:10]:  # Show first 10 events
+                engine = event.get("engine", "Unknown")
+                action = event.get("action", "Unknown")
+                result = event.get("result", "Unknown")
+                print(f"  {result} {engine}: {action}")
+            
+            if len(events) > 10:
+                print(f"  ... and {len(events) - 10} more events")
+        
+        print(f"\n📄 Full report saved to: {controller.logs_dir / 'latest.json'}")
+        
+        return 0 if summary.get('status') == 'Stable' else 1
+        
+    except Exception as e:
+        print(f"❌ Self-test failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
+
+
 def main():
     """Main CLI entry point"""
     parser = argparse.ArgumentParser(
@@ -290,6 +333,14 @@ def main():
     # engines_status command
     subparsers.add_parser('engines_status',
                          help='Get current activation status of all engines')
+    
+    # self_test_full command
+    selftest_parser = subparsers.add_parser('self_test_full',
+                                            help='Run full Bridge self-test diagnostic pulse')
+    selftest_parser.add_argument('--heal', action='store_true', default=True,
+                                help='Enable auto-healing (default: true)')
+    selftest_parser.add_argument('--no-heal', dest='heal', action='store_false',
+                                help='Disable auto-healing')
     
     # env command
     env_parser = subparsers.add_parser('env', help='Environment management commands')
@@ -321,6 +372,8 @@ def main():
         return cmd_engines_enable_true()
     elif args.command == 'engines_status':
         return cmd_engines_status()
+    elif args.command == 'self_test_full':
+        return asyncio.run(cmd_self_test_full(args.heal))
     elif args.command == 'env':
         if args.env_command == 'audit':
             return asyncio.run(cmd_env_audit())

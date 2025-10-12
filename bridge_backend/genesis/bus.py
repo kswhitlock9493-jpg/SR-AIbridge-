@@ -148,6 +148,11 @@ class GenesisEventBus:
             "chimera.preflight.ok",
             "chimera.preflight.fail",
             "chimera.deploy.heal.intent",
+            # Self-Test Diagnostic Pulse topics (v1.9.7j)
+            "selftest.run.start",
+            "selftest.run.complete",
+            "selftest.autoheal.trigger",
+            "selftest.autoheal.complete",
             "chimera.deploy.heal.applied",
             "chimera.deploy.heal.rollback",
             "deploy.preview.requested",
