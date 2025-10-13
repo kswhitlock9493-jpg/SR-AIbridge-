@@ -265,3 +265,54 @@ def get_activation_status() -> Dict[str, Any]:
             status["summary"]["inactive"] += 1
     
     return status
+
+
+# ------------------------------------------------------------
+# Reflex Loop Protocol Announcer (v1.9.7o)
+# ------------------------------------------------------------
+
+def announce_reflex_start():
+    """
+    Announce Reflex Loop Protocol activation to Genesis Bus.
+    
+    This function broadcasts the startup of the Autonomy Node Reflex Protocol,
+    allowing other engines (Truth, Cascade, Steward) to detect and record the
+    cycle start.
+    """
+    from datetime import datetime, timezone
+    
+    timestamp = datetime.now(timezone.utc).isoformat()
+    message = f"[{timestamp}] 🧠 Autonomy Node Reflex Protocol: Active and Self-Publishing"
+    
+    logger.info(message)
+    print(message)
+    
+    try:
+        from bridge_backend.genesis.bus import genesis_bus
+        import asyncio
+        
+        event_data = {
+            "timestamp": timestamp,
+            "status": "active",
+            "context": "self-publishing reflex node online"
+        }
+        
+        # Publish asynchronously (best effort)
+        try:
+            loop = asyncio.get_event_loop()
+            if loop.is_running():
+                asyncio.create_task(genesis_bus.publish("autonomy.reflex.startup", event_data))
+            else:
+                asyncio.run(genesis_bus.publish("autonomy.reflex.startup", event_data))
+        except RuntimeError:
+            # No event loop available, skip publishing
+            pass
+    except Exception as e:
+        logger.warning(f"Reflex announcement bus publish failed: {e}")
+
+
+# Call the announcement on module load (when Genesis activates)
+try:
+    announce_reflex_start()
+except Exception as e:
+    logger.debug(f"[GENESIS] Could not announce reflex startup: {e}")

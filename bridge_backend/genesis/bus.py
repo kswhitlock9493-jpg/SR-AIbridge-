@@ -58,6 +58,10 @@ class GenesisEventBus:
             # Parity topics for autonomy integration
             "parity.check",
             "parity.autofix",
+            # Autonomy topics for reflex loop
+            "autonomy.reflex.startup",
+            "autonomy.reflex.pr_created",
+            "autonomy.reflex.pr_queued",
             # Super Engines topics for autonomy integration
             "scrolltongue.analysis",
             "scrolltongue.translation", 
