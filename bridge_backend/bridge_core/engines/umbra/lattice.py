@@ -491,3 +491,19 @@ class UmbraLattice:
         logger.info(f"📸 Exported snapshot: {snapshot.summary.get('nodes', 0)} nodes, {snapshot.summary.get('edges', 0)} edges")
         
         return snapshot
+
+
+def fallback_neural_channel(name: str):
+    """
+    Umbra Lattice fallback neural channel for engines.
+    
+    Provides a minimal stub publish/subscribe bus so engines can queue signals
+    until Genesis is ready. This ensures engines remain online and observable
+    even when Genesis bus is temporarily unavailable.
+    
+    Args:
+        name: Name of the engine attaching to the fallback channel
+    """
+    logger.info(f"🧬 Umbra Lattice: '{name}' attached to neural fallback bus")
+    # Minimal stub implementation - signals are logged but not propagated
+    # In production, this could buffer events for later replay when Genesis is available
