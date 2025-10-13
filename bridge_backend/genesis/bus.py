@@ -259,6 +259,13 @@ class GenesisEventBus:
             "sanctum.predeploy.failure",
             "forge.repair.applied",
             "elysium.cycle.complete",
+            # Embedded Autonomy Node topics (v1.9.7n)
+            "genesis.node.register",
+            "genesis.autonomy_node.report",
+            "autonomy_node.scan.complete",
+            "autonomy_node.repair.applied",
+            "autonomy_node.truth.verified",
+            "autonomy_node.cascade.synced",
         }
         
         logger.info(f"🌌 Genesis Event Bus initialized (enabled={self._enabled}, strict={self._strict_policy})")

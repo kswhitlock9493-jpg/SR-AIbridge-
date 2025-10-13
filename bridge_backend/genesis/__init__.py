@@ -11,6 +11,7 @@ from .manifest import GenesisManifest
 from .introspection import GenesisIntrospection
 from .orchestration import GenesisOrchestrator
 from .activation import activate_all_engines, get_activation_status, ActivationReport
+from .registration import register_embedded_nodes
 
 __all__ = [
     "GenesisEventBus",
@@ -21,4 +22,5 @@ __all__ = [
     "activate_all_engines",
     "get_activation_status",
     "ActivationReport",
+    "register_embedded_nodes",
 ]
