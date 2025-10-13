@@ -60,6 +60,9 @@ The Sanctum Cascade Protocol is a five-layer defense system designed to make dep
 - Creates minimal `public/` folder if none exist
 - Sets `NETLIFY_PUBLISH_PATH` environment variable
 
+**Health Check API:**
+- `GET /api/guards/netlify/status` - Returns publish path and token configuration status
+
 ### 2. Deferred Integrity
 
 **Location:** `bridge_backend/bridge_core/integrity/deferred.py`
@@ -71,6 +74,9 @@ The Sanctum Cascade Protocol is a five-layer defense system designed to make dep
 - Allows Reflex/Umbra/Genesis to finish bootstrapping
 - Then runs integrity checks
 
+**Health Check API:**
+- `GET /api/guards/integrity/status` - Returns defer configuration status
+
 ### 3. Umbra Auto-Heal Linker
 
 **Location:** `bridge_backend/bridge_core/engines/umbra/autoheal_link.py`
@@ -81,6 +87,20 @@ The Sanctum Cascade Protocol is a five-layer defense system designed to make dep
 - Attempts to link to Genesis bus with bounded retry
 - Uses exponential backoff between retries
 - Returns `True` on success, `False` after exhausting retries
+
+**Health Check API:**
+- `GET /api/guards/umbra/status` - Returns Genesis bus connectivity status
+
+### 4. Guard Status Routes
+
+**Location:** `bridge_backend/bridge_core/guards/routes.py`
+
+**Endpoints:**
+- `GET /api/guards/status` - Overall guard system status
+- `GET /api/guards/health` - Simple health check (healthy/degraded)
+- `GET /api/guards/netlify/status` - Netlify guard details
+- `GET /api/guards/integrity/status` - Integrity guard details
+- `GET /api/guards/umbra/status` - Umbra link details
 
 ---
 
@@ -100,6 +120,67 @@ This order ensures:
 - No missing token errors
 - No race conditions between validators
 - No cold-boot Genesis link failures
+
+---
+
+## Monitoring and Health Checks
+
+The Sanctum Cascade Protocol includes built-in health check endpoints for monitoring guard status:
+
+### Quick Health Check
+
+```bash
+curl http://localhost:8000/api/guards/health
+```
+
+Response:
+```json
+{
+  "status": "healthy",
+  "guards": {
+    "netlify_guard": {
+      "enabled": true,
+      "publish_path": "dist",
+      "path_exists": true,
+      "token_configured": true,
+      "status": "ok"
+    },
+    "integrity_guard": {
+      "enabled": true,
+      "defer_seconds": 3.0,
+      "status": "ok"
+    },
+    "umbra_link": {
+      "enabled": true,
+      "genesis_enabled": true,
+      "umbra_enabled": true,
+      "bus_accessible": true,
+      "status": "ok"
+    }
+  }
+}
+```
+
+### Individual Guard Status
+
+```bash
+# Netlify Guard
+curl http://localhost:8000/api/guards/netlify/status
+
+# Integrity Guard
+curl http://localhost:8000/api/guards/integrity/status
+
+# Umbra Link
+curl http://localhost:8000/api/guards/umbra/status
+```
+
+### Integration with Monitoring Systems
+
+The health endpoints can be integrated with:
+- **Prometheus** - Scrape `/api/guards/health` for metrics
+- **Datadog** - Use synthetic monitoring on health endpoints
+- **New Relic** - Custom health check dashboard
+- **PagerDuty** - Alert on degraded status
 
 ---
 
