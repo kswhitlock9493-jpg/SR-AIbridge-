@@ -34,6 +34,8 @@ SR-AIbridge is a comprehensive, production-ready platform for managing AI agents
 [![Bridge Parity](https://img.shields.io/badge/Bridge_Parity-Active-blue)](docs/BRIDGE_PARITY_ENGINE.md)
 [![Diagnostics Federation](https://img.shields.io/badge/Diagnostics-Federated-purple)](docs/HEALER_NET.md)
 
+![Bridge Health](docs/badges/bridge_health.svg)
+
 ## ✨ What is SR-AIbridge?
 
 SR-AIbridge provides a complete tactical command system for coordinating AI agents and autonomous operations. Whether you're managing a fleet of AI agents, tracking complex missions, or monitoring system health in real-time, SR-AIbridge offers the tools and infrastructure you need.

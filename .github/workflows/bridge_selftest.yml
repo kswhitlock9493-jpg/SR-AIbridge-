@@ -86,6 +86,28 @@ jobs:
             --out-md bridge_backend/logs/selftest_reports/summary.md \
             --out-json bridge_backend/logs/selftest_reports/summary.json
 
+      - name: 📊 Generate & Publish Health Record
+        if: always()
+        run: |
+          echo "Generating Bridge Health Record..."
+          python3 bridge_backend/metrics/health_record.py \
+            --selftest bridge_backend/logs/selftest_reports/latest.json \
+            --umbra bridge_backend/logs/umbra_reports/latest.json \
+            --output-dir bridge_backend/logs/health_history/
+          
+          echo "Generating Health Badge..."
+          python3 bridge_backend/cli/badgegen.py \
+            --input bridge_backend/logs/health_history/latest.json \
+            --out-md docs/badges/bridge_health.md \
+            --out-svg docs/badges/bridge_health.svg
+
+      - name: 🚀 Commit Updated Badge
+        if: always()
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update Bridge Health badge [auto]"
+          file_pattern: docs/badges/bridge_health.*
+
       - name: 💬 Comment Health on PR
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
