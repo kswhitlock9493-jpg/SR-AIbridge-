@@ -173,3 +173,10 @@ logs/github_envhook_triggers.log
 
 # v1.9.7g Umbra Lattice Memory (auto-generated)
 .umbra/
+
+# v1.9.7l Bridge Health History (auto-generated, keep latest only)
+bridge_backend/logs/health_history/*.json
+bridge_backend/logs/health_history/*.json.gz
+!bridge_backend/logs/health_history/latest.json
+!bridge_backend/logs/health_history/latest.md
+
