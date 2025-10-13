@@ -180,3 +180,6 @@ bridge_backend/logs/health_history/*.json.gz
 !bridge_backend/logs/health_history/latest.json
 !bridge_backend/logs/health_history/latest.md
 
+
+# Autonomy Node Reports (generated artifacts)
+.github/autonomy_node/reports/
