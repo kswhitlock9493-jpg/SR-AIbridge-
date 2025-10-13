@@ -254,6 +254,11 @@ class GenesisEventBus:
             "env.audit",
             "env.heal.intent",
             "env.heal.applied",
+            # Total Autonomy Protocol topics (v1.9.7m)
+            "sanctum.predeploy.success",
+            "sanctum.predeploy.failure",
+            "forge.repair.applied",
+            "elysium.cycle.complete",
         }
         
         logger.info(f"🌌 Genesis Event Bus initialized (enabled={self._enabled}, strict={self._strict_policy})")
