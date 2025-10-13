@@ -314,6 +314,15 @@ async def startup_event():
         except Exception as e:
             logger.warning(f"⚠️ Genesis initialization failed (continuing): {e}")
     
+    # === Chimera Genesis Recovery ===
+    # Safe initialization with retry and fallback for Chimera
+    try:
+        from bridge_backend.bridge_core.engines.hxo import safe_init as chimera_safe_init
+        chimera_safe_init()
+        logger.info("✅ Chimera safe initialization complete")
+    except Exception as e:
+        logger.warning(f"⚠️ Chimera safe init failed (continuing): {e}")
+    
     # === Forge Integration Bootstrap ===
     # Initialize GitHub Forge introspection and engine integration
     if os.getenv("FORGE_MODE", "disabled").lower() == "enabled":
