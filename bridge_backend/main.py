@@ -26,6 +26,40 @@ logger.info(f"[BOOT] Detected host environment: {HOST_PLATFORM}")
 # Ensures the app finds local modules even under Render's /opt/render/project/src environment
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
+# === Sanctum Cascade Protocol v1.9.7q ===
+# Ordered boot hardening: guards → reflex → umbra → integrity
+from bridge_backend.bridge_core.guards.netlify_guard import validate_publish_path, require_netlify_token
+from bridge_backend.bridge_core.integrity.deferred import delayed_integrity_check
+from bridge_backend.bridge_core.engines.umbra.autoheal_link import safe_autoheal_init
+
+# 1) Netlify publish path & token guard
+validate_publish_path()
+
+# Reflex Auth Forge token fallback for Netlify egress
+try:
+    from bridge_backend.bridge_core.engines.reflex.auth_forge import ensure_github_token
+except Exception:
+    def ensure_github_token(): return os.getenv("GITHUB_TOKEN")  # safe no-op fallback
+require_netlify_token(ensure_github_token)
+
+# 2) Umbra⇄Genesis link retry
+def _link_bus():
+    """Safe Genesis bus connectivity check"""
+    try:
+        from bridge_backend.genesis.bus import GenesisEventBus
+        # Try to instantiate bus to verify connectivity
+        bus = GenesisEventBus()
+        logger.info("Genesis bus accessible")
+    except Exception as e:
+        raise RuntimeError(f"Genesis bus not accessible: {e}")
+
+safe_autoheal_init(_link_bus)
+
+# 3) Deferred integrity (after engines are steady)
+from bridge_backend.bridge_core.integrity.core import run_integrity
+delayed_integrity_check(run_integrity)
+# === end Sanctum Cascade Protocol ===
+
 # === Safe Import Guard ===
 def safe_import(module_path: str, alias: str = None):
     """
@@ -43,8 +77,8 @@ def safe_import(module_path: str, alias: str = None):
 
 app = FastAPI(
     title="SR-AIbridge",
-    version="1.9.7g",
-    description="v1.9.7g Lattice Memory Bloom: Neural Changelog - Self-Healing, Self-Learning, Self-Reflective Intelligence"
+    version="1.9.7q",
+    description="v1.9.7q Sanctum Cascade Protocol: Self-Healing, Self-Learning, Self-Reflective Intelligence"
 )
 
 # === CORS ===
@@ -220,6 +254,10 @@ else:
 if os.getenv("GENESIS_MODE", "enabled").lower() == "enabled":
     safe_include_router("bridge_backend.genesis.routes")
     logger.info("[GENESIS] API routes enabled")
+
+# Sanctum Cascade Protocol guard status routes (v1.9.7q)
+safe_include_router("bridge_backend.bridge_core.guards.routes")
+logger.info("[GUARDS] Sanctum Cascade Protocol status routes enabled")
 else:
     logger.info("[GENESIS] API routes disabled (set GENESIS_MODE=enabled to enable)")
 
