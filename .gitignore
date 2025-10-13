@@ -183,3 +183,6 @@ bridge_backend/logs/health_history/*.json.gz
 
 # Autonomy Node Reports (generated artifacts)
 .github/autonomy_node/reports/
+
+# v1.9.7o Reflex Loop Protocol - Offline PR Queue (generated artifacts)
+.github/autonomy_node/pending_prs/
