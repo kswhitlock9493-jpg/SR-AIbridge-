@@ -19,6 +19,17 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Chrome Dependencies
+        run: |
+          # Install Playwright browser dependencies
+          npx playwright install-deps
+          npx playwright install chromium
+
       - run: pip install requests python-dotenv
 
       - name: 🔍 Validate & Auto-Heal Env

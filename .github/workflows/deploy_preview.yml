@@ -22,6 +22,12 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Install Chrome Dependencies
+        run: |
+          # Install Playwright browser dependencies
+          npx playwright install-deps
+          npx playwright install chromium
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
