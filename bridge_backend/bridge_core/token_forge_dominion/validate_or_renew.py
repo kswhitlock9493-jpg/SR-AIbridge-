@@ -6,7 +6,7 @@ Implements continuous token refresh for zero-downtime operation.
 """
 import os
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timezone
 from typing import Dict, Optional, Any, Tuple, List
 from pathlib import Path
 
@@ -58,8 +58,8 @@ class TokenLifecycleManager:
         try:
             with open(state_path, 'w') as f:
                 json.dump(self.tokens, f, indent=2)
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"[TokenLifecycleManager] Warning: Could not save state: {e}")
     
     def validate_token(
         self,
@@ -106,8 +106,8 @@ class TokenLifecycleManager:
             return True, "Token invalid or expired"
         
         # Check time to expiration
-        expires_at = datetime.fromisoformat(payload["expires_at"].rstrip('Z'))
-        time_remaining = (expires_at - datetime.utcnow()).total_seconds()
+        expires_at = datetime.fromisoformat(payload["expires_at"].rstrip('Z')).replace(tzinfo=timezone.utc)
+        time_remaining = (expires_at - datetime.now(timezone.utc)).total_seconds()
         
         if time_remaining < self.RENEWAL_THRESHOLD_SECONDS:
             return True, f"Expires in {int(time_remaining)}s (threshold: {self.RENEWAL_THRESHOLD_SECONDS}s)"
@@ -255,8 +255,8 @@ class TokenLifecycleManager:
             }
             
             if is_valid and payload:
-                expires_at = datetime.fromisoformat(payload["expires_at"].rstrip('Z'))
-                time_remaining = (expires_at - datetime.utcnow()).total_seconds()
+                expires_at = datetime.fromisoformat(payload["expires_at"].rstrip('Z')).replace(tzinfo=timezone.utc)
+                time_remaining = (expires_at - datetime.now(timezone.utc)).total_seconds()
                 
                 token_status.update({
                     "expires_at": payload["expires_at"],

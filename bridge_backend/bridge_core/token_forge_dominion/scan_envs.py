@@ -7,7 +7,7 @@ Blocks deployment if static API keys or tokens are detected.
 import os
 import re
 from pathlib import Path
-from typing import List, Tuple, Dict, Any
+from typing import List, Dict, Any
 
 
 # Patterns for common secret formats
@@ -118,7 +118,6 @@ def scan_file(file_path: Path) -> List[SecretFinding]:
     except (IOError, UnicodeDecodeError) as e:
         # Log read errors but don't fail the scan
         print(f"[Scanner] Warning: Could not read {file_path}: {e}")
-        pass
     
     return findings
 

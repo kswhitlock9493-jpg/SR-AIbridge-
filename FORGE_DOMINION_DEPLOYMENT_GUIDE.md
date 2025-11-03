@@ -116,7 +116,7 @@ Look for logs:
 
 | Property | Mechanism | Guarantee |
 |----------|-----------|-----------|
-| **Sealed issuance** | HMAC-SHA256 | Tamper-proof token signatures |
+| **Sealed issuance** | HMAC-SHA384 | Tamper-proof token signatures |
 | **Short lifespan** | TTL ≤ 3600s | Automatic expiry |
 | **Root isolation** | `FORGE_DOMINION_ROOT` | Never written to disk |
 | **Continuous audit** | Dominion events | Traceable mint → renew → reject |

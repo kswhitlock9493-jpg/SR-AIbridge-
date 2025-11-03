@@ -8,7 +8,7 @@ import os
 import json
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Tuple
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from .quantum_authority import QuantumAuthority
 from .zero_trust_validator import ZeroTrustValidator
@@ -414,6 +414,7 @@ class EnterpriseOrchestrator:
             with open(state_path, 'w') as f:
                 json.dump({"events": events}, f, indent=2)
         except Exception:
+            # Intentionally ignore all exceptions to avoid interrupting main workflow
             pass
     
     def check_pulse(self) -> Dict[str, Any]:
@@ -443,12 +444,12 @@ class EnterpriseOrchestrator:
             events = []
         
         # Analyze events in last 5 minutes
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         window_start = now - timedelta(minutes=5)
         
         recent_events = [
             e for e in events
-            if datetime.fromisoformat(e["timestamp"].rstrip('Z')) > window_start
+            if datetime.fromisoformat(e["timestamp"].rstrip('Z')).replace(tzinfo=timezone.utc) > window_start
         ]
         
         # Count event types
@@ -484,7 +485,7 @@ class EnterpriseOrchestrator:
         
         # Check for inactivity (>20 minutes since last event)
         if events:
-            last_event = datetime.fromisoformat(events[-1]["timestamp"].rstrip('Z'))
+            last_event = datetime.fromisoformat(events[-1]["timestamp"].rstrip('Z')).replace(tzinfo=timezone.utc)
             inactive_minutes = (now - last_event).total_seconds() / 60
             
             pulse_status["inactive_minutes"] = inactive_minutes
