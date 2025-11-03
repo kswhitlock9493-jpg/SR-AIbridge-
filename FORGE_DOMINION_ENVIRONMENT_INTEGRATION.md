@@ -161,11 +161,17 @@ Tokens nearing expiry (<5 minutes) are automatically renewed:
 
 Token Forge monitors token health:
 
-| Condition | Action |
-|-----------|--------|
-| >5 mints in 5min | Governance lock (rate limit) |
-| >10 renews in 5min | Governance lock |
-| Inactive >20min | Manual review required |
+| Condition | Action | Impact |
+|-----------|--------|--------|
+| >5 mints in 5min | Governance lock (rate limit) | Token minting halted, requires manual review |
+| >10 renews in 5min | Governance lock | Token renewal halted, requires manual review |
+| Inactive >20min | Manual review required | Warning state, no automatic action |
+
+**Governance Lock Explanation:**
+- **What it does:** Temporarily halts all token minting/renewal operations
+- **Why:** Prevents abuse, runaway automation, or security incidents
+- **Recovery:** Requires manual intervention by an Admiral/Owner to review and reset
+- **How to reset:** Check logs, verify legitimacy, then reset pulse via orchestrator
 
 Check pulse:
 ```python

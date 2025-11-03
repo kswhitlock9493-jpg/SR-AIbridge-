@@ -84,13 +84,19 @@ runs:
           
           echo "🜂 Minting token for $provider..."
           
-          # Mint token using Python
-          TOKEN_JSON=$(python3 -c "
+          # Mint token using Python - pass provider as environment variable for safety
+          export FORGE_PROVIDER="$provider"
+          TOKEN_JSON=$(python3 -c '
 import json
 import os
 from bridge_backend.bridge_core.token_forge_dominion import QuantumAuthority, SovereignIntegration
 
-provider = '$provider'
+# Get provider from environment variable (safe)
+provider = os.environ.get("FORGE_PROVIDER", "")
+if not provider:
+    print(json.dumps({"error": "no provider specified"}))
+    exit(1)
+
 authority = QuantumAuthority()
 sovereign = SovereignIntegration()
 
@@ -98,20 +104,22 @@ sovereign = SovereignIntegration()
 ttl_seconds = sovereign.get_resonance_aware_ttl(
     base_ttl=3600,
     provider=provider,
-    environment='production'
+    environment="production"
 )
 
 # Mint token
-token_envelope = authority.mint_quantum_token(
-    provider=provider,
-    ttl_seconds=ttl_seconds
-)
-
-# Output token envelope
-print(json.dumps(token_envelope))
-" 2>/dev/null || echo '{"error": "failed"}')
+try:
+    token_envelope = authority.mint_quantum_token(
+        provider=provider,
+        ttl_seconds=ttl_seconds
+    )
+    print(json.dumps(token_envelope))
+except Exception as e:
+    print(json.dumps({"error": str(e)}))
+' 2>&1)
           
-          if [[ "$TOKEN_JSON" != *"error"* ]]; then
+          # Check for errors in the output
+          if echo "$TOKEN_JSON" | python3 -c "import sys, json; obj=json.load(sys.stdin); exit(1 if 'error' in obj else 0)" 2>/dev/null; then
             # Extract the token from the JSON envelope
             TOKEN=$(echo "$TOKEN_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin).get('token', ''))")
             
@@ -131,7 +139,8 @@ print(json.dumps(token_envelope))
             TOKEN_COUNT=$((TOKEN_COUNT + 1))
             echo "✅ Token minted for $provider"
           else
-            echo "❌ Failed to mint token for $provider"
+            ERROR_MSG=$(echo "$TOKEN_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin).get('error', 'Unknown error'))" 2>/dev/null || echo "Failed to parse error")
+            echo "❌ Failed to mint token for $provider: $ERROR_MSG"
           fi
         done
         

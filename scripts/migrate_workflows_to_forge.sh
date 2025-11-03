@@ -25,40 +25,49 @@ echo "Scanning workflows for hardcoded secrets..."
 echo ""
 
 # Find workflows using hardcoded secrets (excluding FORGE_DOMINION_ROOT and GITHUB_TOKEN)
-SECRETS_FOUND=false
+# Use process substitution and command substitution to preserve variable state
+NETLIFY_COUNT=0
+RENDER_COUNT=0
+GITHUB_COUNT=0
+OTHER_COUNT=0
 
 echo "📋 Workflows using NETLIFY_AUTH_TOKEN from secrets:"
-grep -l "NETLIFY_AUTH_TOKEN.*secrets\." "$WORKFLOW_DIR"/*.yml 2>/dev/null | while read -r file; do
+while IFS= read -r file; do
+    [ -z "$file" ] && continue
     echo "  - $(basename "$file")"
-    SECRETS_FOUND=true
-done
+    NETLIFY_COUNT=$((NETLIFY_COUNT + 1))
+done < <(grep -l "NETLIFY_AUTH_TOKEN.*secrets\." "$WORKFLOW_DIR"/*.yml 2>/dev/null || true)
 echo ""
 
 echo "📋 Workflows using RENDER_API_KEY from secrets:"
-grep -l "RENDER_API_KEY.*secrets\." "$WORKFLOW_DIR"/*.yml 2>/dev/null | while read -r file; do
+while IFS= read -r file; do
+    [ -z "$file" ] && continue
     echo "  - $(basename "$file")"
-    SECRETS_FOUND=true
-done
+    RENDER_COUNT=$((RENDER_COUNT + 1))
+done < <(grep -l "RENDER_API_KEY.*secrets\." "$WORKFLOW_DIR"/*.yml 2>/dev/null || true)
 echo ""
 
 echo "📋 Workflows using GITHUB_TOKEN from secrets (excluding auto-provided):"
-grep -l "GITHUB_TOKEN.*secrets\." "$WORKFLOW_DIR"/*.yml 2>/dev/null | \
-    grep -v "secrets.GITHUB_TOKEN" | while read -r file; do
+while IFS= read -r file; do
+    [ -z "$file" ] && continue
     echo "  - $(basename "$file")"
-    SECRETS_FOUND=true
-done
+    GITHUB_COUNT=$((GITHUB_COUNT + 1))
+done < <(grep -l "GITHUB_TOKEN.*secrets\." "$WORKFLOW_DIR"/*.yml 2>/dev/null | grep -v "secrets.GITHUB_TOKEN" || true)
 echo ""
 
 echo "📋 Workflows using other API tokens/keys from secrets:"
-grep -E "API_TOKEN|API_KEY|AUTH_TOKEN" "$WORKFLOW_DIR"/*.yml 2>/dev/null | \
+while IFS= read -r file; do
+    [ -z "$file" ] && continue
+    echo "  - $(basename "$file")"
+    OTHER_COUNT=$((OTHER_COUNT + 1))
+done < <(grep -E "API_TOKEN|API_KEY|AUTH_TOKEN" "$WORKFLOW_DIR"/*.yml 2>/dev/null | \
     grep "secrets\." | \
     grep -v "FORGE_DOMINION_ROOT" | \
     grep -v "GITHUB_TOKEN" | \
-    cut -d: -f1 | sort -u | while read -r file; do
-    echo "  - $(basename "$file")"
-    SECRETS_FOUND=true
-done
+    cut -d: -f1 | sort -u || true)
 echo ""
+
+TOTAL_COUNT=$((NETLIFY_COUNT + RENDER_COUNT + GITHUB_COUNT + OTHER_COUNT))
 
 echo "======================================================================="
 echo "Migration Instructions:"
@@ -92,11 +101,16 @@ echo "Example: See .github/workflows/bridge_autodeploy.yml"
 echo "======================================================================="
 echo ""
 
-if [ "$SECRETS_FOUND" = false ]; then
+if [ "$TOTAL_COUNT" -eq 0 ]; then
     echo "✅ No workflows with hardcoded secrets found!"
     echo "🜂 All workflows are using Forge Dominion Token Forge."
 else
-    echo "⚠️  Workflows found that may need migration."
+    echo "⚠️  Found $TOTAL_COUNT workflow(s) that may need migration:"
+    echo "   - NETLIFY_AUTH_TOKEN: $NETLIFY_COUNT"
+    echo "   - RENDER_API_KEY: $RENDER_COUNT"
+    echo "   - GITHUB_TOKEN: $GITHUB_COUNT"
+    echo "   - Other tokens: $OTHER_COUNT"
+    echo ""
     echo "   Review the list above and migrate as needed."
 fi
 
