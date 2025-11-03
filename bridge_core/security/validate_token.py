@@ -7,6 +7,9 @@ import sys
 import argparse
 import os
 
+# Minimum token length for basic validation
+MIN_TOKEN_LENGTH = 10
+
 
 def validate_dominion_token(token):
     """
@@ -26,8 +29,8 @@ def validate_dominion_token(token):
 
     # Basic token validation
     # In a real implementation, this would check token expiry, signature, etc.
-    if len(token) < 10:
-        print("❌ Token appears invalid (too short)")
+    if len(token) < MIN_TOKEN_LENGTH:
+        print(f"❌ Token appears invalid (too short, minimum length: {MIN_TOKEN_LENGTH})")
         return 1
 
     print("  ✅ Token format valid")

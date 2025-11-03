@@ -6,6 +6,9 @@ Validates core system components before deployment
 import sys
 import argparse
 
+# Minimum required Python version
+MIN_PYTHON_VERSION = (3, 11)
+
 
 def check_core_validation():
     """
@@ -19,10 +22,10 @@ def check_core_validation():
 
     # Check 1: Python version
     python_version = sys.version_info
-    if python_version >= (3, 11):
+    if python_version >= MIN_PYTHON_VERSION:
         print(f"  ✅ Python version: {python_version.major}.{python_version.minor}")
     else:
-        print(f"  ❌ Python version too old: {python_version.major}.{python_version.minor}")
+        print(f"  ❌ Python version too old: {python_version.major}.{python_version.minor} (minimum: {MIN_PYTHON_VERSION[0]}.{MIN_PYTHON_VERSION[1]})")
         checks_passed = False
 
     # Check 2: Module structure

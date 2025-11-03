@@ -7,6 +7,9 @@ import sys
 import time
 import argparse
 
+# Simulated network check delay
+NETWORK_CHECK_DELAY_SECONDS = 1
+
 
 def run_federation_heartbeat(mode="federation", timeout=60):
     """
@@ -27,7 +30,7 @@ def run_federation_heartbeat(mode="federation", timeout=60):
 
         # Basic federation health check
         print("  🔍 Checking federation connectivity...")
-        time.sleep(1)  # Simulate network check
+        time.sleep(NETWORK_CHECK_DELAY_SECONDS)  # Simulate network check
 
         print("  ✅ Federation nodes responsive")
 

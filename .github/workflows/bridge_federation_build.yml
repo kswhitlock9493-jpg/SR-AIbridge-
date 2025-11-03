@@ -28,7 +28,7 @@ env:
   NODE_VERSION: "20"
   FED_KEY: ${{ secrets.FED_KEY }}
   DOM_TOKEN: ${{ secrets.DOM_TOKEN }}
-  BRIDGE_ENV: "sovereign"
+  BRIDGE_ENV: ${{ vars.BRIDGE_ENV || 'sovereign' }}
 
 jobs:
   build:
