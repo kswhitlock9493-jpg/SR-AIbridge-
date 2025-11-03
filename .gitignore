@@ -186,3 +186,7 @@ bridge_backend/logs/health_history/*.json.gz
 
 # v1.9.7o Reflex Loop Protocol - Offline PR Queue (generated artifacts)
 .github/autonomy_node/pending_prs/
+
+# v1.9.7s Forge Dominion - Quantum Sovereignty State (generated artifacts)
+.alik/*
+!.alik/.gitkeep

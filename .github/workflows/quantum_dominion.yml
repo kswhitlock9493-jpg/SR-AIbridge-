@@ -1,0 +1,153 @@
+name: Quantum Dominion Security
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  quantum-security:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r bridge_backend/requirements.txt
+      
+      - name: Set environment variables
+        env:
+          FORGE_DOMINION_ROOT: ${{ secrets.FORGE_DOMINION_ROOT }}
+        run: |
+          echo "FORGE_DOMINION_MODE=${{ vars.FORGE_DOMINION_MODE || 'sovereign' }}" >> $GITHUB_ENV
+          echo "FORGE_DOMINION_VERSION=${{ vars.FORGE_DOMINION_VERSION || '1.9.7s' }}" >> $GITHUB_ENV
+          echo "ENVIRONMENT=${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}" >> $GITHUB_ENV
+      
+      - name: Run Quantum Predeploy Orchestrator
+        id: quantum_check
+        run: |
+          python3 bridge_backend/runtime/quantum_predeploy_orchestrator.py
+        continue-on-error: true
+      
+      - name: Upload Security Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: quantum-security-reports-${{ github.run_number }}
+          path: |
+            .alik/predeploy_report.json
+            .alik/forge_state.json
+          retention-days: 90
+      
+      - name: Extract Security Metrics
+        if: always()
+        run: |
+          if [ -f .alik/predeploy_report.json ]; then
+            echo "### 🜂 Quantum Dominion Security Report" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            python3 - <<'PYTHON'
+          import json, os
+          
+          with open('.alik/predeploy_report.json') as f:
+              report = json.load(f)
+          
+          summary = []
+          summary.append("| Component | Status |")
+          summary.append("|-----------|--------|")
+          
+          # Health check
+          health = report.get('health_check', {})
+          overall = health.get('overall_status', 'unknown')
+          summary.append(f"| Overall Health | {overall} |")
+          
+          # Pre-deployment checks
+          checks = report.get('pre_deployment_checks', {})
+          overall_checks = checks.get('overall', 'UNKNOWN')
+          summary.append(f"| Pre-deployment Checks | {overall_checks} |")
+          
+          # Security scan
+          scan = report.get('security_scan', {})
+          scan_status = scan.get('status', 'UNKNOWN')
+          total_findings = scan.get('total_findings', 0)
+          risk_score = scan.get('risk_score', 0)
+          summary.append(f"| Security Scan | {scan_status} |")
+          summary.append(f"| Total Findings | {total_findings} |")
+          summary.append(f"| Risk Score | {risk_score} |")
+          
+          # Compliance
+          compliance = report.get('compliance', {})
+          compliance_status = compliance.get('compliance_status', 'UNKNOWN')
+          summary.append(f"| Compliance | {compliance_status} |")
+          
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
+              f.write('\n'.join(summary))
+              f.write('\n\n')
+              
+              # Findings by severity
+              if scan.get('findings_by_severity'):
+                  f.write("#### Security Findings\n\n")
+                  findings = scan['findings_by_severity']
+                  if findings.get('critical', 0) > 0:
+                      f.write(f"- ❌ **Critical**: {findings['critical']}\n")
+                  if findings.get('high', 0) > 0:
+                      f.write(f"- ⚠️ **High**: {findings['high']}\n")
+                  if findings.get('medium', 0) > 0:
+                      f.write(f"- ℹ️ **Medium**: {findings['medium']}\n")
+                  if findings.get('low', 0) > 0:
+                      f.write(f"- ℹ️ **Low**: {findings['low']}\n")
+          PYTHON
+          fi
+      
+      - name: Check Critical Failures
+        if: always()
+        run: |
+          if [ -f .alik/predeploy_report.json ]; then
+            python3 - <<'PYTHON'
+          import json, sys
+          
+          with open('.alik/predeploy_report.json') as f:
+              report = json.load(f)
+          
+          # Check for critical security findings
+          scan = report.get('security_scan', {})
+          findings = scan.get('findings_by_severity', {})
+          
+          if findings.get('critical', 0) > 0:
+              print(f"❌ Critical security findings detected: {findings['critical']}")
+              sys.exit(1)
+          
+          # Check compliance for production
+          environment = report.get('environment', 'unknown')
+          if environment == 'production':
+              compliance = report.get('compliance', {})
+              if compliance.get('compliance_status') != 'COMPLIANT':
+                  print(f"❌ Production deployment requires COMPLIANT status")
+                  sys.exit(1)
+          
+          print("✅ Security checks passed")
+          PYTHON
+          fi
+      
+      - name: Report Status
+        if: always()
+        run: |
+          if [ "${{ steps.quantum_check.outcome }}" == "success" ]; then
+            echo "✅ Quantum Dominion security checks PASSED"
+          else
+            echo "❌ Quantum Dominion security checks FAILED"
+            exit 1
+          fi
