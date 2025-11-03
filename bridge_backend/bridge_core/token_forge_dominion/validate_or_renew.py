@@ -242,7 +242,7 @@ class TokenLifecycleManager:
             dict: Status report
         """
         status = {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             "version": "1.9.7s",
             "tokens": {}
         }
