@@ -5,7 +5,6 @@ Tests the modules used by bridge_federation_build.yml workflow
 """
 import pytest
 import sys
-import os
 from pathlib import Path
 
 # Add bridge_core to path
