@@ -68,7 +68,7 @@ jobs:
 
       - name: Install Chrome Dependencies
         run: |
-          # Use GitHub's built-in browser tools
+          # Install Playwright browser dependencies
           npx playwright install-deps
           npx playwright install chromium
 
@@ -236,7 +236,7 @@ jobs:
 
       - name: Install Chrome Dependencies
         run: |
-          # Use GitHub's built-in browser tools
+          # Install Playwright browser dependencies
           npx playwright install-deps
           npx playwright install chromium
 
