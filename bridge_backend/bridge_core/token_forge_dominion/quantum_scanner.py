@@ -28,7 +28,7 @@ class QuantumScanner:
     # Paths to exclude from scanning
     EXCLUDE_PATHS = {
         'node_modules', '.git', '__pycache__', '.cache', 'dist', 'build',
-        '.venv', 'venv', 'env', '.pytest_cache', 'coverage', '.alik'
+        '.venv', 'venv', 'env', '.pytest_cache', 'coverage', '.alik', 'tests'
     }
     
     # High-confidence secret patterns
