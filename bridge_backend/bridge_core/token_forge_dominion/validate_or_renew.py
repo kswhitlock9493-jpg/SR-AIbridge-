@@ -158,7 +158,7 @@ class TokenLifecycleManager:
                 {
                     "provider": provider,
                     "ttl_seconds": ttl_seconds,
-                    "timestamp": datetime.utcnow().isoformat() + "Z"
+                    "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
                 }
             )
             
