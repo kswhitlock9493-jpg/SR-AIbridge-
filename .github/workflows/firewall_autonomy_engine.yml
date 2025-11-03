@@ -63,7 +63,7 @@ jobs:
           fi
       
       - name: Upload Firewall Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: firewall-autonomy-report
           path: |
@@ -73,14 +73,14 @@ jobs:
           retention-days: 90
       
       - name: Upload Generated Policies
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: generated-network-policies
           path: network_policies/generated_allowlist.yaml
           retention-days: 90
       
       - name: Upload Autonomy Vault Records
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: autonomy-vault-records
           path: vault/autonomy/firewall_*

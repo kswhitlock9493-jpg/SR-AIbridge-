@@ -254,10 +254,10 @@ else:
 if os.getenv("GENESIS_MODE", "enabled").lower() == "enabled":
     safe_include_router("bridge_backend.genesis.routes")
     logger.info("[GENESIS] API routes enabled")
-
-# Sanctum Cascade Protocol guard status routes (v1.9.7q)
-safe_include_router("bridge_backend.bridge_core.guards.routes")
-logger.info("[GUARDS] Sanctum Cascade Protocol status routes enabled")
+    
+    # Sanctum Cascade Protocol guard status routes (v1.9.7q)
+    safe_include_router("bridge_backend.bridge_core.guards.routes")
+    logger.info("[GUARDS] Sanctum Cascade Protocol status routes enabled")
 else:
     logger.info("[GENESIS] API routes disabled (set GENESIS_MODE=enabled to enable)")
 
