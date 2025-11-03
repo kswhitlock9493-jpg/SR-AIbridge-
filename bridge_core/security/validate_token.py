@@ -34,8 +34,6 @@ def validate_dominion_token(token):
         return 1
 
     print("  ✅ Token format valid")
-    print("  ✅ Token not expired")
-    print("  ✅ Token signature verified")
     print("✅ Dominion token valid")
     return 0
 
