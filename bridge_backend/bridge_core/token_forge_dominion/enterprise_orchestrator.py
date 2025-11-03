@@ -242,9 +242,8 @@ class EnterpriseOrchestrator:
                     }
                 )
                 
-                result["token_id"] = json.loads(
-                    json.dumps(token)
-                )  # Safely serialize
+                # Store token ID for tracking (avoid storing full token in logs)
+                result["token_id"] = token.get("token_id", "unknown")
                 result["token_generated"] = True
             else:
                 result["token_generated"] = False

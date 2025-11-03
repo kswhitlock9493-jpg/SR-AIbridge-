@@ -26,6 +26,8 @@ class QuantumScanner:
     }
     
     # Paths to exclude from scanning
+    # Note: 'tests' excluded by default to avoid false positives from test fixtures
+    # For comprehensive scanning including tests, instantiate with custom exclude list
     EXCLUDE_PATHS = {
         'node_modules', '.git', '__pycache__', '.cache', 'dist', 'build',
         '.venv', 'venv', 'env', '.pytest_cache', 'coverage', '.alik', 'tests'
