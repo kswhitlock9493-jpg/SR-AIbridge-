@@ -11,6 +11,12 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: '22' }
 
+      - name: Install Chrome Dependencies
+        run: |
+          # Use GitHub's built-in browser tools
+          npx playwright install-deps
+          npx playwright install chromium
+
       - name: Install & Dry Build (monorepo aware)
         env:
           CI: false
