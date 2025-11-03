@@ -27,7 +27,8 @@ jobs:
         env:
           DATABASE_URL: postgresql+asyncpg://user:pass@localhost/db
           NETLIFY_ORIGIN: "*"
-          NETLIFY_AUTH_TOKEN: "test-token-for-ci"
+          # Dummy token for CI testing - has no actual Netlify permissions
+          NETLIFY_AUTH_TOKEN: "dummy-ci-test-token"
         run: pytest -q
       
       - name: Lint check

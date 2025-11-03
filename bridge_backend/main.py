@@ -37,7 +37,8 @@ validate_publish_path()
 
 # Reflex Auth Forge token fallback for Netlify egress
 # Only enforce token requirement in production/deployment environments, not during tests
-if not os.getenv("PYTEST_CURRENT_TEST"):  # Skip during pytest execution
+# Skip if running in test/CI environment
+if not (os.getenv("PYTEST_CURRENT_TEST") or os.getenv("CI")):
     try:
         from bridge_backend.bridge_core.engines.reflex.auth_forge import ensure_github_token
     except Exception:
