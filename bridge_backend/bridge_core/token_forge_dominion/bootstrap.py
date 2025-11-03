@@ -116,10 +116,7 @@ def bootstrap() -> int:
         if is_ci:
             print("[Dominion Bootstrap] ❌ CRITICAL: No FORGE_DOMINION_ROOT in CI")
             print("[Dominion Bootstrap] Set secret with:")
-            print('  gh secret set FORGE_DOMINION_ROOT --body "$(python - <<\'PY\'')
-            print('import base64, os; print(base64.urlsafe_b64encode(os.urandom(32)).decode().rstrip("="))')
-            print('PY')
-            print('")')
+            print('  gh secret set FORGE_DOMINION_ROOT --body "$(python - <<\'PY\'\nimport base64, os; print(base64.urlsafe_b64encode(os.urandom(32)).decode().rstrip("="))\nPY\n)"')
             print("=" * 70)
             return 2  # Critical failure in CI
         else:
