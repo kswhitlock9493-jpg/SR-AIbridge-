@@ -7,7 +7,7 @@ Implements continuous token refresh for zero-downtime operation.
 import os
 import json
 from datetime import datetime, timedelta
-from typing import Dict, Optional, Any, Tuple
+from typing import Dict, Optional, Any, Tuple, List
 from pathlib import Path
 
 from .quantum_authority import QuantumAuthority

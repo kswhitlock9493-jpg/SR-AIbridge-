@@ -47,18 +47,17 @@ for PROVIDER in "${PROVIDERS[@]}"; do
     echo -n "[Dominion] Forging token for $PROVIDER... "
     
     # Use Python to mint token via the quantum authority
-    TOKEN_RESULT=$(python3 - <<'PYEOF'
-import sys
+    TOKEN_RESULT=$(python3 -c "
 import json
 import os
 from bridge_backend.bridge_core.token_forge_dominion import QuantumAuthority, SovereignIntegration
 
-provider = sys.argv[1]
+provider = '$PROVIDER'
 authority = QuantumAuthority()
 sovereign = SovereignIntegration()
 
 # Get resonance-aware TTL
-environment = os.getenv("FORGE_ENVIRONMENT", "production")
+environment = os.getenv('FORGE_ENVIRONMENT', 'production')
 ttl_seconds = sovereign.get_resonance_aware_ttl(
     base_ttl=3600,  # 1 hour
     provider=provider,
@@ -73,8 +72,7 @@ token_envelope = authority.mint_quantum_token(
 
 # Output token envelope as JSON
 print(json.dumps(token_envelope))
-PYEOF
-    "$PROVIDER")
+")
     
     if [ $? -eq 0 ]; then
         echo "OK"
