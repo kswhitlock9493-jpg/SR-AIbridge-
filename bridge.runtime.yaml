@@ -1,0 +1,44 @@
+version: "1.0"
+
+# Who owns/runs this runtime
+dominion:
+  root_env_var: FORGE_DOMINION_ROOT     # one-variable-to-rule-them-all
+  service_ttl_minutes: 180              # lifetime for minted tokens
+  allow_unsigned: false                 # block runs if sig invalid
+
+# Where to run (Phase-1 = local/host Docker)
+provider:
+  kind: docker
+  network: brh_net
+  autostart: true
+
+# Services to launch (examples)
+services:
+  api:
+    context: ./bridge_backend
+    dockerfile: Dockerfile    # optional; builds if context present, else pulls image
+    image: ghcr.io/kswhitlock9493-jpg/sr-aibridge-backend:latest
+    replicas: 1
+    ports:
+      - "8000:8000"
+    env:
+      - "ENVIRONMENT=production"
+      - "LOG_LEVEL=INFO"
+    health:
+      http: "http://localhost:8000/health/live"
+      interval: 10s
+      timeout: 2s
+      retries: 12
+    volumes: []               # e.g. - "./data:/app/data"
+
+  ws:
+    image: ghcr.io/kswhitlock9493-jpg/ws-sidecar:latest
+    replicas: 1
+    depends_on: [api]
+    env:
+      - "BACKEND_URL=http://api:8000"
+    health:
+      tcp: "localhost:9001"
+      interval: 10s
+      timeout: 2s
+      retries: 12
