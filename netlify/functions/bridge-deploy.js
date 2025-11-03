@@ -2,9 +2,9 @@
 // Netlify Function to trigger your Bridge Runtime Handler node
 
 export async function handler(event) {
-  const secret = process.env.FORGE_DOMINION_ROOT;
+  const forgeAuth = process.env.FORGE_DOMINION_ROOT;
 
-  if (!event.headers.authorization || event.headers.authorization !== `Bearer ${secret}`) {
+  if (!event.headers.authorization || event.headers.authorization !== `Bearer ${forgeAuth}`) {
     return {
       statusCode: 403,
       body: JSON.stringify({ error: "Forbidden: invalid token" }),
@@ -16,13 +16,12 @@ export async function handler(event) {
     const branch = payload?.branch || "main";
     const repo = payload?.repository || "kswhitlock9493-jpg/SR-AIbridge-";
     const image = `ghcr.io/${repo}/sr-aibridge-backend:latest`;
-    const forge = process.env.FORGE_DOMINION_ROOT;
 
     const res = await fetch("http://localhost:7878/deploy", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${forge}`,
+        Authorization: `Bearer ${forgeAuth}`,
       },
       body: JSON.stringify({
         image,

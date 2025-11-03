@@ -164,6 +164,7 @@ The `BridgeRuntimePanel.jsx` component provides:
 - Restart/drain controls
 - Auto-refresh every 10 seconds
 - Forge authentication status
+- Configurable API endpoint
 
 Add to your CommandDeck:
 
@@ -174,10 +175,21 @@ export default function CommandDeck() {
   return (
     <main className="space-y-6 p-8">
       <h1 className="text-3xl font-bold">SR-AIbridge Command Deck</h1>
+      {/* Use default localhost:7878 */}
       <BridgeRuntimePanel />
+      
+      {/* Or specify custom BRH URL */}
+      <BridgeRuntimePanel apiUrl="https://brh.yourdomain.com" />
     </main>
   );
 }
+```
+
+Configure the default URL via environment variable:
+```bash
+# In .env or Vite config
+VITE_BRH_API_URL=https://brh.yourdomain.com
+```
 ```
 
 ## Systemd Service (Production)
@@ -189,11 +201,11 @@ For persistent BRH node operation:
    sudo cp infra/systemd/brh@.service /etc/systemd/system/
    ```
 
-2. Create seal file:
+2. Create environment file with seal:
    ```bash
    sudo mkdir -p /etc/brh
-   echo "your-dominion-seal" | sudo tee /etc/brh/dominion.seal
-   sudo chmod 600 /etc/brh/dominion.seal
+   echo "DOMINION_SEAL=your-dominion-seal" | sudo tee /etc/brh/dominion.env
+   sudo chmod 600 /etc/brh/dominion.env
    ```
 
 3. Enable and start:
@@ -207,9 +219,30 @@ For persistent BRH node operation:
 When running `brh/api.py`:
 
 - `POST /deploy` - Trigger deployment (pull image + restart)
+  - Validates image names to prevent command injection
+  - Returns deployment status
 - `GET /status` - Get container status
+  - Returns list of containers with metadata
 - `POST /restart/{name}` - Restart container
+  - Requires valid container name
 - `POST /drain/{name}` - Stop and remove container
+  - Safely drains container before removal
+
+### Security Configuration
+
+Set allowed CORS origins for production:
+```bash
+export BRH_ALLOWED_ORIGINS="https://bridge.netlify.app,https://yourdomain.com"
+```
+
+If not set, defaults to allowing all origins (development only).
+
+### Image Name Validation
+
+All image names are validated against a strict pattern:
+- Must match: `[a-zA-Z0-9][a-zA-Z0-9._/-]*:[tag]` or without tag
+- Maximum length: 256 characters
+- Prevents command injection attacks
 
 ## Troubleshooting
 

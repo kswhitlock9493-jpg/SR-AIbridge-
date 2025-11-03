@@ -2,7 +2,8 @@
 import os
 import subprocess
 import time
-from fastapi import FastAPI, Request
+import re
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 try:
@@ -12,9 +13,12 @@ except ImportError:
     DOCKER_AVAILABLE = False
 
 app = FastAPI()
+
+# Configure CORS based on environment
+ALLOWED_ORIGINS = os.getenv("BRH_ALLOWED_ORIGINS", "").split(",") if os.getenv("BRH_ALLOWED_ORIGINS") else ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # lock this to bridge domains in prod
+    allow_origins=ALLOWED_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -22,13 +26,27 @@ app.add_middleware(
 if DOCKER_AVAILABLE:
     client = docker.from_env()
 
+# Valid image name pattern (prevents command injection)
+IMAGE_PATTERN = re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9._/-]*:[a-zA-Z0-9._-]+$|^[a-zA-Z0-9][a-zA-Z0-9._/-]*$')
+
+def validate_image_name(image: str) -> bool:
+    """Validate Docker image name to prevent command injection"""
+    if not image or len(image) > 256:
+        return False
+    return IMAGE_PATTERN.match(image) is not None
+
 
 @app.post("/deploy")
 async def deploy(req: Request):
     """Deploy endpoint for triggering BRH node restart"""
     data = await req.json()
-    image = data.get("image")
-    branch = data.get("branch")
+    image = data.get("image", "")
+    branch = data.get("branch", "unknown")
+    
+    # Validate image name to prevent command injection
+    if not validate_image_name(image):
+        raise HTTPException(status_code=400, detail="Invalid image name")
+    
     print(f"[BRH] Deploy request for {image} (branch: {branch})")
 
     try:

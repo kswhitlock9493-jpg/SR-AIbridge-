@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 
-export default function BridgeRuntimePanel() {
+// Configure BRH API endpoint via environment variable or prop
+const DEFAULT_BRH_URL = import.meta.env.VITE_BRH_API_URL || "http://localhost:7878";
+
+export default function BridgeRuntimePanel({ apiUrl = DEFAULT_BRH_URL }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const fetchStatus = async () => {
     try {
-      const res = await fetch("http://localhost:7878/status");
+      const res = await fetch(`${apiUrl}/status`);
       const json = await res.json();
       setData(json);
       setError(null);
@@ -20,7 +23,7 @@ export default function BridgeRuntimePanel() {
 
   const sendCommand = async (name, action) => {
     try {
-      await fetch(`http://localhost:7878/${action}/${name}`, { method: "POST" });
+      await fetch(`${apiUrl}/${action}/${name}`, { method: "POST" });
       fetchStatus();
     } catch (err) {
       console.error(`Failed to ${action} ${name}:`, err);
@@ -42,7 +45,7 @@ export default function BridgeRuntimePanel() {
       <div className="bg-red-900/20 border border-red-600 text-red-400 p-6 rounded-xl">
         <h2 className="text-xl mb-2">⚠️ BRH Connection Error</h2>
         <p>{error}</p>
-        <p className="text-sm mt-2">Make sure the BRH node is running on localhost:7878</p>
+        <p className="text-sm mt-2">Make sure the BRH node is running at {apiUrl}</p>
       </div>
     );
   }

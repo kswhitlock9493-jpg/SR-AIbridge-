@@ -54,11 +54,25 @@ def http_ok(url: str, timeout: float) -> bool:
 
 def wait_health(h: HealthSpec):
     for i in range(h.retries):
-        ok = False
+        http_ok_result = False
+        tcp_ok_result = False
+        
         if h.http:
-            ok = http_ok(h.http, h.timeout)
+            http_ok_result = http_ok(h.http, h.timeout)
         if h.tcp:
-            ok = ok or tcp_ok(h.tcp, h.timeout)
+            tcp_ok_result = tcp_ok(h.tcp, h.timeout)
+        
+        # If both are defined, both must pass
+        if h.http and h.tcp:
+            ok = http_ok_result and tcp_ok_result
+        # If only one is defined, that one must pass
+        elif h.http:
+            ok = http_ok_result
+        elif h.tcp:
+            ok = tcp_ok_result
+        else:
+            ok = True  # No health checks defined
+            
         if ok:
             return
         time.sleep(h.interval)
