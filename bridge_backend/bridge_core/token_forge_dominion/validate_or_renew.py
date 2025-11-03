@@ -43,7 +43,9 @@ class TokenLifecycleManager:
             try:
                 with open(state_path, 'r') as f:
                     self.tokens = json.load(f)
-            except Exception:
+            except (json.JSONDecodeError, IOError) as e:
+                # Log error but continue with empty state
+                print(f"[TokenLifecycleManager] Warning: Could not load state: {e}")
                 self.tokens = {}
         else:
             self.tokens = {}

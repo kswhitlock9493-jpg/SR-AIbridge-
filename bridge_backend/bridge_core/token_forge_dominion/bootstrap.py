@@ -7,10 +7,11 @@ Validates FORGE_DOMINION_ROOT and provides initialization support.
 import os
 import sys
 from pathlib import Path
+from typing import Tuple
 from .quantum_authority import generate_root_key
 
 
-def bootstrap_dominion_root() -> tuple[bool, str]:
+def bootstrap_dominion_root() -> Tuple[bool, str]:
     """
     Bootstrap FORGE_DOMINION_ROOT key.
     
@@ -47,7 +48,7 @@ def bootstrap_dominion_root() -> tuple[bool, str]:
         return False, "No root key - temporary key generated"
 
 
-def validate_dominion_mode() -> tuple[bool, str]:
+def validate_dominion_mode() -> Tuple[bool, str]:
     """
     Validate FORGE_DOMINION_MODE setting.
     
@@ -67,7 +68,7 @@ def validate_dominion_mode() -> tuple[bool, str]:
         return False, f"Invalid mode: {mode}"
 
 
-def validate_dominion_version() -> tuple[bool, str]:
+def validate_dominion_version() -> Tuple[bool, str]:
     """
     Validate FORGE_DOMINION_VERSION setting.
     

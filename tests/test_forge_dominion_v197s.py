@@ -92,7 +92,7 @@ class TestSecretScanner:
     
     def test_should_ignore_examples(self):
         """Test that example values are ignored."""
-        line = "SECRET_KEY=example_value_here"
+        line = "SECRET_KEY=example"
         assert should_ignore_line(line)
     
     def test_scan_file_with_secrets(self):
@@ -322,7 +322,7 @@ class TestEnterpriseOrchestrator:
             orchestrator.record_pulse_event("mint", "github")
         
         pulse_status = orchestrator.check_pulse()
-        assert pulse_status["governance_lock"] == True
+        assert pulse_status["governance_lock"]
         assert len(pulse_status["alerts"]) > 0
 
 

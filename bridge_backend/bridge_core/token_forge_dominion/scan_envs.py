@@ -29,7 +29,7 @@ IGNORE_PATTERNS = [
     re.compile(r'FORGE_DOMINION_VERSION'),
     re.compile(r'\$\{[^}]+\}'),  # Template variables
     re.compile(r'<[^>]+>'),  # Placeholders
-    re.compile(r'example|sample|test|dummy|placeholder', re.IGNORECASE),
+    re.compile(r'\b(example|sample|test|dummy|placeholder)\b', re.IGNORECASE),
 ]
 
 # Files to scan
@@ -115,8 +115,9 @@ def scan_file(file_path: Path) -> List[SecretFinding]:
                         )
                         findings.append(finding)
     
-    except Exception as e:
-        # Don't fail on read errors, just skip
+    except (IOError, UnicodeDecodeError) as e:
+        # Log read errors but don't fail the scan
+        print(f"[Scanner] Warning: Could not read {file_path}: {e}")
         pass
     
     return findings
