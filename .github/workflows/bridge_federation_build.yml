@@ -1,3 +1,21 @@
+# Forge Dominion CI/CD v1.9.7s - Federation Sync
+#
+# This workflow addresses GitHub Actions failures by:
+# 1. Correcting job dependency graph with proper 'needs:' clauses
+# 2. Adding explicit timeout for federation heartbeat
+# 3. Ensuring proper secret propagation (FED_KEY, DOM_TOKEN, BRIDGE_ENV)
+# 4. Moving validation before deploy for deterministic sequencing
+# 5. Adding final summary job for clarity
+#
+# Required Secrets (configure in repository settings):
+#   FED_KEY:    Active federation access token
+#   DOM_TOKEN:  Active dominion token (freshly generated, ephemeral)
+#
+# Optional Variables:
+#   BRIDGE_ENV: "sovereign" or "staging" (defaults to "sovereign")
+#
+# See BRIDGE_FEDERATION_SECRETS.md for detailed configuration instructions.
+
 name: Forge Dominion CI/CD v1.9.7s - Federation Sync
 
 on:
