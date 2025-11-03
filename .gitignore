@@ -190,3 +190,11 @@ bridge_backend/logs/health_history/*.json.gz
 # v1.9.7s Forge Dominion - Quantum Sovereignty State (generated artifacts)
 .alik/*
 !.alik/.gitkeep
+
+# Bridge Runtime Handler
+/tmp/forge_runtime_token.json
+/tmp/forge_runtime_status.json
+forge/runtime/*.tmp
+forge/runtime/*.lock
+# Keep active_nodes.json tracked
+!forge/runtime/active_nodes.json

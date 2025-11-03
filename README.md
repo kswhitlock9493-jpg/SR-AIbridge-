@@ -25,6 +25,8 @@ SR-AIbridge is a comprehensive, production-ready platform for managing AI agents
 
 > **🎉 NEW: Unified Autonomy Integration** - The Autonomy Engine is now fully integrated with all triage, federation, and parity systems, enabling automatic response to health issues, distributed coordination, and self-repair across the entire platform. [Learn more →](docs/AUTONOMY_INTEGRATION_QUICK_REF.md)
 
+> **🧠 NEW: Bridge Runtime Handler (BRH) v1.0.0-alpha** - Sovereign runtime backend supervisor that eliminates vendor lock-in. Deploy directly from GitHub using ephemeral Forge tokens. Each repo becomes its own deployment node with self-healing containers and federation-ready architecture. [Learn more →](BRH_GUIDE.md) | [Quick Ref →](BRH_QUICK_REF.md)
+
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
@@ -65,6 +67,7 @@ SR-AIbridge provides a complete tactical command system for coordinating AI agen
 - 🔁 **Auto-Deploy Mode (v1.6.7)** - Self-sustaining 6-hour redeploy cycles with live sync badges
 - 🔧 **Environment Recovery** - Automatic registry self-healing and dependency management
 - 🔗 **Unified Autonomy Integration** - Autonomy engine linked to all triage, federation, and parity systems for comprehensive auto-healing and distributed coordination
+- 🚀 **Bridge Runtime Handler (v1.0.0-alpha)** - Sovereign runtime supervisor for vendor-free deployment with ephemeral tokens and self-healing containers
 
 ---
 
@@ -3906,3 +3909,75 @@ If you find SR-AIbridge useful, please consider giving it a star on GitHub!
 **Built with ❤️ by Admiral Kyle S. Whitlock and Contributors**
 
 *Gold ripple eternal.*
+
+---
+
+## 🧠 Bridge Runtime Handler (BRH)
+
+### Sovereign Deployment Without Vendor Lock-In
+
+The Bridge Runtime Handler transforms each repository into a **self-contained deployment node** that manages its own runtime using ephemeral Forge Dominion tokens. No more dependency on Render, Vercel, or any third-party platform.
+
+```yaml
+# src/bridge.runtime.yaml
+version: "1.0"
+runtime:
+  name: "my-bridge-runtime"
+  type: "sovereign"
+  auth:
+    provider: "forge_dominion"
+    token_mode: "ephemeral"
+    auto_renew: true
+```
+
+**Key Features:**
+
+- 🔐 **100% Sovereign** - Complete control over runtime and deployment
+- ⏱️ **Ephemeral Auth** - Auto-expiring tokens, zero static secrets
+- 🔄 **Self-Healing** - Automatic container restart and recovery
+- 🌐 **Federation-Ready** - Multi-node sync via μ-harmonic lattice
+- 📊 **Built-in Monitoring** - Health checks, logs, and metrics
+- 🚀 **GitHub Native** - Deploy directly from Actions with Sovereign Deploy Protocol
+
+**Quick Start:**
+
+```bash
+# 1. Configure Forge Dominion
+gh secret set FORGE_DOMINION_ROOT --body "$(python -c 'import base64, os; print(base64.urlsafe_b64encode(os.urandom(32)).decode().rstrip("="))')"
+
+# 2. Create runtime manifest
+cp src/bridge.runtime.yaml.example src/bridge.runtime.yaml
+
+# 3. Deploy
+git push origin main  # Triggers bridge_deploy.yml workflow
+```
+
+**Architecture:**
+
+```
+GitHub Repo → Forge Auth → Runtime Core → Containers → Active Nodes Registry
+     ↓            ↓             ↓              ↓              ↓
+  Manifest   Ephemeral      Self-Heal    Docker/VM    Federation Sync
+  (.yaml)      Token       Auto-Renew   Management    (μ-lattice)
+```
+
+**Benefits Over Traditional Platforms:**
+
+| Feature | BRH (Sovereign) | Render/Vercel |
+|---------|----------------|---------------|
+| Ownership | 100% You | 3rd-party vendor |
+| Auth | Ephemeral via Forge | Static OAuth/API keys |
+| Deploy | GitHub + Forge | Webhooks |
+| Logs | Stored in Forge | Hosted externally |
+| Cost | Zero platform fees | Paid tiers |
+| Lock-in | None | Vendor-specific |
+
+**Documentation:**
+
+- 📖 [Complete BRH Guide](BRH_GUIDE.md) - Full implementation details
+- ⚡ [Quick Reference](BRH_QUICK_REF.md) - Common commands and patterns
+- 🔧 [Forge Integration](FORGE_DOMINION_DEPLOYMENT_GUIDE.md) - Token management
+
+**Status:** Phase 1 Complete (Core Runtime) | Phase 2 In Progress (GitHub Integration)
+
+---
