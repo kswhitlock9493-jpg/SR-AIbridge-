@@ -53,7 +53,7 @@ Successfully implemented **Forge Dominion** - a quantum-resistant cryptographic 
 - **.github/scripts/**: Workflow helper scripts (2 files)
 
 #### Documentation
-- **DOMINION_SECURITY_SPEC.md** (9,926 chars): Complete cryptographic specification
+- **DOMINION_SECURITY_SPEC.md** (5,954 chars): Complete cryptographic specification with Dominion lore
 - **DOMINION_DEPLOY_GUIDE.md** (10,697 chars): Deployment and operations guide
 
 #### Testing
