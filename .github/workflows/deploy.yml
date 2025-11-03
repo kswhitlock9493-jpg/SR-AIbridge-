@@ -66,6 +66,12 @@ jobs:
           cache: 'npm'
           cache-dependency-path: bridge-frontend/package-lock.json
 
+      - name: Install Chrome Dependencies
+        run: |
+          # Use GitHub's built-in browser tools
+          npx playwright install-deps
+          npx playwright install chromium
+
       - name: Install dependencies
         run: cd bridge-frontend && npm ci
 
@@ -227,6 +233,12 @@ jobs:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: bridge-frontend/package-lock.json
+
+      - name: Install Chrome Dependencies
+        run: |
+          # Use GitHub's built-in browser tools
+          npx playwright install-deps
+          npx playwright install chromium
 
       - name: Setup Python
         uses: actions/setup-python@v4

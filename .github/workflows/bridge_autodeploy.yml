@@ -22,6 +22,12 @@ jobs:
           cache: 'npm'
           cache-dependency-path: bridge-frontend/package-lock.json
 
+      - name: Install Chrome Dependencies
+        run: |
+          # Use GitHub's built-in browser tools
+          npx playwright install-deps
+          npx playwright install chromium
+
       - name: Install Dependencies
         run: |
           cd bridge-frontend

@@ -22,6 +22,12 @@ jobs:
         with:
           node-version: '22'
       
+      - name: Install Chrome Dependencies
+        run: |
+          # Use GitHub's built-in browser tools
+          npx playwright install-deps
+          npx playwright install chromium
+      
       - name: Install Python Dependencies
         run: |
           pip install toml pyyaml python-dotenv

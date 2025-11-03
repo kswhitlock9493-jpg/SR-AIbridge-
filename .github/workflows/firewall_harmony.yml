@@ -34,6 +34,12 @@ jobs:
           key: chromium-${{ runner.os }}-${{ hashFiles('bridge-frontend/package-lock.json') }}
           restore-keys: chromium-${{ runner.os }}-
 
+      - name: Install Chrome Dependencies
+        run: |
+          # Use GitHub's built-in browser tools
+          npx playwright install-deps
+          npx playwright install chromium
+
       - name: Install deps
         run: npm ci
         working-directory: bridge-frontend
