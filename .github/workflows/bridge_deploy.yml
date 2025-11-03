@@ -88,8 +88,8 @@ jobs:
           }
           
           # Output to GitHub Actions
-          print(f"::set-output name=token::{json.dumps(token)}")
-          print(f"::set-output name=node_id::{node_id}")
+          echo "token=${json.dumps(token)}" >> $GITHUB_OUTPUT
+          echo "node_id=${node_id}" >> $GITHUB_OUTPUT
           print(f"Runtime token generated for node: {node_id}")
           PYTHON
       
@@ -198,8 +198,8 @@ jobs:
           # Save runtime token
           echo "$RUNTIME_TOKEN" > /tmp/forge_runtime_token.json
           
-          # Run runtime handler in validation mode
-          python bridge_backend/bridge_core/runtime_handler.py --validate
+          # Validate manifest
+          python bridge_backend/cli/brh_cli.py validate
       
       - name: Register Runtime Node
         env:
