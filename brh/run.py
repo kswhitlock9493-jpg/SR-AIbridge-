@@ -91,7 +91,10 @@ def main():
         env = (s.get("env") or []) + [f"BRH_TOKEN={token}", f"BRH_ENV={ctx.env}"]
         # Build if context exists; else ensure image present
         if "context" in s:
-            sh(["docker", "build", "-t", s["image"], "-f", s.get("dockerfile", "Dockerfile"), s["context"]])
+            dockerfile_path = s.get("dockerfile", "Dockerfile")
+            # Build context is relative to current directory, dockerfile is inside context
+            dockerfile = f"{s['context']}/{dockerfile_path}"
+            sh(["docker", "build", "-t", s["image"], "-f", dockerfile, "."])
 
         # Stop existing (suppress errors if container doesn't exist)
         try:
