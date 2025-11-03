@@ -13,10 +13,13 @@
 ![Telemetry Live](https://img.shields.io/badge/Telemetry-Live-brightgreen)
 ![Autonomy Unified](https://img.shields.io/badge/Autonomy-Unified_Integration-purple?style=for-the-badge)
 ![HXO Nexus](https://img.shields.io/badge/HXO_Nexus-v1.9.6p_Ascendant-gold?style=for-the-badge)
+![Forge Dominion](https://img.shields.io/badge/Forge_Dominion-v1.9.7s_Sovereign-gold?style=for-the-badge)
 
 **A Sovereign Command & Control System for AI Agent Coordination**
 
 SR-AIbridge is a comprehensive, production-ready platform for managing AI agents, missions, and autonomous operations. Built with modern async architecture, it features real-time monitoring, self-healing capabilities, cryptographic attestation, and a rich ecosystem of specialized AI engines.
+
+> **🜂 NEW: Forge Dominion v1.9.7s "Sovereign"** - Environment sovereignty achieved through ephemeral token management. Static secrets abolished across GitHub, Netlify, and Render. The Bridge now owns, guards, and renews its own credentials. [Learn more →](FORGE_DOMINION_DEPLOYMENT_GUIDE.md) | [Quick Ref →](FORGE_DOMINION_QUICK_REF.md)
 
 > **🌟 NEW: HXO Nexus v1.9.6p "Ascendant"** - The central harmonic conductor implementing the "1+1=∞" connectivity paradigm. All 10 engines now connect through a quantum-synchrony layer, enabling emergent capabilities through harmonic resonance and infinite scaling via HypShard v3. [Learn more →](HXO_NEXUS_CONNECTIVITY.md)
 
@@ -44,6 +47,7 @@ SR-AIbridge provides a complete tactical command system for coordinating AI agen
 - 🤖 **AI Agent Management** - Register, monitor, and coordinate AI agents with real-time status tracking
 - 🎯 **Mission Control** - Create, assign, and track missions with progress monitoring
 - 🛡️ **Health Monitoring** - Comprehensive health checks with automatic self-healing
+- 🜂 **Forge Dominion (v1.9.7s)** - Environment sovereignty with ephemeral token management and zero static secrets
 - 🌌 **HXO Nexus (v1.9.6p)** - Central harmonic conductor connecting all engines with quantum-synchrony layer for emergent capabilities
 - ⚡ **HypShard v3** - Quantum adaptive shard manager with 1M concurrent shard capacity
 - 🔮 **Harmonic Consensus** - Distributed decision-making through wave-function-like agreement

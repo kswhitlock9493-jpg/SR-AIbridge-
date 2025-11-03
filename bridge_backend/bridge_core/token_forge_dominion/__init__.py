@@ -10,6 +10,7 @@ from .zero_trust_validator import ZeroTrustValidator
 from .sovereign_integration import SovereignIntegration
 from .quantum_scanner import QuantumScanner
 from .enterprise_orchestrator import EnterpriseOrchestrator
+from .validate_or_renew import TokenLifecycleManager, validate_or_renew
 
 __version__ = "1.9.7s-SOVEREIGN"
 __all__ = [
@@ -18,5 +19,7 @@ __all__ = [
     "SovereignIntegration",
     "QuantumScanner",
     "EnterpriseOrchestrator",
+    "TokenLifecycleManager",
+    "validate_or_renew",
     "generate_root_key"
 ]

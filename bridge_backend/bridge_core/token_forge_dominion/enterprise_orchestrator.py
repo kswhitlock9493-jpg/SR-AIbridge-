@@ -8,7 +8,7 @@ import os
 import json
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Tuple
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 from .quantum_authority import QuantumAuthority
 from .zero_trust_validator import ZeroTrustValidator
@@ -36,6 +36,8 @@ class EnterpriseOrchestrator:
         self.scanner = QuantumScanner()
         
         self.deployment_log: List[Dict[str, Any]] = []
+        self.pulse_events: List[Dict[str, Any]] = []
+        self.pulse_state_file = ".alik/forge_pulse.json"
     
     def pre_deployment_checks(self) -> Tuple[bool, Dict[str, Any]]:
         """
@@ -374,3 +376,136 @@ class EnterpriseOrchestrator:
             health["overall_status"] = "degraded"
         
         return health
+    
+    def record_pulse_event(self, event_type: str, provider: str = None) -> None:
+        """
+        Record a pulse event (mint/renew/reject).
+        
+        Args:
+            event_type: Type of event (mint, renew, reject)
+            provider: Provider name (optional)
+        """
+        event = {
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "event_type": event_type,
+            "provider": provider
+        }
+        
+        self.pulse_events.append(event)
+        
+        # Save to state file
+        try:
+            state_path = Path(self.pulse_state_file)
+            state_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Load existing events
+            if state_path.exists():
+                with open(state_path, 'r') as f:
+                    state = json.load(f)
+                    events = state.get("events", [])
+            else:
+                events = []
+            
+            events.append(event)
+            
+            # Keep only last 1000 events
+            events = events[-1000:]
+            
+            with open(state_path, 'w') as f:
+                json.dump({"events": events}, f, indent=2)
+        except Exception:
+            # Intentionally ignore all exceptions to avoid interrupting main workflow
+            pass
+    
+    def check_pulse(self) -> Dict[str, Any]:
+        """
+        Check governance pulse and detect rate limit violations.
+        
+        Returns:
+            dict: Pulse status with governance alerts
+        """
+        pulse_status = {
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "version": "1.9.7s",
+            "governance_lock": False,
+            "alerts": []
+        }
+        
+        # Load recent events
+        try:
+            state_path = Path(self.pulse_state_file)
+            if state_path.exists():
+                with open(state_path, 'r') as f:
+                    state = json.load(f)
+                    events = state.get("events", [])
+            else:
+                events = []
+        except Exception:
+            events = []
+        
+        # Analyze events in last 5 minutes
+        now = datetime.now(timezone.utc)
+        window_start = now - timedelta(minutes=5)
+        
+        recent_events = [
+            e for e in events
+            if datetime.fromisoformat(e["timestamp"].rstrip('Z')).replace(tzinfo=timezone.utc) > window_start
+        ]
+        
+        # Count event types
+        mints = len([e for e in recent_events if e["event_type"] == "mint"])
+        renews = len([e for e in recent_events if e["event_type"] == "renew"])
+        rejects = len([e for e in recent_events if e["event_type"] == "reject"])
+        
+        pulse_status["pulse_metrics"] = {
+            "window_minutes": 5,
+            "mints": mints,
+            "renews": renews,
+            "rejects": rejects,
+            "total_events": len(recent_events)
+        }
+        
+        # Check governance thresholds
+        # >5 mints or >10 renews in 5min triggers lock
+        if mints > 5:
+            pulse_status["governance_lock"] = True
+            pulse_status["alerts"].append({
+                "level": "critical",
+                "type": "rate_limit",
+                "message": f"Excessive mints detected: {mints} in 5 minutes (limit: 5)"
+            })
+        
+        if renews > 10:
+            pulse_status["governance_lock"] = True
+            pulse_status["alerts"].append({
+                "level": "critical",
+                "type": "rate_limit",
+                "message": f"Excessive renews detected: {renews} in 5 minutes (limit: 10)"
+            })
+        
+        # Check for inactivity (>20 minutes since last event)
+        if events:
+            last_event = datetime.fromisoformat(events[-1]["timestamp"].rstrip('Z')).replace(tzinfo=timezone.utc)
+            inactive_minutes = (now - last_event).total_seconds() / 60
+            
+            pulse_status["inactive_minutes"] = inactive_minutes
+            
+            if inactive_minutes > 20:
+                pulse_status["alerts"].append({
+                    "level": "warning",
+                    "type": "inactivity",
+                    "message": f"Inactive for {int(inactive_minutes)} minutes (threshold: 20)"
+                })
+        
+        # Calculate pulse strength
+        if pulse_status["governance_lock"]:
+            pulse_status["pulse_strength"] = "red"
+            pulse_status["pulse_message"] = "rate limit triggered"
+        elif pulse_status["alerts"]:
+            pulse_status["pulse_strength"] = "silver"
+            pulse_status["pulse_message"] = "manual review required"
+        else:
+            pulse_status["pulse_strength"] = "gold"
+            pulse_status["pulse_message"] = "healthy"
+        
+        return pulse_status
