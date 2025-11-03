@@ -38,6 +38,13 @@ jobs:
           cd bridge-frontend
           npm run build
 
+      - name: Setup Forge Dominion
+        id: forge
+        uses: ./.github/actions/forge-dominion-setup
+        with:
+          forge-dominion-root: ${{ secrets.FORGE_DOMINION_ROOT }}
+          providers: 'netlify'
+
       - name: Notify Deployment Start
         run: |
           python3 bridge_backend/utils/deployment_publisher.py \
@@ -45,7 +52,7 @@ jobs:
             --event-type start \
             --status deploying \
             --branch main \
-            --message "Auto-deploy via Bridge Auto-Deploy Mode v1.6.7" || echo "⚠️ Event notification skipped"
+            --message "Auto-deploy via Bridge Auto-Deploy Mode v1.9.7s (Forge Dominion)" || echo "⚠️ Event notification skipped"
 
       - name: Verify Backend Health
         run: |
@@ -61,14 +68,15 @@ jobs:
         run: |
           python3 bridge_backend/scripts/generate_sync_badge.py
 
-      - name: Deploy to Netlify
+      - name: Deploy to Netlify (Forge Dominion)
         env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ steps.forge.outputs.netlify-token }}
+          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
         run: |
           npm install -g netlify-cli
           cd bridge-frontend
-          netlify deploy --prod --dir=dist --message="Auto-redeploy via Bridge Auto-Deploy Mode v1.6.7"
+          echo "🜂 Deploying with Forge Dominion ephemeral token..."
+          netlify deploy --prod --dir=dist --message="Auto-redeploy via Bridge Auto-Deploy Mode v1.9.7s (Sovereign)"
 
       - name: Notify Deployment Success
         if: success()
@@ -79,7 +87,7 @@ jobs:
             --status deployed \
             --branch main \
             --deploy-url "https://sr-aibridge.netlify.app" \
-            --message "Deployment successful" || echo "⚠️ Event notification skipped"
+            --message "Deployment successful (Forge Dominion)" || echo "⚠️ Event notification skipped"
 
       - name: Notify Deployment Failure
         if: failure()
@@ -97,9 +105,11 @@ jobs:
 
       - name: Deployment Summary
         run: |
-          echo "=== Bridge Auto-Deploy Summary ==="
+          echo "=== Bridge Auto-Deploy Summary (Forge Dominion) ==="
           echo "✅ Frontend built successfully"
           echo "✅ Backend health verified"
           echo "✅ Sync badge updated"
-          echo "✅ Deployed to Netlify"
-          echo "=================================="
+          echo "🜂 Forge Dominion: ${{ steps.forge.outputs.tokens-minted }} tokens minted"
+          echo "✅ Deployed to Netlify (ephemeral token)"
+          echo "==================================================="
+

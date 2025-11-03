@@ -1,0 +1,150 @@
+name: 'Forge Dominion Setup'
+description: 'Mint ephemeral tokens using Sovereign Dominion Token Forge'
+author: 'SR-AIbridge Team'
+
+inputs:
+  forge-dominion-root:
+    description: 'Forge Dominion root key (from secrets)'
+    required: true
+  forge-dominion-mode:
+    description: 'Forge Dominion operation mode'
+    required: false
+    default: 'sovereign'
+  forge-dominion-version:
+    description: 'Forge Dominion version'
+    required: false
+    default: '1.9.7s'
+  providers:
+    description: 'Comma-separated list of providers to mint tokens for (github,netlify,render)'
+    required: false
+    default: 'github,netlify,render'
+
+outputs:
+  github-token:
+    description: 'Minted GitHub token (ephemeral)'
+    value: ${{ steps.mint-tokens.outputs.github-token }}
+  netlify-token:
+    description: 'Minted Netlify token (ephemeral)'
+    value: ${{ steps.mint-tokens.outputs.netlify-token }}
+  render-token:
+    description: 'Minted Render token (ephemeral)'
+    value: ${{ steps.mint-tokens.outputs.render-token }}
+  tokens-minted:
+    description: 'Number of tokens successfully minted'
+    value: ${{ steps.mint-tokens.outputs.tokens-minted }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Bootstrap Dominion
+      shell: bash
+      env:
+        FORGE_DOMINION_ROOT: ${{ inputs.forge-dominion-root }}
+        FORGE_DOMINION_MODE: ${{ inputs.forge-dominion-mode }}
+        FORGE_DOMINION_VERSION: ${{ inputs.forge-dominion-version }}
+      run: |
+        echo "🜂 Bootstrapping Forge Dominion..."
+        python -m bridge_backend.bridge_core.token_forge_dominion.bootstrap
+    
+    - name: Mint Tokens
+      id: mint-tokens
+      shell: bash
+      env:
+        FORGE_DOMINION_ROOT: ${{ inputs.forge-dominion-root }}
+        FORGE_DOMINION_MODE: ${{ inputs.forge-dominion-mode }}
+        FORGE_DOMINION_VERSION: ${{ inputs.forge-dominion-version }}
+        FORGE_ENVIRONMENT: production
+      run: |
+        echo "🜂 Minting ephemeral tokens..."
+        
+        # Run the pre-deploy script
+        bash runtime/pre-deploy.dominion.sh
+        
+        # Extract tokens from environment (set by pre-deploy script)
+        # In a real scenario, these would be properly extracted and masked
+        # For now, we'll use the forge_dominion module to mint them
+        
+        IFS=',' read -ra PROVIDER_LIST <<< "${{ inputs.providers }}"
+        TOKEN_COUNT=0
+        
+        for provider in "${PROVIDER_LIST[@]}"; do
+          provider=$(echo "$provider" | xargs)  # trim whitespace
+          
+          echo "🜂 Minting token for $provider..."
+          
+          # Mint token using Python
+          TOKEN_JSON=$(python3 -c "
+import json
+import os
+from bridge_backend.bridge_core.token_forge_dominion import QuantumAuthority, SovereignIntegration
+
+provider = '$provider'
+authority = QuantumAuthority()
+sovereign = SovereignIntegration()
+
+# Get resonance-aware TTL
+ttl_seconds = sovereign.get_resonance_aware_ttl(
+    base_ttl=3600,
+    provider=provider,
+    environment='production'
+)
+
+# Mint token
+token_envelope = authority.mint_quantum_token(
+    provider=provider,
+    ttl_seconds=ttl_seconds
+)
+
+# Output token envelope
+print(json.dumps(token_envelope))
+" 2>/dev/null || echo '{"error": "failed"}')
+          
+          if [[ "$TOKEN_JSON" != *"error"* ]]; then
+            # Extract the token from the JSON envelope
+            TOKEN=$(echo "$TOKEN_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin).get('token', ''))")
+            
+            # Set output based on provider
+            case "$provider" in
+              github)
+                echo "github-token=$TOKEN" >> $GITHUB_OUTPUT
+                ;;
+              netlify)
+                echo "netlify-token=$TOKEN" >> $GITHUB_OUTPUT
+                ;;
+              render)
+                echo "render-token=$TOKEN" >> $GITHUB_OUTPUT
+                ;;
+            esac
+            
+            TOKEN_COUNT=$((TOKEN_COUNT + 1))
+            echo "✅ Token minted for $provider"
+          else
+            echo "❌ Failed to mint token for $provider"
+          fi
+        done
+        
+        echo "tokens-minted=$TOKEN_COUNT" >> $GITHUB_OUTPUT
+        echo "🜂 Token minting complete: $TOKEN_COUNT tokens minted"
+    
+    - name: Validate Tokens
+      shell: bash
+      run: |
+        echo "🜂 Validating minted tokens..."
+        if [ "${{ steps.mint-tokens.outputs.tokens-minted }}" -gt 0 ]; then
+          echo "✅ Validation passed: ${{ steps.mint-tokens.outputs.tokens-minted }} tokens active"
+        else
+          echo "❌ Validation failed: No tokens minted"
+          exit 1
+        fi
