@@ -1,0 +1,79 @@
+name: Quantum Dominion Security
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  quantum-security:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r bridge_backend/requirements.txt
+      
+      - name: Set environment variables
+        env:
+          FORGE_DOMINION_ROOT: ${{ secrets.FORGE_DOMINION_ROOT }}
+        run: |
+          echo "FORGE_DOMINION_MODE=${{ vars.FORGE_DOMINION_MODE || 'sovereign' }}" >> $GITHUB_ENV
+          echo "FORGE_DOMINION_VERSION=${{ vars.FORGE_DOMINION_VERSION || '1.9.7s' }}" >> $GITHUB_ENV
+          echo "ENVIRONMENT=${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}" >> $GITHUB_ENV
+      
+      - name: Run Quantum Predeploy Orchestrator
+        id: quantum_check
+        run: |
+          python3 bridge_backend/runtime/quantum_predeploy_orchestrator.py
+        continue-on-error: true
+      
+      - name: Upload Security Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: quantum-security-reports-${{ github.run_number }}
+          path: |
+            .alik/predeploy_report.json
+            .alik/forge_state.json
+          retention-days: 90
+      
+      - name: Extract Security Metrics
+        if: always()
+        run: |
+          if [ -f .alik/predeploy_report.json ]; then
+            echo "### 🜂 Quantum Dominion Security Report" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            python3 .github/scripts/extract_security_metrics.py
+          fi
+      
+      - name: Check Critical Failures
+        if: always()
+        run: |
+          if [ -f .alik/predeploy_report.json ]; then
+            python3 .github/scripts/check_critical_failures.py
+          fi
+      
+      - name: Report Status
+        if: always()
+        run: |
+          if [ "${{ steps.quantum_check.outcome }}" == "success" ]; then
+            echo "✅ Quantum Dominion security checks PASSED"
+          else
+            echo "❌ Quantum Dominion security checks FAILED"
+            exit 1
+          fi
