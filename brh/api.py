@@ -27,11 +27,16 @@ if DOCKER_AVAILABLE:
     client = docker.from_env()
 
 # Valid image name pattern (prevents command injection)
-IMAGE_PATTERN = re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9._/-]*:[a-zA-Z0-9._-]+$|^[a-zA-Z0-9][a-zA-Z0-9._/-]*$')
+# Supports: name, name:tag, registry/name:tag, registry:port/name:tag
+IMAGE_PATTERN = re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9._:/-]*$')
 
 def validate_image_name(image: str) -> bool:
     """Validate Docker image name to prevent command injection"""
     if not image or len(image) > 256:
+        return False
+    # Reject images with shell metacharacters
+    dangerous_chars = [';', '&', '|', '$', '`', '(', ')', '<', '>', '\n', '\r', ' ']
+    if any(char in image for char in dangerous_chars):
         return False
     return IMAGE_PATTERN.match(image) is not None
 
