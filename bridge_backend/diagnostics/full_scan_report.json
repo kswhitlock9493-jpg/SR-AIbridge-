@@ -1,5 +1,5 @@
 {
-  "scan_date": "2025-11-03T22:00:25.533134",
+  "scan_date": "2025-11-03T22:03:36.178053",
   "total_checks": 8,
   "passed": 8,
   "failed": 0,
@@ -9,14 +9,14 @@
       "success": true,
       "report_exists": true,
       "report_data": {
-        "timestamp": "2025-11-03T22:00:17.289605Z",
+        "timestamp": "2025-11-03T22:03:28.082093Z",
         "environment": "development",
         "health_check": {
-          "timestamp": "2025-11-03T22:00:17.289337Z",
+          "timestamp": "2025-11-03T22:03:28.081842Z",
           "components": {
             "quantum_authority": {
               "status": "healthy",
-              "fingerprint": "b96e266076846eab"
+              "fingerprint": "8ff3d77202ef7522"
             },
             "validator": {
               "status": "degraded",
@@ -30,7 +30,7 @@
           "overall_status": "degraded"
         },
         "pre_deployment_checks": {
-          "timestamp": "2025-11-03T22:00:17.289605Z",
+          "timestamp": "2025-11-03T22:03:28.082093Z",
           "environment": "development",
           "checks": {
             "environment": {
@@ -38,7 +38,7 @@
             },
             "root_key": {
               "passed": true,
-              "fingerprint": "b96e266076846eab"
+              "fingerprint": "8ff3d77202ef7522"
             },
             "security_scan": {
               "passed": true,
@@ -58,10 +58,10 @@
           "overall": "PASSED"
         },
         "security_scan": {
-          "timestamp": "2025-11-03T22:00:18.196089Z",
+          "timestamp": "2025-11-03T22:03:28.990602Z",
           "scan_path": ".",
           "version": "1.9.7s-SOVEREIGN",
-          "files_scanned": 1094,
+          "files_scanned": 1104,
           "files_with_findings": 5,
           "total_findings": 0,
           "findings_by_severity": {
@@ -136,7 +136,7 @@
           "status": "CLEAN"
         },
         "compliance": {
-          "timestamp": "2025-11-03T22:00:19.086746Z",
+          "timestamp": "2025-11-03T22:03:29.883401Z",
           "version": "1.9.7s-SOVEREIGN",
           "environment": "development",
           "validation_metrics": {
@@ -146,7 +146,7 @@
             "recent_validations": 0
           },
           "sovereign_status": {
-            "timestamp": "2025-11-03T22:00:19.086823Z",
+            "timestamp": "2025-11-03T22:03:29.883470Z",
             "version": "1.9.7s-SOVEREIGN",
             "resonance": {
               "score": 75.0,
@@ -194,7 +194,7 @@
         "status": "CRITICAL",
         "source": "api_triage.py",
         "meta": {
-          "timestamp": "2025-11-03T22:00:19.267657+00:00",
+          "timestamp": "2025-11-03T22:03:30.061006+00:00",
           "manual": true,
           "failedChecks": [
             {
@@ -244,8 +244,8 @@
       "success": true,
       "report_exists": true,
       "report_data": {
-        "report_id": "REP-20251103-220024",
-        "run_timestamp": "2025-11-03 22:00:24.594055",
+        "report_id": "REP-20251103-220335",
+        "run_timestamp": "2025-11-03 22:03:35.235313",
         "tickets_opened": 0,
         "tickets_healed": 0,
         "tickets_failed": 0,
@@ -253,7 +253,7 @@
         "warning_count": 0,
         "heal_plans_generated": 0,
         "heal_plans_applied": 0,
-        "duration_seconds": 2.8e-05,
+        "duration_seconds": 4.3e-05,
         "summary": "Sweep complete: 0 open tickets, 0 plans generated",
         "tickets": []
       }
