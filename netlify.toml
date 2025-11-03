@@ -1,7 +1,7 @@
 [build]
   # Use the build script that synthesizes artifacts
   command = "bash scripts/netlify_build.sh"
-  publish = "dist"
+  publish = "bridge-frontend/dist"
 
 # Security headers
 [[headers]]

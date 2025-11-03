@@ -52,7 +52,7 @@ jobs:
       
       - name: Upload Firewall Report Artifact
         if: ${{ github.event.inputs.upload_artifacts != 'false' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: firewall-report
           path: bridge_backend/diagnostics/firewall_report.json
@@ -60,7 +60,7 @@ jobs:
       
       - name: Upload Generated Allowlist
         if: ${{ github.event.inputs.upload_artifacts != 'false' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: generated-allowlist
           path: network_policies/generated_allowlist.yaml
