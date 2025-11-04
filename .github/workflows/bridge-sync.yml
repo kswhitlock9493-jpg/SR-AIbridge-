@@ -8,6 +8,10 @@ on:
 jobs:
   bridge-feedback:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
