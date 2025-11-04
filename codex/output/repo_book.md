@@ -1,6 +1,6 @@
 # 📘 The Book of the Repo
 
-_Generated automatically on 2025-11-04T03:45:37.336024+00:00 UTC_
+_Generated automatically on 2025-11-04T03:50:27.959070+00:00 UTC_
 
 ---
 
@@ -12456,6 +12456,32 @@ _Generated automatically on 2025-11-04T03:45:37.336024+00:00 UTC_
 - # Indoctrination Doctrine v1
 
 
+### ./codex/README.md
+
+- # 📘 Repo Codex Engine
+- ## 🧩 Overview
+- ## 🔹 Core Components
+- ### Three Coordinated Engines
+- ### Two Compilers
+- ## 🚀 Quick Start
+- ### Manual Compilation
+- # Generate JSON output
+- # Generate Markdown output
+- ### Automatic Compilation (GitHub Actions)
+- ## 📖 Output Structure
+- ### repo_book.json
+- ### repo_book.md
+- ## 🧪 Testing
+- ## 🛠️ Configuration
+- ### codex/manifest.yaml
+- ## 📊 Statistics (Current Repository)
+- ## 🔄 Workflow Integration
+- ## 🎯 Use Cases
+- ## 🔐 Security
+- ## 📝 Development
+- ## 🎉 Features
+
+
 ### ./codex/output/repo_book.md
 
 - # 📘 The Book of the Repo
@@ -12790,6 +12816,7 @@ _Generated automatically on 2025-11-04T03:45:37.336024+00:00 UTC_
 - ### ./bridge_backend/bridge_core/payments/README.md
 - ### ./DOCTRINE/teaching-doctrine-the-test-of-chains.md
 - ### ./DOCTRINE/indoctrination/lore.md
+- ### ./codex/README.md
 - ### ./codex/output/repo_book.md
 - ### ./bridge-frontend/README.md
 - ### ./bridge-frontend/src/api/auto_generated/README.md
@@ -19158,8 +19185,6 @@ _Generated automatically on 2025-11-04T03:45:37.336024+00:00 UTC_
   - import pytest
   - import os
   - import json
-  - import sys
-  - from pathlib import Path
   - from codex.truth_engine import gather_meta, validate_facts
   - from codex.parser_engine import parse_docs
   - from codex.blueprint_engine import build_blueprint

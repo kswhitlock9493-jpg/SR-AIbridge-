@@ -6,11 +6,6 @@ Tests the truth engine, parser engine, blueprint engine, and compilers.
 import pytest
 import os
 import json
-import sys
-from pathlib import Path
-
-# Add parent directory to path
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from codex.truth_engine import gather_meta, validate_facts
 from codex.parser_engine import parse_docs

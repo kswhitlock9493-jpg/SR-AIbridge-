@@ -14,12 +14,13 @@ def gather_meta():
         for f in files:
             if f.endswith((".yaml", ".yml")):
                 filepath = os.path.join(root, f)
-                with open(filepath, encoding="utf-8") as fp:
-                    try:
+                try:
+                    with open(filepath, encoding="utf-8") as fp:
                         data = yaml.safe_load(fp)
                         meta[filepath] = data
-                    except Exception:
-                        pass
+                except (yaml.YAMLError, OSError, IOError):
+                    # Skip files that can't be parsed or read
+                    pass
     return meta
 
 

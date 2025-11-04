@@ -1,9 +1,17 @@
+#!/usr/bin/env python3
+"""
+JSON Compiler for the Repo Codex Engine.
+
+This module compiles the repository into a machine-readable JSON format.
+Can be run as a standalone script or imported as a module.
+"""
 import sys
 import os
 import json
 
-# Add parent directory to path for module imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Add parent directory to path only when run as script
+if __name__ == "__main__":
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from codex.truth_engine import gather_meta, validate_facts  # noqa: E402
 from codex.parser_engine import parse_docs  # noqa: E402

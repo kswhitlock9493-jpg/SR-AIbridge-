@@ -16,7 +16,7 @@ def build_blueprint():
                         lines = fp.readlines()
                     imports = [line.strip() for line in lines if "import " in line or "from " in line]
                     blueprint["modules"].append({"file": filepath, "imports": imports})
-                except Exception:
-                    # Skip files that can't be read
+                except (UnicodeDecodeError, OSError, IOError):
+                    # Skip files that can't be read or decoded
                     pass
     return blueprint
