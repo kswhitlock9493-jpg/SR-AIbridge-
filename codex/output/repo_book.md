@@ -1,6 +1,6 @@
 # 📘 The Book of the Repo
 
-_Generated automatically on 2025-11-04T03:43:00.468664+00:00 UTC_
+_Generated automatically on 2025-11-04T03:45:37.336024+00:00 UTC_
 
 ---
 
@@ -12336,6 +12336,11 @@ _Generated automatically on 2025-11-04T03:43:00.468664+00:00 UTC_
 - ## Integration
 
 
+### ./.pytest_cache/README.md
+
+- # pytest cache directory #
+
+
 ### ./bridge_backend/dock_day_exports/test_export/README.md
 
 - # SR-AIbridge Dock-Day Drop: test_export
@@ -12776,6 +12781,7 @@ _Generated automatically on 2025-11-04T03:43:00.468664+00:00 UTC_
 - ### ./docs/archive/TDE_X_IMPLEMENTATION_SUMMARY.md
 - ### ./docs/badges/README.md
 - ### ./docs/badges/bridge_health.md
+- ### ./.pytest_cache/README.md
 - ### ./bridge_backend/dock_day_exports/test_export/README.md
 - ### ./bridge_backend/dock_day_exports/final_demo/README.md
 - ### ./bridge_backend/examples/README.md
@@ -12784,6 +12790,7 @@ _Generated automatically on 2025-11-04T03:43:00.468664+00:00 UTC_
 - ### ./bridge_backend/bridge_core/payments/README.md
 - ### ./DOCTRINE/teaching-doctrine-the-test-of-chains.md
 - ### ./DOCTRINE/indoctrination/lore.md
+- ### ./codex/output/repo_book.md
 - ### ./bridge-frontend/README.md
 - ### ./bridge-frontend/src/api/auto_generated/README.md
 - ### ./brh/README.md
@@ -13409,6 +13416,7 @@ _Generated automatically on 2025-11-04T03:43:00.468664+00:00 UTC_
 - ### ./tests/test_zero_trust_validation.py
 - ### ./tests/test_v196c_features.py
 - ### ./tests/test_v196i_features.py
+- ### ./tests/test_codex_engine.py
 - ### ./tests/deployment_readiness_v197c.py
 - ### ./tests/test_genesis_v2_0_1.py
 - ### ./tests/test_forge_cascade_synchrony.py
@@ -19146,6 +19154,20 @@ _Generated automatically on 2025-11-04T03:43:00.468664+00:00 UTC_
   - from bridge_backend.routes.health import health_stage
 
 
+### ./tests/test_codex_engine.py
+  - import pytest
+  - import os
+  - import json
+  - import sys
+  - from pathlib import Path
+  - from codex.truth_engine import gather_meta, validate_facts
+  - from codex.parser_engine import parse_docs
+  - from codex.blueprint_engine import build_blueprint
+  - """Test gathering metadata from YAML files."""
+  - from codex.compiler import compile_codex
+  - from codex.markdown_compiler import compile_markdown
+
+
 ### ./tests/deployment_readiness_v197c.py
   - import sys
   - from pathlib import Path
@@ -19524,26 +19546,25 @@ _Generated automatically on 2025-11-04T03:43:00.468664+00:00 UTC_
 ### ./codex/markdown_compiler.py
   - import sys
   - import os
-  - from codex.truth_engine import gather_meta, validate_facts
-  - from codex.parser_engine import parse_docs
-  - from codex.blueprint_engine import build_blueprint
   - import datetime
+  - from codex.truth_engine import gather_meta, validate_facts  # noqa: E402
+  - from codex.parser_engine import parse_docs  # noqa: E402
+  - from codex.blueprint_engine import build_blueprint  # noqa: E402
 
 
 ### ./codex/compiler.py
   - import sys
   - import os
-  - from codex.truth_engine import gather_meta, validate_facts
-  - from codex.parser_engine import parse_docs
-  - from codex.blueprint_engine import build_blueprint
   - import json
+  - from codex.truth_engine import gather_meta, validate_facts  # noqa: E402
+  - from codex.parser_engine import parse_docs  # noqa: E402
+  - from codex.blueprint_engine import build_blueprint  # noqa: E402
 
 
 ### ./codex/blueprint_engine.py
   - import os
-  - import json
   - """Build dependency blueprint from Python and JavaScript files."""
-  - imports = [l.strip() for l in lines if "import " in l or "from " in l]
+  - imports = [line.strip() for line in lines if "import " in line or "from " in line]
 
 
 ### ./codex/__init__.py

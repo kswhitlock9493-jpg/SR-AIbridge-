@@ -1,11 +1,13 @@
 import sys
 import os
+import datetime
+
+# Add parent directory to path for module imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from codex.truth_engine import gather_meta, validate_facts
-from codex.parser_engine import parse_docs
-from codex.blueprint_engine import build_blueprint
-import datetime
+from codex.truth_engine import gather_meta, validate_facts  # noqa: E402
+from codex.parser_engine import parse_docs  # noqa: E402
+from codex.blueprint_engine import build_blueprint  # noqa: E402
 
 
 def compile_markdown():

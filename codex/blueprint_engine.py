@@ -1,5 +1,4 @@
 import os
-import json
 
 
 def build_blueprint():
@@ -15,7 +14,7 @@ def build_blueprint():
                 try:
                     with open(filepath, encoding="utf-8") as fp:
                         lines = fp.readlines()
-                    imports = [l.strip() for l in lines if "import " in l or "from " in l]
+                    imports = [line.strip() for line in lines if "import " in line or "from " in line]
                     blueprint["modules"].append({"file": filepath, "imports": imports})
                 except Exception:
                     # Skip files that can't be read
