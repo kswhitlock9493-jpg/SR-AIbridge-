@@ -16,5 +16,17 @@
     "port": 8000,
     "port_resolution_time": 5.032748460769653,
     "timestamp": "2025-11-04T04:37:37.597870+00:00"
+  },
+  {
+    "startup_latency": 5.028030872344971,
+    "port": 8000,
+    "port_resolution_time": 5.027957201004028,
+    "timestamp": "2025-11-04T04:40:54.142997+00:00"
+  },
+  {
+    "startup_latency": 5.0309882164001465,
+    "port": 8000,
+    "port_resolution_time": 5.030928134918213,
+    "timestamp": "2025-11-04T04:42:05.750808+00:00"
   }
 ]
