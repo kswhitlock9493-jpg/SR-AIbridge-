@@ -1,0 +1,91 @@
+{
+  "timestamp": "2025-11-04T03:09:51.037587+00:00",
+  "stats": {
+    "total_workflows": 60,
+    "workflows_with_issues": 2,
+    "total_issues": 3,
+    "critical_issues": 1,
+    "high_issues": 0,
+    "medium_issues": 1,
+    "low_issues": 1,
+    "auto_fixable": 3
+  },
+  "issues": [
+    {
+      "file": ".github/workflows/bridge_autodeploy.yml",
+      "pattern": "container_health_timeout",
+      "severity": "MEDIUM",
+      "description": "Detected container health timeout",
+      "solution": "adjust_health_check_intervals",
+      "auto_fixable": true,
+      "fix_template": {
+        "add_timeout": "timeout-minutes: 15"
+      }
+    },
+    {
+      "file": ".github/workflows/sovereign-diagnostic-sweep.yml",
+      "pattern": "browser_download_blocked",
+      "severity": "CRITICAL",
+      "description": "Detected browser download blocked",
+      "solution": "use_playwright_system_browsers",
+      "auto_fixable": true,
+      "fix_template": {
+        "add_step": {
+          "name": "Install Chrome Dependencies",
+          "run": "npx playwright install-deps\nnpx playwright install chromium"
+        },
+        "add_env": {
+          "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD": "true",
+          "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD": "false"
+        }
+      }
+    },
+    {
+      "file": ".github/workflows/sovereign-diagnostic-sweep.yml",
+      "pattern": "deprecated_actions",
+      "severity": "LOW",
+      "description": "Detected deprecated actions",
+      "solution": "update_action_versions",
+      "auto_fixable": true,
+      "fix_template": {
+        "replacements": {
+          "actions/upload-artifact@v3": "actions/upload-artifact@v4",
+          "actions/download-artifact@v3": "actions/download-artifact@v4",
+          "actions/setup-node@v3": "actions/setup-node@v4"
+        }
+      }
+    }
+  ],
+  "recommendations": [
+    {
+      "pattern": "browser_download_blocked",
+      "affected_files": [
+        ".github/workflows/sovereign-diagnostic-sweep.yml"
+      ],
+      "count": 1,
+      "severity": "CRITICAL",
+      "auto_fixable": true,
+      "action": "Add browser dependency resolution step to affected workflows"
+    },
+    {
+      "pattern": "container_health_timeout",
+      "affected_files": [
+        ".github/workflows/bridge_autodeploy.yml"
+      ],
+      "count": 1,
+      "severity": "MEDIUM",
+      "auto_fixable": true,
+      "action": "Review and fix container health timeout"
+    },
+    {
+      "pattern": "deprecated_actions",
+      "affected_files": [
+        ".github/workflows/sovereign-diagnostic-sweep.yml"
+      ],
+      "count": 1,
+      "severity": "LOW",
+      "auto_fixable": true,
+      "action": "Update action versions from v3 to v4"
+    }
+  ]
+}
