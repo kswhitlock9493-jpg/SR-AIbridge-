@@ -5,6 +5,16 @@
 import crypto from "crypto";
 
 // Global state for consensus tracking
+// WARNING: Serverless functions are stateless. These variables will be reset
+// on cold starts and are NOT shared across function invocations or instances.
+// For production deployments with multiple BRH nodes, replace with:
+//   - External database (DynamoDB, Firestore, etc.)
+//   - Distributed cache (Redis, Memcached)
+//   - Persistent storage (S3, Cloud Storage)
+// This in-memory state is suitable for:
+//   - Development/testing
+//   - Single-region deployments with low traffic
+//   - Temporary leader tracking between consensus cycles
 let currentLeader = null;
 let consensusHistory = [];
 

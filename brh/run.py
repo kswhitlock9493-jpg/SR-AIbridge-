@@ -35,7 +35,16 @@ def sh(cmd: list[str], **kw):
 
 
 def sh_guarded(cmd: list[str], **kw):
-    """Execute shell command only if this node is the leader"""
+    """
+    Execute shell command only if this node is the leader.
+    
+    Note: Currently not used by default since initial deployments assume
+    single-leader mode. Available for future multi-node deployments where
+    orchestration commands (docker build, docker run) should only execute
+    on the leader node.
+    
+    To use: Replace sh() calls with sh_guarded() for leader-only operations.
+    """
     if not role.am_leader():
         raise NotLeaderError("This BRH is not the elected leader; orchestration disabled.")
     print("⇒", " ".join(cmd))
