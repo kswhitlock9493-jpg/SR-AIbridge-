@@ -130,11 +130,22 @@ class FailurePatternAnalyzer:
             
             issues_found = False
             
+            # Get relative path if possible, otherwise use name
+            try:
+                file_path = str(workflow_file.relative_to("."))
+            except ValueError:
+                # If not in current dir, use relative to workflows_dir
+                try:
+                    file_path = str(workflow_file.relative_to(self.workflows_dir.parent))
+                except ValueError:
+                    # Fall back to just the name
+                    file_path = str(workflow_file)
+            
             # Check for each failure pattern
             for pattern_name, pattern_config in self.FAILURE_PATTERNS.items():
                 if re.search(pattern_config["detection"], content, re.IGNORECASE):
                     issue = {
-                        "file": str(workflow_file.relative_to(".")),
+                        "file": file_path,
                         "pattern": pattern_name,
                         "severity": pattern_config["priority"],
                         "description": f"Detected {pattern_name.replace('_', ' ')}",
@@ -158,7 +169,7 @@ class FailurePatternAnalyzer:
             if "playwright" in content.lower() or "puppeteer" in content.lower():
                 if "PUPPETEER_SKIP" not in content and "playwright install" not in content:
                     issue = {
-                        "file": str(workflow_file.relative_to(".")),
+                        "file": file_path,
                         "pattern": "missing_browser_setup",
                         "severity": "MEDIUM",
                         "description": "Browser tools without proper configuration",
