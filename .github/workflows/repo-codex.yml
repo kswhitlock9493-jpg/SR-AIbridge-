@@ -20,12 +20,13 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install pyyaml
+          pip install pyyaml markdown
       
       - name: Build Repo Codex
         run: |
           python codex/compiler.py
           python codex/markdown_compiler.py
+          python codex/html_compiler.py
       
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

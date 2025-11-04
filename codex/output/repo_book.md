@@ -1,6 +1,6 @@
 # 📘 The Book of the Repo
 
-_Generated automatically on 2025-11-04T03:52:22.855657+00:00 UTC_
+_Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 
 ---
 
@@ -13464,6 +13464,7 @@ _Generated automatically on 2025-11-04T03:52:22.855657+00:00 UTC_
 - ### ./tests/test_autonomy_node.py
 - ### ./tests/test_v196h_features.py
 - ### ./tests/test_quantum_dominion.py
+- ### ./codex/html_compiler.py
 - ### ./codex/markdown_compiler.py
 - ### ./codex/compiler.py
 - ### ./codex/blueprint_engine.py
@@ -19191,6 +19192,7 @@ _Generated automatically on 2025-11-04T03:52:22.855657+00:00 UTC_
   - """Test gathering metadata from YAML files."""
   - from codex.compiler import compile_codex
   - from codex.markdown_compiler import compile_markdown
+  - from codex.html_compiler import build_html
 
 
 ### ./tests/deployment_readiness_v197c.py
@@ -19566,6 +19568,14 @@ _Generated automatically on 2025-11-04T03:52:22.855657+00:00 UTC_
   - from pathlib import Path
   - from bridge_backend.bridge_core.token_forge_dominion import (
   - """Test complete token lifecycle from minting to validation."""
+
+
+### ./codex/html_compiler.py
+  - import markdown
+  - import os
+  - from datetime import datetime, timezone
+  - """Build a styled HTML book from the markdown repo book."""
+  - background: conic-gradient(from 0deg, #00ffaa20, #00ffaa, #00ffaa20);
 
 
 ### ./codex/markdown_compiler.py
