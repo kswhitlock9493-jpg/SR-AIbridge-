@@ -1,6 +1,6 @@
 # 📘 The Book of the Repo
 
-_Generated automatically on 2025-11-04T03:52:22.855657+00:00 UTC_
+_Generated automatically on 2025-11-04T04:02:13.301661+00:00 UTC_
 
 ---
 
@@ -12334,11 +12334,6 @@ _Generated automatically on 2025-11-04T03:52:22.855657+00:00 UTC_
 
 - # 🔵 Bridge Health Badge
 - ## Integration
-
-
-### ./.pytest_cache/README.md
-
-- # pytest cache directory #
 
 
 ### ./bridge_backend/dock_day_exports/test_export/README.md
