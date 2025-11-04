@@ -1,0 +1,32 @@
+name: Bridge Sync Feedback
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [bridge-deploy]
+
+jobs:
+  bridge-feedback:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Parse Bridge Payload
+        run: |
+          echo "Bridge Deploy received from Netlify"
+          echo "Payload: ${{ toJson(github.event.client_payload) }}"
+
+      - name: Post Comment to PR
+        if: ${{ github.event.client_payload.pull_request_number }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.client_payload.pull_request_number;
+            const msg = context.payload.client_payload.message || "Bridge Deploy event received ✅";
+            await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number: pr,
+              body: `🔗 **Bridge Sync Update**\n${msg}\n\n_Triggered by SR-AIBridge webhook_`
+            });
