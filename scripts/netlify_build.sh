@@ -1,7 +1,24 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Error reporting function
+report_error() {
+  local error_msg="$1"
+  local exit_code="${2:-1}"
+  echo "❌ BUILD FAILED: $error_msg" >&2
+  echo "Exit code: $exit_code" >&2
+  echo "Timestamp: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >&2
+  echo "Branch: ${BRANCH:-unknown}" >&2
+  echo "Deploy ID: ${DEPLOY_ID:-unknown}" >&2
+  exit "$exit_code"
+}
+
+# Set up error trap
+trap 'report_error "Build script failed at line $LINENO" $?' ERR
+
 echo "🔧 Starting Netlify build process..."
+echo "Branch: ${BRANCH:-unknown}"
+echo "Deploy context: ${CONTEXT:-unknown}"
 
 # Synthesize artifacts to satisfy preview checks even for minimal branches
 python3 scripts/synthesize_netlify_artifacts.py
