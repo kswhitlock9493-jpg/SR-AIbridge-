@@ -8,12 +8,8 @@ import pytest
 import json
 import tempfile
 from pathlib import Path
-import sys
-import os
 
-# Add parent directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
-
+# Import from autonomy package
 from bridge_backend.tools.autonomy.failure_analyzer import FailurePatternAnalyzer
 from bridge_backend.tools.autonomy.pr_generator import PRGenerator
 from bridge_backend.tools.autonomy.failure_patterns import (

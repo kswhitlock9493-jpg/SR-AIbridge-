@@ -8,7 +8,7 @@ and can create fix scripts or recommendations.
 import json
 import argparse
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Tuple
 from datetime import datetime, timezone
 
 
@@ -111,7 +111,7 @@ class PRGenerator:
                 "reason": str(e)
             })
     
-    def _fix_deprecated_actions(self, content: str) -> tuple[str, bool]:
+    def _fix_deprecated_actions(self, content: str) -> Tuple[str, bool]:
         """Fix deprecated GitHub Actions versions."""
         replacements = {
             "actions/upload-artifact@v3": "actions/upload-artifact@v4",
@@ -130,7 +130,7 @@ class PRGenerator:
         
         return modified, changed
     
-    def _add_browser_env_vars(self, content: str) -> tuple[str, bool]:
+    def _add_browser_env_vars(self, content: str) -> Tuple[str, bool]:
         """Add browser-related environment variables."""
         # This is a simple implementation - in production, you'd want more sophisticated YAML parsing
         
