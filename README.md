@@ -55,6 +55,26 @@ SR-AIbridge is a comprehensive, production-ready platform for managing AI agents
 
 ![Bridge Health](docs/badges/bridge_health.svg)
 
+---
+
+## 📚 **NEW: Complete Documentation Suite**
+
+> **Never touched SR-AIbridge before?** We've created comprehensive documentation to get you from zero to sovereign in minutes.
+
+| Document | Purpose | Time | Best For |
+|----------|---------|------|----------|
+| **[📍 NAVIGATION_INDEX](NAVIGATION_INDEX.md)** | Choose your learning path | 5 min | Everyone - START HERE |
+| **[🚀 QUICK_START_30MIN](QUICK_START_30MIN.md)** | Get running fast | 30 min | Experienced developers |
+| **[🗺️ MASTER_ROADMAP](MASTER_ROADMAP.md)** | Complete project map | 30 min | Understanding the system |
+| **[🏗️ SYSTEM_BLUEPRINT](SYSTEM_BLUEPRINT.md)** | Technical architecture | 1 hour | Architects & developers |
+| **[🔨 BUILD_DOSSIER](BUILD_DOSSIER.md)** | Rebuild from scratch | 1-2 hours | Learning by building |
+| **[🧠 ENGINE_CATALOG](ENGINE_CATALOG.md)** | All 20 engines | 30 min | Engine documentation |
+| **[📑 COMPONENT_INDEX](COMPONENT_INDEX.md)** | Find any file | 15 min | Quick reference |
+
+**Goal**: Someone with zero knowledge can read the docs and rebuild SR-AIbridge in ~30 minutes.
+
+---
+
 ## ✨ What is SR-AIbridge?
 
 SR-AIbridge provides a complete tactical command system for coordinating AI agents and autonomous operations. Whether you're managing a fleet of AI agents, tracking complex missions, or monitoring system health in real-time, SR-AIbridge offers the tools and infrastructure you need.
