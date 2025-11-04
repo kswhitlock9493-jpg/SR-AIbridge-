@@ -19,6 +19,7 @@ import os
 from pathlib import Path
 from typing import Dict, Any, List
 import json
+from datetime import datetime, timezone
 
 # Add the backend to the path to import engines
 sys.path.insert(0, str(Path(__file__).parent / "bridge_backend"))
@@ -260,7 +261,7 @@ def generate_comprehensive_report(parser_results, blueprint_results, truth_resul
     
     report = {
         "study_metadata": {
-            "timestamp": "2024-11-04T15:24:27Z",
+            "timestamp": datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
             "engines_used": ["Parser Engine", "Blueprint Engine", "Truth Engine"],
             "repository": "SR-AIbridge",
             "study_type": "Comprehensive Repository Analysis"
