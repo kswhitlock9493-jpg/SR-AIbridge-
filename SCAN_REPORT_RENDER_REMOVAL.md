@@ -1,56 +1,38 @@
 # Repository Scan Report - Render Removal Readiness
 
-**Date:** Tue Nov  4 02:30:49 UTC 2025
+**Date:** Tue Nov  4 02:40:09 UTC 2025
 
 ## Summary
 
-- Issues: 3
-- Info: 13
-- Render References: 36 files
-- BRH References: 28 files
+- Issues: 1
+- Info: 10
+- Render References: 26 files
+- BRH References: 33 files
 - Forge References: 33 files
 
 ## Issues
 
 - ❌ Token Forge Dominion module not found
-- ❌ .env.example still references Render
-- ❌ Frontend config.js still defaults to Render
 
 ## Information
 
 - ✅ Backend main.py has Forge references
 - ✅ Forge engine directory exists: /home/runner/work/SR-AIbridge-/SR-AIbridge-/bridge_backend/forge
+- ✅ .env.example has BRH configuration
+- ✅ Frontend config.js doesn't hardcode Render
 - ✅ BRH directory exists
 -   ✅ BRH run.py exists
 -   ✅ BRH api.py exists
 -   ✅ BRH forge_auth.py exists
 -   ✅ BRH README.md exists
 - ✅ bridge.runtime.yaml exists
-- ⚠️  render.yaml still exists (can be removed)
-- ⚠️  Render script exists: render_collect.py
-- ⚠️  Render script exists: render_env_lint.py
-- ⚠️  Render script exists: runtime_triage_render.py
-- ⚠️  2 Render-related workflow(s) found
 
 ## Render References by File
-
-### bridge-frontend/netlify/functions/health.ts
-
-- Line 15: `const backend = process.env.RENDER_HEALTH_URL || "https://sr-aibridge.onrender.com/api/health";`
-
-### bridge-frontend/src/config.js
-
-- Line 2: `export const API_BASE = import.meta.env.VITE_API_BASE || "https://sr-aibridge.onrender.com";`
-- Line 15: `: "wss://sr-aibridge.onrender.com")`
 
 ### bridge_backend/bridge_core/engines/envsync/providers/render.py
 
 - Line 23: `url = f"https://api.render.com/v1/services/{self.service_id}/env-vars"`
 - Line 37: `url = f"https://api.render.com/v1/services/{self.service_id}/env-vars"`
-
-### bridge_backend/config.py
-
-- Line 77: `"https://*.onrender.com",  # All Render subdomains`
 
 ### bridge_backend/diagnostics/full_scan_report.json
 
@@ -65,38 +47,14 @@
 
 - Line 37: `url = f"https://api.render.com/v1/services/{service_id}/env-vars"`
 
-### bridge_backend/engines/hydra/guard.py
-
-- Line 47: `return """/api/*   https://sr-aibridge.onrender.com/:splat   200`
-
 ### bridge_backend/engines/steward/adapters/render_adapter.py
 
 - Line 12: `"""Adapter for Render.com environment variables"""`
 
-### bridge_backend/main.py
+### bridge_backend/hooks_triage_report.json
 
-- Line 91: `"https://sr-aibridge.netlify.app,https://sr-aibridge.onrender.com"`
-
-### bridge_backend/middleware/headers.py
-
-- Line 40: `"https://sr-aibridge.netlify.app,https://sr-aibridge.onrender.com"`
-
-### bridge_backend/runtime/egress_canary.py
-
-- Line 16: `"api.render.com",`
-- Line 17: `"render.com",`
-
-### bridge_backend/runtime/heartbeat.py
-
-- Line 27: `return "https://sr-aibridge.onrender.com/health"`
-
-### bridge_backend/runtime/parity.py
-
-- Line 45: `"https://sr-aibridge.onrender.com"`
-
-### bridge_backend/scripts/api_triage.py
-
-- Line 34: `BASE_URL = os.getenv("BRIDGE_BASE_URL", "https://sr-aibridge.onrender.com")`
+- Line 11: `"url": "https://sr-aibridge.onrender.com/api/diagnostics",`
+- Line 18: `"url": "https://sr-aibridge.onrender.com/api/status",`
 
 ### bridge_backend/scripts/deploy_diagnose.py
 
@@ -147,12 +105,6 @@
 ### netlify.toml
 
 - Line 18: `to = "https://sr-aibridge.onrender.com/:splat"`
-
-### render.yaml
-
-- Line 26: `value: postgresql://sr_admin:<YOUR_PASSWORD>@dpg-d3i3jc0dl3ps73csp9e0-a.oregon-postgres.render.com/s`
-- Line 28: `value: https://sr-aibridge.onrender.com`
-- Line 44: `value: https://bridge.netlify.app,https://sr-aibridge.netlify.app,https://sr-aibridge.onrender.com`
 
 ### scripts/check_env_parity.py
 
