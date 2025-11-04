@@ -70,7 +70,7 @@ jobs:
         run: |
           npm install -g netlify-cli
           echo "🚀 Starting deployment..."
-          netlify deploy --dir=bridge-frontend/build --site=$NETLIFY_SITE_ID --prod || (
+          netlify deploy --dir=bridge-frontend/dist --site=$NETLIFY_SITE_ID --prod || (
             echo "⚠️ Deploy failed — rolling back to previous successful version"
             python3 scripts/report_bridge_event.py report_deploy_failure || true
             python3 scripts/netlify_rollback.py
