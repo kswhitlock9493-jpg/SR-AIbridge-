@@ -14,7 +14,7 @@ report_error() {
 }
 
 # Set up error trap
-trap 'report_error "Build script failed at line $LINENO" $?' ERR
+trap 'report_error "Build script failed at line $LINENO" 1' ERR
 
 echo "🔧 Starting Netlify build process..."
 echo "Branch: ${BRANCH:-unknown}"
