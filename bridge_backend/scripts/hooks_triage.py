@@ -18,7 +18,8 @@ from typing import Dict, List, Any, Optional
 
 # Configuration
 # Use BRH (Bridge Runtime Handler) as default, not Render
-BASE_URL = os.getenv("BRIDGE_BASE_URL", os.getenv("BRH_BACKEND_URL", "http://localhost:8000"))
+# Priority: BRIDGE_BASE_URL > BRH_BACKEND_URL > localhost:8000
+BASE_URL = os.getenv("BRIDGE_BASE_URL") or os.getenv("BRH_BACKEND_URL") or "http://localhost:8000"
 BRIDGE_NOTIFY = os.getenv("BRIDGE_URL", "https://sr-aibridge.netlify.app/api/diagnostics")
 CONFIG_PATH = Path(__file__).parent.parent / "config" / "hooks.json"
 
