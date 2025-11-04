@@ -198,3 +198,11 @@ forge/runtime/*.tmp
 forge/runtime/*.lock
 # Keep active_nodes.json tracked
 !forge/runtime/active_nodes.json
+
+# Workflow Failure Resolution Framework (generated diagnostics)
+bridge_backend/diagnostics/failure_analysis.json
+bridge_backend/diagnostics/autofix_plan.json
+bridge_backend/diagnostics/fix_summary.json
+bridge_backend/diagnostics/recommendations.md
+bridge_backend/diagnostics/forensics_report.json
+bridge_backend/diagnostics/workflow_scan_results.json
