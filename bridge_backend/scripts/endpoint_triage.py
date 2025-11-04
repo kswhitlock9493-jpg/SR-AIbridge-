@@ -19,8 +19,13 @@ ENDPOINTS = [
     {"name": "agents", "url": "/agents"},
 ]
 
-BASE_URL = os.getenv("BRIDGE_BASE_URL", "https://sr-aibridge.onrender.com")
+# Use BRH (Bridge Runtime Handler) as default, not Render
+# Priority: BRIDGE_BASE_URL > BRH_BACKEND_URL > localhost:8000
+BASE_URL = os.getenv("BRIDGE_BASE_URL") or os.getenv("BRH_BACKEND_URL") or "http://localhost:8000"
 BRIDGE_NOTIFY = os.getenv("BRIDGE_URL", "https://sr-aibridge.netlify.app/api/diagnostics")
+
+# Skip HTTP calls during CI/build process to avoid blocking
+IS_BUILD_ENV = os.getenv("CI") == "true" or os.getenv("NETLIFY") == "true"
 
 
 def check_endpoint(endpoint: Dict[str, str]) -> Dict[str, Any]:
@@ -28,6 +33,14 @@ def check_endpoint(endpoint: Dict[str, str]) -> Dict[str, Any]:
     name = endpoint["name"]
     url = endpoint["url"]
     full_url = f"{BASE_URL}{url}"
+    
+    # Skip HTTP calls in build environments
+    if IS_BUILD_ENV:
+        return {
+            "name": name,
+            "status": "SKIPPED",
+            "reason": "Build environment - HTTP checks disabled"
+        }
     
     try:
         response = requests.get(full_url, timeout=7)
@@ -55,6 +68,11 @@ def check_endpoint(endpoint: Dict[str, str]) -> Dict[str, Any]:
 
 def notify_bridge(payload: Dict[str, Any]) -> None:
     """Send notification to Bridge diagnostics endpoint"""
+    # Skip notifications in build environments
+    if IS_BUILD_ENV:
+        print(f"ℹ️  Skipping bridge notification (build environment)")
+        return
+        
     try:
         response = requests.post(
             BRIDGE_NOTIFY,
@@ -80,16 +98,28 @@ def run_endpoint_triage(manual: bool = False) -> Dict[str, Any]:
     
     print("🩺 Starting endpoint triage...")
     
+    if IS_BUILD_ENV:
+        print("ℹ️  Running in build environment - HTTP checks will be skipped")
+    
     # Check each endpoint
     for endpoint in ENDPOINTS:
         result = check_endpoint(endpoint)
         results.append(result)
-        status_icon = "✅" if result["status"] == "OK" else "❌"
+        if result["status"] == "SKIPPED":
+            status_icon = "⏭️"
+        elif result["status"] == "OK":
+            status_icon = "✅"
+        else:
+            status_icon = "❌"
         print(f"  {status_icon} {result['name']}: {result['status']}")
     
     # Calculate overall status
+    skipped = [r for r in results if r["status"] == "SKIPPED"]
     failed = [r for r in results if r["status"] == "FAILED"]
-    if len(failed) == 0:
+    
+    if len(skipped) == len(results):
+        overall = "SKIPPED"
+    elif len(failed) == 0:
         overall = "HEALTHY"
     elif len(failed) < 2:
         overall = "DEGRADED"
@@ -104,6 +134,7 @@ def run_endpoint_triage(manual: bool = False) -> Dict[str, Any]:
         "meta": {
             "timestamp": timestamp,
             "manual": manual,
+            "buildEnvironment": IS_BUILD_ENV,
             "failedEndpoints": [f["name"] for f in failed],
             "results": results,
             "environment": "backend"
@@ -124,7 +155,7 @@ def run_endpoint_triage(manual: bool = False) -> Dict[str, Any]:
     
     # Print summary
     print(f"\n📡 Endpoint Triage: {overall}")
-    if overall != "HEALTHY":
+    if overall != "HEALTHY" and overall != "SKIPPED":
         print("\n❌ Failed Endpoints:")
         for f in failed:
             print(f"  - {f['name']}: {f.get('error', 'Unknown error')}")
@@ -139,7 +170,7 @@ if __name__ == "__main__":
     # Run triage
     summary = run_endpoint_triage(manual)
     
-    # Exit with appropriate code
+    # Exit with appropriate code (SKIPPED is not an error)
     if summary["status"] == "CRITICAL":
         sys.exit(2)
     elif summary["status"] == "DEGRADED":

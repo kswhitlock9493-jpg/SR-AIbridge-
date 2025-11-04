@@ -17,9 +17,14 @@ from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional
 
 # Configuration
-BASE_URL = os.getenv("BRIDGE_BASE_URL", "https://sr-aibridge.onrender.com")
+# Use BRH (Bridge Runtime Handler) as default, not Render
+# Priority: BRIDGE_BASE_URL > BRH_BACKEND_URL > localhost:8000
+BASE_URL = os.getenv("BRIDGE_BASE_URL") or os.getenv("BRH_BACKEND_URL") or "http://localhost:8000"
 BRIDGE_NOTIFY = os.getenv("BRIDGE_URL", "https://sr-aibridge.netlify.app/api/diagnostics")
 CONFIG_PATH = Path(__file__).parent.parent / "config" / "hooks.json"
+
+# Skip HTTP calls during CI/build process to avoid blocking
+IS_BUILD_ENV = os.getenv("CI") == "true" or os.getenv("NETLIFY") == "true"
 
 
 def now_iso() -> str:
@@ -49,6 +54,14 @@ def ping_hook(entry: Dict[str, Any]) -> Dict[str, Any]:
     Ping a single hook endpoint and measure latency
     Returns status result with latency information
     """
+    # Skip HTTP calls in build environments
+    if IS_BUILD_ENV:
+        return {
+            "name": entry["name"],
+            "status": "SKIPPED",
+            "reason": "Build environment - HTTP checks disabled"
+        }
+    
     is_absolute = bool(entry.get("absoluteUrl"))
     target = entry["absoluteUrl"] if is_absolute else f"{BASE_URL}{entry['url']}"
     method = entry.get("method", "POST").upper()
@@ -127,6 +140,11 @@ def ping_hook(entry: Dict[str, Any]) -> Dict[str, Any]:
 
 def notify_bridge(payload: Dict[str, Any]) -> None:
     """Send notification to Bridge diagnostics endpoint"""
+    # Skip notifications in build environments
+    if IS_BUILD_ENV:
+        print(f"ℹ️  Skipping bridge notification (build environment)")
+        return
+        
     try:
         response = requests.post(
             BRIDGE_NOTIFY,
@@ -169,17 +187,29 @@ def run_hooks_triage(manual: bool = False) -> Dict[str, Any]:
     
     print("🪝 Starting Hooks triage...")
     
+    if IS_BUILD_ENV:
+        print("ℹ️  Running in build environment - HTTP checks will be skipped")
+    
     # Check each hook
     results = []
     for entry in config:
         result = ping_hook(entry)
         results.append(result)
-        status_icon = "✅" if result["status"] == "OK" else "❌"
+        if result["status"] == "SKIPPED":
+            status_icon = "⏭️"
+        elif result["status"] == "OK":
+            status_icon = "✅"
+        else:
+            status_icon = "❌"
         print(f"  {status_icon} {result['name']}: {result['status']}")
     
     # Calculate overall status
-    failed = [r for r in results if r["status"] != "OK"]
-    if len(failed) == 0:
+    skipped = [r for r in results if r["status"] == "SKIPPED"]
+    failed = [r for r in results if r["status"] != "OK" and r["status"] != "SKIPPED"]
+    
+    if len(skipped) == len(results):
+        overall = "SKIPPED"
+    elif len(failed) == 0:
         overall = "HEALTHY"
     elif len(failed) <= 1:
         overall = "DEGRADED"
@@ -194,6 +224,7 @@ def run_hooks_triage(manual: bool = False) -> Dict[str, Any]:
         "manual": manual,
         "meta": {
             "timestamp": timestamp,
+            "buildEnvironment": IS_BUILD_ENV,
             "results": results,
             "environment": "backend"
         }
@@ -229,7 +260,7 @@ if __name__ == "__main__":
     # Run triage
     report = run_hooks_triage(manual)
     
-    # Exit with appropriate code
+    # Exit with appropriate code (SKIPPED is not an error)
     if report["status"] == "CRITICAL":
         sys.exit(2)
     elif report["status"] == "DEGRADED":
