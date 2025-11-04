@@ -62,9 +62,9 @@ jobs:
       - name: 🔍 Verify Build Output Directory
         run: |
           echo "Checking for deploy folder..."
-          if [ ! -d "bridge-frontend/build" ]; then
+          if [ ! -d "bridge-frontend/dist" ]; then
             echo "❌ Missing deploy directory! Creating placeholder."
-            mkdir -p bridge-frontend/build
+            mkdir -p bridge-frontend/dist
           fi
           echo "✅ Deploy directory confirmed."
 
@@ -74,7 +74,7 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         run: |
           npm install -g netlify-cli
-          netlify deploy --dir=bridge-frontend/build --site=$NETLIFY_SITE_ID --prod || (
+          netlify deploy --dir=bridge-frontend/dist --site=$NETLIFY_SITE_ID --prod || (
             echo "⚠️ Deploy failed — reporting to Bridge"
             python3 - <<'EOF'
 from scripts.report_bridge_event import report_deploy_failure
