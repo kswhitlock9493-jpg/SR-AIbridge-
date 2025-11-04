@@ -1,6 +1,6 @@
 # 📘 The Book of the Repo
 
-_Generated automatically on 2025-11-04T04:02:13.301661+00:00 UTC_
+_Generated automatically on 2025-11-04T04:04:55.828808+00:00 UTC_
 
 ---
 
@@ -12336,6 +12336,11 @@ _Generated automatically on 2025-11-04T04:02:13.301661+00:00 UTC_
 - ## Integration
 
 
+### ./.pytest_cache/README.md
+
+- # pytest cache directory #
+
+
 ### ./bridge_backend/dock_day_exports/test_export/README.md
 
 - # SR-AIbridge Dock-Day Drop: test_export
@@ -13459,6 +13464,7 @@ _Generated automatically on 2025-11-04T04:02:13.301661+00:00 UTC_
 - ### ./tests/test_autonomy_node.py
 - ### ./tests/test_v196h_features.py
 - ### ./tests/test_quantum_dominion.py
+- ### ./codex/html_compiler.py
 - ### ./codex/markdown_compiler.py
 - ### ./codex/compiler.py
 - ### ./codex/blueprint_engine.py
@@ -19186,6 +19192,7 @@ _Generated automatically on 2025-11-04T04:02:13.301661+00:00 UTC_
   - """Test gathering metadata from YAML files."""
   - from codex.compiler import compile_codex
   - from codex.markdown_compiler import compile_markdown
+  - from codex.html_compiler import build_html
 
 
 ### ./tests/deployment_readiness_v197c.py
@@ -19561,6 +19568,14 @@ _Generated automatically on 2025-11-04T04:02:13.301661+00:00 UTC_
   - from pathlib import Path
   - from bridge_backend.bridge_core.token_forge_dominion import (
   - """Test complete token lifecycle from minting to validation."""
+
+
+### ./codex/html_compiler.py
+  - import markdown
+  - import os
+  - from datetime import datetime, timezone
+  - """Build a styled HTML book from the markdown repo book."""
+  - background: conic-gradient(from 0deg, #00ffaa20, #00ffaa, #00ffaa20);
 
 
 ### ./codex/markdown_compiler.py

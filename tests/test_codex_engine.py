@@ -117,6 +117,29 @@ class TestCompilers:
         assert "## 📄 Documentation Index" in content
         assert "## 🧬 Blueprint Overview" in content
 
+    def test_html_compiler_output(self):
+        """Test that HTML compiler creates valid output."""
+        from codex.html_compiler import build_html
+        
+        # Run the compiler
+        build_html()
+        
+        # Check that output file exists
+        output_path = "codex/output/repo_book.html"
+        assert os.path.exists(output_path)
+        
+        # Verify HTML has expected elements
+        with open(output_path, "r") as f:
+            content = f.read()
+        
+        assert "<!DOCTYPE html>" in content
+        assert "<title>Book of the Repo</title>" in content
+        assert "forgeSeal" in content  # Forge Seal div
+        assert "forgeGlow" in content  # CSS animation
+        assert "sealPulse" in content  # CSS animation
+        assert "SR-AIBridge — The Book of the Repo" in content
+        assert "SR-AIBridge — Sovereign Runtime Codex ©" in content
+
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
