@@ -85,10 +85,10 @@ app = FastAPI(
 )
 
 # === CORS ===
-# Dynamic CORS handling for Netlify ↔ Render coordination
+# Dynamic CORS handling for Netlify ↔ BRH coordination
 CORS_ALLOW_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS", 
-    "https://sr-aibridge.netlify.app,https://sr-aibridge.onrender.com"
+    "https://sr-aibridge.netlify.app"
 ).split(",")
 
 # Allow localhost in development

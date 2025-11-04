@@ -31,7 +31,7 @@ CHECKS = [
     }
 ]
 
-BASE_URL = os.getenv("BRIDGE_BASE_URL", "https://sr-aibridge.onrender.com")
+BASE_URL = os.getenv("BRIDGE_BASE_URL", "http://localhost:8000")
 BRIDGE_NOTIFY = os.getenv("BRIDGE_URL", "https://sr-aibridge.netlify.app/api/diagnostics")
 
 

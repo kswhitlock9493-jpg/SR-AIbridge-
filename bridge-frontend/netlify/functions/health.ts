@@ -12,7 +12,8 @@ const ok = async (url: string) => {
 };
 
 export const handler: Handler = async () => {
-  const backend = process.env.RENDER_HEALTH_URL || "https://sr-aibridge.onrender.com/api/health";
+  // Use BRH_HEALTH_URL for Bridge Runtime Handler, fallback to localhost
+  const backend = process.env.BRH_HEALTH_URL || process.env.BACKEND_HEALTH_URL || "http://localhost:8000/api/health";
   const frontend = process.env.FRONTEND_HEALTH_URL || "https://sr-aibridge.netlify.app";
   const service = process.env.SITE_URL || "https://sr-aibridge.netlify.app";
 

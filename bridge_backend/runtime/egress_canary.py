@@ -13,8 +13,6 @@ HOSTS = [
     "codeload.github.com",
     "registry.npmjs.org",
     "nodejs.org",
-    "api.render.com",
-    "render.com",
     "api.netlify.com",
     "netlify.com",
 ]
