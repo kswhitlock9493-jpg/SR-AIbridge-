@@ -7,7 +7,14 @@ import os
 import random
 import threading
 import time
-import subprocess
+
+try:
+    import docker
+    DOCKER_AVAILABLE = True
+    client = docker.from_env()
+except ImportError:
+    DOCKER_AVAILABLE = False
+    client = None
 
 INTERVAL = int(os.getenv("BRH_CHAOS_INTERVAL", "600"))  # every 10 min
 KILL_PROB = float(os.getenv("BRH_KILL_PROB", "0.15"))   # 15% chance
@@ -19,24 +26,26 @@ def chaos_loop():
     Continuous chaos injection loop.
     Periodically kills random containers to test resilience.
     """
+    if not DOCKER_AVAILABLE:
+        print("[CHAOS] Docker SDK not available, chaos disabled")
+        return
+    
     while True:
         time.sleep(INTERVAL)
         if random.random() > KILL_PROB:
             continue
         try:
-            out = subprocess.check_output(
-                ["docker", "ps", "--format", "{{.Names}}"], text=True
-            ).strip().splitlines()
-            if not out:
+            containers = client.containers.list()
+            if not containers:
                 continue
-            target = random.choice(out)
-            print(f"[CHAOS] 💣 Simulating failure in {target}")
-            subprocess.call(["docker", "kill", target])
+            target = random.choice(containers)
+            print(f"[CHAOS] 💣 Simulating failure in {target.name}")
+            target.kill()
             
             # Log event
             try:
                 from brh.api import log_event
-                log_event(f"CHAOS: killed container {target}")
+                log_event(f"CHAOS: killed container {target.name}")
             except Exception:
                 pass  # Event logging not required for chaos operation
         except Exception as e:
@@ -51,6 +60,10 @@ def start():
     enabled = os.getenv("BRH_CHAOS_ENABLED", "false").lower() == "true"
     if not enabled:
         print("[CHAOS] Chaos injector disabled")
+        return
+    
+    if not DOCKER_AVAILABLE:
+        print("[CHAOS] Docker SDK not available, chaos disabled")
         return
     
     print(f"[CHAOS] Starting chaos injector (interval={INTERVAL}s, probability={KILL_PROB})")

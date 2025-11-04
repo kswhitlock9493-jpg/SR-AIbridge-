@@ -21,9 +21,10 @@ class TestChaosModule:
     def test_chaos_enabled_starts_thread(self):
         """Test that chaos starts when enabled"""
         with patch.dict(os.environ, {'BRH_CHAOS_ENABLED': 'true'}):
-            with patch('threading.Thread') as mock_thread:
-                chaos.start()
-                mock_thread.assert_called_once()
+            with patch('brh.chaos.DOCKER_AVAILABLE', True):
+                with patch('threading.Thread') as mock_thread:
+                    chaos.start()
+                    mock_thread.assert_called_once()
     
     def test_chaos_interval_configuration(self):
         """Test chaos interval can be configured"""

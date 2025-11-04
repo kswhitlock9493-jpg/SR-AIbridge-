@@ -3,7 +3,7 @@ import os
 import subprocess
 import time
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from brh import role
@@ -138,7 +138,6 @@ def log_event(msg: str):
     Args:
         msg: Event message to log
     """
-    from datetime import timezone
     EVENT_LOG.append({"time": datetime.now(timezone.utc).isoformat(), "message": msg})
     if len(EVENT_LOG) > 1000:
         EVENT_LOG.pop(0)

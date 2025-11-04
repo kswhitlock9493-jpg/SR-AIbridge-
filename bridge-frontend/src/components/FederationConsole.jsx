@@ -9,9 +9,12 @@ export default function FederationConsole() {
     forgeStatus: "Connecting...",
   });
 
+  // Use environment variable for API base URL with fallback
+  const apiBase = import.meta.env.VITE_BRH_API_BASE || "http://localhost:7878";
+
   const fetchStatus = async () => {
     try {
-      const res = await fetch("http://localhost:7878/federation/state");
+      const res = await fetch(`${apiBase}/federation/state`);
       const data = await res.json();
       setState((prev) => ({
         ...prev,
@@ -26,7 +29,7 @@ export default function FederationConsole() {
 
   const fetchEvents = async () => {
     try {
-      const res = await fetch("http://localhost:7878/events");
+      const res = await fetch(`${apiBase}/events`);
       const data = await res.json();
       setState((prev) => ({
         ...prev,
