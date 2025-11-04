@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=20 <21",
+    "node": ">=20 <=22",
     "npm": ">=10"
   },
   "dependencies": {
@@ -14,7 +14,6 @@
   },
   "devDependencies": {
     "@netlify/functions": "^2.8.2",
-    "@netlify/plugin-lighthouse": "^4.1.0",
     "@playwright/test": "^1.47.2",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.1.2",
@@ -23,7 +22,7 @@
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.2.1",
     "cross-env": "^7.0.3",
-    "eslint": "^8.57.0",
+    "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
@@ -32,7 +31,7 @@
     "vitest": "^1.4.0"
   },
   "optionalDependencies": {
-    "puppeteer": "^22.12.0"
+    "puppeteer": "^24.28.0"
   },
   "scripts": {
     "dev": "vite",
