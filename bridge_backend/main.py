@@ -24,7 +24,11 @@ logger.info(f"[BOOT] Detected host environment: {HOST_PLATFORM}")
 
 # === Runtime Path Safety Net ===
 # Ensures the app finds local modules even under Render's /opt/render/project/src environment
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Add both the current directory and the parent directory to support both run contexts
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)  # Add parent to find bridge_backend package
+sys.path.insert(0, current_dir)  # Add current for local imports
 
 # === Sanctum Cascade Protocol v1.9.7q ===
 # Ordered boot hardening: guards → reflex → umbra → integrity
