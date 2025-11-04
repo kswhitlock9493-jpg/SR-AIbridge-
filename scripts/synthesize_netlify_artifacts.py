@@ -4,10 +4,23 @@ Synthesize Netlify artifacts to ensure preview checks pass
 Creates _headers, _redirects, and minimal index.html if they don't exist
 """
 from pathlib import Path
+import os
 
-root = Path(__file__).resolve().parents[1]
-public = root / "public"
-dist = root / "dist"
+# Determine the correct root based on where we're running from
+script_dir = Path(__file__).resolve().parent
+repo_root = script_dir.parent
+
+# If we're being called from bridge-frontend (Netlify base dir), use current dir
+# Otherwise use bridge-frontend subdirectory
+if Path.cwd().name == "bridge-frontend":
+    # Running from bridge-frontend (Netlify context)
+    frontend_root = Path.cwd()
+else:
+    # Running from repo root (legacy/local testing)
+    frontend_root = repo_root / "bridge-frontend"
+
+public = frontend_root / "public"
+dist = frontend_root / "dist"
 
 # Ensure directories exist
 public.mkdir(exist_ok=True)
