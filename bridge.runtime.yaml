@@ -30,6 +30,19 @@ runtime:
       interval: 180
       election_method: highest_epoch
       ledger_forward: true
+  # Health and chaos configuration
+  health:
+    recovery: true
+    chaos:
+      enabled: false
+      interval: 600
+      probability: 0.15
+  # Ledger forwarding configuration
+  ledger:
+    forward:
+      - federation/heartbeat
+      - federation/consensus
+      - recovery
 
 # Forge configuration schema
 forge:

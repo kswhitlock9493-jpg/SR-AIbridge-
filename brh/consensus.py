@@ -40,6 +40,12 @@ def heartbeat_listener(pulse):
         "status": "alive",
         "last_seen": time.time()
     }
+    # Log event
+    try:
+        from brh.api import log_event
+        log_event(f"HEARTBEAT: received from {node} at epoch {pulse['epoch']}")
+    except Exception:
+        pass  # Event logging not required for operation
 
 
 def elect_leader():
@@ -80,6 +86,12 @@ def apply_leader_change(new_leader: str, lease_token: str | None = None):
     if not prev_was_leader and now_leader:
         print(f"[CN] PROMOTE → I am leader ({new_leader})")
         handover.adopt_containers(ENV)
+        # Log event
+        try:
+            from brh.api import log_event
+            log_event(f"PROMOTION: node promoted to leader ({new_leader})")
+        except Exception:
+            pass
 
     if prev_was_leader and not now_leader:
         print(f"[CN] DEMOTE → I am witness (leader={new_leader})")
@@ -87,6 +99,12 @@ def apply_leader_change(new_leader: str, lease_token: str | None = None):
         handover.relinquish_ownership(ENV)
         # If you prefer to stop workloads on demotion:
         # handover.drain_and_stop(ENV)
+        # Log event
+        try:
+            from brh.api import log_event
+            log_event(f"DEMOTION: node demoted to witness (leader={new_leader})")
+        except Exception:
+            pass
 
 
 def broadcast_election():
@@ -112,6 +130,28 @@ def broadcast_election():
             
             r = requests.post(f"{forge_url}/federation/consensus", json=payload, timeout=10)
             print(f"[CN] Elected leader={leader} | peers={len(peers)} | → {r.status_code}")
+            
+            # Log event
+            try:
+                from brh.api import log_event
+                log_event(f"CONSENSUS: elected leader={leader}, peers={len(peers)}")
+            except Exception:
+                pass
+            
+            # Send ledger feedback (optional, may not exist yet)
+            try:
+                ledger_payload = {
+                    "epoch": epoch,
+                    "leader": leader,
+                    "peers": list(peers.keys()),
+                    "status": "consensus-ok",
+                    "signature": sig,
+                    "bridge": "SR-AIBRIDGE"
+                }
+                requests.post(f"{forge_url}/api/ledger/feedback", json=ledger_payload, timeout=10)
+            except Exception:
+                pass  # Ledger feedback optional
+                
         except Exception as e:
             print(f"[CN] consensus broadcast failed: {e}")
 

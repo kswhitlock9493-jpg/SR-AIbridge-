@@ -117,6 +117,14 @@ def main():
     
     # Start consensus coordinator
     consensus.start()
+    
+    # Start chaos injector (if enabled)
+    from brh import chaos
+    chaos.start()
+    
+    # Start recovery watchtower (if enabled)
+    from brh import recovery
+    recovery.start()
 
     spec = yaml.safe_load(MANIFEST.read_text())
     assert spec["provider"]["kind"] == "docker", "Phase-1 supports docker only"

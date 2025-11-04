@@ -5,6 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import { bootstrapEndpoints } from '../utils/endpointBootstrap';
+import FederationConsole from '../components/FederationConsole';
 
 export default function CommandDeck() {
   const [status, setStatus] = useState('LOADING');
@@ -32,6 +33,11 @@ export default function CommandDeck() {
           <ul>{failed.map(ep => <li key={ep}>{ep}</li>)}</ul>
         </div>
       )}
+      
+      {/* Federation Console */}
+      <div className="mt-6">
+        <FederationConsole />
+      </div>
     </div>
   );
 }
