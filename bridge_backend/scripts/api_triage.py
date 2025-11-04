@@ -31,8 +31,12 @@ CHECKS = [
     }
 ]
 
-BASE_URL = os.getenv("BRIDGE_BASE_URL", "http://localhost:8000")
+# Use BRH (Bridge Runtime Handler) as default, not Render
+BASE_URL = os.getenv("BRIDGE_BASE_URL", os.getenv("BRH_BACKEND_URL", "http://localhost:8000"))
 BRIDGE_NOTIFY = os.getenv("BRIDGE_URL", "https://sr-aibridge.netlify.app/api/diagnostics")
+
+# Skip HTTP calls during CI/build process to avoid blocking
+IS_BUILD_ENV = os.getenv("CI") == "true" or os.getenv("NETLIFY") == "true"
 
 
 def validate_schema(obj: Any, schema: Dict[str, str]) -> Optional[str]:
@@ -71,6 +75,15 @@ def check_api(check: Dict[str, Any]) -> Dict[str, Any]:
     schema = check["schema"]
     full_url = f"{BASE_URL}{url}"
     
+    # Skip HTTP calls in build environments
+    if IS_BUILD_ENV:
+        return {
+            "name": name,
+            "url": url,
+            "status": "SKIPPED",
+            "reason": "Build environment - HTTP checks disabled"
+        }
+    
     try:
         response = requests.get(full_url, timeout=8)
         if not response.ok:
@@ -103,6 +116,11 @@ def check_api(check: Dict[str, Any]) -> Dict[str, Any]:
 
 def notify_bridge(payload: Dict[str, Any]) -> None:
     """Send notification to Bridge diagnostics endpoint"""
+    # Skip notifications in build environments
+    if IS_BUILD_ENV:
+        print(f"ℹ️  Skipping bridge notification (build environment)")
+        return
+        
     try:
         response = requests.post(
             BRIDGE_NOTIFY,
@@ -128,16 +146,28 @@ def run_api_triage(manual: bool = False) -> Dict[str, Any]:
     
     print("🧬 Starting API triage...")
     
+    if IS_BUILD_ENV:
+        print("ℹ️  Running in build environment - HTTP checks will be skipped")
+    
     # Check each API
     for check in CHECKS:
         result = check_api(check)
         results.append(result)
-        status_icon = "✅" if result["status"] == "OK" else "❌"
+        if result["status"] == "SKIPPED":
+            status_icon = "⏭️"
+        elif result["status"] == "OK":
+            status_icon = "✅"
+        else:
+            status_icon = "❌"
         print(f"  {status_icon} {result['name']}: {result['status']}")
     
     # Calculate overall status
+    skipped = [r for r in results if r["status"] == "SKIPPED"]
     failed = [r for r in results if r["status"] == "FAILED"]
-    if len(failed) == 0:
+    
+    if len(skipped) == len(results):
+        state = "SKIPPED"
+    elif len(failed) == 0:
         state = "HEALTHY"
     elif len(failed) <= 1:
         state = "DEGRADED"
@@ -152,6 +182,7 @@ def run_api_triage(manual: bool = False) -> Dict[str, Any]:
         "meta": {
             "timestamp": timestamp,
             "manual": manual,
+            "buildEnvironment": IS_BUILD_ENV,
             "failedChecks": failed,
             "results": results,
             "environment": "backend"
@@ -187,7 +218,7 @@ if __name__ == "__main__":
     # Run triage
     report = run_api_triage(manual)
     
-    # Exit with appropriate code
+    # Exit with appropriate code (SKIPPED is not an error)
     if report["status"] == "CRITICAL":
         sys.exit(2)
     elif report["status"] == "DEGRADED":

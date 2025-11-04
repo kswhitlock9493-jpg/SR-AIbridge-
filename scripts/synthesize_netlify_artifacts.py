@@ -28,10 +28,10 @@ if not headers.exists():
 else:
     print("ℹ️  _headers already exists")
 
-# _redirects (proxy + SPA fallback)
+# _redirects (SPA fallback only - API served via Netlify Functions)
 redirects = public / "_redirects"
 if not redirects.exists():
-    redirects.write_text("""/api/* https://sr-aibridge.onrender.com/:splat 200!
+    redirects.write_text("""# SPA fallback - API endpoints served via Netlify Functions
 /* /index.html 200
 """)
     print("✅ Created _redirects")
