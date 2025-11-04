@@ -17,6 +17,32 @@ runtime:
         type: log
         scope: deploy
         verify: true
+  # Federation heartbeat configuration
+  federation:
+    heartbeat:
+      enabled: true
+      interval: 60
+      endpoint: forge://federation/heartbeat
+      ledger_forward: true
+      ttl: 300
+
+# Forge configuration schema
+forge:
+  dominion: sovereign.bridge
+  resolver: forge://resolve
+  schema:
+    - target: ledger
+      purpose: runtime logging
+      return:
+        - ledger_url
+        - ledger_signature
+        - ledger_identity
+    - target: bridge
+      purpose: deployment bridge sync
+      return:
+        - bridge_url
+        - bridge_signature
+        - bridge_identity
 
 # Where to run (Phase-1 = local/host Docker)
 provider:

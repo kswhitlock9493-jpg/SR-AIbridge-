@@ -10,6 +10,7 @@ import requests
 from pathlib import Path
 from dataclasses import dataclass
 from brh.forge_auth import parse_forge_root, verify_seal, mint_ephemeral_token
+from brh import heartbeat_daemon
 
 MANIFEST = Path("bridge.runtime.yaml")
 
@@ -88,6 +89,9 @@ def main():
     token = mint_ephemeral_token(ctx)
     print(f"[BRH] Forge root={ctx.root} env={ctx.env} epoch={ctx.epoch}")
     print(f"[BRH] ephemeral-token={token[:8]}… (masked)")
+    
+    # Start heartbeat daemon
+    heartbeat_daemon.start()
 
     spec = yaml.safe_load(MANIFEST.read_text())
     assert spec["provider"]["kind"] == "docker", "Phase-1 supports docker only"
