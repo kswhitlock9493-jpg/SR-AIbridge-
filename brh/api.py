@@ -138,7 +138,8 @@ def log_event(msg: str):
     Args:
         msg: Event message to log
     """
-    EVENT_LOG.append({"time": datetime.utcnow().isoformat(), "message": msg})
+    from datetime import timezone
+    EVENT_LOG.append({"time": datetime.now(timezone.utc).isoformat(), "message": msg})
     if len(EVENT_LOG) > 1000:
         EVENT_LOG.pop(0)
 
