@@ -5,6 +5,7 @@ import time
 import re
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from brh import role
 
 try:
     import docker
@@ -44,6 +45,10 @@ def validate_image_name(image: str) -> bool:
 @app.post("/deploy")
 async def deploy(req: Request):
     """Deploy endpoint for triggering BRH node restart"""
+    # Only leader can accept deploy hooks
+    if not role.am_leader():
+        return {"status": "ignored", "reason": "not-leader"}
+    
     data = await req.json()
     image = data.get("image", "")
     branch = data.get("branch", "unknown")

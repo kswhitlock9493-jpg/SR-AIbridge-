@@ -25,6 +25,11 @@ runtime:
       endpoint: forge://federation/heartbeat
       ledger_forward: true
       ttl: 300
+    consensus:
+      enabled: true
+      interval: 180
+      election_method: highest_epoch
+      ledger_forward: true
 
 # Forge configuration schema
 forge:

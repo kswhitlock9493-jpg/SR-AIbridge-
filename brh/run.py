@@ -10,7 +10,7 @@ import requests
 from pathlib import Path
 from dataclasses import dataclass
 from brh.forge_auth import parse_forge_root, verify_seal, mint_ephemeral_token
-from brh import heartbeat_daemon
+from brh import heartbeat_daemon, consensus, role
 
 MANIFEST = Path("bridge.runtime.yaml")
 
@@ -24,7 +24,20 @@ class HealthSpec:
     retries: int = 12
 
 
+class NotLeaderError(Exception):
+    """Raised when a non-leader node attempts orchestration"""
+    pass
+
+
 def sh(cmd: list[str], **kw):
+    print("⇒", " ".join(cmd))
+    subprocess.check_call(cmd, **kw)
+
+
+def sh_guarded(cmd: list[str], **kw):
+    """Execute shell command only if this node is the leader"""
+    if not role.am_leader():
+        raise NotLeaderError("This BRH is not the elected leader; orchestration disabled.")
     print("⇒", " ".join(cmd))
     subprocess.check_call(cmd, **kw)
 
@@ -92,6 +105,9 @@ def main():
     
     # Start heartbeat daemon
     heartbeat_daemon.start()
+    
+    # Start consensus coordinator
+    consensus.start()
 
     spec = yaml.safe_load(MANIFEST.read_text())
     assert spec["provider"]["kind"] == "docker", "Phase-1 supports docker only"
@@ -105,6 +121,7 @@ def main():
             "brh.service": name,
             "brh.env": ctx.env,
             "brh.epoch": str(ctx.epoch),
+            "brh.owner": role.BRH_NODE_ID,  # ownership tracking for handover
         }
         env = (s.get("env") or []) + [f"BRH_TOKEN={token}", f"BRH_ENV={ctx.env}"]
         # Build if context exists; else ensure image present

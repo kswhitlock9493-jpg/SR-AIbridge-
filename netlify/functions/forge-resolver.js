@@ -4,11 +4,17 @@
 
 import crypto from "crypto";
 
+// Global state for consensus tracking
+let currentLeader = null;
+let consensusHistory = [];
+
 /**
  * Main handler for Forge Dominion Manifest Resolver
  * Supports:
  *   GET /manifest/resolve?target=ledger
  *   POST /federation/heartbeat
+ *   POST /federation/consensus
+ *   GET /federation/leader
  */
 export async function handler(event) {
   try {
@@ -16,6 +22,16 @@ export async function handler(event) {
     const url = event.rawUrl 
       ? new URL(event.rawUrl) 
       : new URL(`https://${event.headers.host}${event.path}`);
+    
+    // Handle federation consensus endpoint
+    if (url.pathname.includes("/federation/consensus") && event.httpMethod === "POST") {
+      return await handleConsensus(event);
+    }
+    
+    // Handle federation leader query endpoint
+    if (url.pathname.includes("/federation/leader") && event.httpMethod === "GET") {
+      return await handleLeaderQuery(event);
+    }
     
     // Handle federation heartbeat endpoint
     if (url.pathname.includes("/federation/heartbeat") && event.httpMethod === "POST") {
@@ -32,7 +48,7 @@ export async function handler(event) {
       statusCode: 404,
       body: JSON.stringify({
         error: "Unknown endpoint",
-        available: ["/manifest/resolve", "/federation/heartbeat"]
+        available: ["/manifest/resolve", "/federation/heartbeat", "/federation/consensus", "/federation/leader"]
       })
     };
     
@@ -138,6 +154,73 @@ async function handleHeartbeat(event) {
       valid,
       age,
       received_at: now
+    })
+  };
+}
+
+/**
+ * Handle consensus election reports from BRH nodes
+ */
+async function handleConsensus(event) {
+  const data = JSON.parse(event.body || "{}");
+  const { leader, peers, epoch } = data;
+
+  console.log(`👑 Consensus report: Leader=${leader} | Peers=${peers?.length || 0} @ ${epoch}`);
+
+  // Update current leader
+  currentLeader = leader;
+  
+  // Store consensus history (keep last 100 entries)
+  consensusHistory.push({
+    epoch,
+    leader,
+    peers,
+    timestamp: Date.now()
+  });
+  if (consensusHistory.length > 100) {
+    consensusHistory.shift();
+  }
+
+  // Optionally forward to ledger for audit trail
+  const ledgerForward = process.env.FORGE_CONSENSUS_LEDGER_FORWARD === "true";
+  if (ledgerForward) {
+    try {
+      await fetch("https://sovereign.bridge/api/consensus", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ epoch, leader, peers }),
+      });
+    } catch (err) {
+      console.log("ℹ️  Consensus ledger forward failed:", err.message);
+    }
+  }
+
+  return { 
+    statusCode: 200,
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ 
+      ok: true,
+      leader,
+      peers_count: peers?.length || 0
+    })
+  };
+}
+
+/**
+ * Handle leader query requests from BRH nodes
+ */
+async function handleLeaderQuery(event) {
+  return {
+    statusCode: 200,
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      leader: currentLeader,
+      lease: null,  // Optional: implement lease token system
+      epoch: Math.floor(Date.now() / 1000)
     })
   };
 }
