@@ -179,7 +179,7 @@ class TestBridgeRuntimeYaml:
     def test_runtime_yaml_exists(self):
         """Test that bridge.runtime.yaml file exists"""
         from pathlib import Path
-        runtime_file = Path("/home/runner/work/SR-AIbridge-/SR-AIbridge-/bridge.runtime.yaml")
+        runtime_file = Path(__file__).parent.parent / "bridge.runtime.yaml"
         assert runtime_file.exists()
     
     def test_runtime_yaml_structure(self):
@@ -187,7 +187,7 @@ class TestBridgeRuntimeYaml:
         import yaml
         from pathlib import Path
         
-        runtime_file = Path("/home/runner/work/SR-AIbridge-/SR-AIbridge-/bridge.runtime.yaml")
+        runtime_file = Path(__file__).parent.parent / "bridge.runtime.yaml"
         spec = yaml.safe_load(runtime_file.read_text())
         
         # Check forge configuration exists
@@ -211,7 +211,7 @@ class TestBridgeRuntimeYaml:
         import yaml
         from pathlib import Path
         
-        runtime_file = Path("/home/runner/work/SR-AIbridge-/SR-AIbridge-/bridge.runtime.yaml")
+        runtime_file = Path(__file__).parent.parent / "bridge.runtime.yaml"
         spec = yaml.safe_load(runtime_file.read_text())
         
         schema = spec["forge"]["schema"]
@@ -228,7 +228,7 @@ class TestBRHIntegration:
         """Test that brh/run.py imports heartbeat_daemon"""
         from pathlib import Path
         
-        run_file = Path("/home/runner/work/SR-AIbridge-/SR-AIbridge-/brh/run.py")
+        run_file = Path(__file__).parent.parent / "brh" / "run.py"
         content = run_file.read_text()
         
         assert "from brh import heartbeat_daemon" in content
