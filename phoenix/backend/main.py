@@ -17,6 +17,11 @@ import db
 from models import Guardian, Agent, Mission, VaultLog
 from schemas import HealthResponse, FullHealthResponse
 
+# Import routers
+from core.agents import routes as agent_routes
+from core.missions import routes as mission_routes
+from core.engines import calculus_core
+
 # Environment configuration
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
@@ -76,6 +81,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(agent_routes.router)
+app.include_router(mission_routes.router)
+app.include_router(calculus_core.router)
 
 
 # Health Endpoints (BUILD_DOSSIER Phase 2 Step 2.3)
