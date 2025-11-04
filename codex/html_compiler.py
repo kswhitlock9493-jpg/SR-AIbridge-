@@ -15,6 +15,9 @@ def build_html():
     """Build a styled HTML book from the markdown repo book."""
     src = "codex/output/repo_book.md"
     dst = "codex/output/repo_book.html"
+    
+    # Capture timestamp once for consistency
+    timestamp = datetime.now(timezone.utc)
 
     if not os.path.exists(src):
         raise FileNotFoundError("repo_book.md not found. Run markdown_compiler first.")
@@ -43,7 +46,7 @@ def build_html():
 }}
 
 body {{
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
   background: radial-gradient(circle at 50% 10%, #001a10 0%, #000 80%);
   color: #aefdd0;
   margin: 0;
@@ -119,7 +122,7 @@ nav li {{
   <h1 style="text-align:center;">SR-AIBridge — The Book of the Repo</h1>
   <nav>
     <h2>📚 Book of the Repo</h2>
-    <p><em>Auto-generated on {datetime.now(timezone.utc).isoformat()} UTC</em></p>
+    <p><em>Auto-generated on {timestamp.isoformat()} UTC</em></p>
     <ul>
       <li><a href="#brain-truth-engine-summary">🧠 Truth Engine</a></li>
       <li><a href="#documentations">📄 Documentation</a></li>
@@ -128,7 +131,7 @@ nav li {{
   </nav>
   {html_body}
   <footer>
-    <p>SR-AIBridge — Sovereign Runtime Codex © {datetime.now(timezone.utc).year}</p>
+    <p>SR-AIBridge — Sovereign Runtime Codex © {timestamp.year}</p>
   </footer>
 </div>
 </body>
