@@ -1,4 +1,4 @@
-# brh/heartbeat.py
+# brh/heartbeat_daemon.py
 """
 BRH Heartbeat Daemon
 Establishes Bridge-to-Bridge pings and Forge health consensus loop.

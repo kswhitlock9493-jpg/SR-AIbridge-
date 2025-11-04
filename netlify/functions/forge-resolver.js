@@ -12,7 +12,10 @@ import crypto from "crypto";
  */
 export async function handler(event) {
   try {
-    const url = new URL(event.rawUrl);
+    // Construct URL from event properties for better compatibility
+    const url = event.rawUrl 
+      ? new URL(event.rawUrl) 
+      : new URL(`https://${event.headers.host}${event.path}`);
     
     // Handle federation heartbeat endpoint
     if (url.pathname.includes("/federation/heartbeat") && event.httpMethod === "POST") {
