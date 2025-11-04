@@ -7,7 +7,7 @@
 [build]
   base = "bridge-frontend"
   command = "npm run build && python3 ../bridge_backend/forge/export_runtime.py"
-  publish = "bridge-frontend/dist"
+  publish = "dist"
 
 [functions]
   directory = "bridge-frontend/netlify/functions"
@@ -17,15 +17,18 @@
 # ==========================================================
 # Passes the Sovereign Dominion Root to build-time context.
 # FORGE_DOMINION_ROOT is managed by GitHub Secrets and injected automatically.
+# Note: These environment variables are static at build time. 
+# Dynamic values should be set in the build command or via Netlify's UI.
 
 [context.production.environment]
-  FORGE_DOMINION_ROOT = "dominion://sovereign.bridge?env=${GITHUB_REF_NAME}&epoch=$(date +%s)&sig=${DOMINION_SEAL}"
+  FORGE_DOMINION_ROOT = "dominion://sovereign.bridge"
+  GITHUB_REF_NAME = "main"
 
 [context.deploy-preview.environment]
-  FORGE_DOMINION_ROOT = "dominion://sovereign.bridge?env=preview-${GITHUB_REF_NAME}&epoch=$(date +%s)&sig=${DOMINION_SEAL}"
+  FORGE_DOMINION_ROOT = "dominion://sovereign.bridge?env=preview"
 
 [context.branch-deploy.environment]
-  FORGE_DOMINION_ROOT = "dominion://sovereign.bridge?env=branch-${GITHUB_REF_NAME}&epoch=$(date +%s)&sig=${DOMINION_SEAL}"
+  FORGE_DOMINION_ROOT = "dominion://sovereign.bridge?env=branch"
 
 # ==========================================================
 # ⚙️ Redirect Rules (API Federation)

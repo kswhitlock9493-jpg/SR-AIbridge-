@@ -54,4 +54,5 @@ jobs:
           curl -X POST "https://sovereign.bridge/api/forge/deploy" \
           -H "Authorization: Bearer $DOMINION_SEAL" \
           -H "Content-Type: application/json" \
-          -d '{"status": "deployed", "env": "${{ github.ref_name }}", "build_id": "${{ github.run_id }}"}'
+          -d '{"status": "deployed", "env": "${{ github.ref_name }}", "build_id": "${{ github.run_id }}"}' \
+          || echo "Warning: Failed to notify Forge Dominion endpoint"

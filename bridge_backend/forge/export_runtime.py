@@ -72,7 +72,15 @@ def save_runtime_manifest(context: dict) -> None:
     """Save runtime manifest to file."""
     # Determine output directory
     output_dir = Path(__file__).parent / "runtime_exports"
-    output_dir.mkdir(exist_ok=True)
+    
+    try:
+        output_dir.mkdir(exist_ok=True)
+    except PermissionError as e:
+        print(f"⚠️  Warning: Cannot create directory {output_dir}: {e}", file=sys.stderr)
+        # Fall back to /tmp if we can't write to the local directory
+        output_dir = Path("/tmp/forge_runtime_exports")
+        output_dir.mkdir(exist_ok=True)
+        print(f"ℹ️  Using fallback directory: {output_dir}")
     
     # Create manifest file
     manifest_path = output_dir / "runtime_manifest.json"
