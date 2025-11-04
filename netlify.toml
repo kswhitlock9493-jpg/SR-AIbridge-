@@ -1,11 +1,12 @@
 [build]
   # Use the build script that synthesizes artifacts
-  command = "bash scripts/netlify_build.sh"
-  publish = "bridge-frontend/dist"
+  base = "bridge-frontend"
+  command = "bash ../scripts/netlify_build.sh"
+  publish = "dist"
   environment = { FORGE_DOMINION_ROOT = "", REVIEW_ID = "" }
 
 [functions]
-  directory = "bridge-frontend/netlify/functions"
+  directory = "netlify/functions"
 
 # Security headers
 [[headers]]
@@ -29,10 +30,6 @@
 
 [context.branch-deploy.environment]
   FORGE_DOMINION_ROOT = "dominion://sovereign.bridge?env=branch"
-
-# Build notifications - reports build failures
-[[plugins]]
-  package = "@netlify/plugin-build-info"
 
 # SPA fallback (safe for static + React/Vite/etc.)
 [[redirects]]
