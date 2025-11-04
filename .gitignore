@@ -206,3 +206,4 @@ bridge_backend/diagnostics/fix_summary.json
 bridge_backend/diagnostics/recommendations.md
 bridge_backend/diagnostics/forensics_report.json
 bridge_backend/diagnostics/workflow_scan_results.json
+bridge_backend/forge/runtime_exports/

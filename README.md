@@ -1,5 +1,19 @@
 # 🚀 SR-AIbridge
 
+<p align="center">
+  <img src="https://img.shields.io/badge/FORGE%20DOMINION-LIVE-%2300ffaa?style=for-the-badge&logo=netlify&logoColor=white" />
+  <img src="https://img.shields.io/github/actions/workflow/status/kswhitlock9493-jpg/SR-AIbridge-/bridge-deploy.yml?label=Bridge%20Deploy&logo=githubactions&style=for-the-badge&color=00ffaa" />
+  <img src="https://img.shields.io/netlify/YOUR_NETLIFY_SITE_ID?label=Bridge%20Frontend&logo=netlify&style=for-the-badge&color=00ffaa" />
+</p>
+
+<p align="center">
+  <em>🌉 Sovereign Runtime v5.5.3 — Self-Authoring, Self-Deploying, Self-Documenting</em>
+</p>
+
+<p align="center">
+  <img src="assets/dominion-seal.svg" width="140" height="140" alt="Forge Dominion Seal" />
+</p>
+
 ![Netlify Deploy Status](https://img.shields.io/badge/Netlify_Verified-brightgreen?style=for-the-badge)
 ![Bridge Network Health](https://img.shields.io/badge/Bridge_Parity_Engine-Active-blue?style=for-the-badge)
 ![Firewall Healer](https://img.shields.io/badge/Firewall_Intelligence-Operational-orange?style=for-the-badge)
