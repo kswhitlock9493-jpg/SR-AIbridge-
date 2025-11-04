@@ -3,6 +3,7 @@ import os
 import subprocess
 import time
 import re
+from datetime import datetime, timezone
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from brh import role
@@ -14,6 +15,9 @@ except ImportError:
     DOCKER_AVAILABLE = False
 
 app = FastAPI()
+
+# Event log storage (in-memory)
+EVENT_LOG = []
 
 # Configure CORS based on environment
 ALLOWED_ORIGINS = os.getenv("BRH_ALLOWED_ORIGINS", "").split(",") if os.getenv("BRH_ALLOWED_ORIGINS") else ["*"]
@@ -124,3 +128,46 @@ def drain(name: str):
         return {"status": "drained", "name": name}
     except Exception as e:
         return {"error": str(e)}
+
+
+def log_event(msg: str):
+    """
+    Log an event to the in-memory event log.
+    Used by heartbeat, consensus, chaos, and recovery modules.
+    
+    Args:
+        msg: Event message to log
+    """
+    EVENT_LOG.append({"time": datetime.now(timezone.utc).isoformat(), "message": msg})
+    if len(EVENT_LOG) > 1000:
+        EVENT_LOG.pop(0)
+
+
+@app.get("/federation/state")
+def federation_state():
+    """
+    Get current federation state including leader and peers.
+    Used by FederationConsole UI component.
+    """
+    from brh import consensus
+    return {
+        "leader": role.leader_id(),
+        "peers": [
+            {
+                "node": n,
+                "epoch": d.get("epoch", 0),
+                "status": d.get("status", "unknown"),
+                "uptime": "ok"
+            }
+            for n, d in consensus.peers.items()
+        ],
+    }
+
+
+@app.get("/events")
+def events():
+    """
+    Get recent events from the event log.
+    Returns up to the last 50 events.
+    """
+    return EVENT_LOG[-50:]
