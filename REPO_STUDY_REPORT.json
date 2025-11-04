@@ -12,7 +12,7 @@
   "parser_insights": {
     "documents_ingested": 5,
     "total_chunks": 66,
-    "new_chunks": 66,
+    "new_chunks": 0,
     "files": [
       "README.md",
       "BLUEPRINT_ENGINE_GUIDE.md",
