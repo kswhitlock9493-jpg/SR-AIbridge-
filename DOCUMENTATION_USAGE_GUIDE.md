@@ -584,6 +584,6 @@ Problem? → README#troubleshooting → Not found? → INDEX → Specific guide 
 
 ---
 
-**Last Updated**: 2025-11-04  
 **Maintained by**: SR-AIbridge Documentation Team  
-**Feedback**: Open an issue or submit a PR
+**Feedback**: Open an issue or submit a PR  
+_(Updated: November 2025)_
