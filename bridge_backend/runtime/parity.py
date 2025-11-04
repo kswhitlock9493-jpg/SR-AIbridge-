@@ -41,8 +41,7 @@ def verify_cors_parity():
     """
     allowed_origins = os.getenv("ALLOWED_ORIGINS", "")
     expected_origins = [
-        "https://sr-aibridge.netlify.app",
-        "https://sr-aibridge.onrender.com"
+        "https://sr-aibridge.netlify.app"
     ]
     
     all_present = all(origin in allowed_origins for origin in expected_origins)

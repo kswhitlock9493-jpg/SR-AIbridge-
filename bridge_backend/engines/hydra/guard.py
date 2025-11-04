@@ -44,7 +44,9 @@ class HydraGuard:
         Returns:
             Redirects configuration string
         """
-        return """/api/*   https://sr-aibridge.onrender.com/:splat   200
+        # Use BRH_BACKEND_URL if available, otherwise localhost
+        backend_url = os.getenv("BRH_BACKEND_URL", "http://localhost:8000")
+        return f"""/api/*   {backend_url}/:splat   200
 /health    /index.html   200
 """
     

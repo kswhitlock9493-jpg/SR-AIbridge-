@@ -24,15 +24,12 @@ ALLOWED_FALLBACK_ORDER = ("GET", "HEAD", "POST")
 def get_target():
     """Determine heartbeat target based on host platform"""
     if os.getenv("HOST_PLATFORM") == "netlify":
-        return "https://sr-aibridge.onrender.com/health"
+        # For Netlify frontend, check localhost BRH or environment-specified backend
+        return os.getenv("BRH_BACKEND_URL", "http://localhost:8000/health")
     if HEARTBEAT_URL:
         return HEARTBEAT_URL
-    # Auto-detect from Render
-    _render_external = os.getenv("RENDER_EXTERNAL_URL")
-    if _render_external:
-        from urllib.parse import urlparse, urlunparse
-        parsed = urlparse(_render_external)
-        return urlunparse(parsed._replace(path="/health"))
+    # Default to localhost for BRH deployments
+    return os.getenv("BRH_BACKEND_URL", "http://localhost:8000/health")
     return os.getenv("HEARTBEAT_URL", "http://0.0.0.0:8000/health")
 
 def _info(msg: str): print(f"INFO:bridge_backend.runtime.heartbeat: {msg}")

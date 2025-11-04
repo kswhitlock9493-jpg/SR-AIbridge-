@@ -37,7 +37,7 @@ class HeaderSyncMiddleware(BaseHTTPMiddleware):
             origin = request.headers.get("origin")
             allowed_origins = os.getenv(
                 "ALLOWED_ORIGINS",
-                "https://sr-aibridge.netlify.app,https://sr-aibridge.onrender.com"
+                "https://sr-aibridge.netlify.app"
             ).split(",")
 
             if origin in allowed_origins or os.getenv("CORS_ALLOW_ALL", "false").lower() == "true":

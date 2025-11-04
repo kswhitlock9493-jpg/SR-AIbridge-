@@ -74,7 +74,6 @@ class Settings:
         origins = [
             *self.ALLOWED_ORIGINS,
             "https://*.netlify.app",  # All Netlify subdomains
-            "https://*.onrender.com",  # All Render subdomains
             "http://localhost:3001",   # Alternative dev port
             "https://localhost:3000",  # HTTPS dev
             "https://localhost:3001",  # HTTPS alternative dev

@@ -1,5 +1,6 @@
 // Centralized environment gateway
-export const API_BASE = import.meta.env.VITE_API_BASE || "https://sr-aibridge.onrender.com";
+// Default to localhost for BRH (Bridge Runtime Handler) development
+export const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
 export const BRIDGE_API_URL = import.meta.env.BRIDGE_API_URL || API_BASE;
 export const CASCADE_MODE = import.meta.env.CASCADE_MODE || "active";
 export const VAULT_URL = import.meta.env.VAULT_URL || "https://vault.sr-aibridge.com";
@@ -12,7 +13,7 @@ const config = {
   WS_BASE_URL: import.meta.env.VITE_WS_BASE ||
     (import.meta.env.MODE === 'development'
       ? "ws://localhost:8000"
-      : "wss://sr-aibridge.onrender.com")
+      : "ws://localhost:8000")  // BRH WebSocket endpoint
 };
 
 export default config;
