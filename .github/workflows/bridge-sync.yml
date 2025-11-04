@@ -23,8 +23,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const pr = context.payload.client_payload.pull_request_number;
-            const msg = context.payload.client_payload.message || "Bridge Deploy event received ✅";
+            const pr = github.event.client_payload.pull_request_number;
+            const msg = github.event.client_payload.message || "Bridge Deploy event received ✅";
             await github.rest.issues.createComment({
               ...context.repo,
               issue_number: pr,

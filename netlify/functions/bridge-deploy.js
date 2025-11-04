@@ -9,16 +9,20 @@ export async function handler(event) {
     // Pull Forge credentials dynamically from the Dominion root
     const forgeRoot = process.env.FORGE_DOMINION_ROOT;
     if (!forgeRoot) {
-      return { statusCode: 400, body: "Missing Forge Dominion Root" };
+      return { 
+        statusCode: 400, 
+        body: JSON.stringify({ error: "Missing Forge Dominion Root" })
+      };
     }
 
     console.log("🔗 Bridge Received:", payload);
 
     // Forward event to GitHub as repository_dispatch
     const ghToken = process.env.GITHUB_TOKEN;
+    const ghRepo = process.env.GITHUB_REPOSITORY || "kswhitlock9493-jpg/SR-AIbridge-";
     if (ghToken) {
       try {
-        const ghRes = await fetch("https://api.github.com/repos/kswhitlock9493-jpg/SR-AIbridge-/dispatches", {
+        const ghRes = await fetch(`https://api.github.com/repos/${ghRepo}/dispatches`, {
           method: "POST",
           headers: {
             "Accept": "application/vnd.github+json",
