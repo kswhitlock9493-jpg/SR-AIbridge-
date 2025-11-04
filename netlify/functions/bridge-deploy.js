@@ -2,46 +2,104 @@
 // Netlify Function to trigger your Bridge Runtime Handler node
 
 export async function handler(event) {
-  const forgeAuth = process.env.FORGE_DOMINION_ROOT;
-
-  if (!event.headers.authorization || event.headers.authorization !== `Bearer ${forgeAuth}`) {
-    return {
-      statusCode: 403,
-      body: JSON.stringify({ error: "Forbidden: invalid token" }),
-    };
-  }
-
   try {
+    // Parse incoming deploy event
     const payload = JSON.parse(event.body || "{}");
-    const branch = payload?.branch || "main";
-    const repo = payload?.repository || "kswhitlock9493-jpg/SR-AIbridge-";
-    const image = `ghcr.io/${repo}/sr-aibridge-backend:latest`;
 
-    const res = await fetch("http://localhost:7878/deploy", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${forgeAuth}`,
-      },
-      body: JSON.stringify({
-        image,
-        branch,
-        timestamp: Date.now(),
-      }),
-    });
+    // Pull Forge credentials dynamically from the Dominion root
+    const forgeRoot = process.env.FORGE_DOMINION_ROOT;
+    if (!forgeRoot) {
+      return { 
+        statusCode: 400, 
+        body: JSON.stringify({ error: "Missing Forge Dominion Root" })
+      };
+    }
 
-    const data = await res.json().catch(() => ({}));
-    console.log("Bridge deploy hook:", data);
+    console.log("🔗 Bridge Received:", payload);
 
+    // Forward event to GitHub as repository_dispatch
+    const ghToken = process.env.GITHUB_TOKEN;
+    const ghRepo = process.env.GITHUB_REPOSITORY || "kswhitlock9493-jpg/SR-AIbridge-";
+    if (ghToken) {
+      try {
+        const ghRes = await fetch(`https://api.github.com/repos/${ghRepo}/dispatches`, {
+          method: "POST",
+          headers: {
+            "Accept": "application/vnd.github+json",
+            "Authorization": `Bearer ${ghToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            event_type: "bridge-deploy",
+            client_payload: {
+              status: payload.state || "unknown",
+              commit: payload.commit_ref,
+              pull_request_number: payload.pull_request || null,
+              message: `Deploy ${payload.state === "success" ? "✅ succeeded" : "❌ failed"}`
+            }
+          }),
+        });
+
+        console.log("📤 Sent to GitHub:", ghRes.status);
+      } catch (ghErr) {
+        console.error("GitHub dispatch error:", ghErr);
+      }
+    }
+
+    // Try to connect to Forge manifest for sovereign ledger
+    let ledgerStatus = null;
+    try {
+      const forgeResponse = await fetch(`${forgeRoot}/manifest/resolve?target=ledger`, {
+        method: "GET",
+      });
+
+      if (forgeResponse.ok) {
+        const forgeData = await forgeResponse.json();
+        const { ledger_url, ledger_signature, ledger_identity } = forgeData;
+
+        // Prepare sovereign ledger payload
+        const ledgerPayload = {
+          timestamp: new Date().toISOString(),
+          commit_ref: payload.commit_ref || null,
+          deploy_state: payload.state || "unknown",
+          bridge: "sr-aibridge",
+          dominion: forgeRoot,
+          relay: "netlify",
+          verified_by: ledger_identity,
+        };
+
+        // Post event to the dynamically provisioned ledger URL
+        const res = await fetch(ledger_url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Ledger-Signature": ledger_signature,
+          },
+          body: JSON.stringify(ledgerPayload),
+        });
+
+        ledgerStatus = res.status;
+        console.log("📜 Sovereign ledger response:", ledgerStatus);
+      }
+    } catch (forgeErr) {
+      console.log("ℹ️  Forge ledger not available:", forgeErr.message);
+    }
+
+    // Return to Bridge runtime
     return {
       statusCode: 200,
-      body: JSON.stringify({ ok: true, data }),
+      body: JSON.stringify({
+        result: "Bridge sync completed",
+        forge: forgeRoot,
+        ledgerStatus: ledgerStatus,
+        timestamp: new Date().toISOString(),
+      }),
     };
   } catch (err) {
-    console.error("Bridge deploy error:", err);
+    console.error("🔥 Bridge error:", err);
     return {
       statusCode: 500,
-      body: JSON.stringify({ ok: false, error: err.message }),
+      body: JSON.stringify({ error: "Bridge internal error", message: err.message }),
     };
   }
 }

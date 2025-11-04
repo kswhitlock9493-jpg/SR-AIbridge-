@@ -6,6 +6,18 @@ dominion:
   service_ttl_minutes: 180              # lifetime for minted tokens
   allow_unsigned: false                 # block runs if sig invalid
 
+# Runtime configuration for Forge integration
+runtime:
+  name: sr-aibridge
+  forge:
+    mode: dominion
+    handshake: forge://resolve
+    targets:
+      - name: sovereign-ledger
+        type: log
+        scope: deploy
+        verify: true
+
 # Where to run (Phase-1 = local/host Docker)
 provider:
   kind: docker
