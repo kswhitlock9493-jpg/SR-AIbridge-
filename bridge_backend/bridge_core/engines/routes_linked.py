@@ -32,7 +32,7 @@ async def linkage_status() -> Dict[str, Any]:
         }
     
     try:
-        from ..blueprint.registry import BlueprintRegistry
+        from .blueprint.registry import BlueprintRegistry
         
         # Load manifest
         manifest = BlueprintRegistry.load_all()
@@ -76,7 +76,7 @@ async def get_manifest() -> Dict[str, Any]:
         )
     
     try:
-        from ..blueprint.registry import BlueprintRegistry
+        from .blueprint.registry import BlueprintRegistry
         manifest = BlueprintRegistry.load_all()
         return manifest
     except Exception as e:
@@ -102,7 +102,7 @@ async def get_engine_manifest(engine_name: str) -> Dict[str, Any]:
         )
     
     try:
-        from ..blueprint.registry import BlueprintRegistry
+        from .blueprint.registry import BlueprintRegistry
         engine = BlueprintRegistry.get_engine(engine_name)
         
         if not engine:
@@ -142,7 +142,7 @@ async def initialize_linkages() -> Dict[str, Any]:
         
         # Initialize Cascade subscription to Blueprint events
         try:
-            from ..blueprint.adapters import cascade_link
+            from .blueprint.adapters import cascade_link
             await cascade_link.subscribe_to_blueprint_updates()
             results["initialized"].append("cascade")
             logger.info("✅ Cascade linkage initialized")
@@ -152,7 +152,7 @@ async def initialize_linkages() -> Dict[str, Any]:
         
         # Initialize Super Engines linkage
         try:
-            from ..blueprint.adapters import super_engines_link
+            from .blueprint.adapters import super_engines_link
             await super_engines_link.subscribe_super_engines_to_blueprint()
             results["initialized"].append("super_engines")
             logger.info("✅ Super Engines linkage initialized")
@@ -162,7 +162,7 @@ async def initialize_linkages() -> Dict[str, Any]:
         
         # Initialize Utility Engines linkage
         try:
-            from ..blueprint.adapters import utility_engines_link
+            from .blueprint.adapters import utility_engines_link
             await utility_engines_link.initialize_utility_engines()
             results["initialized"].append("utility_engines")
             logger.info("✅ Utility Engines linkage initialized")
@@ -172,7 +172,7 @@ async def initialize_linkages() -> Dict[str, Any]:
         
         # Validate Blueprint manifest
         try:
-            from ..blueprint.registry import BlueprintRegistry
+            from .blueprint.registry import BlueprintRegistry
             validation = BlueprintRegistry.validate_manifest_integrity()
             results["validation"] = validation
             logger.info("✅ Blueprint manifest validated")
@@ -205,7 +205,7 @@ async def get_engine_dependencies(engine_name: str) -> Dict[str, Any]:
         )
     
     try:
-        from ..blueprint.registry import BlueprintRegistry
+        from .blueprint.registry import BlueprintRegistry
         dependencies = BlueprintRegistry.get_dependencies(engine_name)
         topics = BlueprintRegistry.get_topics(engine_name)
         
@@ -234,8 +234,8 @@ async def get_super_engines_status() -> Dict[str, Any]:
         )
     
     try:
-        from ..blueprint.registry import BlueprintRegistry
-        from ..blueprint.adapters import super_engines_link
+        from .blueprint.registry import BlueprintRegistry
+        from .blueprint.adapters import super_engines_link
         
         manifest = BlueprintRegistry.load_all()
         validation = await super_engines_link.validate_super_engines(manifest)
@@ -266,8 +266,8 @@ async def get_utility_engines_status() -> Dict[str, Any]:
         )
     
     try:
-        from ..blueprint.registry import BlueprintRegistry
-        from ..blueprint.adapters import utility_engines_link
+        from .blueprint.registry import BlueprintRegistry
+        from .blueprint.adapters import utility_engines_link
         
         manifest = BlueprintRegistry.load_all()
         validation = await utility_engines_link.validate_utility_engines(manifest)
@@ -298,8 +298,8 @@ async def get_leviathan_status() -> Dict[str, Any]:
         )
     
     try:
-        from ..blueprint.registry import BlueprintRegistry
-        from ..blueprint.adapters import leviathan_link
+        from .blueprint.registry import BlueprintRegistry
+        from .blueprint.adapters import leviathan_link
         
         manifest = BlueprintRegistry.load_all()
         leviathan_config = leviathan_link.get_leviathan_config(manifest)
