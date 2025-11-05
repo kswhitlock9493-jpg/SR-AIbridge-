@@ -191,8 +191,19 @@ class SovereignComplianceGuard:
             # Try to load sovereign policy
             import json
             from pathlib import Path
+            import os
             
-            policy_path = Path("/home/runner/work/SR-AIbridge-/SR-AIbridge-/.forge/sovereign_policy.json")
+            # Use environment variable or find .forge directory relative to current file
+            policy_dir = os.getenv("SOVEREIGN_POLICY_DIR")
+            if policy_dir:
+                policy_path = Path(policy_dir) / "sovereign_policy.json"
+            else:
+                # Try to find .forge directory in repository root
+                current_file = Path(__file__).resolve()
+                # Go up to find repository root (where .forge should be)
+                repo_root = current_file.parent.parent.parent
+                policy_path = repo_root / ".forge" / "sovereign_policy.json"
+            
             if policy_path.exists():
                 with open(policy_path) as f:
                     policy = json.load(f)

@@ -179,10 +179,19 @@ class SovereignMicroScribe:
         
         # In QUANTUM mode, perform deeper analysis
         if mode == AnalysisMode.QUANTUM:
-            # Check for hardcoded credentials
-            if re.search(r'["\']([a-zA-Z0-9]{32,})["\']', diff_content):
-                findings.append("Possible hardcoded credentials detected")
-                risk_level = max_level(risk_level, SecurityLevel.HIGH)
+            # Check for hardcoded credentials with context awareness
+            # Look for long alphanumeric strings in assignment or key-value contexts
+            # Exclude common patterns like test data, UUIDs in comments, etc.
+            cred_pattern = r'(?:key|token|secret|password|auth)\s*[:=]\s*["\']([a-zA-Z0-9_\-]{20,})["\']'
+            if re.search(cred_pattern, diff_content, re.IGNORECASE):
+                # Only flag if it's in added lines (starts with +)
+                for line in diff_content.split('\n'):
+                    if line.startswith('+') and re.search(cred_pattern, line, re.IGNORECASE):
+                        # Skip if it looks like a comment or test data
+                        if not any(marker in line.lower() for marker in ['#', '//', '/*', 'example', 'test', 'mock', 'placeholder']):
+                            findings.append("Possible hardcoded credentials detected")
+                            risk_level = max_level(risk_level, SecurityLevel.HIGH)
+                            break
         
         # Check all patterns
         for level, pattern_list in patterns.items():

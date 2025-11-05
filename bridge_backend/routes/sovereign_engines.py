@@ -231,7 +231,7 @@ async def analyze_logs(log_file: UploadFile = File(...)):
         )
 
 
-@router.get("/micrologician/security")
+@router.post("/micrologician/security")
 async def get_security_intelligence(log_file: UploadFile = File(...)):
     """
     Get security intelligence from logs
