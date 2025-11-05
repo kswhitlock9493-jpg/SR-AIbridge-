@@ -23,6 +23,17 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: 'bridge_backend/requirements.txt'
+      
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-quantum-${{ hashFiles('bridge_backend/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-quantum-
+            ${{ runner.os }}-pip-
       
       - name: Install dependencies
         run: |
@@ -51,7 +62,7 @@ jobs:
           path: |
             .alik/predeploy_report.json
             .alik/forge_state.json
-          retention-days: 90
+          retention-days: 7
       
       - name: Extract Security Metrics
         if: always()
