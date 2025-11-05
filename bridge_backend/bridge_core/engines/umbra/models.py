@@ -4,7 +4,7 @@ Graph-based memory structure for causal tracking
 """
 
 from pydantic import BaseModel, Field
-from typing import Dict, List, Literal, Optional
+from typing import Dict, List, Literal, Optional, Any, Union
 from datetime import datetime, timezone
 
 
@@ -71,9 +71,9 @@ class LatticeSnapshot(BaseModel):
         default_factory=list,
         description="All edges in the graph"
     )
-    summary: Dict[str, int] = Field(
+    summary: Dict[str, Union[int, Dict[str, int]]] = Field(
         default_factory=dict,
-        description="Summary statistics"
+        description="Summary statistics (supports both flat counts and nested dictionaries)"
     )
     ts: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
