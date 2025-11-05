@@ -1,0 +1,105 @@
+{
+  "version": "1.0.0",
+  "exported_at": "2025-11-05T05:24:26.044983+00:00",
+  "allowlist": {
+    "version": "1.0.0",
+    "last_updated": "2025-11-05T05:16:40.275165+00:00",
+    "domains": {
+      "critical": [
+        "api.netlify.com",
+        "sr-aibridge.onrender.com",
+        "bridge.sr-aibridge.com",
+        "diagnostics.sr-aibridge.com"
+      ],
+      "infrastructure": [
+        "github.com",
+        "api.github.com",
+        "registry.npmjs.org",
+        "pypi.org"
+      ],
+      "monitoring": [
+        "sentry.io"
+      ]
+    },
+    "ip_ranges": {
+      "netlify": [
+        "44.211.0.0/16",
+        "52.2.0.0/15"
+      ],
+      "github": [
+        "140.82.112.0/20",
+        "143.55.64.0/20"
+      ]
+    }
+  },
+  "egress_policies": {
+    "version": "1.0.0",
+    "last_updated": "2025-11-05T05:16:40.276170+00:00",
+    "policies": {
+      "default_action": "deny",
+      "allowed_protocols": [
+        "https",
+        "http"
+      ],
+      "allowed_ports": [
+        80,
+        443,
+        8080,
+        3000
+      ],
+      "dns_resolution": {
+        "primary": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ],
+        "fallback": [
+          "1.1.1.1",
+          "1.0.0.1"
+        ]
+      },
+      "retry_policy": {
+        "max_retries": 3,
+        "backoff_multiplier": 2,
+        "initial_delay_ms": 1000
+      },
+      "timeout_policy": {
+        "connection_timeout_s": 10,
+        "read_timeout_s": 30,
+        "total_timeout_s": 60
+      }
+    }
+  },
+  "firewall_rules": {
+    "version": "1.0.0",
+    "last_updated": "2025-11-05T05:16:40.277094+00:00",
+    "rules": [
+      {
+        "id": "allow_critical_domains",
+        "action": "allow",
+        "priority": 100,
+        "source": "any",
+        "destination": "critical_domains",
+        "protocol": "https",
+        "enabled": true
+      },
+      {
+        "id": "allow_infrastructure",
+        "action": "allow",
+        "priority": 90,
+        "source": "any",
+        "destination": "infrastructure_domains",
+        "protocol": "https",
+        "enabled": true
+      },
+      {
+        "id": "block_unknown",
+        "action": "log_and_notify",
+        "priority": 10,
+        "source": "any",
+        "destination": "unknown",
+        "protocol": "any",
+        "enabled": true
+      }
+    ]
+  }
+}

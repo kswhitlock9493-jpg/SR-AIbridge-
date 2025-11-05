@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2025-11-05T05:24:26.585768+00:00",
+  "environment": {
+    "python_version": "3.12.3",
+    "python_path": "/usr/bin/python3",
+    "workspace_root": "/home/runner/work/SR-AIbridge-/SR-AIbridge-",
+    "platform": "linux",
+    "path": "/snap/bin:/home/runner/.local/bin:/opt/pipx_bin:/home/runner/.cargo/bin:/home/runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+    "detected_at": "2025-11-05T05:24:25.929966+00:00",
+    "node_version": "v20.19.5",
+    "npm_version": "10.8.2"
+  },
+  "execution_log": [],
+  "total_executions": 0,
+  "successful_executions": 0,
+  "failed_executions": 0
+}
