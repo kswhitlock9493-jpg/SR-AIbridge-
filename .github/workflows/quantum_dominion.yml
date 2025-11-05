@@ -29,12 +29,13 @@ jobs:
           pip install -r bridge_backend/requirements.txt
       
       - name: Set environment variables
-        env:
-          FORGE_DOMINION_ROOT: ${{ secrets.FORGE_DOMINION_ROOT }}
         run: |
           echo "FORGE_DOMINION_MODE=${{ vars.FORGE_DOMINION_MODE || 'sovereign' }}" >> $GITHUB_ENV
           echo "FORGE_DOMINION_VERSION=${{ vars.FORGE_DOMINION_VERSION || '1.9.7s' }}" >> $GITHUB_ENV
           echo "ENVIRONMENT=${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}" >> $GITHUB_ENV
+          if [ -n "${{ secrets.FORGE_DOMINION_ROOT }}" ]; then
+            echo "FORGE_DOMINION_ROOT=${{ secrets.FORGE_DOMINION_ROOT }}" >> $GITHUB_ENV
+          fi
       
       - name: Run Quantum Predeploy Orchestrator
         id: quantum_check

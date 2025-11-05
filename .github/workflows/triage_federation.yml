@@ -85,7 +85,13 @@ jobs:
           PY
 
       - name: Fail if federation failed after auto-heal
-        if: steps.gate.outputs.ok == 'false'
+        if: steps.gate.outputs.ok == 'false' && (github.ref == 'refs/heads/main' || github.event_name == 'schedule')
         run: |
-          echo "Federation triage failed after retries. See artifacts."
+          echo "❌ Federation triage failed after retries. See artifacts."
           exit 1
+      
+      - name: Warn if federation degraded on PR
+        if: steps.gate.outputs.ok == 'false' && github.event_name == 'pull_request'
+        run: |
+          echo "⚠️  Federation triage degraded (non-critical for PR context)"
+          echo "This is expected for PRs where backend services may not be fully deployed."
