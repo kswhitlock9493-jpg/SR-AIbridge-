@@ -146,11 +146,17 @@ jobs:
               }
             }' || echo "Diagnostics notification failed (non-critical)"
 
-  # Backend deployment to Render (webhook-based)
+  # Backend deployment note - using BRH (Bridge Runtime Handler)
+  # BRH is self-hosted and doesn't require deployment from GitHub Actions
+  # Backend is managed independently via BRH runtime
+  # See docs/BRH_DEPLOYMENT_GUIDE.md for deployment instructions
+  
   deploy-backend:
-    name: Trigger Backend Deployment
+    name: Backend Status Check (BRH)
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout code
@@ -164,40 +170,24 @@ jobs:
           python3 -m py_compile self_test.py
           echo "✅ Backend Python files validated"
 
-      - name: Notify Render Deployment Start
+      - name: Notify BRH Backend Status
         run: |
-          python3 bridge_backend/utils/deployment_publisher.py \
-            --platform render \
-            --event-type start \
-            --status deploying \
-            --branch main \
-            --commit-sha ${{ github.sha }} \
-            --message "Trigger Render deployment" || echo "⚠️ Event notification skipped"
-
-      - name: Trigger Render deployment
-        run: |
-          if [ -n "${{ secrets.RENDER_DEPLOY_HOOK }}" ]; then
-            echo "Triggering Render deployment..."
-            curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
-            echo "✅ Render deployment triggered"
-          else
-            echo "⚠️ RENDER_DEPLOY_HOOK not configured - skipping deployment"
-            echo "Note: Render will auto-deploy on push to main branch"
-          fi
-
-      - name: Notify Render Deployment Success
-        if: success()
-        run: |
+          echo "ℹ️ Backend uses BRH (Bridge Runtime Handler) - self-hosted deployment"
+          echo "✅ Backend validation complete"
           python3 bridge_backend/utils/deployment_publisher.py \
             --platform backend \
-            --event-type success \
-            --status triggered \
+            --event-type validation \
+            --status validated \
             --branch main \
             --commit-sha ${{ github.sha }} \
-            --deploy-url "${{ secrets.BACKEND_URL || 'https://bridge.sr-aibridge.com' }}" \
-            --message "Backend deployment triggered successfully" || echo "⚠️ Event notification skipped"
+            --deploy-url "${{ secrets.BACKEND_URL || secrets.BRIDGE_URL || 'https://bridge.sr-aibridge.com' }}" \
+            --message "Backend validation successful - BRH managed" || echo "⚠️ Event notification skipped"
 
-      - name: Notify Backend Deployment Failure
+      - name: Check BRH Backend Health
+        run: |
+          BACKEND_URL="${{ secrets.BACKEND_URL || secrets.BRIDGE_URL || 'https://bridge.sr-aibridge.com' }}"
+          echo "Checking BRH backend health at $BACKEND_URL..."
+          curl -f -s "$BACKEND_URL/api/health" || echo "⚠️ Health check not available (non-critical)"
         if: failure()
         run: |
           python3 bridge_backend/utils/deployment_publisher.py \

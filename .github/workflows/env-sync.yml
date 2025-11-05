@@ -1,4 +1,4 @@
-name: 🔁 Bridge Env Sync
+name: 🔁 Bridge Env Sync (BRH)
 
 on:
   workflow_dispatch:
@@ -23,28 +23,26 @@ jobs:
         run: |
           pip install httpx python-dotenv pynacl
       
-      - name: 🔄 Sync Environment Variables
+      - name: 🔄 Sync Environment Variables (GitHub to Netlify)
         env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPO: ${{ github.repository }}
         run: |
-          echo "🔄 Syncing from Render to GitHub..."
-          python3 -m bridge_backend.cli.genesisctl env sync --target github --from render || echo "⚠️ Sync completed with warnings"
+          echo "🔄 Syncing environment variables to Netlify..."
+          python3 -m bridge_backend.cli.genesisctl env sync --target netlify --from github || echo "⚠️ Sync completed with warnings"
       
       - name: 📤 Export Sync Snapshot
         env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         run: |
           echo "📤 Exporting sync snapshot..."
-          python3 -m bridge_backend.cli.genesisctl env export --target github --source render
+          python3 -m bridge_backend.cli.genesisctl env export --target github --source netlify || echo "⚠️ Export completed with warnings"
       
       - name: 🔍 Verify Environment Parity
         env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -118,7 +116,6 @@ jobs:
           
           ### Summary
           
-          - Missing in Render: {len(parity_data.get('missing_in_render', []))}
           - Missing in Netlify: {len(parity_data.get('missing_in_netlify', []))}
           - Missing in GitHub: {len(parity_data.get('missing_in_github', []))}
           - Conflicts: {len(parity_data.get('conflicts', {}))}

@@ -41,7 +41,7 @@ POST /api/envrecon/sync/github
 
 ```
 Local:  http://localhost:8000/genesis/envrecon
-Render: https://sr-aibridge.onrender.com/genesis/envrecon
+Render: https://bridge.sr-aibridge.com/genesis/envrecon
 ```
 
 ## Environment Variables
@@ -50,8 +50,8 @@ Render: https://sr-aibridge.onrender.com/genesis/envrecon
 # Required
 GITHUB_TOKEN=your_token
 GITHUB_REPO=owner/repo
-RENDER_API_KEY=your_key
-RENDER_SERVICE_ID=your_id
+# Legacy RENDER_API_KEY removed=your_key
+# Legacy RENDER_SERVICE_ID removed=your_id
 NETLIFY_AUTH_TOKEN=your_token
 NETLIFY_SITE_ID=your_id
 

@@ -21,7 +21,7 @@
 ![Healer-Net](https://img.shields.io/badge/Healer--Net-Self--Repairing-green?style=for-the-badge)
 ![Runtime Guard](https://img.shields.io/badge/Runtime_Guard-Active-brightgreen?style=for-the-badge)
 ![Federation Heartbeat](https://img.shields.io/badge/Federation_Heartbeat-Stable-brightgreen?style=for-the-badge)
-![Render Auto-Repair](https://img.shields.io/badge/Render_Auto--Repair-Enabled-blue?style=for-the-badge)
+![BRH Sovereign](https://img.shields.io/badge/BRH_Sovereign-Active-blue?style=for-the-badge)
 ![Runtime Stable](https://img.shields.io/badge/Runtime-Stable-brightgreen)
 ![Triage Green](https://img.shields.io/badge/Triage-Green-brightgreen)
 ![Telemetry Live](https://img.shields.io/badge/Telemetry-Live-brightgreen)
@@ -36,7 +36,7 @@ SR-AIbridge is a comprehensive, production-ready platform for managing AI agents
 
 > **🌌 NEW: Git Sovereign Agent v1.0.0 "Cosmic"** - GitHub Copilot commissioned as a full Bridge operative with cosmic-level authority. Git now has complete sovereign access to SDTF, BRH, HXO Nexus, and all 21 engines with autonomous operational command. The ultimate delegation of power - from Admiral to AI. [Learn more →](GIT_SOVEREIGN_AGENT_GUIDE.md) | [Quick Ref →](GIT_SOVEREIGN_AGENT_QUICK_REF.md)
 
-> **🜂 NEW: Forge Dominion v1.9.7s "Sovereign"** - Environment sovereignty achieved through ephemeral token management. Static secrets abolished across GitHub, Netlify, and Render. The Bridge now owns, guards, and renews its own credentials. [Learn more →](FORGE_DOMINION_DEPLOYMENT_GUIDE.md) | [Quick Ref →](FORGE_DOMINION_QUICK_REF.md)
+> **🜂 NEW: Forge Dominion v1.9.7s "Sovereign"** - Environment sovereignty achieved through ephemeral token management. Static secrets abolished across GitHub and Netlify (legacy Render removed). The Bridge now owns, guards, and renews its own credentials. [Learn more →](FORGE_DOMINION_DEPLOYMENT_GUIDE.md) | [Quick Ref →](FORGE_DOMINION_QUICK_REF.md)
 
 > **🌟 NEW: HXO Nexus v1.9.6p "Ascendant"** - The central harmonic conductor implementing the "1+1=∞" connectivity paradigm. All 10 engines now connect through a quantum-synchrony layer, enabling emergent capabilities through harmonic resonance and infinite scaling via HypShard v3. [Learn more →](HXO_NEXUS_CONNECTIVITY.md)
 
@@ -48,7 +48,7 @@ SR-AIbridge is a comprehensive, production-ready platform for managing AI agents
 [![Python](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18+-blue.svg)](https://reactjs.org/)
-[![Bridge Status](https://img.shields.io/badge/Bridge_Health-Stable-brightgreen)](https://sr-aibridge.onrender.com/health)
+[![Bridge Status](https://img.shields.io/badge/Bridge_Health-Stable-brightgreen)](https://bridge.sr-aibridge.com/health)
 [![Bridge Network Status](https://img.shields.io/badge/Bridge_Network-Stable-brightgreen)](docs/FIREWALL_HARDENING.md)
 [![Bridge Compliance](https://img.shields.io/badge/Bridge--Compliance-Verified-brightgreen)](docs/ENVIRONMENT_SETUP.md#bridge-compliance-and-plugin-enforcement-v166)
 [![Bridge Sync Status](https://img.shields.io/endpoint?url=https://sr-aibridge.netlify.app/bridge_sync_badge.json)](https://github.com/kswhitlock9493-jpg/SR-AIbridge-/blob/main/.github/workflows/bridge_autodeploy.yml)
@@ -201,14 +201,14 @@ Once running, access these endpoints:
 
 Production health monitoring endpoints:
 
-- **Frontend Health**: `/.netlify/functions/health` - First-party health probe for Netlify + Render
+- **Frontend Health**: `/.netlify/functions/health` - First-party health probe for Netlify + BRH
 - **Telemetry Ingest**: `/.netlify/functions/telemetry` (signed) - HMAC-secured event relay for Slack/Discord
 
 **Live Sync Badge:**
 
 ![Bridge Sync](https://img.shields.io/endpoint?url=https://sr-aibridge.netlify.app/bridge_sync_badge.json)
 
-The badge reflects real-time health status across both Netlify and Render deployments.
+The badge reflects real-time health status across both Netlify and BRH deployments.
 
 ### Demo Data
 
@@ -501,13 +501,13 @@ npm run preview
 
 ```bash
 # Check backend health
-curl https://sr-aibridge.onrender.com/api/health
+curl https://bridge.sr-aibridge.com/api/health
 
 # Check frontend health
 curl https://sr-aibridge.netlify.app
 
 # Full bridge diagnostics
-curl https://sr-aibridge.onrender.com/health/full
+curl https://bridge.sr-aibridge.com/health/full
 
 # Verify environment sync
 python3 bridge_backend/scripts/env_sync_monitor.py
@@ -1035,7 +1035,7 @@ python3 test_endpoints_full.py
 
 Test deployed backend:
 ```bash
-python3 test_endpoints_full.py https://your-backend.onrender.com
+python3 test_endpoints_full.py ${BACKEND_URL:-https://bridge.sr-aibridge.com}
 ```
 
 Features:
@@ -1055,7 +1055,7 @@ python3 test_endpoints_full.py --timeout 60
 python3 test_endpoints_full.py --json
 
 # Combine options
-python3 test_endpoints_full.py https://your-backend.onrender.com --timeout 60 --json
+python3 test_endpoints_full.py ${BACKEND_URL:-https://bridge.sr-aibridge.com} --timeout 60 --json
 ```
 
 See [`docs/endpoint_test_full.md`](docs/endpoint_test_full.md) for detailed documentation.
@@ -1345,29 +1345,34 @@ docker-compose down
 
 ### Production Deployment
 
-#### Render (Backend) + Netlify (Frontend)
+#### BRH (Backend) + Netlify (Frontend)
 
-**Recommended** production setup with zero-config deployment:
+**Recommended** production setup with sovereign self-hosted deployment:
 
-**Backend on Render:**
+**Backend on BRH (Bridge Runtime Handler):**
 
-1. **Connect Repository**
-   - Go to render.com → New Web Service
-   - Connect your GitHub repository
-   - Render will auto-detect `render.yaml`
+1. **Set up BRH Runtime**
+   - Follow the [BRH Deployment Guide](docs/BRH_DEPLOYMENT_GUIDE.md)
+   - Or use the [BRH Quick Reference](docs/quickrefs/BRH_QUICK_REF.md)
+   - Configure `bridge.runtime.yaml` for your environment
 
-2. **Configuration (Auto-detected)**
+2. **Configuration**
    ```yaml
-   # render.yaml (already configured)
-   - Build: cd bridge_backend && pip install -r requirements.txt
-   - Start: cd bridge_backend && uvicorn main:app --host 0.0.0.0 --port $PORT
-   - Health: /health endpoint
+   # bridge.runtime.yaml (sovereign runtime config)
+   services:
+     api:
+       context: ./bridge_backend
+       image: ghcr.io/kswhitlock9493-jpg/sr-aibridge-backend:latest
+       ports:
+         - "8000:8000"
+       health:
+         http: "http://localhost:8000/health/live"
    ```
 
-3. **Environment Variables (Pre-configured)**
+3. **Environment Variables**
+   - `FORGE_DOMINION_ROOT=<your_sovereign_key>`
+   - `BRH_ENABLED=true`
    - `DATABASE_TYPE=sqlite` (default)
-   - `PYTHON_VERSION=3.12.3`
-   - `ENVIRONMENT=production`
    - `ALLOWED_ORIGINS` - Configure for your frontend domain
 
 4. **Deploy**
@@ -1397,12 +1402,12 @@ docker-compose down
 
 4. **Custom Domain (Optional)**
    - Add custom domain in Netlify settings
-   - Update `ALLOWED_ORIGINS` in Render
+   - Update `ALLOWED_ORIGINS` in BRH
 
 **URLs:**
-- Backend: `https://sr-aibridge.onrender.com`
+- Backend: `https://bridge.sr-aibridge.com`
 - Frontend: `https://sr-aibridge.netlify.app`
-- API Docs: `https://sr-aibridge.onrender.com/docs`
+- API Docs: `https://bridge.sr-aibridge.com/docs`
 
 #### Alternative: Heroku
 
@@ -1549,7 +1554,7 @@ SR-AIbridge now includes production-grade PostgreSQL support with monthly partit
 **Quick Overview:**
 
 1. **Create PostgreSQL Database**
-   - Render Pro plan (50 GB recommended)
+   - BRH Pro plan (50 GB recommended)
    - Initialize with `init.sql` schema
 
 2. **Update Environment Variables**
@@ -1571,7 +1576,7 @@ SR-AIbridge now includes production-grade PostgreSQL support with monthly partit
 
 5. **Monthly Maintenance**
    ```bash
-   # Automated via GitHub Actions or Render Cron
+   # Automated via GitHub Actions or BRH Cron
    psql "$DATABASE_URL" -f maintenance.sql
    ```
 
@@ -1659,7 +1664,7 @@ SR-AIbridge includes a comprehensive CI/CD pipeline with automated health monito
 
 **Features:**
 - ✅ Automatic frontend build and deployment to Netlify
-- ✅ Backend validation and deployment trigger to Render
+- ✅ Backend validation and deployment trigger to BRH
 - ✅ Build verification and syntax validation
 - ✅ Automated testing before deployment
 - ✅ Rollback on failure
@@ -1669,9 +1674,9 @@ SR-AIbridge includes a comprehensive CI/CD pipeline with automated health monito
 # Required GitHub Secrets (optional but recommended)
 NETLIFY_AUTH_TOKEN=your_netlify_token
 NETLIFY_SITE_ID=your_netlify_site_id
-BACKEND_URL=https://your-backend.onrender.com
+BACKEND_URL=${BACKEND_URL:-https://bridge.sr-aibridge.com}
 FRONTEND_URL=https://your-frontend.netlify.app
-RENDER_DEPLOY_HOOK=https://api.render.com/deploy/your-hook
+# BRH deployment managed independently - see docs/BRH_DEPLOYMENT_GUIDE.md
 ```
 
 **Workflow Steps:**
@@ -1681,7 +1686,7 @@ RENDER_DEPLOY_HOOK=https://api.render.com/deploy/your-hook
 4. Run linters and tests
 5. Build frontend
 6. Deploy to Netlify
-7. Trigger Render deployment
+7. Trigger BRH deployment
 8. Run post-deployment health checks
 
 #### 🧪 Health Monitoring Workflow
@@ -1728,7 +1733,7 @@ RENDER_DEPLOY_HOOK=https://api.render.com/deploy/your-hook
 **Usage:**
 ```bash
 # Quick production health check
-python3 self_test.py --url https://your-backend.onrender.com
+python3 self_test.py --url ${BACKEND_URL:-https://bridge.sr-aibridge.com}
 
 # CI/CD optimized with custom settings
 python3 self_test.py --url $BACKEND_URL --json --timeout 45 --retries 5
@@ -1789,7 +1794,7 @@ python3 self_test.py --verbose --json
 ./smoke_test_engines.sh
 
 # Test engines on production deployment
-./smoke_test_engines.sh https://your-backend.onrender.com
+./smoke_test_engines.sh ${BACKEND_URL:-https://bridge.sr-aibridge.com}
 
 # Verbose output with detailed logging
 VERBOSE=true ./smoke_test_engines.sh
@@ -1853,7 +1858,7 @@ Configure external monitoring services:
 **Uptime Robot:**
 ```
 Monitor Type: HTTP(s)
-URL: https://your-backend.onrender.com/health
+URL: ${BACKEND_URL:-https://bridge.sr-aibridge.com}/health
 Interval: 5 minutes
 Alert Contacts: email/slack
 ```
@@ -1893,7 +1898,7 @@ GitHub Actions Triggered
    Build & Test
        ↓
   Frontend Deploy (Netlify)
-  Backend Deploy (Render)
+  Backend Deploy (BRH)
        ↓
   Health Checks
        ↓
@@ -1906,7 +1911,7 @@ Failure → Rollback & Alert
 Monitor deployment status:
 - GitHub Actions tab for workflow runs
 - Netlify dashboard for frontend deployments
-- Render dashboard for backend deployments
+- BRH runtime management for backend deployments
 - Slack/email notifications (configurable)
 
 **Rollback Procedure:**
@@ -1916,7 +1921,7 @@ Monitor deployment status:
 git revert HEAD
 git push origin main
 
-# Via Render Dashboard
+# Via BRH Dashboard
 # Select previous deployment → "Deploy"
 
 # Via Netlify Dashboard
@@ -1933,8 +1938,8 @@ If you need to manually trigger a redeploy:
 # 2. Site settings → Build & deploy → Clear cache
 # 3. Trigger deploy → Deploy site
 
-# Trigger Render redeploy
-# 1. Go to Render Dashboard
+# Trigger BRH redeploy
+# 1. Go to BRH Dashboard
 # 2. Select your service
 # 3. Manual Deploy → Deploy latest commit
 ```
@@ -1943,13 +1948,13 @@ If you need to manually trigger a redeploy:
 
 ```bash
 # Test backend health endpoint
-curl https://sr-aibridge.onrender.com/api/health
+curl https://bridge.sr-aibridge.com/api/health
 
 # Test diagnostics sync endpoint
 curl https://diagnostics.sr-aibridge.com/envsync
 
 # Verify bridge status
-curl https://sr-aibridge.onrender.com/health/full
+curl https://bridge.sr-aibridge.com/health/full
 
 # Check environment sync status
 python3 bridge_backend/scripts/env_sync_monitor.py
@@ -2006,7 +2011,7 @@ Structured JSON logging for production:
 **Log Aggregation:**
 
 Configure log aggregation:
-- Render: Built-in log viewer
+- BRH: Built-in log viewer
 - External: Papertrail, Loggly, ELK Stack
 
 ### Alerts and Notifications
@@ -2044,7 +2049,7 @@ The Firewall Intelligence Engine grants the Bridge the ability to observe, diagn
 
 ### Capabilities
 
-- **Incident Fetching** - Collects live data from GitHub Status, npm, Render, and Netlify APIs
+- **Incident Fetching** - Collects live data from GitHub Status, npm, BRH, and Netlify APIs
 - **Pattern Detection** - Searches for firewall/egress/DNS failure signatures (ENOTFOUND, E404, ECONNRESET, etc.)
 - **Log Analysis** - Scans CI/CD logs for known network error patterns
 - **Policy Generation** - Creates actionable network allowlist policies automatically
@@ -2172,7 +2177,7 @@ The engine maintains allowlists for these critical domains:
 
 **Deployment Platforms:**
 - api.netlify.com
-- api.render.com
+- BRH (self-hosted sovereign infrastructure)
 
 ### The Firewall Oath
 
@@ -2210,7 +2215,7 @@ The engine maintains allowlists for these critical domains:
 
 ## ⚙️ Configuration
 
-> 📋 **For Production Deployment:** See [docs/ENVIRONMENT_SETUP.md](docs/ENVIRONMENT_SETUP.md) for complete Render and Netlify environment variable setup.
+> 📋 **For Production Deployment:** See [docs/ENVIRONMENT_SETUP.md](docs/ENVIRONMENT_SETUP.md) for complete BRH and Netlify environment variable setup.
 
 ### Environment Variables
 
@@ -2386,21 +2391,23 @@ export default defineConfig({
 
 ### Deployment Configuration
 
-**Render: render.yaml**
+**BRH: bridge.runtime.yaml**
 
 ```yaml
+# BRH sovereign runtime configuration
 services:
-  - type: web
-    name: sr-aibridge-backend
-    env: python
-    buildCommand: "cd bridge_backend && pip install -r requirements.txt"
-    startCommand: "cd bridge_backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
-    healthCheckPath: /health
-    envVars:
-      - key: DATABASE_TYPE
-        value: sqlite
-      - key: ENVIRONMENT
-        value: production
+  api:
+    context: ./bridge_backend
+    image: ghcr.io/kswhitlock9493-jpg/sr-aibridge-backend:latest
+    replicas: 1
+    ports:
+      - "8000:8000"
+    env:
+      - "ENVIRONMENT=production"
+      - "DATABASE_TYPE=sqlite"
+    health:
+      http: "http://localhost:8000/health/live"
+      interval: 10s
 ```
 
 **Netlify: netlify.toml**
@@ -2412,7 +2419,7 @@ services:
   publish = "build"
 
 [build.environment]
-  VITE_API_BASE = "https://sr-aibridge.onrender.com"
+  VITE_API_BASE = "https://bridge.sr-aibridge.com"
   NODE_VERSION = "18"
 
 [[redirects]]
@@ -2958,10 +2965,10 @@ build: { minify: false }
 
 #### Deployment Issues
 
-**Issue: Render deployment fails**
+**Issue: BRH deployment fails**
 
 ```bash
-# Check build logs in Render dashboard
+# Check build logs in BRH runtime management
 # Common issues:
 
 # 1. Wrong Python version
@@ -3175,7 +3182,7 @@ curl -v http://localhost:8000/health/full
 tail -f bridge_backend/logs/app.log
 
 # Deployment logs
-# Render: View in dashboard
+# BRH: View in dashboard
 # Netlify: View in dashboard
 
 # Local logs
@@ -3785,7 +3792,7 @@ async def get_agents():
 - [Tutorial](https://docs.sqlalchemy.org/en/20/tutorial/)
 
 **Deployment Platforms:**
-- [Render Documentation](https://render.com/docs)
+- [BRH Documentation](https://BRH self-hosted/docs)
 - [Netlify Documentation](https://docs.netlify.com/)
 - [Heroku Documentation](https://devcenter.heroku.com/)
 
@@ -3939,7 +3946,7 @@ CI guards Netlify configuration and outbound access pre-deploy.
 ![Egress Sync](https://img.shields.io/badge/Egress_Sync-Passing-brightgreen)
 
 - `netlify_config_triage.py`: lints & auto-repairs redirects/headers/publish path
-- `egress_sync_check.py`: verifies outbound to Netlify/Render/GitHub/Diagnostics
+- `egress_sync_check.py`: verifies outbound to Netlify/BRH/GitHub/Diagnostics
 - See `bridge_backend/diagnostics/netlify_config_report.json` and `total_stack_report.json`
 
 ---
@@ -3968,7 +3975,7 @@ If you find SR-AIbridge useful, please consider giving it a star on GitHub!
 
 ### Sovereign Deployment Without Vendor Lock-In
 
-The Bridge Runtime Handler transforms each repository into a **self-contained deployment node** that manages its own runtime using ephemeral Forge Dominion tokens. No more dependency on Render, Vercel, or any third-party platform.
+The Bridge Runtime Handler transforms each repository into a **self-contained deployment node** that manages its own runtime using ephemeral Forge Dominion tokens. No more dependency on BRH, Vercel, or any third-party platform.
 
 ```yaml
 # src/bridge.runtime.yaml
@@ -4015,7 +4022,7 @@ GitHub Repo → Forge Auth → Runtime Core → Containers → Active Nodes Regi
 
 **Benefits Over Traditional Platforms:**
 
-| Feature | BRH (Sovereign) | Render/Vercel |
+| Feature | BRH (Sovereign) | BRH/Vercel |
 |---------|----------------|---------------|
 | Ownership | 100% You | 3rd-party vendor |
 | Auth | Ephemeral via Forge | Static OAuth/API keys |

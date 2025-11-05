@@ -186,7 +186,7 @@ netlify deploy --prod --dir=dist
 
 ```bash
 # Update .env with production backend URL
-VITE_API_BASE=https://your-backend.onrender.com
+VITE_API_BASE=${BACKEND_URL:-https://bridge.sr-aibridge.com}
 ```
 
 Rebuild and redeploy frontend.
