@@ -1,0 +1,24 @@
+version: 1.0.0
+last_updated: '2025-11-05T05:16:40.277094+00:00'
+rules:
+- id: allow_critical_domains
+  action: allow
+  priority: 100
+  source: any
+  destination: critical_domains
+  protocol: https
+  enabled: true
+- id: allow_infrastructure
+  action: allow
+  priority: 90
+  source: any
+  destination: infrastructure_domains
+  protocol: https
+  enabled: true
+- id: block_unknown
+  action: log_and_notify
+  priority: 10
+  source: any
+  destination: unknown
+  protocol: any
+  enabled: true
