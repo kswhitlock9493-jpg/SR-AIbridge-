@@ -1,12 +1,12 @@
 {
-  "session_id": "20251105_182038",
-  "timestamp": "2025-11-05T18:20:38.395623+00:00",
+  "session_id": "20251105_181636",
+  "timestamp": "2025-11-05T18:16:36.749664+00:00",
   "status": "completed",
   "systems": {
     "firewall": {
       "status": "completed",
       "validation": {
-        "timestamp": "2025-11-05T18:20:38.395631+00:00",
+        "timestamp": "2025-11-05T18:16:36.749672+00:00",
         "valid": true,
         "errors": [],
         "warnings": []
@@ -23,7 +23,7 @@
     "network": {
       "status": "completed",
       "health_check": {
-        "timestamp": "2025-11-05T18:20:38.396067+00:00",
+        "timestamp": "2025-11-05T18:16:36.750099+00:00",
         "total_checked": 4,
         "successful": 4,
         "failed": 0,
@@ -31,25 +31,25 @@
           {
             "success": true,
             "status_code": 404,
-            "response_time_ms": 309.227,
+            "response_time_ms": 424.77799999999996,
             "url": "https://api.netlify.com"
           },
           {
             "success": true,
             "status_code": 200,
-            "response_time_ms": 190.795,
+            "response_time_ms": 175.38899999999998,
             "url": "https://api.github.com"
           },
           {
             "success": true,
             "status_code": 200,
-            "response_time_ms": 104.703,
+            "response_time_ms": 104.161,
             "url": "https://pypi.org"
           },
           {
             "success": true,
             "status_code": 200,
-            "response_time_ms": 154.046,
+            "response_time_ms": 138.86499999999998,
             "url": "https://registry.npmjs.org"
           }
         ]
@@ -68,25 +68,25 @@
     "validation": {
       "status": "completed",
       "validation_results": {
-        "timestamp": "2025-11-05T18:20:39.164937+00:00",
+        "timestamp": "2025-11-05T18:16:37.603397+00:00",
         "overall_valid": true,
         "validations": {
           "netlify_config": {
-            "timestamp": "2025-11-05T18:20:39.164943+00:00",
+            "timestamp": "2025-11-05T18:16:37.603403+00:00",
             "valid": true,
             "errors": [],
             "warnings": [],
             "recommendations": []
           },
           "network_policies": {
-            "timestamp": "2025-11-05T18:20:39.165242+00:00",
+            "timestamp": "2025-11-05T18:16:37.603695+00:00",
             "valid": true,
             "errors": [],
             "warnings": [],
             "recommendations": []
           },
           "headers_file": {
-            "timestamp": "2025-11-05T18:20:39.166777+00:00",
+            "timestamp": "2025-11-05T18:16:37.605200+00:00",
             "valid": true,
             "errors": [],
             "warnings": []
@@ -99,7 +99,7 @@
       "status": "completed",
       "dependencies": {
         "python": {
-          "timestamp": "2025-11-05T18:20:39.167144+00:00",
+          "timestamp": "2025-11-05T18:16:37.605545+00:00",
           "type": "python",
           "valid": false,
           "missing": [
@@ -129,7 +129,7 @@
           ]
         },
         "node": {
-          "timestamp": "2025-11-05T18:20:39.169150+00:00",
+          "timestamp": "2025-11-05T18:16:37.607473+00:00",
           "type": "node",
           "valid": false,
           "missing": [
@@ -139,7 +139,7 @@
         }
       },
       "script_health": {
-        "timestamp": "2025-11-05T18:20:39.169244+00:00",
+        "timestamp": "2025-11-05T18:16:37.607566+00:00",
         "total_scripts": 3,
         "accessible": 3,
         "inaccessible": 0,
@@ -168,8 +168,8 @@
     }
   },
   "summary": {
-    "session_id": "20251105_182038",
-    "timestamp": "2025-11-05T18:20:39.169529+00:00",
+    "session_id": "20251105_181636",
+    "timestamp": "2025-11-05T18:16:37.607819+00:00",
     "systems_executed": 4,
     "overall_status": "healthy",
     "recommendations": [
