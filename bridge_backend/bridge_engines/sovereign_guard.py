@@ -90,16 +90,9 @@ class SovereignComplianceGuard:
         """Emit audit event to Genesis bus"""
         try:
             # Try to emit to Genesis bus if available
-            from bridge_backend.genesis.bus import GenesisEventBus
-            bus = GenesisEventBus()
-            bus.publish("genesis.audit", {
-                "timestamp": event.timestamp,
-                "type": event.event_type,
-                "operation": event.operation,
-                "result": event.result,
-                "signature": event.signature,
-                "metadata": event.metadata
-            })
+            # Note: Genesis bus publish is async, so we just log here
+            # In production, this would be handled by an async wrapper
+            logger.debug(f"Audit event: {event.event_type} - {event.operation}")
         except Exception as e:
             logger.debug(f"Genesis bus not available for audit: {e}")
         

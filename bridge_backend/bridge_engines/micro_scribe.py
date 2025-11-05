@@ -134,6 +134,19 @@ class SovereignMicroScribe:
         findings = []
         risk_level = SecurityLevel.NONE
         
+        # Security level hierarchy for comparison
+        level_order = {
+            SecurityLevel.NONE: 0,
+            SecurityLevel.LOW: 1,
+            SecurityLevel.MEDIUM: 2,
+            SecurityLevel.HIGH: 3,
+            SecurityLevel.CRITICAL: 4
+        }
+        
+        def max_level(level1: SecurityLevel, level2: SecurityLevel) -> SecurityLevel:
+            """Helper to get max security level"""
+            return level1 if level_order[level1] > level_order[level2] else level2
+        
         # Security patterns to check
         patterns = {
             SecurityLevel.CRITICAL: [
@@ -169,20 +182,20 @@ class SovereignMicroScribe:
             # Check for hardcoded credentials
             if re.search(r'["\']([a-zA-Z0-9]{32,})["\']', diff_content):
                 findings.append("Possible hardcoded credentials detected")
-                risk_level = max(risk_level, SecurityLevel.HIGH)
+                risk_level = max_level(risk_level, SecurityLevel.HIGH)
         
         # Check all patterns
         for level, pattern_list in patterns.items():
             for pattern in pattern_list:
                 if re.search(pattern, diff_content, re.IGNORECASE):
                     findings.append(f"Security pattern detected: {pattern}")
-                    risk_level = max(risk_level, level)
+                    risk_level = max_level(risk_level, level)
         
         # File-based checks
         for file_path in file_list:
             if file_path.endswith(('.env', '.key', '.pem', 'credentials.json')):
                 findings.append(f"Sensitive file modified: {file_path}")
-                risk_level = max(risk_level, SecurityLevel.HIGH)
+                risk_level = max_level(risk_level, SecurityLevel.HIGH)
         
         return risk_level, findings
     
