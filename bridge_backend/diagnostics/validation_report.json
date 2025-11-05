@@ -1,26 +1,26 @@
 {
   "version": "1.0.0",
-  "generated_at": "2025-11-05T18:16:37.605335+00:00",
+  "generated_at": "2025-11-05T18:20:39.166931+00:00",
   "validation_results": {
-    "timestamp": "2025-11-05T18:16:37.603397+00:00",
+    "timestamp": "2025-11-05T18:20:39.164937+00:00",
     "overall_valid": true,
     "validations": {
       "netlify_config": {
-        "timestamp": "2025-11-05T18:16:37.603403+00:00",
+        "timestamp": "2025-11-05T18:20:39.164943+00:00",
         "valid": true,
         "errors": [],
         "warnings": [],
         "recommendations": []
       },
       "network_policies": {
-        "timestamp": "2025-11-05T18:16:37.603695+00:00",
+        "timestamp": "2025-11-05T18:20:39.165242+00:00",
         "valid": true,
         "errors": [],
         "warnings": [],
         "recommendations": []
       },
       "headers_file": {
-        "timestamp": "2025-11-05T18:16:37.605200+00:00",
+        "timestamp": "2025-11-05T18:20:39.166777+00:00",
         "valid": true,
         "errors": [],
         "warnings": []
@@ -30,12 +30,12 @@
   "validation_history": [
     {
       "type": "netlify_config",
-      "timestamp": "2025-11-05T18:16:37.603403+00:00",
+      "timestamp": "2025-11-05T18:20:39.164943+00:00",
       "valid": true
     },
     {
       "type": "network_policies",
-      "timestamp": "2025-11-05T18:16:37.603695+00:00",
+      "timestamp": "2025-11-05T18:20:39.165242+00:00",
       "valid": true
     }
   ]
