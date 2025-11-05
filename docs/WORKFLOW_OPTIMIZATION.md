@@ -9,16 +9,19 @@ This guide documents the workflow optimizations implemented to reduce GitHub Act
 **Before Optimization:**
 - 43 pushes per month
 - ~70 minutes per push
-- 3,000 total minutes/month
-- Cost: ~$50/month (exceeding $75 budget at scale)
+- 3,010 total minutes/month
+- 2,000 free tier minutes used
+- 1,010 billable minutes
+- Cost: ~$8/month
 
 **After Optimization:**
 - 43 pushes per month
 - ~20 minutes per push
 - 860 total minutes/month
-- Cost: ~$15/month (well within budget)
+- Within FREE tier (no billing)
+- Cost: $0/month
 
-**Savings: 70% reduction in GitHub Actions costs**
+**Savings: 100% cost reduction (from $8/month to $0/month)**
 
 ## Optimization Strategies Implemented
 
@@ -227,16 +230,17 @@ If using Render.com integration:
 - **Total: ~860 minutes/month**
 
 **Cost Calculation:**
-- Free tier: 2,000 minutes
-- No overage charges with 860 minutes/month
-- **Projected cost: $0-15/month**
+- Free tier: 2,000 minutes/month
+- Usage: 860 minutes/month
+- Billable minutes: 0 (within free tier)
+- **Projected cost: $0/month**
 
 ### Cost Savings
 
-- **Before:** $50/month
-- **After:** $15/month
-- **Savings:** $35/month (70% reduction)
-- **Annual savings:** $420/year
+- **Before:** $8/month (1,010 billable minutes @ $0.008/min)
+- **After:** $0/month (860 minutes, all within free tier)
+- **Savings:** $8/month (100% reduction)
+- **Annual savings:** $96/year
 
 ## Next Steps
 
