@@ -5,17 +5,17 @@
   "quantum_mode_threshold": 0.99,
   "deep_mode_threshold": 0.95,
   "protected_routes": [
-    "/bridge/engines/compliance/audit",
+    "/bridge/engines/compliance/audit"
+  ],
+  "allowed_routes": [
+    "/bridge/engines/status",
+    "/bridge/engines/health",
+    "/bridge/engines/compliance/check",
     "/bridge/engines/microscribe/analyze",
     "/bridge/engines/microscribe/generate-pr",
     "/bridge/engines/micrologician/analyze",
     "/bridge/engines/micrologician/security",
     "/bridge/engines/micrologician/performance"
-  ],
-  "allowed_routes": [
-    "/bridge/engines/status",
-    "/bridge/engines/health",
-    "/bridge/engines/compliance/check"
   ],
   "public_routes": [
     "/bridge/engines/health"
