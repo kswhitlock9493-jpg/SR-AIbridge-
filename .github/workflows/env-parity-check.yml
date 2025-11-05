@@ -1,10 +1,11 @@
-name: 🔁 Build & Deploy Triage
+name: 🔁 Build & Deploy Triage (DISABLED - Use deploy.yml)
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  # Disabled to prevent duplicate Netlify deployments  
+  # push:
+  #   branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
   workflow_dispatch:
 
 jobs:
