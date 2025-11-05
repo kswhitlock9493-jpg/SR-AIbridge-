@@ -27,7 +27,7 @@ ENVSYNC_SCHEDULE=@hourly
 **Render:**
 ```bash
 RENDER_API_TOKEN=<your-render-api-token>
-RENDER_SERVICE_ID=<your-service-id>
+# Legacy RENDER_SERVICE_ID removed=<your-service-id>
 ```
 
 **Netlify:**
@@ -40,10 +40,10 @@ NETLIFY_SITE_ID=<your-site-id>
 
 ```bash
 # Check EnvSync status
-curl https://sr-aibridge.onrender.com/envsync/health
+curl https://bridge.sr-aibridge.com/envsync/health
 
 # Trigger manual sync
-curl -X POST https://sr-aibridge.onrender.com/envsync/apply-all
+curl -X POST https://bridge.sr-aibridge.com/envsync/apply-all
 ```
 
 ## 📝 How It Works
@@ -90,21 +90,21 @@ curl -X POST https://sr-aibridge.onrender.com/envsync/apply-all
 
 ```bash
 # See what would change on Render
-curl -X POST https://sr-aibridge.onrender.com/envsync/dry-run/render
+curl -X POST https://bridge.sr-aibridge.com/envsync/dry-run/render
 
 # See what would change on Netlify
-curl -X POST https://sr-aibridge.onrender.com/envsync/dry-run/netlify
+curl -X POST https://bridge.sr-aibridge.com/envsync/dry-run/netlify
 ```
 
 ### Manual Sync
 
 ```bash
 # Sync to both platforms
-curl -X POST https://sr-aibridge.onrender.com/envsync/apply-all
+curl -X POST https://bridge.sr-aibridge.com/envsync/apply-all
 
 # Sync to one platform only
-curl -X POST https://sr-aibridge.onrender.com/envsync/apply/render
-curl -X POST https://sr-aibridge.onrender.com/envsync/apply/netlify
+curl -X POST https://bridge.sr-aibridge.com/envsync/apply/render
+curl -X POST https://bridge.sr-aibridge.com/envsync/apply/netlify
 ```
 
 ### Check Sync Status
@@ -176,7 +176,7 @@ ls -la bridge_backend/.genesis/envsync_seed_manifest.env
 ### "Variables not syncing"
 ```bash
 # Check EnvSync is enabled
-curl https://sr-aibridge.onrender.com/envsync/health
+curl https://bridge.sr-aibridge.com/envsync/health
 
 # Check logs for errors
 # Look for "EnvSync" in application logs
@@ -204,7 +204,7 @@ git commit -m "feat: enable new feature"
 
 # 4. Deploy - sync happens automatically on next cycle
 # Or trigger immediately:
-curl -X POST https://sr-aibridge.onrender.com/envsync/apply-all
+curl -X POST https://bridge.sr-aibridge.com/envsync/apply-all
 ```
 
 ### Example 2: Adjust database pool size

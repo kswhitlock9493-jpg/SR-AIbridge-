@@ -83,7 +83,7 @@ ENVSYNC_DASHBOARD_TOKEN_URLS=https://admin.example.com/api/tokens/envsync
 
 # === RENDER SELECTORS ===
 RENDER_ACCOUNT_ID=auto
-RENDER_SERVICE_ID=srv-xxxxx
+# Legacy RENDER_SERVICE_ID removed=srv-xxxxx
 RENDER_REGION=oregon             # optional, cosmetic
 
 # === NETLIFY SELECTORS ===
@@ -146,7 +146,7 @@ Applies synchronization in enforce mode.
 
 ### Manual Dry-Run
 ```bash
-curl -X POST https://sr-aibridge.onrender.com/envsync/dry-run/render
+curl -X POST https://bridge.sr-aibridge.com/envsync/dry-run/render
 ```
 
 Response:
@@ -165,7 +165,7 @@ Response:
 
 ### Apply Sync to All Providers
 ```bash
-curl -X POST https://sr-aibridge.onrender.com/envsync/apply-all
+curl -X POST https://bridge.sr-aibridge.com/envsync/apply-all
 ```
 
 ## Include/Exclude Filtering

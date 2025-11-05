@@ -183,7 +183,7 @@ function Dashboard() {
 
 ### Environment Variables
 
-- `BRIDGE_BASE_URL`: Base URL for API checks (default: `https://sr-aibridge.onrender.com`)
+- `BRIDGE_BASE_URL`: Base URL for API checks (default: `https://bridge.sr-aibridge.com`)
 - `BRIDGE_URL`: Bridge diagnostics endpoint for notifications (default: `https://sr-aibridge.netlify.app/api/diagnostics`)
 
 ### GitHub Secrets

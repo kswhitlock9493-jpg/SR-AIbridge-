@@ -68,8 +68,8 @@ The script will set these defaults if variables are missing:
 | Variable | Default Value |
 |----------|--------------|
 | PUBLIC_API_BASE | `/api` |
-| VITE_API_BASE | `https://sr-aibridge.onrender.com/api` |
-| REACT_APP_API_URL | `https://sr-aibridge.onrender.com/api` |
+| VITE_API_BASE | `https://bridge.sr-aibridge.com/api` |
+| REACT_APP_API_URL | `https://bridge.sr-aibridge.com/api` |
 | CASCADE_MODE | `production` |
 | VAULT_URL | `https://sr-aibridge.netlify.app/api/vault` |
 

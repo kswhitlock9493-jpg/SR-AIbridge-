@@ -49,7 +49,7 @@ When `BRIDGE_HEALTH_REPORT = "enabled"`:
 - ✅ Parity violations logged and alerted
 
 **Monitoring:**
-- Backend health: `https://sr-aibridge.onrender.com/api/health`
+- Backend health: `https://bridge.sr-aibridge.com/api/health`
 - Frontend status: `https://sr-aibridge.netlify.app`
 - Diagnostics endpoint: `https://diagnostics.sr-aibridge.com/envsync`
 
@@ -253,7 +253,7 @@ The Bridge reports the following events:
 
 **Backend Health:**
 ```bash
-curl https://sr-aibridge.onrender.com/api/health
+curl https://bridge.sr-aibridge.com/api/health
 ```
 
 Expected: `200 OK` with JSON health status
@@ -354,13 +354,13 @@ python3 scripts/validate_copilot_env.py
 
 ```bash
 # Backend health
-curl https://sr-aibridge.onrender.com/api/health
+curl https://bridge.sr-aibridge.com/api/health
 
 # Frontend health
 curl https://sr-aibridge.netlify.app
 
 # Full bridge diagnostics
-curl https://sr-aibridge.onrender.com/health/full
+curl https://bridge.sr-aibridge.com/health/full
 
 # Environment sync status
 python3 bridge_backend/scripts/env_sync_monitor.py
