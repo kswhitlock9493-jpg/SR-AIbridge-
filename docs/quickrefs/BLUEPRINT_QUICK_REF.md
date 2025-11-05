@@ -103,7 +103,7 @@ SMTP_PASSWORD=...
 
 # Frontend
 VITE_API_BASE=https://bridge.sr-aibridge.com
-VITE_WS_BASE=wss://sr-aibridge.onrender.com
+VITE_WS_BASE=wss://bridge.sr-aibridge.com
 ```
 
 ## RBAC Matrix

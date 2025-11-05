@@ -1676,7 +1676,7 @@ NETLIFY_AUTH_TOKEN=your_netlify_token
 NETLIFY_SITE_ID=your_netlify_site_id
 BACKEND_URL=${BACKEND_URL:-https://bridge.sr-aibridge.com}
 FRONTEND_URL=https://your-frontend.netlify.app
-RENDER_DEPLOY_HOOK=https://api.BRH self-hosted/deploy/your-hook
+# BRH deployment managed independently - see docs/BRH_DEPLOYMENT_GUIDE.md
 ```
 
 **Workflow Steps:**
@@ -2177,7 +2177,7 @@ The engine maintains allowlists for these critical domains:
 
 **Deployment Platforms:**
 - api.netlify.com
-- api.BRH self-hosted
+- BRH (self-hosted sovereign infrastructure)
 
 ### The Firewall Oath
 
@@ -2391,21 +2391,23 @@ export default defineConfig({
 
 ### Deployment Configuration
 
-**BRH: render.yaml**
+**BRH: bridge.runtime.yaml**
 
 ```yaml
+# BRH sovereign runtime configuration
 services:
-  - type: web
-    name: sr-aibridge-backend
-    env: python
-    buildCommand: "cd bridge_backend && pip install -r requirements.txt"
-    startCommand: "cd bridge_backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
-    healthCheckPath: /health
-    envVars:
-      - key: DATABASE_TYPE
-        value: sqlite
-      - key: ENVIRONMENT
-        value: production
+  api:
+    context: ./bridge_backend
+    image: ghcr.io/kswhitlock9493-jpg/sr-aibridge-backend:latest
+    replicas: 1
+    ports:
+      - "8000:8000"
+    env:
+      - "ENVIRONMENT=production"
+      - "DATABASE_TYPE=sqlite"
+    health:
+      http: "http://localhost:8000/health/live"
+      interval: 10s
 ```
 
 **Netlify: netlify.toml**
