@@ -117,7 +117,7 @@ jobs:
           if [ -f .github/forge_token_engine/financial_rescue_config.json ]; then
             SPEND=$(python -c "import json; print(json.load(open('.github/forge_token_engine/financial_rescue_config.json'))['current_month_spend'])")
             LIMIT=$(python -c "import json; print(json.load(open('.github/forge_token_engine/financial_rescue_config.json'))['budget_limit'])")
-            REMAINING=$(python -c "print($LIMIT - $SPEND)")
+            REMAINING=$(python -c "import json; config = json.load(open('.github/forge_token_engine/financial_rescue_config.json')); print(config['budget_limit'] - config['current_month_spend'])")
             
             echo "- **Current Spend:** \$$SPEND" >> $GITHUB_STEP_SUMMARY
             echo "- **Budget Limit:** \$$LIMIT" >> $GITHUB_STEP_SUMMARY

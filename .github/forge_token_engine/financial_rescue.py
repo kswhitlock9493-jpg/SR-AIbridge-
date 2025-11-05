@@ -34,6 +34,9 @@ class BudgetThreshold(Enum):
 class FinancialRescueEngine:
     """Guarantees bridge stays under $75/month regardless of usage"""
     
+    # GitHub Actions pricing constants
+    GITHUB_ACTIONS_COST_PER_MINUTE = 0.008  # $0.008 per minute for Linux runners
+    
     def __init__(self):
         self.config_file = Path('.github/forge_token_engine/financial_rescue_config.json')
         self.cost_log_file = Path('.github/forge_token_engine/cost_log.json')
@@ -119,7 +122,7 @@ class FinancialRescueEngine:
     
     def record_github_actions_usage(self, minutes: int, workflow: str) -> Dict:
         """Record GitHub Actions usage and calculate cost"""
-        cost = minutes * 0.008  # $0.008 per minute
+        cost = minutes * self.GITHUB_ACTIONS_COST_PER_MINUTE
         
         old_spend = self.config['current_month_spend']
         self.config['current_month_spend'] += cost
@@ -280,7 +283,7 @@ class FinancialRescueEngine:
         
         Returns provider selection with reasoning.
         """
-        estimated_cost = estimated_minutes * 0.008
+        estimated_cost = estimated_minutes * self.GITHUB_ACTIONS_COST_PER_MINUTE
         
         # Check if we can use GitHub Actions
         can_use_github, reason = self.can_run_github_workflow(estimated_cost)

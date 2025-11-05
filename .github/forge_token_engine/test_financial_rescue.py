@@ -120,7 +120,7 @@ def test_financial_rescue_system():
     lines = report.split('\n')[:10]
     for line in lines:
         print(f"   {line}")
-    print(f"   ... ({len(report.split(chr(10)))} total lines)")
+    print(f"   ... ({len(report.split('\\n'))} total lines)")
     print()
     
     # Test 10: Final status check

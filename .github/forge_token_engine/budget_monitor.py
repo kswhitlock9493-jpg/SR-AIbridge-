@@ -70,10 +70,12 @@ class BudgetMonitor:
         days_elapsed = now.day
         
         # Calculate burn rate and projection
+        # Handle edge case: first day of month (days_elapsed = 0)
         if days_elapsed > 0:
             burn_rate = status['current_spend'] / days_elapsed
             projected_total = status['current_spend'] + (burn_rate * days_remaining)
         else:
+            # On first day, assume current spend rate for projection
             burn_rate = 0
             projected_total = status['current_spend']
         
