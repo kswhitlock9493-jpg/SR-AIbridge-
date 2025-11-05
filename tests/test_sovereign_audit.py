@@ -9,6 +9,7 @@ import json
 import pytest
 import tempfile
 import shutil
+import subprocess
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 
@@ -74,9 +75,9 @@ class TestSovereignGitAuditor:
         repo_path = Path(temp_dir)
         
         # Initialize git repo
-        os.system(f"cd {repo_path} && git init")
-        os.system(f"cd {repo_path} && git config user.name 'Test User'")
-        os.system(f"cd {repo_path} && git config user.email 'test@example.com'")
+        subprocess.run(['git', 'init'], cwd=repo_path, check=True, capture_output=True)
+        subprocess.run(['git', 'config', 'user.name', 'Test User'], cwd=repo_path, check=True, capture_output=True)
+        subprocess.run(['git', 'config', 'user.email', 'test@example.com'], cwd=repo_path, check=True, capture_output=True)
         
         # Create .gitignore
         gitignore = repo_path / ".gitignore"
@@ -426,10 +427,10 @@ class TestSovereignAuditOrchestrator:
         repo_path = Path(temp_dir)
         
         # Initialize git
-        os.system(f"cd {repo_path} && git init")
-        os.system(f"cd {repo_path} && git config user.name 'Test User'")
-        os.system(f"cd {repo_path} && git config user.email 'test@example.com'")
-        os.system(f"cd {repo_path} && git checkout -b test-branch")
+        subprocess.run(['git', 'init'], cwd=repo_path, check=True, capture_output=True)
+        subprocess.run(['git', 'config', 'user.name', 'Test User'], cwd=repo_path, check=True, capture_output=True)
+        subprocess.run(['git', 'config', 'user.email', 'test@example.com'], cwd=repo_path, check=True, capture_output=True)
+        subprocess.run(['git', 'checkout', '-b', 'test-branch'], cwd=repo_path, check=True, capture_output=True)
         
         # Create basic structure
         (repo_path / "bridge_backend").mkdir()

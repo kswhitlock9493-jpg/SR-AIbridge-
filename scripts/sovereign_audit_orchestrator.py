@@ -60,7 +60,17 @@ class SovereignGitAuditor:
     """Audits and repairs Git sovereign configuration"""
     
     def __init__(self, repo_root: Path):
-        self.repo_root = repo_root
+        # Validate and normalize the repo_root path
+        self.repo_root = Path(repo_root).resolve()
+        
+        # Ensure the path is safe (no path traversal)
+        if not self.repo_root.exists():
+            raise ValueError(f"Repository root does not exist: {self.repo_root}")
+        
+        # Ensure it's actually a directory
+        if not self.repo_root.is_dir():
+            raise ValueError(f"Repository root is not a directory: {self.repo_root}")
+        
         self.results: List[AuditResult] = []
     
     def audit(self, auto_repair: bool = True) -> List[AuditResult]:
@@ -427,15 +437,24 @@ class SovereignGitAuditor:
             gitignore_path = self.repo_root / ".gitignore"
             missing_patterns = result.details.get("missing_patterns", [])
             
-            if missing_patterns:
+            # Validate patterns to prevent injection
+            safe_patterns = []
+            for pattern in missing_patterns:
+                # Only allow alphanumeric, dots, asterisks, underscores, hyphens, and slashes
+                if re.match(r'^[a-zA-Z0-9.*_\-/]+$', pattern):
+                    safe_patterns.append(pattern)
+                else:
+                    print(f"  ⚠️  Skipping potentially unsafe pattern: {pattern}")
+            
+            if safe_patterns:
                 with open(gitignore_path, 'a') as f:
                     f.write("\n# Auto-added by Sovereign Audit\n")
-                    for pattern in missing_patterns:
+                    for pattern in safe_patterns:
                         f.write(f"{pattern}\n")
                 
                 result.status = "REPAIRED"
                 result.repaired = True
-                result.message = f"Added missing patterns to .gitignore: {', '.join(missing_patterns)}"
+                result.message = f"Added safe patterns to .gitignore: {', '.join(safe_patterns)}"
                 print(f"  ✅ Repaired: {result.check_name}")
         except Exception as e:
             print(f"  ❌ Failed to repair {result.check_name}: {e}")
@@ -458,7 +477,16 @@ class SovereignNetlifyAuditor:
     """Audits and repairs Netlify sovereign configuration"""
     
     def __init__(self, repo_root: Path):
-        self.repo_root = repo_root
+        # Validate and normalize the repo_root path
+        self.repo_root = Path(repo_root).resolve()
+        
+        # Ensure the path is safe
+        if not self.repo_root.exists():
+            raise ValueError(f"Repository root does not exist: {self.repo_root}")
+        
+        if not self.repo_root.is_dir():
+            raise ValueError(f"Repository root is not a directory: {self.repo_root}")
+        
         self.results: List[AuditResult] = []
     
     def audit(self, auto_repair: bool = True) -> List[AuditResult]:
@@ -730,7 +758,16 @@ class SovereignRepositoryAuditor:
     """Audits and repairs repository integrity"""
     
     def __init__(self, repo_root: Path):
-        self.repo_root = repo_root
+        # Validate and normalize the repo_root path
+        self.repo_root = Path(repo_root).resolve()
+        
+        # Ensure the path is safe
+        if not self.repo_root.exists():
+            raise ValueError(f"Repository root does not exist: {self.repo_root}")
+        
+        if not self.repo_root.is_dir():
+            raise ValueError(f"Repository root is not a directory: {self.repo_root}")
+        
         self.results: List[AuditResult] = []
     
     def audit(self, auto_repair: bool = True) -> List[AuditResult]:
