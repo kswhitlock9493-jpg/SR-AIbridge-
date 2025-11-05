@@ -22,7 +22,7 @@ echo "Deploy context: ${CONTEXT:-unknown}"
 echo "Working directory: $(pwd)"
 
 # Synthesize artifacts to satisfy preview checks even for minimal branches
-python3 ../scripts/synthesize_netlify_artifacts.py
+python3 scripts/synthesize_netlify_artifacts.py
 
 # Set environment variables to skip browser downloads
 export PUPPETEER_SKIP_DOWNLOAD=true
