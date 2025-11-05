@@ -16,8 +16,8 @@ jobs:
       TELEMETRY_SIGNING_SECRET: ${{ secrets.TELEMETRY_SIGNING_SECRET }}
       TELEMETRY_ENDPOINT: >-
         https://sr-aibridge.netlify.app/.netlify/functions/telemetry
-      RENDER_HEALTH_URL: >-
-        https://sr-aibridge.onrender.com/api/health
+      BACKEND_HEALTH_URL: >-
+        ${{ secrets.BACKEND_URL || secrets.BRIDGE_URL || 'https://bridge.sr-aibridge.com' }}/api/health
       FRONTEND_HEALTH_URL: >-
         https://sr-aibridge.netlify.app/.netlify/functions/health
     steps:

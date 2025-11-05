@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Bridge Sync Badge Generator
-Generates a real-time badge reflecting Render + Netlify health status
+Generates a real-time badge reflecting Backend + Netlify health status
 """
 
 import requests
@@ -27,10 +27,11 @@ def generate_badge():
     """Generate the sync badge JSON"""
     print("🔍 Checking Bridge sync status...")
     
-    # Check backend (Render)
+    # Check backend (configurable)
+    backend_url = os.getenv("BACKEND_URL", "https://bridge.sr-aibridge.com")
     backend_ok = check_endpoint(
-        "https://sr-aibridge.onrender.com/api/health",
-        "Backend (Render)"
+        f"{backend_url}/api/health",
+        "Backend"
     )
     
     # Check frontend (Netlify)

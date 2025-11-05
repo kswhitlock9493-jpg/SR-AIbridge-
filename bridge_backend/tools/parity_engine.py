@@ -87,7 +87,7 @@ async def publish_parity_event(report):
 def analyze():
     backend=collect_backend_routes()
     frontend=collect_frontend_calls()
-    prefix="https://sr-aibridge.onrender.com"
+    prefix=os.getenv("BACKEND_URL", "https://bridge.sr-aibridge.com")
     # Normalize frontend calls - extract paths and remove query strings
     normalized=[]
     for c in frontend:

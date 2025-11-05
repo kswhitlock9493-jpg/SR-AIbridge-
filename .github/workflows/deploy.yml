@@ -80,8 +80,8 @@ jobs:
         env:
           CI: false
           REACT_APP_API_URL: >-
-            ${{ secrets.BACKEND_URL ||
-            'https://sr-aibridge-backend.onrender.com' }}
+            ${{ secrets.BACKEND_URL || secrets.BRIDGE_URL ||
+            'https://bridge.sr-aibridge.com' }}
 
       - name: Notify Netlify Deployment Start
         run: |
@@ -133,7 +133,7 @@ jobs:
       - name: Notify Bridge Diagnostics
         if: success() && github.ref == 'refs/heads/main'
         run: |
-          BRIDGE_URL="${{ secrets.BRIDGE_URL || secrets.BACKEND_URL || 'https://sr-aibridge-backend.onrender.com' }}"
+          BRIDGE_URL="${{ secrets.BRIDGE_URL || secrets.BACKEND_URL || 'https://bridge.sr-aibridge.com' }}"
           curl -X POST "$BRIDGE_URL/api/diagnostics" \
             -H "Content-Type: application/json" \
             -d '{
@@ -189,19 +189,19 @@ jobs:
         if: success()
         run: |
           python3 bridge_backend/utils/deployment_publisher.py \
-            --platform render \
+            --platform backend \
             --event-type success \
             --status triggered \
             --branch main \
             --commit-sha ${{ github.sha }} \
-            --deploy-url "https://sr-aibridge.onrender.com" \
-            --message "Render deployment triggered successfully" || echo "⚠️ Event notification skipped"
+            --deploy-url "${{ secrets.BACKEND_URL || 'https://bridge.sr-aibridge.com' }}" \
+            --message "Backend deployment triggered successfully" || echo "⚠️ Event notification skipped"
 
-      - name: Notify Render Deployment Failure
+      - name: Notify Backend Deployment Failure
         if: failure()
         run: |
           python3 bridge_backend/utils/deployment_publisher.py \
-            --platform render \
+            --platform backend \
             --event-type failure \
             --status failed \
             --branch main \

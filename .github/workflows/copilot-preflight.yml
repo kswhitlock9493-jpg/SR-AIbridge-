@@ -60,10 +60,9 @@ jobs:
           echo "bridge.sr-aibridge.com" >> .github/allowlist/hosts.txt
           echo "diagnostics.sr-aibridge.com" >> .github/allowlist/hosts.txt
           echo "api.netlify.com" >> .github/allowlist/hosts.txt
-          echo "render.com" >> .github/allowlist/hosts.txt
           echo "registry.npmjs.org" >> .github/allowlist/hosts.txt
           echo "pypi.org" >> .github/allowlist/hosts.txt
-          echo "✅ Added default allowlist hosts."
+          echo "✅ Added default allowlist hosts (sovereign mode - no vendor dependencies)."
 
       - name: Preflight Sanity Check
         run: |

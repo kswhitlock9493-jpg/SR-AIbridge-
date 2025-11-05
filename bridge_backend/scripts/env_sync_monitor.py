@@ -9,10 +9,10 @@ def ping(url: str) -> bool:
     except Exception:
         return False
 
-RENDER = os.getenv("RENDER_HEALTH_URL", "https://sr-aibridge.onrender.com/api/health")
+BACKEND = os.getenv("BACKEND_HEALTH_URL", os.getenv("BACKEND_URL", "https://bridge.sr-aibridge.com") + "/api/health")
 FRONTEND = os.getenv("FRONTEND_HEALTH_URL", "https://sr-aibridge.netlify.app/.netlify/functions/health")
 
-backend_ok = ping(RENDER)
+backend_ok = ping(BACKEND)
 frontend_ok = ping(FRONTEND)
 
 status = "stable" if backend_ok and frontend_ok else ("degraded" if backend_ok or frontend_ok else "down")

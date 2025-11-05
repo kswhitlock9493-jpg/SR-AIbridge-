@@ -55,8 +55,8 @@ jobs:
 
       - name: 🌐 Endpoint Connectivity Test
         env:
-          VITE_API_BASE: ${{ secrets.VITE_API_BASE || 'https://sr-aibridge.onrender.com/api' }}
-          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL || 'https://sr-aibridge.onrender.com/api' }}
+          VITE_API_BASE: ${{ secrets.VITE_API_BASE || secrets.BACKEND_URL || 'https://bridge.sr-aibridge.com/api' }}
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL || secrets.BACKEND_URL || 'https://bridge.sr-aibridge.com/api' }}
         run: |
           echo "🌐 Testing live endpoints..."
           for endpoint in $VITE_API_BASE $REACT_APP_API_URL; do
@@ -65,7 +65,7 @@ jobs:
               code=$(curl -s -o /dev/null -w "%{http_code}" "$endpoint" || echo "000")
               echo "➡️  Response Code: $code"
               if [ "$code" -ne 200 ]; then
-                echo "⚠️ Endpoint $endpoint returned code $code"
+                echo "⚠️ Endpoint $endpoint returned code $code (expected if using sovereign deployment)"
               else
                 echo "✅ Endpoint $endpoint reachable"
               fi
@@ -74,10 +74,10 @@ jobs:
 
       - name: 🧱 CORS Verification
         env:
-          VITE_API_BASE: ${{ secrets.VITE_API_BASE || 'https://sr-aibridge.onrender.com/api' }}
+          VITE_API_BASE: ${{ secrets.VITE_API_BASE || secrets.BACKEND_URL || 'https://bridge.sr-aibridge.com/api' }}
         run: |
           echo "🧱 Checking CORS headers..."
-          curl -I -s $VITE_API_BASE | grep -i "access-control-allow-origin" || echo "⚠️ No CORS headers detected"
+          curl -I -s $VITE_API_BASE | grep -i "access-control-allow-origin" || echo "⚠️ No CORS headers detected (expected if endpoint unavailable)"
 
       - name: 📡 Report DeepScan Results to Bridge
         if: always()

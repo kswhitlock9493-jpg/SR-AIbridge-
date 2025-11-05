@@ -6,7 +6,7 @@ Comprehensive triage matrix - validates backend endpoints and API surface
 import json, os, time, urllib.request
 from pathlib import Path
 
-BASE = os.getenv("BRIDGE_BASE", "https://sr-aibridge.onrender.com")
+BASE = os.getenv("BRIDGE_BASE", os.getenv("BACKEND_URL", "https://bridge.sr-aibridge.com"))
 OUT = Path("bridge_backend/diagnostics/triage_matrix.ndjson")
 OUT.parent.mkdir(parents=True, exist_ok=True)
 

@@ -22,7 +22,7 @@ jobs:
 
       - name: Run Endpoint Triage
         env:
-          BRIDGE_BASE_URL: ${{ secrets.BACKEND_URL || 'https://sr-aibridge.onrender.com' }}
+          BRIDGE_BASE_URL: ${{ secrets.BACKEND_URL || secrets.BRIDGE_URL || 'https://bridge.sr-aibridge.com' }}
           BRIDGE_URL: ${{ secrets.BRIDGE_URL }}
         run: |
           cd bridge_backend

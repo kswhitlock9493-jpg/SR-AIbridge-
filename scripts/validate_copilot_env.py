@@ -11,7 +11,6 @@ ALLOWLIST = [
     "https://api.netlify.com",
     "https://bridge.sr-aibridge.com",
     "https://diagnostics.sr-aibridge.com",
-    "https://render.com",
     "https://registry.npmjs.org",
     "https://pypi.org",
     "https://nodejs.org",

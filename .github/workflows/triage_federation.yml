@@ -33,7 +33,7 @@ jobs:
 
       - name: API Triage (auto-heal)
         env:
-          PUBLIC_API_BASE: ${{ secrets.BACKEND_URL || 'https://sr-aibridge.onrender.com' }}
+          PUBLIC_API_BASE: ${{ secrets.BACKEND_URL || secrets.BRIDGE_URL || 'https://bridge.sr-aibridge.com' }}
           TRIAGE_MAX_RETRIES: 4
           TRIAGE_TIMEOUT_MS: 8000
           TRIAGE_BACKOFF_BASE: 0.8
@@ -49,7 +49,7 @@ jobs:
 
       - name: Endpoint Triage (parity-aware)
         env:
-          PUBLIC_API_BASE: ${{ secrets.BACKEND_URL || 'https://sr-aibridge.onrender.com' }}
+          PUBLIC_API_BASE: ${{ secrets.BACKEND_URL || secrets.BRIDGE_URL || 'https://bridge.sr-aibridge.com' }}
           ENDPOINT_TRIAGE_LIMIT: 20
           TRIAGE_MAX_RETRIES: 4
           TRIAGE_TIMEOUT_MS: 8000

@@ -18,12 +18,11 @@ from typing import List, Dict, Any
 
 LOG_PATH = "logs/copilot_firewall.log"
 ALLOWLIST_PATH = ".github/allowlist/hosts.txt"
-BRIDGE_URL = os.getenv("BRIDGE_URL", "https://sr-aibridge.onrender.com")
+BRIDGE_URL = os.getenv("BRIDGE_URL", os.getenv("BACKEND_URL", "https://bridge.sr-aibridge.com"))
 
 # Self-healing watchdog configuration
 WATCHDOG_LOG_PATH = "bridge_backend/logs/firewall_watchdog.log"
 TARGETS = [
-    "sr-aibridge.onrender.com",
     "bridge.sr-aibridge.com",
     "diagnostics.sr-aibridge.com",
     "api.netlify.com",

@@ -4,10 +4,9 @@ import json, sys, socket, ssl, time
 
 TARGETS = [
   "api.netlify.com", "netlify.com",
-  "api.render.com", "render.com",
   "api.github.com", "github.com", "codeload.github.com",
   "registry.npmjs.org", "nodejs.org",
-  "diagnostics.sr-aibridge.com", "sr-aibridge.onrender.com"
+  "diagnostics.sr-aibridge.com"
 ]
 PORT = 443
 
