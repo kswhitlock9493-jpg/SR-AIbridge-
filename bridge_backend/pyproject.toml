@@ -43,7 +43,4 @@ Homepage = "https://github.com/kswhitlock9493-jpg/SR-AIbridge-"
 Repository = "https://github.com/kswhitlock9493-jpg/SR-AIbridge-"
 
 [tool.setuptools]
-packages = ["bridge_backend"]
-
-[tool.setuptools.package-data]
-bridge_backend = ["**/*.py"]
+packages.find = {}  # Automatically discover all packages
