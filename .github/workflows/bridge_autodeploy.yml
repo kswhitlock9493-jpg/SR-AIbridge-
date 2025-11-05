@@ -1,10 +1,11 @@
-name: Bridge Auto-Deploy Mode
+name: Bridge Auto-Deploy Mode (DISABLED - Use deploy.yml)
 
 on:
-  push:
-    branches: [ "main" ]
-  schedule:
-    - cron: "0 */6 * * *"   # Every 6 hours
+  # Disabled to prevent duplicate Netlify deployments
+  # push:
+  #   branches: [ "main" ]
+  # schedule:
+  #   - cron: "0 */6 * * *"   # Every 6 hours
   workflow_dispatch:
 
 jobs:

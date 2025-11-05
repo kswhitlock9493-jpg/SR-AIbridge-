@@ -1,7 +1,8 @@
-name: 🌉 Bridge Deploy
+name: 🌉 Bridge Deploy (DISABLED - Use deploy.yml)
 on:
-  push:
-    branches: [ main ]
+  # Disabled to prevent duplicate Netlify deployments
+  # push:
+  #   branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -40,7 +41,7 @@ jobs:
           python3 bridge_backend/forge/export_runtime.py
 
       - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v2
+        uses: nwtgck/actions-netlify@v3.0
         with:
           publish-dir: bridge-frontend/dist
           production-deploy: true

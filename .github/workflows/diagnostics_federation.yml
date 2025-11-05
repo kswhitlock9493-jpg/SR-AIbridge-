@@ -1,11 +1,12 @@
 ---
-name: Diagnostics Federation
+name: Diagnostics Federation (DISABLED - Use deploy.yml)
 
 on:
-  push:
-    branches: ["main"]
-  schedule:
-    - cron: "*/30 * * * *"   # every 30 minutes
+  # Disabled to prevent duplicate Netlify deployments
+  # push:
+  #   branches: ["main"]
+  # schedule:
+  #   - cron: "*/30 * * * *"   # every 30 minutes
   workflow_dispatch:
 
 jobs:
