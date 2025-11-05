@@ -22,7 +22,8 @@ from .adapters.arie_adapter import ArieGate
 from .adapters.env_adapter import EnvSuite
 from .adapters.github_forge_adapter import GitHubForge
 from .adapters.netlify_guard_adapter import NetlifyGuard
-from .adapters.render_fallback_adapter import RenderFallback
+# Legacy Render fallback adapter removed - using BRH sovereign deployment
+# from .adapters.render_fallback_adapter import RenderFallback
 
 logger = logging.getLogger(__name__)
 
@@ -135,7 +136,8 @@ class ChimeraOracle:
         self.arie = ArieGate()
         self.env = EnvSuite()
         self.guard = NetlifyGuard()
-        self.fallback = RenderFallback()
+        # Legacy Render fallback removed - using BRH sovereign deployment
+        # self.fallback = RenderFallback()
         self.forge = GitHubForge()
     
     @require_role("admiral")

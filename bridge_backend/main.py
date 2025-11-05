@@ -16,15 +16,15 @@ logger = logging.getLogger(__name__)
 # === Environment Detection ===
 # Detect runtime environment for platform-specific configuration
 HOST_PLATFORM = os.getenv("HOST_PLATFORM") or (
-    "render" if os.getenv("RENDER") else
+    "brh" if os.getenv("BRH_ENABLED") else  # BRH sovereign deployment
     "netlify" if os.getenv("NETLIFY") else
     "local"
 )
 logger.info(f"[BOOT] Detected host environment: {HOST_PLATFORM}")
 
 # === Runtime Path Safety Net ===
-# Ensures the app finds local modules even under Render's /opt/render/project/src environment
-# Add both the current directory and the parent directory to support both run contexts
+# Ensures the app finds local modules in various deployment contexts
+# Add both the current directory and the parent directory to support different run contexts
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)  # Add parent to find bridge_backend package
@@ -310,12 +310,13 @@ else:
 safe_include_router("bridge_backend.webhooks.deployment_webhooks")
 logger.info("[WEBHOOKS] Deployment webhook routes enabled for autonomy integration")
 
-# Umbra Triage Mesh webhook routes (v1.9.7k)
+# Umbra Triage Mesh webhook routes (v2.0.0 - BRH)
 if os.getenv("UMBRA_ENABLED", "true").lower() == "true":
-    safe_include_router("bridge_backend.webhooks.render")
+    # Legacy Render webhook removed - using BRH sovereign deployment
+    # safe_include_router("bridge_backend.webhooks.render")
     safe_include_router("bridge_backend.webhooks.netlify")
     safe_include_router("bridge_backend.webhooks.github")
-    logger.info("[WEBHOOKS] Umbra triage webhook routes enabled (Render, Netlify, GitHub)")
+    logger.info("[WEBHOOKS] Umbra triage webhook routes enabled (Netlify, GitHub) - BRH mode")
 
 # Umbra Triage Mesh routes (v1.9.7k)
 if os.getenv("UMBRA_ENABLED", "true").lower() == "true":

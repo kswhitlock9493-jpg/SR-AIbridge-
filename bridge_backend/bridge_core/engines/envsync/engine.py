@@ -4,7 +4,8 @@ from pathlib import Path
 from typing import Dict, List
 from .config import CONFIG
 from .types import SyncResult, Mode
-from .providers.render import RenderProvider
+# Legacy Render provider removed - using BRH sovereign deployment
+# from .providers.render import RenderProvider
 from .providers.netlify import NetlifyProvider
 from .providers.base import ProviderBase
 from .diffs import compute_diff
@@ -85,7 +86,9 @@ def load_canonical() -> Dict[str,str]:
 
 def provider_for(name: str) -> ProviderBase:
     if name == "render":
-        return RenderProvider(service_id=os.getenv("RENDER_SERVICE_ID",""))
+        # Legacy Render provider removed - using BRH sovereign deployment
+        logger.warning("⚠️ Render provider deprecated - use BRH for backend deployment")
+        raise ValueError("Render provider no longer supported - use BRH (Bridge Runtime Handler)")
     if name == "netlify":
         return NetlifyProvider(site_id=os.getenv("NETLIFY_SITE_ID",""))
     raise ValueError(f"Unknown provider {name}")
