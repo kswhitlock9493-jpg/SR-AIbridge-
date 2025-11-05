@@ -14,24 +14,12 @@ def fetch_netlify_env():
 def fetch_backend_env():
     """
     OPTIONAL: Fetch backend environment variables if using a managed provider.
-    For sovereign deployments, this function may not be needed.
+    For BRH sovereign deployments, this function is not used.
+    Backend environment is managed independently via BRH runtime.
     """
-    backend_api_key = os.getenv('BACKEND_API_KEY')
-    service_id = os.getenv("BACKEND_SERVICE_ID")
-    
-    if not backend_api_key or not service_id:
-        print("⚠️ Backend API credentials not configured - skipping backend env check")
-        return {}
-    
-    headers = {"Authorization": f"Bearer {backend_api_key}"}
-    url = f"https://api.render.com/v1/services/{service_id}/env-vars"
-    try:
-        resp = requests.get(url, headers=headers, timeout=10)
-        resp.raise_for_status()
-        return {item["key"]: item["value"] for item in resp.json()}
-    except Exception as e:
-        print(f"⚠️ Could not fetch backend env (expected in sovereign mode): {e}")
-        return {}
+    print("ℹ️ Backend uses BRH (Bridge Runtime Handler) - environment managed independently")
+    print("⚠️ Skipping backend env check (BRH sovereign mode)")
+    return {}
 
 def load_local_env():
     return dotenv_values(".env.production")

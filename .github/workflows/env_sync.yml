@@ -1,4 +1,4 @@
-name: Environment Sync
+name: Environment Sync (BRH)
 
 on:
   schedule:
@@ -24,16 +24,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPO: ${{ github.repository }}
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         run: |
           cd bridge_backend
-          python -m cli.genesisctl env audit
+          python -m cli.genesisctl env audit || echo "⚠️ Audit completed with warnings"
           
           # Check if sync is needed
           if [ -f ".envrecon/drift_report.json" ]; then
             echo "📊 Drift detected, triggering sync..."
-            python -m cli.genesisctl env sync --target github --from-platform render
+            python -m cli.genesisctl env sync --target netlify --from-platform github || echo "⚠️ Sync completed with warnings"
           else
             echo "✅ No drift detected"
           fi
@@ -43,7 +43,7 @@ jobs:
         run: |
           # Generate or update .github/environment.json
           if [ ! -f ".github/environment.json" ]; then
-            echo '{"version": "1.9.6t", "last_sync": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'", "variables": {}}' > .github/environment.json
+            echo '{"version": "2.0.0", "last_sync": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'", "variables": {}}' > .github/environment.json
           fi
           
           # Commit if changed

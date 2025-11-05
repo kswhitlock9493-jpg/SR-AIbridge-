@@ -122,7 +122,6 @@ def watchdog() -> None:
     monitored_hosts = [
         "bridge.sr-aibridge.com",
         "diagnostics.sr-aibridge.com",
-        "render.com",
         "api.netlify.com",
         "pypi.org",
         "registry.npmjs.org"
