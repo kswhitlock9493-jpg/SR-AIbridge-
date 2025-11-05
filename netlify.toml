@@ -2,9 +2,9 @@
   # Build is handled by GitHub Actions (deploy.yml)
   # Netlify automatic builds are disabled - deployments only via GitHub Actions
   ignore = "git diff --quiet HEAD^ HEAD"  # Always skip Netlify auto-builds
-  base = "bridge-frontend"
-  command = "bash ../scripts/netlify_build.sh"
-  publish = "dist"
+  base = "."
+  command = "bash scripts/netlify_build.sh"
+  publish = "bridge-frontend/dist"
   environment = { FORGE_DOMINION_ROOT = "", REVIEW_ID = "" }
 
 [functions]
