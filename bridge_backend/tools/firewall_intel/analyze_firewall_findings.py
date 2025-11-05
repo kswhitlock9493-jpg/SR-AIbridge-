@@ -50,12 +50,16 @@ CRITICAL_DOMAINS = [
     "objects.githubusercontent.com",
     "api.netlify.com",
     "netlify.com",
-    "api.render.com",
-    "render.com",
     "pypi.org",
     "files.pythonhosted.org",
     "www.githubstatus.com",
     "www.netlifystatus.com"
+]
+
+# Optional: Legacy backend provider domains (not required for sovereign mode)
+OPTIONAL_BACKEND_DOMAINS = [
+    "api.render.com",
+    "render.com",
 ]
 
 # Required network ports
