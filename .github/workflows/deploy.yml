@@ -217,6 +217,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: Notify GitHub Build Start
         run: |
           python3 bridge_backend/utils/deployment_publisher.py \
@@ -239,11 +244,6 @@ jobs:
           # Install Playwright browser dependencies
           npx playwright install-deps
           npx playwright install chromium
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
 
       - name: Install frontend dependencies
         run: cd bridge-frontend && npm ci
