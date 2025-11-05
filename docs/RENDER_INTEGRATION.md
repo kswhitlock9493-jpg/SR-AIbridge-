@@ -176,15 +176,17 @@ jobs:
 ## Expected Cost Savings
 
 **Before Optimization**:
-- 43 pushes × 70 minutes = 3,000 minutes/month
-- Cost: ~$50/month
+- 43 pushes × 70 minutes = 3,010 minutes/month
+- 1,010 billable minutes (after 2,000 free tier)
+- Cost: ~$8/month
 
 **After Optimization**:
 - GitHub Actions: 43 pushes × 20 minutes = 860 minutes/month
+- All within free tier (0 billable minutes)
 - Render.com: Free tier (750 hours available)
-- Cost: ~$15/month
+- **Total Cost: $0/month**
 
-**Savings**: ~$35/month (70% reduction)
+**Savings**: $8/month → $0/month (100% reduction, $96/year saved)
 
 ## Monitoring
 
