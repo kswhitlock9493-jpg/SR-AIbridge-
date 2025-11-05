@@ -322,6 +322,13 @@ if os.getenv("UMBRA_ENABLED", "true").lower() == "true":
     safe_include_router("bridge_backend.engines.umbra.routes")
     logger.info("[UMBRA TRIAGE] v1.9.7k routes enabled - unified triage mesh active")
 
+# Sovereign Engines - MicroScribe, MicroLogician, Compliance Guard
+if os.getenv("SOVEREIGN_ENGINES_ENABLED", "true").lower() == "true":
+    safe_include_router("bridge_backend.routes.sovereign_engines")
+    logger.info("[SOVEREIGN ENGINES] v1.0.0 routes enabled - quantum-resistant evaluation engines active")
+else:
+    logger.info("[SOVEREIGN ENGINES] Disabled (set SOVEREIGN_ENGINES_ENABLED=true to enable)")
+
 
 @app.on_event("startup")
 async def startup_event():
