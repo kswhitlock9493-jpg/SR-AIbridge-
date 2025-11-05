@@ -12,9 +12,8 @@ import time
 LOG_PATH = "bridge_backend/logs/integrity_audit.json"
 
 ENDPOINTS = {
-    "Bridge": "https://bridge.sr-aibridge.com",
-    "Diagnostics": "https://diagnostics.sr-aibridge.com",
-    "Render": "https://sr-aibridge.onrender.com/health",
+    "Bridge": os.getenv("BRIDGE_BACKEND", "https://bridge.sr-aibridge.com"),
+    "Diagnostics": os.getenv("BRIDGE_DIAGNOSTICS", "https://diagnostics.sr-aibridge.com"),
     "Netlify": "https://api.netlify.com",
 }
 

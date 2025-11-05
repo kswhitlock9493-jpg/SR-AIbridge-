@@ -4,6 +4,11 @@ from .base import ProviderBase
 from ..discovery.chain import discover_token
 
 class RenderProvider(ProviderBase):
+    """
+    OPTIONAL: Render.com provider for EnvSync.
+    This provider is maintained for backward compatibility with legacy Render deployments.
+    For sovereign deployments, this provider is not required and can be disabled.
+    """
     name = "render"
 
     def __init__(self, service_id: str):
@@ -13,7 +18,7 @@ class RenderProvider(ProviderBase):
         # 1) ENV, 2) secret files, 3) Vault, 4) Dashboard
         tok = os.getenv("RENDER_API_TOKEN") or await discover_token("RENDER_API_TOKEN")
         if not tok:
-            raise RuntimeError("Render API token not found via discovery chain")
+            raise RuntimeError("Render API token not found via discovery chain (optional for sovereign mode)")
         return tok
 
     async def fetch(self) -> Dict[str,str]:

@@ -6,8 +6,8 @@ NETLIFY_SITE_ID = os.getenv("NETLIFY_SITE_ID")
 
 ESSENTIAL_ENV = {
     "PUBLIC_API_BASE": "/api",
-    "VITE_API_BASE": "https://sr-aibridge.onrender.com/api",
-    "REACT_APP_API_URL": "https://sr-aibridge.onrender.com/api",
+    "VITE_API_BASE": os.getenv("BACKEND_URL", "https://bridge.sr-aibridge.com") + "/api",
+    "REACT_APP_API_URL": os.getenv("BACKEND_URL", "https://bridge.sr-aibridge.com") + "/api",
     "CASCADE_MODE": "production",
     "VAULT_URL": "https://sr-aibridge.netlify.app/api/vault"
 }

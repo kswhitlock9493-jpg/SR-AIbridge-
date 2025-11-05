@@ -48,7 +48,6 @@ class FirewallConfigManager:
             "domains": {
                 "critical": [
                     "api.netlify.com",
-                    "sr-aibridge.onrender.com",
                     "bridge.sr-aibridge.com",
                     "diagnostics.sr-aibridge.com"
                 ],

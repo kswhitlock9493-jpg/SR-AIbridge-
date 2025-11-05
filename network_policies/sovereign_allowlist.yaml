@@ -3,7 +3,6 @@ last_updated: '2025-11-05T05:16:40.275165+00:00'
 domains:
   critical:
   - api.netlify.com
-  - sr-aibridge.onrender.com
   - bridge.sr-aibridge.com
   - diagnostics.sr-aibridge.com
   infrastructure:

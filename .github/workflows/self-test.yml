@@ -13,7 +13,7 @@ name: Self-Test SR-AIbridge
       backend_url:
         description: 'Backend URL to test against'
         required: false
-        default: 'https://sr-aibridge-backend.onrender.com'
+        default: 'https://bridge.sr-aibridge.com'
         type: string
       test_timeout:
         description: 'Test timeout in minutes'
@@ -43,7 +43,7 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "backend_url=${{ github.event.inputs.backend_url }}" >> $GITHUB_OUTPUT
           else
-            echo "backend_url=${{ secrets.BACKEND_URL || 'https://sr-aibridge-backend.onrender.com' }}" >> $GITHUB_OUTPUT
+            echo "backend_url=${{ secrets.BACKEND_URL || secrets.BRIDGE_URL || 'https://bridge.sr-aibridge.com' }}" >> $GITHUB_OUTPUT
           fi
 
       - name: Wait for backend to be responsive

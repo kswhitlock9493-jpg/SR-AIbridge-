@@ -33,7 +33,7 @@ jobs:
       - name: Run Endpoint Triage
         env:
           BRIDGE_BASE_URL: >-
-            ${{ secrets.BACKEND_URL || 'https://sr-aibridge.onrender.com' }}
+            ${{ secrets.BACKEND_URL || secrets.BRIDGE_URL || 'https://bridge.sr-aibridge.com' }}
           BRIDGE_URL: ${{ secrets.BRIDGE_URL }}
         run: |
           echo "🩺 Running Endpoint Triage..."
@@ -43,7 +43,7 @@ jobs:
       - name: Run API Triage
         env:
           BRIDGE_BASE_URL: >-
-            ${{ secrets.BACKEND_URL || 'https://sr-aibridge.onrender.com' }}
+            ${{ secrets.BACKEND_URL || secrets.BRIDGE_URL || 'https://bridge.sr-aibridge.com' }}
           BRIDGE_URL: ${{ secrets.BRIDGE_URL }}
         run: |
           echo "🧬 Running API Triage..."

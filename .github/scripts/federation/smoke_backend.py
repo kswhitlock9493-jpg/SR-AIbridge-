@@ -6,7 +6,7 @@ Backend smoke test - validates core backend health endpoints
 import json, os, sys, time, urllib.request
 from pathlib import Path
 
-BASE = os.getenv("BRIDGE_BASE", "https://sr-aibridge.onrender.com")
+BASE = os.getenv("BRIDGE_BASE", os.getenv("BACKEND_URL", "https://bridge.sr-aibridge.com"))
 OUT = Path("bridge_backend/diagnostics/triage_runtime_metrics.json")
 OUT.parent.mkdir(parents=True, exist_ok=True)
 
