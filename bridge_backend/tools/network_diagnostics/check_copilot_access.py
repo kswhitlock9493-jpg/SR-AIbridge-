@@ -19,10 +19,8 @@ TIMEOUT = 4
 DOMAINS = [
     "https://api.github.com",
     "https://api.netlify.com",
-    "https://api.render.com",
     "https://bridge.sr-aibridge.com",
     "https://diagnostics.sr-aibridge.com",
-    "https://sr-aibridge.onrender.com/api",
     "https://sr-aibridge.netlify.app/api/vault",
     "https://registry.npmjs.org",
     "https://pypi.org",
@@ -34,6 +32,11 @@ DOMAINS = [
     "https://ghcr.io",
     "https://www.githubstatus.com",
     "https://www.netlifystatus.com"
+]
+
+# Optional: Legacy backend provider endpoints (not required for sovereign mode)
+OPTIONAL_ENDPOINTS = [
+    "https://api.render.com",
 ]
 
 def check_tls(domain):
