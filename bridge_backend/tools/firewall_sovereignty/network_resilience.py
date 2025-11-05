@@ -85,11 +85,17 @@ class NetworkResilienceLayer:
             return ip_address
         except socket.gaierror:
             if use_fallback:
-                # Attempt custom DNS resolution (simplified)
+                # Attempt fallback DNS resolution using system DNS
+                # Note: Full custom DNS resolution would require dnspython library
+                # This provides basic fallback by trying again after a brief delay
                 self.connection_stats["dns_fallbacks"] += 1
-                # In production, this would use dnspython or similar
-                # For now, return None to indicate fallback was attempted
-                return None
+                try:
+                    import time
+                    time.sleep(0.5)  # Brief delay before retry
+                    ip_address = socket.gethostbyname(hostname)
+                    return ip_address
+                except socket.gaierror:
+                    return None
             return None
     
     def test_connection(self, url: str, method: str = "GET", timeout: Optional[int] = None) -> Dict[str, Any]:

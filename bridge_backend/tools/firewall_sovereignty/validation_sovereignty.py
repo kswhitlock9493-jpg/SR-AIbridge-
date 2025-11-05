@@ -362,10 +362,54 @@ class ValidationSovereignty:
         return healing_results
     
     def _heal_netlify_config(self, config_path: str, errors: List[str]) -> None:
-        """Heal netlify configuration issues"""
-        # This is a placeholder for actual healing logic
-        # In production, this would intelligently add missing sections/headers
-        pass
+        """
+        Heal netlify configuration issues
+        
+        Args:
+            config_path: Path to netlify.toml
+            errors: List of errors to heal
+        """
+        if not Path(config_path).exists():
+            return
+        
+        # Read current config
+        with open(config_path, 'r') as f:
+            content = f.read()
+        
+        healed = False
+        
+        # Check for missing security headers section
+        if "Missing required section: [headers]" in errors or "Missing required section: [[headers]]" in errors:
+            if "[[headers]]" not in content:
+                # Add basic security headers section
+                headers_section = """
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer-when-downgrade"
+"""
+                content += headers_section
+                healed = True
+        
+        # Check for missing build section
+        if "Missing required section: [build]" in errors:
+            if "[build]" not in content:
+                # Add basic build section
+                build_section = """
+[build]
+  command = "npm run build"
+  publish = "dist"
+"""
+                content = build_section + "\n" + content
+                healed = True
+        
+        # Write back if healed
+        if healed:
+            with open(config_path, 'w') as f:
+                f.write(content)
     
     def export_validation_report(self, output_file: str, validation_results: Dict[str, Any]) -> None:
         """Export validation results to file"""

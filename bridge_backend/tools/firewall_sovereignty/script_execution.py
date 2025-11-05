@@ -87,6 +87,8 @@ class ScriptExecutionSovereignty:
             requirements_file = self.workspace_root / "requirements.txt"
             if requirements_file.exists():
                 try:
+                    import importlib.util
+                    
                     # Read requirements
                     with open(requirements_file, 'r') as f:
                         requirements = [
@@ -95,12 +97,13 @@ class ScriptExecutionSovereignty:
                             if line.strip() and not line.startswith('#')
                         ]
                     
-                    # Check each requirement
+                    # Check each requirement using importlib
                     for req in requirements:
-                        try:
-                            __import__(req.replace('-', '_'))
+                        package_name = req.replace('-', '_')
+                        spec = importlib.util.find_spec(package_name)
+                        if spec is not None:
                             validation["installed"].append(req)
-                        except ImportError:
+                        else:
                             validation["missing"].append(req)
                             validation["valid"] = False
                 
