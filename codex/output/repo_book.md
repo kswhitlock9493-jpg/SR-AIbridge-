@@ -1,6 +1,6 @@
 # 📘 The Book of the Repo
 
-_Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
+_Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 
 ---
 
@@ -55,224 +55,6 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 
 ---
 ## 📄 Documentation Index
-
-### ./ETHICS_IMPACT_TEMPLATE.md
-
-- # Ethics Impact Statement (template) — include in PRs for major features
-- ## 1) Description
-- ## 2) Potential Misuses
-- ## 3) Mitigations & Controls
-- ## 4) Data Sensitivity
-- ## 5) Federation / External Dependencies
-- ## 6) Approval
-
-
-### ./PHASE_6_VERIFICATION.md
-
-- # Phase 6 - Final Verification Report
-- ## Implementation Status: ✅ COMPLETE
-- ### Date: 2025-11-04
-- ### Branch: copilot/add-chaos-injector
-- ## Implementation Summary
-- ### Components Delivered
-- ## Test Coverage
-- ### Unit Tests: 14/14 Passing ✅
-- ### Build Validation
-- ## Code Quality
-- ### Code Review
-- ### Security Considerations
-- ### Performance
-- ## Files Changed
-- ### New Files (7)
-- ### Modified Files (5)
-- ### Documentation (2)
-- ## Deployment Readiness
-- ### Prerequisites Met
-- ### Configuration Options
-- # Chaos Injector (disabled by default)
-- # Recovery Watchtower (enabled by default)
-- # Frontend API Configuration
-- ### Environment Variables
-- ## CI/CD Validation
-- ### Local Validation ✅
-- ### Pending CI/CD Checks
-- ## Security Summary
-- ### Vulnerabilities Found: 0
-- ### Security Improvements
-- ## Recommendations
-- ### Immediate Next Steps
-- ### Future Enhancements
-- ## Sign-Off
-
-
-### ./LOC_REPORT.md
-
-- # SR-AIbridge - Lines of Code Report
-- ## Summary
-- ## Breakdown by File Type
-- ## Detailed File List by Category
-- ### Python (278 files, 30,252 lines)
-- ### Markdown (94 files, 23,413 lines)
-- ### JSON (7 files, 9,330 lines)
-- ### JavaScript/TypeScript (140 files, 8,542 lines)
-- ### Unknown (27 files, 2,540 lines)
-- ### YAML (44 files, 2,316 lines)
-- ### CSS (2 files, 2,219 lines)
-- ### Shell (5 files, 718 lines)
-- ### SQL (3 files, 492 lines)
-- ### Other (6 files, 298 lines)
-- ### HTML (2 files, 121 lines)
-- ### TOML (1 files, 30 lines)
-
-
-### ./CHIMERA_IMPLEMENTATION_COMPLETE.md
-
-- # 🚀 Project Chimera v1.9.7c — Implementation Complete
-- ## 🎯 Mission Accomplished
-- ## 📦 Deliverables
-- ### Core Engine (7 files)
-- ### CLI Tool (1 file)
-- ### Documentation (6 files)
-- ### Testing (1 comprehensive suite)
-- ### System Integration
-- ## 🧩 Architecture Overview
-- ## 📊 Performance Metrics
-- ## 🧪 Test Results
-- ## 🌐 Genesis Bus Integration
-- ## 🛠️ Usage Examples
-- ### CLI
-- # Simulate Netlify deployment
-- # Deploy to Render with certification
-- # Monitor deployment status
-- # Verify with Truth Engine
-- ### API
-- # Get Chimera status
-- # Simulate deployment
-- # Deploy with certification
-- ### Python
-- ## 🔒 Security Features
-- ## 📈 Impact Analysis
-- ## 🎯 Supported Platforms
-- ## 🚦 Status Indicators
-- ## 🔮 Future Enhancements
-- ## 🎓 Learning Resources
-- ## 🏆 Final Declaration
-- ## ✅ Sign-Off
-
-
-### ./TDE_X_QUICK_REF.md
-
-- # TDE-X Quick Reference
-- ## v1.9.7a - Hypersharded Deploy + Federation + Sovereign Post-Deploy
-- ### Quick Start
-- # Set environment
-- # Run server
-- ### Health Checks
-- ### Render Configuration
-- ### Architecture
-- ### Shards
-- ### Federation Events
-- ### Monitoring
-- ### Troubleshooting
-- ### File Locations
-- ### Migration from TDB (v1.9.6i)
-- ### Rollback (Emergency Only)
-
-
-### ./V197I_IMPLEMENTATION_SUMMARY.md
-
-- # v1.9.7i Implementation Summary
-- ## Overview
-- ## Components Delivered
-- ### 1. Chimera Oracle (`bridge_backend/engines/chimera/`)
-- ### 2. Hydra Guard v2 (`bridge_backend/engines/hydra/`)
-- ### 3. Leviathan Simulator (`bridge_backend/engines/leviathan/`)
-- ### 4. GitHub Forge (`bridge_backend/engines/github_forge/`)
-- ### 5. Render Fallback (`bridge_backend/engines/render_fallback/`)
-- ### 6. CLI Tool (`bridge_backend/cli/deployctl.py`)
-- ### 7. GitHub Actions Integration
-- ### 8. Genesis Bus Integration
-- ### 9. Tests (`bridge_backend/tests/`)
-- ### 10. Documentation (`docs/`)
-- ## Deployment Pipeline Flow
-- ## Key Features
-- ## Environment Variables
-- ## Usage Examples
-- ### CLI
-- ### API
-- ### Python
-- ## Test Results
-- ## Next Steps
-- ## Files Modified
-- ## Files Created
-- ## Status
-
-
-### ./HXO_V196P_IMPLEMENTATION.md
-
-- # HXO v1.9.6p Implementation Summary
-- ## What Was Delivered
-- ## Changes Made
-- ### Core Files Modified (4)
-- ### Documentation Created (6 files, ~45KB)
-- ### Tests Created (1 file)
-- ### Changelog Updated
-- ## New Features Implemented
-- ### 1. Federation Nexus (9 Engines)
-- ### 2. New Capabilities (8 added)
-- ### 3. Genesis Bus Topics (11 added)
-- ### 4. Security Enhancements
-- ## Testing Results
-- ### Test Summary
-- ### Test Breakdown
-- ## Impact Metrics
-- ## Backward Compatibility
-- ## Migration Path
-- ### From v1.9.6n to v1.9.6p
-- ## Production Readiness Checklist
-- ## Deployment Instructions
-- ### Render
-- # Update environment variables in Render dashboard
-- # Deploy
-- ### Netlify
-- ### GitHub Actions
-- ## Next Steps
-- ### Recommended Post-Deployment
-- ### Optional Enhancements
-- ## Support Resources
-- ### Documentation
-- ### Quick References
-- ## Acknowledgments
-- ## Closing Statement
-
-
-### ./FORGE_DOMINION_DEPLOYMENT_GUIDE.md
-
-- # 🜂 Forge Dominion — Environment Sovereignty Deployment Guide (v1.9.7s)
-- ## ⚙️ Objective
-- ## 🧩 Architecture: Dominion Token Engine
-- ## 🧬 Flow Summary
-- ## 🧠 Setup (First-Time Configuration)
-- ### 🜂 GitHub Variables
-- ## 🚀 Deployment Sequence
-- ### 1️⃣ Bootstrap
-- ### 2️⃣ Pre-Deploy
-- ### 3️⃣ Validate & Scrub
-- ### 4️⃣ CI Verification
-- ## 🔒 Security Guarantees
-- ## 🧾 Test Plan
-- ## 🖼 Visual Pulse Integration
-- ## 🛡 Governance Addendum (v1.9.7s+)
-- ## 🧾 Changelog
-- ## 🕊 Lore Summary
-- ## ✅ Seal of Dominion: Environment Sovereignty Achieved
-- ## 📚 File Structure
-- ## 🔧 Troubleshooting
-- ### Issue: Bootstrap fails with "No FORGE_DOMINION_ROOT"
-- ### Issue: scan_envs.py finds secrets
-- ### Issue: Token validation fails
-- ## 🎯 Next Steps
-
 
 ### ./CHANGELOG.md
 
@@ -404,2318 +186,48 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ### v1.9.3
 
 
-### ./FORGE_DOMINION_IMPLEMENTATION_SUMMARY.md
-
-- # 🜂 Forge Dominion v1.9.7s - Implementation Summary
-- ## Overview
-- ## What Was Built
-- ### Core Achievement
-- ## Components Delivered
-- ### Python Modules (7 files)
-- ### Infrastructure Scripts (2 files)
-- ### CI/CD Workflow (1 file)
-- ### Assets (1 file)
-- ### Documentation (3 files)
-- ### Tests (1 file)
-- ## Technical Specifications
-- ### Cryptography
-- ### Token Lifecycle
-- ### Governance
-- ### Providers Supported
-- ## Security Guarantees
-- ## Testing Coverage
-- ### Unit Tests (26 tests)
-- ### Integration Test
-- ### Compatibility Tests
-- ## Deployment Flow
-- ## Files Changed/Added
-- ### New Files (13)
-- ### Modified Files (4)
-- ### Total Lines of Code
-- ## Environment Variables
-- ## GitHub Setup Commands
-- # Set secret
-- # Set variables
-- ## Integration Points
-- ## Next Steps (Optional Enhancements)
-- ## Lore
-- ## Seal of Dominion
-
-
-### ./DEPLOYMENT_READY_v1.9.4.md
-
-- # SR-AIbridge v1.9.4 — Anchorhold Protocol
-- ## Deployment Readiness Report
-- ## Executive Summary
-- ## Implementation Status
-- ### ✅ Core Improvements (5/5 Complete)
-- ### ✅ Infrastructure Updates (2/2 Complete)
-- ### ✅ Dependencies (1/1 Complete)
-- ### ✅ Documentation (2/2 Complete)
-- ## Verification & Testing
-- ### Automated Test Suite
-- #### Test Coverage:
-- ### Validation Script
-- ## Files Changed
-- ### Modified Files:
-- ### New Files:
-- ## Deployment Instructions
-- ### Automated Deployment
-- ### Manual Verification (Optional)
-- # Check Render deployment
-- # Expected: {"status": "active", "version": "1.9.4", "protocol": "Anchorhold"}
-- # Check version endpoint
-- # Expected: {"version": "1.9.4", "protocol": "Anchorhold", ...}
-- # Check Netlify frontend
-- # Expected: Frontend HTML
-- # Check API proxy
-- # Expected: Same as Render version endpoint
-- ## Breaking Changes
-- ### Migration Notes:
-- ## Outcome Metrics (Expected)
-- ## Rollback Plan
-- ## Support & Monitoring
-- ### Health Checks
-- ### Troubleshooting Resources
-- ### Common Issues & Solutions
-- ## Contributors
-- ## Final Checklist
-
-
-### ./V197F_QUICK_REF.md
-
-- # v1.9.7f Cascade Synchrony - Quick Reference
-- ## 🚀 Quick Start
-- # Forge Core
-- # Cascade Synchrony Protocol
-- ## 📡 API Endpoints
-- ### Status & Configuration
-- ### Actions
-- ## 🧬 Architecture
-- ### Healing Flow
-- ### Platform Support
-- ## 📁 Key Files
-- ### Configuration
-- ### Core Modules
-- ## 🧪 Testing
-- ## 🔒 Security
-- ## 🌐 Integration Matrix
-- ## 📊 Status Check
-- ## 🎯 Usage Examples
-- ### Trigger Healing
-- ### Trigger Recovery
-- ### Manual Integration
-- ## 📈 Version Info
-- ## 🧭 Admiral Directive
-
-
-### ./BRH_GUIDE.md
-
-- # 🧠 Bridge Runtime Handler (BRH) Guide
-- ## 🌟 Overview
-- ### Key Principles
-- ## 🏗️ Architecture
-- ## 🚀 Quick Start
-- ### Prerequisites
-- ### Step 1: Configure Runtime Manifest
-- ### Step 2: Initialize Runtime Locally
-- # Set Forge root key
-- # Run runtime handler
-- ### Step 3: Deploy via GitHub Actions
-- ## 📋 Configuration Reference
-- ### Runtime Manifest Schema
-- #### `runtime.auth`
-- #### `runtime.containers`
-- #### `runtime.federation`
-- #### `security.attestation`
-- ## 🔐 Security
-- ### Token Lifecycle
-- ### Forge Dominion Integration
-- ### Attestation
-- ## 🌐 Federation
-- ### μ-Harmonic Lattice Integration
-- # Register node in lattice
-- ### Multi-Node Deployment
-- ## 📊 Monitoring
-- ### Health Endpoint
-- ### Logs
-- ### Active Nodes Registry
-- ## 🔧 Troubleshooting
-- ### Token Validation Failures
-- ### Container Won't Start
-- ### Federation Sync Issues
-- ## 🛣️ Roadmap
-- ### ✅ Phase 1: Core Runtime (Current)
-- ### 🚧 Phase 2: GitHub Integration (Next)
-- ### 📅 Phase 3: Federation Linking
-- ### 🔮 Phase 4: UI Integration
-- ## 📚 Additional Resources
-- ## 🤝 Contributing
-- ## 📄 License
-
-
-### ./V197L_QUICK_REF.md
-
-- # Bridge Health Record System — Quick Reference
-- ## 🩺 v1.9.7l Overview
-- ## 🚀 Quick Commands
-- ### Generate Health Record
-- ### Generate Badge
-- ### View Latest Health
-- ## 📊 Health Score Formula
-- ## 🎨 Badge Colors
-- ## 📂 File Locations
-- ## 🔄 Data Retention
-- ## 🧪 Testing
-- # Run all health record tests
-- # Run all badge tests
-- # Run both
-- ## 📋 Sample Output
-- ### Health Record JSON
-- ### Badge Display
-- ## 🔧 CI Integration
-- ## 🛠️ Troubleshooting
-- ### Badge not updating
-- # Check latest health record exists
-- # Manually regenerate badge
-- ### Missing health data
-- # Check source reports exist
-- # Manually generate health record
-- ### Low health score
-- ## 🔐 Security Notes
-- ## 📈 Future Enhancements
-
-
-### ./HXO_IMPLEMENTATION_SUMMARY.md
-
-- # HXO Implementation Summary — v1.9.6p (HXO Ascendant)
-- ## What Was Delivered
-- ## Core Components Implemented
-- ### 1. HXO Engine Core (`bridge_backend/engines/hypshard_x/`)
-- ### 2. Integration Adapters (`bridge_backend/bridge_core/engines/adapters/`)
-- ### 3. Tests (`bridge_backend/tests/`)
-- ### 4. Documentation (`docs/`)
-- ### 5. Quick Reference (`HXO_QUICK_REF.md`)
-- ## Integration Points
-- ### Genesis Event Bus
-- ### Main Application
-- ### Configuration
-- ## Features Delivered
-- ### ✅ Adaptive Sharding
-- ### ✅ Content-Addressed Deduplication
-- ### ✅ Merkle Aggregation
-- ### ✅ Idempotent Execution
-- ### ✅ Resumable Across Redeploys
-- ### ✅ Backpressure & Rate Control
-- ### ✅ Self-Healing with Autonomy
-- ### ✅ Truth Certification
-- ### ✅ Blueprint Schema Contract
-- ### ✅ Parser Plan Ingestion
-- ### ✅ RBAC (Admiral-Locked)
-- ## API Endpoints
-- ## Configuration
-- # Enable/disable
-- # Safety/timebox
-- # Auto-tuning
-- # Storage
-- # RBAC
-- ## Testing Summary
-- ### Import Tests
-- ### Functional Tests
-- ### Integration Tests
-- ## File Structure
-- ## No New Dependencies
-- ## Rollback Plan
-- ## Next Steps (Optional Enhancements)
-- ## Security & Safety
-- ## Strengths Added
-- ## Total Delivery
-- ## Permanent Solution, No Duct Tape
-- ## Ready to Merge
-
-
-### ./NETLIFY_UMBRA_QUICK_REF.md
-
-- # Umbra + Netlify Integration — Quick Reference v1.9.7e
-- ## 🚀 Quick Start
-- ### 1. Enable Netlify Validation
-- ### 2. Run Validation
-- ### 3. Record Netlify Events
-- ## 📡 API Endpoints
-- ### Validate Configuration
-- # RBAC: Admiral, Captain
-- # Response: Validation result with status
-- ### Validate with Memory Recall
-- # RBAC: Admiral, Captain
-- # Response: Validation result + recall information
-- ### Get Metrics
-- # RBAC: Admiral, Captain, Observer
-- # Response: Validator metrics
-- ### Get Status
-- # RBAC: All roles
-- # Response: Validator status and version
-- ## 🧠 Intent Classification
-- ## 🔍 Validation Checks
-- ## 🔄 CI/CD Integration
-- ## 📊 Metrics
-- ### Validator Metrics
-- # Returns:
-- ### Umbra Memory Metrics
-- # Categories include:
-- # - netlify_validation
-- # - netlify_event
-- # - repair
-- # - anomaly
-- # - echo
-- ## 🧪 Testing
-- ### Run Tests
-- # Netlify validator tests
-- # All Umbra tests (including Netlify)
-- ### Manual Testing
-- # Test validation script
-- # Test with Python
-- ## 🔐 RBAC
-- ## 🐛 Troubleshooting
-- ### Validation Fails
-- # Check the output for specific errors
-- # Common issues:
-- # - Duplicate header rules
-- # - Duplicate redirect rules
-- # - Missing build command
-- # - Invalid syntax in netlify.toml
-- ### Memory Not Recording
-- # Check if Umbra Memory is enabled
-- # Check if Netlify sync is enabled
-- # Verify vault directory exists
-- ### API Endpoints Not Working
-- # Check if routes are registered
-- # The routes should be in: bridge_backend/engines/netlify_routes.py
-- # Verify RBAC is configured
-- # Check your authentication middleware
-- ## 📚 Related Documentation
-- ## 🎯 Common Use Cases
-- ### 1. Pre-Deploy Validation
-- # In your CI/CD pipeline
-- ### 2. Learning from Failures
-- # After fixing a Netlify issue
-- ### 3. Checking Historical Fixes
-- # Recall past Netlify events
-
-
-### ./EAN_EXECUTION_RESULTS.md
-
-- # EAN (Embedded Autonomy Node) Execution Results
-- ## 🚀 Full EAN Run - October 13, 2025
-- ### Execution Summary
-- ### Results
-- ### Cycle Pipeline
-- ### Findings & Fixes
-- ### Certification
-- ### Report Location
-- ### Integration Status
-- ### Next Steps
-- ### Notes
-
-
-### ./BLUEPRINT_ENGINE_GUIDE.md
-
-- # Blueprint Engine + Mission Log v2 - Usage Guide
-- ## Overview
-- ## Architecture
-- ### Backend Components
-- ### Frontend Components
-- ## Quick Start
-- ### Backend Setup
-- # Health check
-- # List blueprints (empty initially)
-- ### Frontend Setup
-- ## API Usage
-- ### 1. Draft a Blueprint
-- ### 2. Commit Blueprint to Mission
-- ### 3. Get Mission Jobs
-- ### 4. Delete Blueprint (Admiral Only)
-- ## Frontend Usage
-- ### Using BlueprintWizard
-- ### Using MissionLogV2
-- ## PostgreSQL Partitioning
-- ### Initial Setup
-- ### Monthly Maintenance
-- ## RBAC Permissions
-- ## Customization
-- ### Extending Planner Rules
-- ### Plugging in an LLM
-- ## Testing
-- ### Run Backend Tests
-- ### Manual Testing
-- ## Troubleshooting
-- ### Backend Issues
-- ### Frontend Issues
-- ### Database Issues
-- ## Production Deployment
-- ### Environment Variables
-- ### Render Deployment
-- ## Support
-
-
-### ./V196L_STEWARD_SUMMARY.md
-
-- # 🎉 v1.9.6l — Env Steward IMPLEMENTATION COMPLETE
-- ## Admiral-Tier Environment Orchestration
-- ## What Was Built
-- ### New Engine: Env Steward
-- ## File Structure
-- ## Integration Points
-- ### 1. Genesis Event Bus
-- ### 2. Permissions Middleware
-- ### 3. Main Application
-- ### 4. Environment Configuration
-- # Engine toggles
-- # Provider toggles
-- # Provider identifiers (non-secret)
-- # Provider tokens (secret - leave blank)
-- ## API Endpoints
-- ### GET /api/steward/status
-- ### POST /api/steward/diff
-- ### POST /api/steward/plan
-- ### POST /api/steward/cap/issue
-- ### POST /api/steward/apply
-- ## Security Guarantees
-- ### 1. Default Deny
-- ### 2. Admiral-Tier Lock
-- ### 3. Least Authority
-- ### 4. No Secret Echo
-- ### 5. Loop-Safe
-- ### 6. Short-Lived Capabilities
-- ## Testing
-- ### Unit Tests
-- ### Integration Tests
-- # Check status
-- # Non-admiral should be denied
-- # Expected: 403 {"detail": "steward_admiral_only"}
-- # Compute diff
-- # Create plan
-- ## Deployment Checklist
-- ### Pre-Deployment
-- ### Deployment
-- ### Optional: Enable Write Mode
-- ## What's Next?
-- ### Phase 1: Monitoring (Current)
-- ### Phase 2: Write Operations (When Ready)
-- ### Phase 3: Full Integration (Future)
-- ## Key Features
-- ### 1. Admiral-Tier Lock
-- ### 2. Capability Tokens
-- ### 3. Provider Adapters
-- ### 4. Genesis Integration
-- ### 5. Phased Execution
-- ### 6. Rollback Support
-- ## Documentation
-- ## Summary
-
-
-### ./ARIE_V196O_IMPLEMENTATION.md
-
-- # ARIE v1.9.6o Implementation Summary
-- ## Overview
-- ## ✅ Implementation Complete
-- ### Files Added
-- ### Files Modified
-- ### Directories Created
-- ## 🔄 New Behavior
-- ### On Deploy Success
-- ### Scheduled Runs
-- ## ⚙️ Configuration Variables
-- ## 🧠 Genesis Event Topics
-- ### New Topics
-- ### Updated Flow
-- ## ✅ Safeguards
-- ### RBAC Guard
-- ### Truth Enforcement
-- ### Rollback Shield
-- ### Genesis Integration
-- ## 📊 Output Reports
-- ### arie_autorun.json
-- ### arie_certified.json
-- ### arie_rollback.json
-- ## 🔬 Testing Results
-- ### Test Coverage
-- ### Key Test Scenarios
-- ## 🚀 Production Readiness Checklist
-- ## 📝 Usage Examples
-- ### Enable Autonomous Scheduling
-- # In .env or platform dashboard
-- ### Manual Trigger (Admiral Only)
-- # Trigger manual run (requires Admiral handle)
-- ### Subscribe to Scheduler Events
-- ## 🔗 Related Documentation
-- ## 🎯 Next Steps
-
-
-### ./BRH_CONSENSUS_ARCHITECTURE.md
-
-- # BRH Consensus System Architecture
-- ## System Overview
-- ## Component Interactions
-- ### 1. Heartbeat Flow (Every 60s)
-- ### 2. Consensus Election Flow (Every 180s)
-- ### 3. Leader Polling Flow (Every 10s)
-- ### 4. Deploy Hook Flow
-- ## State Transitions
-- ### Node Role States
-- ### Container Ownership Transfer
-- ## Data Structures
-- ### role.py State
-- ### consensus.py Peers
-- ### Container Labels
-- ## Failure Scenarios
-- ### Scenario 1: Leader Node Fails
-- ### Scenario 2: Network Partition
-- ### Scenario 3: Split Brain Prevention
-- ## Security Model
-- ### Signature Generation
-- ### Validation Flow
-- ## Performance Characteristics
-- ## Extension Points
-- ### 1. Custom Election Algorithm
-- # consensus.py - modify elect_leader()
-- ### 2. Lease Token System
-- ### 3. Drain-and-Stop Policy
-- # consensus.py - modify apply_leader_change()
-- ## Monitoring & Observability
-- ### Key Metrics
-- # Prometheus-style metrics (future enhancement)
-- ### Health Checks
-- # Check if consensus is running
-- # Verify leader identity
-- # List container ownership
-- ## Deployment Topology
-- ### Development (Single Node)
-- ### Production (Multi-Node)
-- ### High Availability (Geographic)
-
-
-### ./POST_MERGE_SETUP.md
-
-- # Post-Merge Setup Guide
-- ## 🚀 Congratulations! The cherry is on top! 🍒
-- ## Immediate Actions (Required)
-- ### 1. Enable Genesis Mode ✅
-- ### 2. Verify Deployment ✅
-- # Check webhook status
-- # Check autonomy deployment status  
-- # Should return:
-- # {
-- #   "genesis_enabled": true,
-- #   "platforms_monitored": ["netlify", "render", "github"],
-- #   "status": "active"
-- # }
-- ## Optional Actions (Recommended)
-- ### 3. Configure Netlify Webhook (Optional) 🔔
-- ### 4. Configure Render Webhook (Optional) 🔔
-- ### 5. Configure GitHub Webhook (Optional) 🔔
-- ## Testing the Integration
-- ### Test 1: GitHub Actions (Already Working) ✅
-- ### Test 2: Manual Event Publishing
-- # Test from your local machine or via SSH to Render
-- ### Test 3: Webhook Testing
-- ### Test 4: Verification Script
-- ## Monitoring and Observability
-- ### View Deployment Events
-- ### Monitor Render Logs
-- ### Monitor Autonomy Engine
-- ## Troubleshooting
-- ### Issue: Genesis Mode Not Enabled
-- ### Issue: Webhooks Not Receiving Events
-- ### Issue: GitHub Actions Not Publishing
-- ## What Happens Now?
-- ### On Every Deployment:
-- ### Integration Benefits:
-- ## Documentation
-- ## Support
-- ## Next Enhancements (Future)
-- ## Conclusion
-
-
-### ./COMPLIANCE_INTEGRATION_GUIDE.md
-
-- # Compliance Integration Guide
-- ## Table of Contents
-- ## Overview
-- ## Architecture
-- ### Data Flow
-- ### Components
-- ## API Reference
-- ### POST /engines/autonomy/task
-- ### GET /engines/autonomy/task/{task_id}/compliance
-- ### POST /engines/autonomy/task/{task_id}/loc
-- ## Usage Examples
-- ### Basic Task Creation
-- # Check if task is safe to proceed
-- ### Scan Specific Files
-- ### Disable Compliance (if needed)
-- ### Retrieve Compliance Later
-- # Get compliance validation for a task
-- ### Update LOC Metrics
-- # Refresh LOC metrics for a task
-- ## Compliance States
-- ### OK ✅
-- ### Flagged ⚠️
-- ### Blocked 🚫
-- ### Error ❌
-- ## Configuration
-- ### Policy File: `scan_policy.yaml`
-- ### Environment Variables
-- ## Testing
-- ### Run Tests
-- # Run all autonomy engine tests
-- ### Test Coverage
-- ## Troubleshooting
-- ### Issue: Compliance check returns "error" state
-- ### Issue: High false-positive rate in counterfeit detection
-- ### Issue: Task creation is slow
-- ### Issue: LOC metrics show 0 lines
-- ## License
-
-
-### ./HXO_NEXUS_QUICK_REF.md
-
-- # HXO Nexus Quick Reference Guide
-- ## Version
-- ## Quick Start
-- ### Enable HXO Nexus
-- # .env configuration
-- ### Initialize Programmatically
-- # Initialize the nexus
-- # Check health
-- ## Architecture Overview
-- ## Core Capabilities
-- ### 1. Engine Connectivity (1+1=∞)
-- # Get connection graph
-- # Check if engines are connected
-- # Get engine connections
-- ### 2. HypShard v3 - Quantum Adaptive Sharding
-- # Create shard
-- # Execute on shard
-- # Get stats
-- ### 3. Harmonic Consensus Protocol
-- # Propose
-- # Vote
-- # Check status
-- ### 4. Quantum Entropy Hashing
-- # Hash data
-- # Refresh entropy pool
-- ## API Endpoints
-- ### Health & Status
-- # Nexus health
-- # Configuration
-- ### Engine Management
-- # List engines
-- # Get engine info
-- ### Connectivity
-- # Connection graph
-- # Check connection
-- ### Orchestration
-- # Coordinate engines
-- # Initialize nexus
-- ## Configuration Variables
-- # HXO Nexus Core
-- # HypShard v3
-- # Quantum Entropy
-- # Genesis Integration
-- ## Engine Connection Matrix
-- ## Security Layers
-- ### RBAC
-- ### Quantum Entropy Hashing (QEH-v3)
-- ### Rollback Protection
-- ### Audit Trail
-- ## Common Workflows
-- ### 1. Multi-Engine Deployment
-- ### 2. Self-Healing Workflow
-- # AUTONOMY detects issue → CASCADE orchestrates → TRUTH verifies → ARIE audits
-- ### 3. Consensus Decision
-- # Propose schema change
-- # Engines vote
-- ## Troubleshooting
-- ### Nexus Not Starting
-- # Check if enabled
-- # Check logs
-- # Verify Genesis Bus
-- ### Engine Not Connecting
-- # Test connection
-- # Check engine registration
-- ### HypShard Issues
-- # Check stats
-- # Verify config
-- ## Testing
-- # Run all HXO Nexus tests
-- # Expected: 34 tests pass
-- ## Performance Metrics
-- ## Version History
-- ## Related Documentation
-- ## Meta
-
-
-### ./GENESIS_V2_GUIDE.md
-
-- # v2.0.0 — Project Genesis: Universal Engine Integration
-- ## Overview
-- ## Core Architecture
-- ### The Genesis Framework Components
-- ## Genesis Organism Roles
-- ## Genesis Event Topics
-- ### 1. `genesis.intent`
-- ### 2. `genesis.fact`
-- ### 3. `genesis.heal`
-- ### 4. `genesis.create`
-- ### 5. `genesis.echo`
-- ## Environment Variables
-- ### Trace Levels
-- ## API Endpoints
-- ### `GET /api/genesis/pulse`
-- ### `GET /api/genesis/manifest`
-- ### `GET /api/genesis/manifest/{engine_name}`
-- ### `GET /api/genesis/health`
-- ### `GET /api/genesis/echo`
-- ### `GET /api/genesis/map`
-- ### `GET /api/genesis/events?limit=100`
-- ### `GET /api/genesis/stats`
-- ## Signal Flow
-- ## Initialization Sequence
-- ## Usage Examples
-- ### Publishing Events
-- # Publish an intent event
-- # Publish a fact
-- ### Subscribing to Events
-- # Subscribe to intent events
-- ### Registering Engines
-- # Register a custom engine
-- ### Health Monitoring
-- # Update health status
-- # Get overall health
-- ## Backward Compatibility
-- ## Migration from v1.9.7c
-- ### For Users
-- ### For Developers
-- ## Testing
-- ## Deployment
-- ### Render
-- ### Netlify
-- ## Troubleshooting
-- ### Genesis Not Starting
-- ### Missing Engine Links
-- ### Event Not Publishing
-- ## Future Enhancements
-- ## Summary
-- ## Related Documentation
-
-
-### ./BRH_IMPLEMENTATION_COMPLETE.md
-
-- # Bridge Runtime Handler (BRH) - Implementation Summary
-- ## Overview
-- ## What Was Built
-- ### Core System (646+ lines of code)
-- ### Integration & Deployment
-- ### Documentation & Examples
-- ## Key Features
-- ### Security
-- ### Reliability
-- ### Flexibility
-- ### Integration
-- ## Architecture
-- ## Commits Made
-- ## Files Added/Modified
-- ### New Files (15)
-- ### Modified Files (1)
-- ## Testing & Validation
-- ### Tested Components
-- ### Code Review
-- ## Security Enhancements
-- ## Usage
-- ### Quick Start
-- # 1. Generate Forge root
-- # 2. Set environment (from output)
-- # 3. Install and run
-- ### Production Deployment
-- # Systemd service
-- ## Next Steps for User
-- ## Benefits Over Render
-- ## Conclusion
-
-
-### ./DATA_RELAY_QUICK_REF.md
-
-- # Secure Data Relay Protocol - Quick Reference
-- ## Overview
-- ## Quick Start
-- ### 1. Enable the Relay
-- # In .env
-- # SMTP Configuration (Gmail)
-- ### 2. Use in Code
-- # Before deleting any data
-- ## Role-Based Retention
-- ## Components
-- ## Email Organization
-- ## Metadata Envelope
-- ## Queue Retry Mechanism
-- # Manual retry
-- ## Verification
-- ## Production Checklist
-- ## Monitoring
-- ## Troubleshooting
-- ### "SMTP credentials not configured"
-- ### "Authentication failed"
-- ### "Permission denied: /var/srbridge"
-- ### Queued items not retrying
-- ## Security Notes
-- ## API Reference
-- ### `archive_before_delete(component, user_id, role, record)`
-- ### `format_relay_metadata(component, action, user_id, role, data)`
-- ### `verify_archive(metadata, data)`
-- ### `retry_queued_items(max_retries=3)`
-- ### `get_queued_items()`
-
-
-### ./AUTONOMY_DEPLOYMENT_README.md
-
-- # 🚀 Autonomy Engine Deployment Integration - README
-- ## Overview
-- ## What Was Built
-- ### 3 Platform Integrations
-- ### 6 Genesis Bus Topics
-- ### 5 New Endpoints
-- ### Event Flow
-- ## Files Changed
-- ### Created (7 files, ~2,000 lines)
-- ### Modified (6 files)
-- ## Total Impact
-- ## Quick Start
-- ### 1. Enable Genesis Mode
-- ### 2. Test Integration
-- # Test event publishing
-- # Check integration status
-- # Run verification
-- ### 3. Configure Webhooks (Optional)
-- ## Key Features
-- ### Real-Time Monitoring
-- ### Automated Response
-- ### Multi-Platform Support
-- ### Integration with Existing Systems
-- ## Documentation
-- ## Testing
-- ### Verification Script
-- ### Manual Testing
-- # Test CLI publisher
-- # Test webhook endpoints (after deployment)
-- # Test autonomy API
-- ## Event Examples
-- ### GitHub Actions Event
-- ### Webhook Event
-- ### API Event
-- ## Benefits
-- ## Next Steps
-- ### For Users (Setup)
-- ### For Developers (Enhancements)
-- ## Troubleshooting
-- ### Genesis Mode Not Enabled
-- # Check environment variable
-- # Enable if needed
-- ### Webhooks Not Working
-- ### Events Not Publishing
-- ## Support
-- ## Conclusion
-
-
-### ./V196R_QUICK_REF.md
-
-- # v1.9.6r Quick Reference - Chimera Preflight + Autonomous Deploy Healing
-- ## Overview
-- ## What's New
-- ### 1. Chimera Preflight Engine
-- ### 2. GitHub Actions Deploy Preview Workflow
-- ### 3. Engine Defaults (All ON)
-- ## Usage
-- ### Manual Preflight
-- # Run preflight validation
-- # With JSON output
-- # Specify path
-- ### API Endpoint
-- ### Python API
-- ## Genesis Events
-- ## Auto-Healing
-- ## Configuration
-- ### Environment Variables
-- # Enable/disable Chimera (default: true)
-- # Netlify credentials (optional, for direct API integration)
-- ### Publish Directory Detection
-- ## Testing
-- ## Files Added
-- ## Modified Files
-- ## Integration Points
-- ### With ARIE
-- ### With Genesis Bus
-- ### With Steward  
-- ### With EnvRecon
-- ## Troubleshooting
-- ### Preflight fails with missing publish dir
-- ### GitHub Actions workflow doesn't commit
-- ### Genesis events show as invalid
-- ## Breaking Changes
-- ## Next Steps
-
-
-### ./FORGE_MANIFEST_RESOLVER_GUIDE.md
-
-- # Forge Dominion Manifest Resolver & Federation Heartbeat
-- ## Overview
-- ## Forge Dominion Manifest Resolver
-- ### Purpose
-- ### Endpoint
-- ### Supported Targets
-- ### Response Format
-- ### Environment Variables
-- ### Security
-- ## Federation Heartbeat Extension
-- ### Purpose
-- ### Endpoint
-- ### Request Format
-- ### Heartbeat Daemon
-- ### Environment Variables
-- ### Integration
-- # In brh/run.py main():
-- ## Configuration
-- # Forge configuration schema
-- # Federation heartbeat configuration
-- ## Testing
-- ## Architecture
-- ### Flow: Manifest Resolution
-- ### Flow: Federation Heartbeat
-- ## Benefits
-- ## Next Steps
-
-
-### ./GENESIS_ARCHITECTURE.md
-
-- # Genesis Linkage - Unified Engine Architecture
-- ## System Overview
-- ## Detailed Architecture
-- ### Core Infrastructure Layer (6 Engines)
-- ### Super Engines Layer (6 Engines)
-- ### Utility Engines Layer (7 Engines)
-- ## Event Bus Integration
-- ### Event Flow Diagram
-- ### Event Topics (33 Total)
-- ## Dependency Graph
-- ## API Endpoints (8 Total)
-- ### Status & Information
-- ### Initialization
-- ### Dependencies
-- ### Category Status
-- ## File Structure
-- ## Key Metrics
-- ## Benefits
-
-
-### ./STEWARD_JSON_REPORT_QUICK_START.md
-
-- # 🎯 Quick Answer: Environment Drift JSON Report
-- ## What You Asked For
-- ## ✅ Done!
-- ## 🚀 How to Use It
-- ### Method 1: Quick Script (Easiest)
-- # Enable Steward
-- # Get the JSON report
-- ### Method 2: Via API
-- ## 📄 What You Get
-- ## 🔍 What It Does
-- ## 📝 Note About API Credentials
-- # For Render
-- # For Netlify
-- # For GitHub
-- ## 🛡️ Safety
-- ## 📚 More Info
-- ## 🎉 You're All Set!
-
-
-### ./ENVIRONMENT_CLEANUP_SUMMARY.md
-
-- # 🜂 Environment Cleanup Complete - Sovereign Dominion Token Forge Integration
-- ## 📋 Executive Summary
-- ### Key Achievement
-- ## 🎯 What Was Done
-- ### 1. Environment Files Cleaned ✅
-- #### Main Environment Files
-- #### Example/Template Files
-- ### 2. Placeholder Pattern Established ✅
-- ### 3. GitHub Actions Integration ✅
-- ### 4. Workflow Migration ✅
-- ### 5. Documentation Created ✅
-- ## 🔐 Security Verification
-- ### Secret Scanner Results
-- ### Token Minting Test
-- ## 📊 Before vs After
-- ### Before Token Forge Integration
-- # .env file
-- ### After Token Forge Integration
-- # .env file
-- # GitHub Secrets
-- ## 🔄 Token Lifecycle
-- ### How It Works
-- ### Providers Supported
-- ## 📚 Key Files Created/Modified
-- ### New Files
-- ### Modified Files
-- ## 🚀 Getting Started
-- ### For Developers
-- ### For Workflows
-- ### For Production
-- ## 📖 Documentation
-- ### Primary Documents
-- ### Helper Scripts
-- ### Token Forge Modules
-- ## ✅ Verification Checklist
-- ## 🎯 Next Steps (Optional)
-- ## 🏆 Achievement Unlocked
-- ## 📞 Support
-
-
-### ./STEWARD_DEPLOYMENT_GUIDE.md
-
-- # Env Steward v1.9.6l — Deployment Guide
-- ## Admiral-Tier Environment Orchestration
-- ## Overview
-- ## Pre-Deployment Checklist
-- ## Deployment Steps
-- ### 1. Ship to Main
-- ### 2. Enable Engine (Read-Only)
-- # Provider toggles (keep false for now)
-- # Provider identifiers (non-secret, safe to add)
-- ### 3. Verify Deployment
-- ### 4. Test Diff/Plan (Read-Only)
-- ## Optional: Enable Write Mode
-- ### 5. Add Provider Tokens
-- ### 6. Enable Write Mode
-- ### 7. Issue Capability Token
-- ### 8. Apply Plan
-- ### 9. Monitor Genesis Events
-- ## Security Notes
-- ### Admiral-Only Access
-- ### Capability Tokens
-- ### Secret Handling
-- ## Rollback
-- ## Monitoring
-- ### Genesis Events
-- ### Health Check
-- ## Troubleshooting
-- ### Deployment Issues
-- ### Write Mode Issues
-- ## Ops Playbook
-- ### Daily Operations
-- ### Emergency Rollback
-- ### Capability Management
-- ## What's Next?
-- ### Phase 1: Read-Only Monitoring (Current)
-- ### Phase 2: Write Mode (Optional)
-- ### Phase 3: Autonomy Integration (Future)
-- ## Support
-
-
-### ./ROLE_SEPARATION_QUICK_REF.md
-
-- # SR-AIbridge Role Separation - Quick Reference
-- ## At-A-Glance Component Access Matrix
-- ## Memory Autonomy Tiers
-- ## Vault Structure
-- ## System Health Views
-- ### Admiral View (Global)
-- ### Captain View (Local)
-- ## Endpoint Access Control
-- ### Admiral-Only Endpoints
-- ### Captain Endpoints
-- ### Shared Endpoints (All Roles)
-- ## Backend Routes Summary
-- ### Core Routes
-- ### Special Features
-- ### Engines
-- ## RBAC Quick Check
-- # To check if a role has access to a feature:
-- ## Communication Firewall
-- ### Captain's Chat
-- ### Captain-to-Captain
-- ## Testing Commands
-- # Test brain access (should work)
-- # Test custody as captain (should fail with 403)
-- # Test vault isolation
-- # Test health views
-- ## Key Files Reference
-- ### Frontend Components
-- ### Backend Routes
-- ### Middleware
-- ## Summary
-
-
-### ./AUTONOMY_V196S_IMPLEMENTATION.md
-
-- # Autonomy Decision Layer v1.9.6s - Implementation Summary
-- ## Overview
-- ## What Was Built
-- ### 1. Core Components
-- #### Governor (`bridge_backend/engines/autonomy/governor.py`)
-- #### Models (`bridge_backend/engines/autonomy/models.py`)
-- #### REST API (`bridge_backend/engines/autonomy/routes.py`)
-- #### Genesis Integration (`autonomy_genesis_link.py`)
-- #### CLI Tool (`bridge_backend/cli/autonomyctl.py`)
-- ### 2. Configuration & Integration
-- #### Genesis Bus Topics
-- #### Permissions
-- #### Main Application
-- #### GitHub Actions
-- #### Render Configuration
-- ### 3. Testing
-- #### Test Coverage
-- ### 4. Documentation
-- ## Decision Matrix
-- ## Safety Mechanisms
-- ### Rate Limiting
-- ### Cooldown
-- ### Circuit Breaker
-- ### Truth Certification
-- ## Environment Variables
-- # Core
-- # Safety
-- # Integration
-- ## Files Created/Modified
-- ### Created (17 files)
-- ### Modified (5 files)
-- ## Integration Points
-- ### Genesis Bus
-- ### Engines
-- ### CI/CD
-- ## Usage Examples
-- ### Via CLI
-- # Submit incident
-- # Check status
-- ### Via API
-- # Submit incident
-- ### Via Genesis
-- # Event-driven (automatic)
-- # → Autonomy link receives event
-- # → Governor decides and executes
-- # → Truth certifies
-- # → Result published to Genesis
-- ## Known Limitations
-- ## Next Steps
-- ## Success Criteria
-- ## Version
-
-
-### ./UMBRA_QUICK_REF.md
-
-- # Umbra Cognitive Stack - Quick Reference
-- ## 🌑 Quick Start
-- ### Enable Umbra
-- ## 📡 API Endpoints
-- ### Core Operations
-- # Detect anomalies
-- # Generate and apply repair (Admiral only)
-- ### Memory Operations
-- # Recall experiences
-- # Learn patterns
-- ### Predictive Operations
-- # Predict issues
-- # Apply preventive repair (Admiral only)
-- ### Echo Operations (Admiral Only)
-- # Capture manual edit
-- # Observe git commit
-- ### Metrics
-- # Get all metrics
-- # Get status
-- ## 🧠 Components
-- ## 🔄 Cognitive Lifecycle
-- ## 🔒 RBAC Quick Reference
-- ### Admiral (Full Access)
-- ### Captain (Read + Monitor)
-- ### Observer (Read-Only)
-- ## 📊 Metrics at a Glance
-- ## 🎯 Common Tasks
-- ### Detect and Repair an Anomaly
-- # 1. Detect
-- # 2. Generate repair
-- # 3. Apply
-- ### Learn from Past Repairs
-- # Get all repair experiences
-- # Learn patterns
-- # Use patterns for prediction
-- ### Capture Admiral Actions
-- # Capture single edit
-- # Observe entire commit
-- # Sync to HXO
-- ## 📡 Genesis Bus Topics
-- ## 🧪 Testing
-- # Run all Umbra tests
-- # Run specific component
-- ## 🔧 Troubleshooting
-- ## 💾 Storage Paths
-- ## 🎯 Intent Classification
-- ## 📋 Watched Paths (Echo)
-- ## 🚀 Integration Example
-- # Initialize
-- # Use
-- ## ⚡ Performance Tips
-- ## 📚 Resources
-
-
-### ./UPGRADE_GUIDE.md
-
-- # SR-AIbridge Upgrade Guide
-- ## Current Architecture (v1.1.0-autonomous)
-- ### 🤖 Autonomous Backend Features
-- ### 🌐 Enhanced Frontend Features
-- ## Deployment Options
-- ### Option 1: Quick Start (In-Memory Demo)
-- ### Option 2: Production Database Backend
-- #### Step 1: Database Setup
-- #### Step 2: Database Models
-- #### Step 3: Update Main Application
-- #### Step 4: Environment Configuration
-- #### Step 5: Deploy Database Version
-- ## Feature Comparison
-- ## Migration Strategy
-- ### Zero-Downtime Migration
-- ### Data Migration (Optional)
-- # migration_script.py
-- ## Troubleshooting
-- ### Common Issues
-- ### Performance Optimization
-- ## Support and Maintenance
-- ### Monitoring
-- ### Backup Strategy
-- ### Updates and Scaling
-- ## CI/CD & Monitoring
-- ### Automated Deployment Pipeline
-- #### 🚀 Deployment Workflow (`.github/workflows/deploy.yml`)
-- # Required GitHub Secrets (optional but recommended)
-- # Optional: Custom deployment URLs
-- #### 🧪 Health Monitoring Workflow (`.github/workflows/self-test.yml`)
-- #### Enhanced Self-Test Script
-- # Production health check
-- # Advanced CI/CD usage
-- # Local development testing  
-- #### Manual Health Monitoring
-- # Clone repository locally
-- # Install dependencies
-- # Run health check against your deployment
-- #### Monitoring Dashboard
-- #### Troubleshooting CI/CD
-
-
-### ./ENVRECON_AUTONOMY_SUMMARY.md
-
-- # EnvRecon-Autonomy Integration - Implementation Summary
-- ## What Was Completed
-- ### 1. Created EnvRecon-Autonomy Adapter Link ✅
-- ### 2. Added Genesis Bus Topics ✅
-- ### 3. Integrated Adapter with EnvRecon Core ✅
-- ### 4. Enhanced AutoHeal with Genesis Events ✅
-- ### 5. Updated Routes with Healing Notifications ✅
-- ### 6. Registered EnvRecon in Genesis Linkage System ✅
-- ### 7. Created Comprehensive Documentation ✅
-- ### 8. All Tests Passing ✅
-- ## What Variables Cannot Be Auto-Fixed
-- ### Current Limitation
-- ### API Credentials Required (Must Configure First)
-- # Render API
-- # Netlify API
-- # GitHub API
-- ### All Variables Require Manual Sync
-- ### Why Auto-Sync Doesn't Work Yet
-- ## How to Get Missing Variables List
-- ### Step 1: Configure API Credentials
-- # Render (get from https://dashboard.render.com → Account Settings → API Keys)
-- # Netlify (get from https://app.netlify.com → User Settings → Applications)
-- # GitHub (get from Settings → Developer settings → Personal access tokens)
-- ### Step 2: Run Audit
-- ### Step 3: Get Report
-- ### Step 4: Review Missing Variables
-- ### Step 5: Manual Sync
-- ### Step 6: Verify
-- ## Integration Benefits
-- ### 1. Automated Drift Detection
-- ### 2. Centralized Monitoring
-- ### 3. Genesis Event Stream
-- ### 4. Deployment Integration
-- ### 5. Audit Trail
-- ## Next Steps for Full Auto-Sync
-- ## Files Changed
-- ## Summary
-
-
-### ./ENVRECON_QUICK_REF.md
-
-- # Genesis v2.0.2 EnvRecon - Quick Reference
-- ## CLI Commands
-- # Audit all platforms
-- # Sync to specific platform
-- # Trigger auto-healing
-- ## API Endpoints
-- # Health check
-- # Get report
-- # Run audit
-- # Sync all
-- # Trigger heal
-- # Sync GitHub secrets
-- ## Inspector Panel
-- ## Environment Variables
-- # Required
-- # Optional
-- ## Report Location
-- ## Key Features
-- ## Status Indicators
-- ## Testing
-
-
-### ./PR_READY.md
-
-- # 🚢 Dock-Day Ascension: Ready for Pull Request to Main
-- ## Branch Status: READY FOR MERGE ✅
-- ## Suggested Pull Request Details
-- ### Title:
-- ### Description:
-- ## 🚢 Dock-Day Ascension: Complete Implementation
-- ### Features Implemented
-- #### 🔧 Backend Systems
-- #### 🎨 Frontend Integration  
-- #### 🏛️ Ceremonial Systems
-- #### 📋 Documentation
-- ### Technical Highlights
-- ### Testing Status
-- ### Admiral's Note
-- ### Files Changed
-- ## Branch Diff Summary
-- ### Changes from Main:
-- ### Merge Target: `main`
-- ### Source Branch: `dockday-ascension`
-- ### Commit: `284af8b`
-- ## Next Steps
-- ## Final Verification ✅
-
-
-### ./IMPLEMENTATION_SUMMARY.md
-
-- # Workflow Failure Resolution Framework - Implementation Summary
-- ## ✅ Implementation Complete
-- ## 🎯 Objectives Accomplished
-- ### 1. ✅ Firewall Resolution (CRITICAL Priority)
-- ### 2. ✅ Active Failure Hunting Framework
-- ### 3. ✅ Autonomous Healing & Analysis Tools
-- #### Failure Analyzer (`failure_analyzer.py`)
-- #### PR Generator (`pr_generator.py`)
-- #### Pattern Definitions (`failure_patterns.py`)
-- ### 4. ✅ Failure Pattern Detection
-- ### 5. ✅ Forge Integration
-- ### 6. ✅ BRH Runtime Validation
-- ## 📊 Statistics
-- ### Files Created
-- ### Files Modified
-- ### Code Quality
-- ## 🚀 Deployment Status
-- ### Ready for Production
-- ### Immediate Impact
-- ## 📋 Usage Examples
-- ### Run Diagnostic Sweep
-- # Via GitHub Actions (automated every 6 hours)
-- # Or manual: Actions → Sovereign Diagnostic Sweep → Run workflow
-- # Via CLI
-- ### Fix Browser Issues in Workflows
-- ### Generate Fix Plan
-- # Analyze workflows
-- # Generate fixes (dry-run)
-- # Apply fixes (when ready)
-- ## 🔐 Security Summary
-- ### Security Scan Results
-- ### Security Features
-- ### Guardrails
-- ## 📚 Documentation
-- ### Comprehensive Guide
-- ### Quick Reference
-- ## 🎖️ Success Criteria Met
-- ### Phase 1 (Complete) ✅
-- ### Phase 2 (Framework Ready) ✅
-- ## 🌊 Admiral's Briefing
-- ## 🔄 Next Steps for Operators
-- ## 📞 Support
-
-
-### ./UMBRA_README.md
-
-- # Umbra Cognitive Stack — Complete Documentation
-- ## 🌑 Overview
-- ## 🧠 The Cognitive Architecture
-- ## 🔧 Component Details
-- ### Umbra Core - Pipeline Self-Healing
-- # Detect anomaly
-- # Generate and apply repair
-- ### Umbra Memory - Experience Graph & Recall
-- # Record experience
-- # Recall experiences
-- # Learn patterns
-- ### Umbra Predictive - Confidence-Based Pre-Repair
-- # Predict issue
-- # Apply preventive repair
-- # Update model with feedback
-- ### Umbra Echo - Human-Informed Adaptive Learning
-- # Capture manual edit
-- # Observe git commit
-- ## 🔄 Full Cognitive Lifecycle
-- ## 📡 Genesis Bus Integration
-- ### Published Topics
-- #### `umbra.anomaly.detected`
-- #### `umbra.pipeline.repaired`
-- #### `umbra.echo.recorded`
-- #### `umbra.memory.learned`
-- ## 🔒 Security & RBAC
-- ### Admiral Only (Write Operations)
-- ### Captain (Read + Monitor)
-- ### Observer (Read-Only)
-- ## 🧪 Testing
-- ### Test Coverage
-- ### Running Tests
-- # Run all Umbra tests
-- # Run specific component
-- ## ⚙️ Configuration
-- ### Environment Variables
-- # Enable Umbra self-healing intelligence
-- # Enable Umbra Memory (experience graph & recall)
-- # Enable Umbra Echo (human-informed learning)
-- # Training interval for predictive model updates
-- # Enable reflection on git commits
-- ### Storage Paths
-- ## 📊 Metrics & Monitoring
-- ### Umbra Core Metrics
-- ### Umbra Memory Metrics
-- ### Umbra Predictive Metrics
-- ### Umbra Echo Metrics
-- ## 🚀 Deployment
-- ### Prerequisites
-- ### Integration Steps
-- ## 💡 Best Practices
-- ### For Admirals
-- ### For Captains
-- ### For Developers
-- ## 🔧 Troubleshooting
-- ### Umbra Not Detecting Anomalies
-- ### Memory Not Persisting
-- ### Echo Not Capturing Changes
-- ### Predictions Not Working
-- ## 📚 Additional Resources
-- ## 🎯 Future Enhancements
-
-
-### ./BRH_CONSENSUS_GUIDE.md
-
-- # BRH Consensus and Leader Election Guide
-- ## Overview
-- ## Architecture
-- ### Components
-- ## Configuration
-- ### Environment Variables
-- # Node identity (must be unique per BRH instance)
-- # Environment name (for container filtering)
-- # Forge root endpoint
-- # Consensus settings
-- # Heartbeat settings
-- # Security seal
-- ### Runtime Manifest (`bridge.runtime.yaml`)
-- ## How It Works
-- ### 1. Heartbeat Phase
-- ### 2. Consensus Election
-- # Election algorithm
-- ### 3. Leader Polling
-- ### 4. Role Transitions
-- #### Promotion (Witness → Leader)
-- #### Demotion (Leader → Witness)
-- ### 5. Container Ownership
-- ## API Behavior
-- ### `/deploy` Endpoint
-- # Response: {"status": "restarted", "image": "myapp:latest"}
-- # Response: {"status": "ignored", "reason": "not-leader"}
-- ## Testing
-- ### Unit Tests
-- ### Integration Tests
-- ### Manual Testing (Two Node Setup)
-- ## Security Considerations
-- ## Troubleshooting
-- ### No Leader Elected
-- # Check heartbeat status
-- # Verify peers
-- ### Containers Not Adopted
-- # Install Docker SDK
-- # Check Docker access
-- ### Deploy Hook Rejected
-- # Check role status
-- # Wait for next consensus cycle or promote manually
-- ## Advanced: Custom Demotion Policy
-- ## Future Enhancements
-- ## References
-
-
-### ./AUTONOMY_V196T_IMPLEMENTATION.md
-
-- # Autonomy v1.9.6t — The Living Bridge
-- ## Overview
-- ## Architecture
-- ## New Features
-- ### 1. Reinforcement Scoring
-- ### 2. New Actions
-- ### 3. Leviathan Prediction
-- ### 4. Truth Engine Certificates
-- ### 5. Blueprint Policy Evolution
-- ### 6. Engine Success Rate Tracking
-- ## GitHub Workflows
-- ### bridge_autonomy.yml
-- ### env_sync.yml
-- ## Environment Variables
-- ## Decision Flow
-- # 1. Check safety guardrails
-- # 2. Map incident to action
-- # ... etc
-- # 3. Execute action
-- # 4. Certify result
-- # 5. Predict future success
-- # 6. Update policies
-- # 7. Update engine success rates
-- ## Testing
-- ### Test Coverage
-- ## Integration Points
-- ### Genesis Bus
-- ### Engines
-- ### GitHub API
-- ## Files Changed
-- ### Created
-- ### Modified
-- ## Status
-- ## Usage
-- ### Triggering Autonomy Manually
-- ### Viewing Certificates
-- ### Checking Environment Sync
-- ## What Happens When...
-- ### A deployment fails?
-- ### Environment drift is detected?
-- ### An action fails repeatedly?
-- ## Future Enhancements
-
-
-### ./FIREWALL_LIST.md
-
-- # Firewall Intelligence Engine - Detected Firewalls & Domains
-- ## Executive Summary
-- ## Critical Domains Detected
-- ### Package Registries & Development Tools
-- ### GitHub Services
-- ### Deployment & Hosting Platforms
-- ### Status & Monitoring
-- ## Required Network Ports
-- ### TCP Ports
-- ### UDP Ports
-- ## Detected Network Issues
-- ### DNS Resolution Failures
-- ## Firewall Configuration Recommendations
-- ### For Enterprise Firewalls
-- # Package Registries
-- # GitHub Services
-- # Deployment Platforms
-- # Status Pages
-- ### For Network Security Teams
-- ## Generated Artifacts
-- ### 1. Firewall Report (JSON)
-- ### 2. Network Allowlist (YAML)
-- ### 3. Incident Data (JSON)
-- ## Next Steps
-- ## Automation
-- ## Documentation
-- ## Contact & Support
-
-
-### ./CHIMERA_README.md
-
-- # Project Chimera: Autonomous Deployment Sovereignty
-- ## v1.9.7c — Chimera Deployment Engine (CDE)
-- ## Overview
-- ## Problem Statement
-- ## Solution: Chimera Deployment Engine (CDE)
-- ## 🧩 System Integration Matrix
-- ## 🧠 Core Deployment Flow
-- ## ✨ Features
-- ### 1. **Predictive Build Simulation**
-- ### 2. **Autonomous Configuration Healing**
-- ### 3. **Deterministic Deployment Protocol**
-- ### 4. **Cross-Platform Adaptivity**
-- ### 5. **Self-Monitoring & Temporal Resilience**
-- ## 🚀 Quick Start
-- ### CLI Usage
-- # Simulate Netlify deployment
-- # Deploy to Render with certification
-- # Monitor deployment status
-- # Verify with Truth Engine
-- ### API Usage
-- # Get Chimera status
-- # Simulate deployment
-- # Execute deployment
-- ### Render Integration
-- ## 🛡️ Security and Control
-- ## 📈 Testing and Validation
-- ## 📜 Documentation
-- ## 🧩 Configuration
-- # Enable/disable Chimera
-- # Simulation timeout (seconds)
-- # Healing max attempts
-- ## 🌐 Genesis Bus Integration
-- ## 🚀 Impact
-- ## 🧩 Complementary Updates
-- ## Final Declaration
-- ## Version Information
-
-
-### ./V197G_IMPLEMENTATION_SUMMARY.md
-
-- # v1.9.7g — Umbra Lattice Memory Bloom Implementation Summary
-- ## Overview
-- ## What Was Built
-- ### Core Components
-- ## Integration Points
-- ### Genesis Event Bus
-- ### Main Application
-- ### Version Updates
-- ## File Structure
-- ## Storage
-- ## Environment Variables
-- # Enable/disable Umbra Lattice (default: true)
-- # Strict truth certification (default: true)
-- # Snapshot interval (optional, default: 10m)
-- ## RBAC
-- ## Example Usage
-- ### CLI
-- # View last 7 days as mermaid graph
-- # Export snapshot
-- # Run bloom analysis
-- # Show statistics
-- ### API
-- # Get summary
-- # Get mermaid graph
-- # Export snapshot
-- # Run bloom analysis
-- # Get statistics
-- ### Python
-- # Initialize
-- # Record event
-- # Get summary
-- # Generate mermaid
-- # Export snapshot
-- ## Verification
-- ## Backward Compatibility
-- ## What's Next
-- ### Immediate (v1.9.7g)
-- ### Future Enhancements
-- ## Commit Summary
-- ## Admiral Summary
-
-
-### ./PARITY_ENGINE_QUICK_GUIDE.md
-
-- # Bridge Parity Engine - Quick Reference Guide
-- ## What is the Parity Engine?
-- ## Quick Start
-- ### 1. Run Parity Analysis
-- ### 2. Auto-Fix Mismatches
-- ### 3. Run Tests
-- ## What the Tools Do
-- ### Parity Engine (parity_engine.py)
-- ### Auto-Fix Engine (parity_autofix.py)
-- ## Current Status (Last Run: 2025-10-09 11:46 UTC)
-- ### Critical Issues Resolved
-- ### Pending Manual Review (5 endpoints)
-- ## How to Use Generated Stubs
-- ### Frontend Integration
-- ### Backend Implementation
-- ## File Locations
-- ### Reports
-- ### Generated Code
-- ### Tests
-- ## Understanding Severity Levels
-- ### 🔴 Critical
-- ### 🟡 Moderate
-- ### 🔵 Informational
-- ## Troubleshooting
-- ### Parity Report Not Found
-- ### Stubs Not Generated
-- ### Test Failures
-- ## Best Practices
-- ### 1. Run Regularly
-- ### 2. Review Before Integrating
-- ### 3. Clean Up Unused Stubs
-- ### 4. Keep Documentation Updated
-- ## Quick Commands
-- # Full parity check and fix
-- # View summary
-- # Count generated stubs
-- # Check for critical issues
-- ## Support & Documentation
-- ## Version Information
-
-
-### ./WHAT_I_COULDNT_CHANGE.md
-
-- # What I Couldn't Change - Quick List
-- ## API Write Capabilities (Intentionally Not Implemented)
-- ### 1. Render Write API
-- ### 2. Netlify Write API
-- ### 3. GitHub Secrets Write API
-- ## API Credentials (User Must Configure)
-- ### 1. Render API Credentials
-- ### 2. Netlify API Credentials
-- ### 3. GitHub API Credentials
-- ## Missing Variables Count (Cannot Determine Without Credentials)
-- ## Conflict Resolution Strategy (Not Implemented)
-- ## Validation and Safety Features (Not Implemented)
-- ## Advanced Features (Not Implemented)
-- ## Summary
-- ### What I DID Change ✅
-- ### What I COULDN'T Change ❌
-- ### What YOU Need to Do 📋
-- ### What's Next 🔜
-
-
-### ./PHASE_4_5_IMPLEMENTATION_SUMMARY.md
-
-- # Phase 4 & 5 Implementation Summary
-- ## ✅ Implementation Complete
-- ## 📦 Deliverables
-- ### Core Modules (3 files)
-- ### Integration Updates (4 files)
-- ### Tests (2 files)
-- ### Documentation (3 files)
-- ## 🎯 Feature Summary
-- ### Phase 4: Consensus Election
-- ### Phase 5: Leader Hooks
-- ## 📊 Test Results
-- ### Unit Tests
-- ### Integration Tests
-- ### Security Scan
-- ### Syntax Validation
-- ### Code Review
-- ## 🔧 Configuration
-- ### Required Environment Variables
-- ### Optional Environment Variables
-- ## 🚀 Deployment
-- ### Single Node (Development)
-- ### Multi-Node (Production)
-- # Node 1
-- # Node 2
-- ## 📈 Performance
-- ## 🔒 Security
-- ## 📝 Code Quality
-- ### Metrics
-- ### Standards
-- ## 🎓 Learning Resources
-- ## 🔮 Future Enhancements
-- ## ✅ Acceptance Criteria
-- ## 🎉 Status: Production Ready
-
-
-### ./BRH_QUICK_REF.md
-
-- # 🚀 Bridge Runtime Handler (BRH) - Quick Reference
-- ## ⚡ Quick Setup
-- # 1. Generate FORGE_DOMINION_ROOT
-- # 2. Set environment variables (from output above)
-- # 3. Install dependencies
-- # 4. Run BRH runtime
-- # 5. (Optional) Run API server in another terminal
-- ## 📝 Key Files
-- ## 🔑 Environment Variables
-- ## 📋 Runtime Manifest (bridge.runtime.yaml)
-- ## 🎯 Common Commands
-- # Generate Forge root with custom seal
-- # Test authentication flow
-- # Run BRH runtime (starts containers)
-- # Run API server for remote control
-- # Check API status
-- # Trigger deployment
-- # Restart a container
-- # Drain (stop and remove) a container
-- ## 🔒 Security Features
-- ## 🏃 Deployment Flow
-- ## 🔍 Troubleshooting
-- ### "FORGE_DOMINION_ROOT missing"
-- # Check if set
-- # Generate new one
-- ### "Forge signature invalid"
-- ### "Forge epoch skew too large"
-- ### "Health check failed"
-- # Check container logs
-- # Increase retries in bridge.runtime.yaml
-- # Verify health endpoint URL is correct
-- ### Docker build errors
-- # Ensure context is repository root
-- # Check Dockerfile exists
-- ## 📊 API Endpoints
-- ## 🚀 Production Deployment
-- ### Systemd Service
-- # Copy service file
-- # Create environment file
-- # Generate production Forge root
-- # Enable and start (use generated FORGE_DOMINION_ROOT)
-- # Check status
-- ### GitHub Actions
-- ## 🎨 Frontend Integration
-- ## 🔗 Integration Points
-- ## 📚 Related Documentation
-- ## ⚙️ Next Steps
-
-
-### ./ROLES_INTERFACE_AUDIT.md
-
-- # SR-AIbridge Roles & Interface Audit Report
-- ## Executive Summary
-- ## Audit Results by Component
-- ### 1. Dashboard (Main Display) ✅ COMPLETE
-- ### 2. Captain's Chat ✅ COMPLETE
-- ### 3. Captain-to-Captain Chat ✅ COMPLETE
-- ### 4. Vault ✅ ENHANCED
-- ### 5. Brain ✅ IMPLEMENTED
-- ### 6. Custody ✅ SECURED
-- ### 7. System Health ✅ ENHANCED
-- ## RBAC Matrix Summary
-- ## Additional Features Verified
-- ### Navigation (App.jsx)
-- ### Backend Routes Registration
-- ## Issues Found and Resolved
-- ### Issue 1: Brain Routes Incomplete
-- ### Issue 2: Vault Isolation Missing
-- ### Issue 3: RBAC Not Explicit for New Features
-- ### Issue 4: System Health No Role Differentiation
-- ### Issue 5: Custody Middleware Not Enforced
-- ## File Changes Summary
-- ### Modified Files:
-- ### No Changes Required:
-- ## Testing Recommendations
-- ## Conclusion
-
-
-### ./PHASE_6_IMPLEMENTATION.md
-
-- # Phase 6 — Chaos & Recovery Suite Implementation
-- ## Overview
-- ## Components
-- ### 1. Chaos Injector (`brh/chaos.py`)
-- ### 2. Recovery Watchtower (`brh/recovery.py`)
-- ### 3. Event Logging System (`brh/api.py`)
-- #### `GET /federation/state`
-- #### `GET /events`
-- ### 4. Federation Console UI (`bridge-frontend/src/components/FederationConsole.jsx`)
-- ### 5. Enhanced Consensus with Ledger Feedback (`brh/consensus.py`)
-- ### 6. Runtime Configuration (`bridge.runtime.yaml`)
-- ## Testing
-- ### Unit Tests
-- ### Running Tests
-- # Run all Phase 6 tests
-- # Run integration test
-- # Run specific test
-- ## Deployment
-- ### Prerequisites
-- ### Installation
-- ### Starting the System
-- ### Enabling Chaos for Testing
-- ## Security Considerations
-- ## Architecture Diagram
-- ## Event Flow
-- ## Troubleshooting
-- ### Chaos not working
-- ### Recovery not working
-- ### Events not appearing in UI
-- ## Performance Impact
-- ## Future Enhancements
-- ## References
-
-
-### ./V197C_UNIFIED_GENESIS.md
-
-- # v1.9.7c Genesis Linkage - UNIFIED IMPLEMENTATION
-- ## 🎉 Status: ALL ENGINES UNIFIED
-- ## Summary
-- ### Unified Engine Count: 20
-- ## All Engines Unified
-- ### Core Infrastructure Engines (6)
-- ### Super Engines (6) - Coordinated by Leviathan
-- ### Orchestration (1)
-- ### Utility Engines (7)
-- ## New Implementation Components
-- ### New Adapter Files (3)
-- ### Updated Files
-- ## New API Endpoints
-- ## Event Bus Topics (Expanded)
-- ### Core Topics
-- ### Super Engine Topics
-- ### Orchestration Topics
-- ### Utility Engine Topics
-- ## Engine Dependencies
-- ### Dependency Graph
-- ## Configuration
-- # Enable Genesis Linkage endpoints
-- # Enable Blueprint Engine routes (optional)
-- # Optional: Configure guardrails
-- ## Validation
-- ### Engine Count Validation
-- # Should show: "count": 20
-- ### Super Engines Validation
-- # Should show all 6 super engines available
-- ### Utility Engines Validation
-- # Should show all 7 utility engines available
-- ### Leviathan Validation
-- # Should show super_engines_coordination with all 6 engines
-- ## Benefits
-- ## File Changes Summary
-- ### New Files (3)
-- ### Modified Files (3)
-- ### Documentation (1)
-- ## Deployment Status
-
-
-### ./V197F_CASCADE_SYNCHRONY.md
-
-- # v1.9.7f Cascade Synchrony - Environment Variables
-- ## Forge System Environment Variables
-- ### Core Forge Variables
-- #### FORGE_MODE
-- #### FORGE_SELF_HEAL
-- ### Synchrony Protocol Variables
-- #### CASCADE_SYNC
-- #### ARIE_PROPAGATION
-- #### UMBRA_MEMORY_SYNC
-- ### Existing Variables (Enhanced)
-- #### TRUTH_CERTIFICATION
-- ## Complete v1.9.7f Configuration
-- # Forge Core
-- # Cascade Synchrony Protocol
-- # Truth Certification (already enabled by default)
-- # Existing Engine Flags (ensure these are enabled)
-- ## Architecture Overview
-- ### Healing Flow
-- ### Platform Recovery Matrix
-- ## API Endpoints
-- ## Security Notes
-- ## Version Summary
-- ## Admiral Directive
-
-
-### ./README_SECURITY.md
-
-- # README_SECURITY.md — quick developer guide
-- ## Archival-before-delete (relay_mailer)
-- ## Key generation & vault access
-- ## Fault injection tests
-- ## Where to look in the codebase
-- ## Quick safety checks before merging
-
-
-### ./DEPLOYMENT.md
-
-- # SR-AIbridge Deployment Guide
-- ## SQLite-first Backend with Full Health Monitoring
-- ## Architecture Overview
-- ## Quick Start (Development)
-- ### Backend
-- ### Frontend  
-- ## Health Monitoring Endpoints
-- ### Basic Health Check
-- ### Full Health Check
-- ### Self-Heal
-- ### System Metrics
-- ## Production Deployment
-- ### Render (Backend)
-- #### Scaling to PostgreSQL (Optional)
-- ### Netlify (Frontend)
-- ## Health Monitoring Features
-- ### SystemSelfTest Component
-- ### Database Health Scoring
-- ## Self-Healing Capabilities
-- ## Environment Configuration
-- ### Development (.env)
-- ### Production (Render)
-- ## API Error Handling
-- ## Monitoring and Observability
-- ### Health Check Endpoints
-- ### Logging
-- ### Alerts
-- ## Security
-- ### CORS Configuration
-- ### Headers
-- ### Database
-- ## Troubleshooting
-- ### Backend Won't Start
-- ### Health Checks Failing
-- ### Frontend Can't Connect
-- ### Database Issues
-- ## Performance Tuning
-- ### SQLite Optimization
-- ### API Performance
-- ### Frontend Optimization
-- ## Auto-Deploy & Continuous Monitoring (v1.6.7)
-- ### Bridge Auto-Deploy Workflow
-- # Automatic triggers:
-- # Manual trigger:
-- ### Live Sync Badge
-- ### Package & Registry Configuration (v1.6.7)
-- ### Deployment Secrets Required
-- ## Support
-
-
-### ./UMBRA_QUICK_START.md
-
-- # Umbra Unified Triage Mesh - Quick Start
-- ## 🚀 Getting Started in 5 Minutes
-- ### 1. Enable Umbra (Intent-Only Mode)
-- ### 2. Test Signal Ingestion
-- ### 3. View Tickets
-- # Via API
-- # Via CLI
-- ### 4. Run Triage Sweep
-- ### 5. View Report
-- ## 🎯 Common Tasks
-- ### Configure Webhooks
-- ### Enable Autonomous Healing
-- # In .env
-- ### View Tickets by Status
-- # Open tickets
-- # Healed tickets
-- # All tickets
-- ### Execute Healing Manually
-- # Get ticket ID from list
-- # Heal specific ticket
-- ## 📊 Understanding Health Scores
-- ## 🔧 Key Configuration
-- ### Minimal Configuration
-- ### Recommended Production
-- # Set these if using webhooks
-- ## 🛠️ Troubleshooting
-- ### No tickets appearing?
-- ### Webhooks not working?
-- ### Heal plans not executing?
-- ### PR comments not appearing?
-- ## 📚 Documentation
-- ## 🎓 Learning Path
-- ## ⚡ Quick Commands Reference
-- # Status
-- # Ingest signal
-- # List tickets
-- # Run sweep
-- # View latest report
-- # Generate PR summary
-- ## 🔒 Security Best Practices
+### ./START_HERE.md
+
+- # 🎉 Documentation Enhancement Complete!
+- ## Your SR-AIbridge Documentation is Now Comprehensive and Navigable
+- ## 🎯 What Just Happened?
+- ## 📚 Your New Documentation System
+- ### 1. Master Index (START HERE!)
+- ### 2. Feature Inventory
+- ### 3. Usage Guide
+- ### 4. Enhancement Plan
+- ### 5. Improvement Summary
+- ## 🚀 Quick Start: Finding What You Need
+- ### Method 1: Use the Master Index (Recommended)
+- ### Method 2: Browse the Feature Inventory
+- ### Method 3: Follow a Learning Path
+- ## 📊 What You Now Have
+- ### Coverage Stats
+- ### Navigation Power
+- ## 🎓 Your Documentation Journey
+- ### If You're New to SR-AIbridge
+- ### If You're a Developer
+- ### If You're Looking for Something Specific
 - ## 💡 Pro Tips
-- ## 🆘 Need Help?
-- ## 🎉 Success Indicators
-
-
-### ./SCAN_SUMMARY.md
-
-- # Full System Scan Summary - November 2025
-- ## Request
-- ## Actions Taken
-- ## Results
-- ### ✅ ALL CHECKS PASSING (8/8)
-- ### Security Scan Results
-- ### Compliance
-- ## Deliverables
-- ## About "Twelve Failed Checks"
-- ## How to Run Future Scans
-- # Run full scan with progress output
-- # Run quietly (just show pass/fail results)  
-- # Output as JSON
-- ## Recommendations
-- ## Conclusion
-
-
-### ./V197M_IMPLEMENTATION.md
-
-- # v1.9.7m Implementation Summary
-- ## 🚀 Total Autonomy Protocol - Complete Self-Maintenance Architecture
-- ## Overview
-- ### What's New
-- ### The Autonomy Cycle
-- ## New Engines
-- ### Sanctum Engine
-- ### Forge Engine
-- # Scan only (no fixes)
-- ### Elysium Guardian
-- ## Genesis Bus Updates
-- ### New Topics (v1.9.7m)
-- ## GitHub Actions Workflow
-- ### Triggers
-- ### Jobs
-- ## Documentation
-- ## Configuration
-- ### Environment Variables
-- # Enable engines
-- # Elysium settings
-- # Genesis integration
-- # Truth certification
-- ## Post-Merge Activation
-- # Quick activation
-- # Or manual
-- ## Integration Points
-- ### With Existing Systems
-- ### RBAC
-- ## Testing
-- ### Individual Engines
-- # Sanctum
-- # Forge  
-- # Elysium
-- ### Full Integration
-- # Run activation script
-- # Or trigger workflow
-- ### Validation
-- ## File Structure
-- ## Success Criteria
-- ## Migration Notes
-- ### From v1.9.7l or earlier
-- ### Activation Steps
-- ## Known Limitations
-- ## Troubleshooting
-- ## Next Steps
-- ## Version History
-- ## Support
-
-
-### ./ENVSYNC_QUICK_REF.md
-
-- # EnvSync Seed Manifest - Quick Reference
-- ## 🎯 What Is This?
-- ## 📁 Location
-- ## 🚀 Quick Start
-- ### 1. Enable EnvSync (in platform dashboards)
-- ### 2. Set Platform Credentials
-- ### 3. Deploy and Verify
-- # Check EnvSync status
-- # Trigger manual sync
-- ## 📝 How It Works
-- ## 🔧 Common Tasks
-- ### Add a New Variable
-- ### Preview Changes Before Applying
-- # See what would change on Render
-- # See what would change on Netlify
-- ### Manual Sync
-- # Sync to both platforms
-- # Sync to one platform only
-- ### Check Sync Status
-- ## 🛡️ Security Notes
-- ## 📊 Variables Currently in Manifest
-- ## 🔍 Validation
-- ## 📚 Full Documentation
-- ## 🐛 Troubleshooting
-- ### "Manifest not found"
-- # Check file exists
-- # Verify ENVSYNC_CANONICAL_SOURCE is set to "file"
-- ### "Variables not syncing"
-- # Check EnvSync is enabled
-- # Check logs for errors
-- # Look for "EnvSync" in application logs
-- ### "Drift keeps appearing"
-- ## 🎓 Examples
-- ### Example 1: Enable a new feature
-- # 1. Edit manifest
-- # 2. Validate
-- # 3. Commit
-- # 4. Deploy - sync happens automatically on next cycle
-- # Or trigger immediately:
-- ### Example 2: Adjust database pool size
-- # Edit manifest
-- # Change: DB_POOL_SIZE=10
-- # To:     DB_POOL_SIZE=20
-- # Validate and commit
-- # Deploy - sync on next @hourly cycle or trigger manually
-
-
-### ./GITHUB_ENVHOOK_IMPLEMENTATION.md
-
-- # GitHub Environment Hook - Implementation Summary
-- ## 🎯 What Was Implemented
-- ## 📦 Components Delivered
-- ### Core Implementation
-- ### Documentation
-- ## 🏗️ Architecture
-- ## ✨ Features Implemented
-- ### File Watching
-- ### Event Publishing
-- ### Operational Modes
-- ### Testing
-- ## 🔌 Genesis Topics Added
-- ## 🧪 Test Results
-- ## 📊 Demonstration Results
-- ## 🚀 Usage Examples
-- ### Watch Mode (Continuous)
-- ### Manual Trigger (One-time)
-- ### GitHub Actions Integration
-- ## 📁 Files Created/Modified
-- ### Created Files
-- ### Modified Files
-- ### Auto-Generated (Ignored)
-- ## 🔒 Security Features
-- ## 🎯 Result
-- ### Before (v1.9.6w)
-- ### After (v1.9.6x)
-- ## 💡 Quote
-- ## 🔗 Next Steps
-- ## ✅ Acceptance Criteria Met
-
-
-### ./V196R_IMPLEMENTATION_COMPLETE.md
-
-- # v1.9.6r Implementation Complete ✅
-- ## Summary
-- ## Implementation Checklist
-- ## Files Created (15 total)
-- ### New Modules
-- ### Tests
-- ### CI/CD
-- ### Documentation
-- ## Files Modified (6 total)
-- ## Verification Results
-- ## How It Works
-- ### Normal Flow (Success)
-- ### Auto-Healing Flow (Failure)
-- ## Default Settings
-- ## Usage
-- ### CLI
-- ### API
-- ### Python
-- ## Genesis Events Published
-- ## Breaking Changes
-- ## Environment Variables
-- ## Testing
-- ## Next Steps
-- ## Notes
-- ## Success Metrics
-
-
-### ./COPILOT_IMPROVEMENTS.md
-
-- # Copilot Improvements for v1.9.7q
-- ## Implemented Improvements ✅
-- ## Additional Improvement Suggestions 💡
-- ### 1. Configuration File Support
-- # bridge_backend/bridge_core/guards/config.py
-- ### 2. Metrics and Telemetry
-- # In autoheal_link.py
-- ### 3. Health Check Endpoints
-- # bridge_backend/bridge_core/guards/routes.py
-- ### 4. Retry Strategy Configuration
-- # In autoheal_link.py
-- ### 5. Graceful Degradation Modes
-- # In netlify_guard.py
-- ### 6. Event Bus Integration
-- # In netlify_guard.py
-- ### 7. Pre-flight Dry Run Mode
-- # In netlify_guard.py
-- ### 8. Dependency Checks
-- # bridge_backend/bridge_core/guards/dependency_check.py
-- ### 9. Staged Rollout Support
-- # In main.py
-- ### 10. Structured Logging
-- # Instead of:
-- # Use:
-- ## Implementation Priority
-- ## Notes
-
-
-### ./WORKFLOW_FAILURE_QUICK_REF.md
-
-- # Workflow Failure Resolution - Quick Reference
-- ## 🚀 Quick Commands
-- ### Analyze All Workflows
-- ### Generate Fix Plan
-- ### Apply Fixes (Use with Caution)
-- ## 🔧 Common Fixes
-- ### Fix Browser Downloads
-- ### Fix Deprecated Actions
-- ### Fix Missing Timeouts
-- ## 📊 Priority Levels
-- ## 🎯 Failure Patterns
-- ## 🛠️ Troubleshooting
-- ### Browser Install Fails
-- ### Workflow Still Fails
-- ### Analysis Tool Errors
-- ## 📁 Key Files
-- ## 🔍 GitHub Actions
-- ### Run Diagnostic Sweep
-- ### Use Browser Setup
-- ## ⚡ Environment Variables
-- ### Browser Configuration
-- ### Forge Integration
-- ## 📞 Support
-
-
-### ./FORGE_DOMINION_QUICK_REF.md
-
-- # 🜂 Forge Dominion v1.9.7s - Quick Reference
-- ## ⚡ Quick Start
-- ### 1. Generate Root Key
-- ### 2. Bootstrap
-- ### 3. Pre-Deploy
-- ### 4. Scan Secrets
-- ## 🔑 Key Commands
-- ## 📊 Module Overview
-- ## 🎯 Token Lifecycle
-- ## 🛡 Governance Pulse
-- ## 🧪 Testing
-- ## 🌐 Provider Configuration
-- ### GitHub
-- ### Netlify
-- ### Render
-- ## 📈 Visual Pulse Banner
-- ## ⚙️ Environment Variables
-- ## 🔍 Troubleshooting
-- ### No FORGE_DOMINION_ROOT
-- # Generate and export
-- ### Token validation fails
-- # Force renewal
-- ### Secrets detected
-- ## 📚 Full Documentation
-
-
-### ./FRONTEND_POSTGRES_READINESS.md
-
-- # Frontend PostgreSQL Readiness Audit Report
-- ## Executive Summary
-- ## Audit Results by Category
-- ### 1. Code Quality & Linting ✅ PASSED
-- ### 2. Configuration & API URLs ✅ PASSED
-- ### 3. API Client Architecture ✅ PASSED
-- ### 4. Data Structure Handling ✅ PASSED
-- ### 5. Error Handling & User Experience ✅ PASSED
-- ### 6. Database-Agnostic UI Patterns ✅ PASSED
-- ### 7. Component-Specific Analysis
-- #### Core Components ✅
-- #### Specialized Components ✅
-- #### UI Components ✅
-- ## Recommendations for PostgreSQL Migration
-- ### Pre-Migration
-- ### During Migration
-- ### Post-Migration
-- ## Testing Strategy
-- ### Recommended Tests
-- ### Manual Testing Checklist
-- ## Architecture Strengths
-- ### What Makes This Frontend PostgreSQL-Ready
-- ## Summary of Changes Made
-- ### Files Modified (6 files)
-- ### Impact
-- ## Conclusion
+- ## 🔥 Key Features You Can Now Utilize
+- ### Engines (20+)
+- ### Backend (47 modules)
+- ### Frontend (37 components)
+- ## 🎯 What's Next?
+- ### This PR (COMPLETE ✅)
+- ### Next Phase (Weeks 3-4)
+- ### Future (Weeks 5-8)
+- ## 🤝 How to Contribute
+- ## 📖 Remember
+- ## 🎉 Start Exploring!
 
 
 ### ./README.md
 
 - # 🚀 SR-AIbridge
+- ## 📚 **ENHANCED: Complete Documentation Suite (100,000+ Lines)**
+- ### 🎯 Start Here: Documentation Navigator
+- ### 📊 Documentation Coverage
 - ## ✨ What is SR-AIbridge?
 - ## 📋 Table of Contents
 - ## 🚀 Quick Start
@@ -3192,2601 +704,6 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - # 3. Deploy
 
 
-### ./V197F_IMPLEMENTATION_SUMMARY.md
-
-- # v1.9.7f Cascade Synchrony - Implementation Summary
-- ## 🎯 Mission Accomplished
-- ## 📊 Implementation Statistics
-- ## 🏗️ Architecture Components
-- ### 1. Forge Core (`bridge_backend/forge/forge_core.py`)
-- ### 2. Cascade Synchrony (`bridge_backend/forge/synchrony.py`)
-- ### 3. API Routes (`bridge_backend/forge/routes.py`)
-- ### 4. Configuration Files
-- #### `.github/bridge_forge.json`
-- #### `.github/forge_topology.json`
-- ### 5. Integration Tests (`tests/test_forge_cascade_synchrony.py`)
-- ## 🔄 Integration Points
-- ### Main Application Integration
-- # Forge v1.9.7f - Cascade Synchrony routes
-- # In startup_event:
-- ## 📚 Documentation
-- ### Primary Documentation
-- ## 🌊 Healing Flow Architecture
-- ## 🔒 Security Implementation
-- ## 🧪 Testing & Validation
-- ### Test Results
-- ### Application Startup Verification
-- ## 🎛️ Environment Variables
-- ### New Variables (v1.9.7f)
-- ### Required for Full Functionality
-- ## 📦 Deliverables Checklist
-- ## 🚀 Deployment Readiness
-- ### Pre-Deployment Checklist
-- ### Activation Instructions
-- ## 🎉 Success Metrics
-- ## 🧬 Evolutionary Leap Summary
-- ### Before v1.9.7f
-- ### After v1.9.7f
-- ## 🏆 Admiral Directive Fulfilled
-- ### Status: ✅ READY FOR MERGE
-
-
-### ./HXO_DEPLOYMENT_CHECKLIST.md
-
-- # HXO Deployment Checklist — v1.9.6n
-- ## Pre-Deployment Checklist
-- ### ✅ Code Quality
-- ### ✅ Documentation
-- ### ✅ Configuration
-- ### ✅ Safety Guards
-- ## Deployment Steps
-- ### Step 1: Merge to Main
-- # Ensure all commits are pushed
-- # Create PR and merge to main
-- # Title: "v1.9.6n — Hypshard-X Orchestrator (HXO)"
-- ### Step 2: Deploy to Render (Backend)
-- # Watch deployment logs
-- # Look for:
-- # [HXO] Disabled (set HXO_ENABLED=true to enable)
-- ### Step 3: Verify Backend Health
-- # Check health endpoint
-- # Should return:
-- # {"status": "ready", "message": "Service is operational"}
-- ### Step 4: Enable HXO (Optional, for testing)
-- # Add environment variable
-- # Redeploy
-- # Look for:
-- # [HXO] v1.9.6n routes enabled - hypshard-x orchestrator active
-- ### Step 5: Test HXO Endpoints
-- # Test status endpoint (should return 404 for non-existent plan)
-- # Expected: 404 with "Plan not found" message
-- ### Step 6: Submit Test Plan (Admiral only)
-- # Should return:
-- # {
-- #   "plan_id": "...",
-- #   "name": "test_deploy",
-- #   "status": "submitted",
-- #   "total_shards": N
-- # }
-- ### Step 7: Monitor Test Plan
-- # Get status
-- # Watch for completion
-- # done_shards should equal total_shards
-- ### Step 8: Verify Checkpoint Persistence
-- # Check checkpoint DB exists
-- # In Render shell:
-- # Should exist and have non-zero size
-- ### Step 9: Test Abort (Admiral only)
-- # Submit another plan
-- # Abort it
-- # Should return:
-- # {"plan_id": "...", "status": "aborted"}
-- ### Step 10: Verify Genesis Integration
-- # Check Genesis events
-- # Should return recent hxo.plan events
-- ## Post-Deployment Monitoring
-- ### Metrics to Track
-- ### Log Queries
-- # Find HXO errors
-- # Find failed shards
-- # Find auto-tune signals
-- ## Rollback Plan
-- ### Quick Disable
-- # In Render dashboard
-- # Redeploy
-- ### Full Rollback
-- # Revert merge commit
-- # Push to main
-- # Render auto-deploys
-- ### Abort In-Flight Plans
-- # Get all active plans
-- # Abort each
-- ## Known Limitations (v1.9.6n)
-- ## Success Criteria
-- ## Production Readiness (Optional)
-- ## Support Contacts
-- ## Deployment Sign-Off
-
-
-### ./STEWARD_ENVRECON_INTEGRATION.md
-
-- # Steward-EnvRecon Integration Guide
-- ## Overview
-- ## Usage
-- ### Read-Only Mode (Default)
-- # Enable Steward in read-only mode
-- # Run diff via API endpoint
-- ### JSON Report Format
-- ### Field Descriptions
-- ## Integration Details
-- ### How It Works
-- ### Secret Detection
-- ## Example: Using the JSON Report
-- ### Python Script
-- # Run
-- ### Shell Script
-- # Get drift report via API
-- # Extract missing variables for each platform
-- ## Benefits
-- ## Configuration
-- ### Required Environment Variables
-- # Enable Steward
-- # Optional: Provider credentials for live data
-- ## Next Steps
-- ## See Also
-
-
-### ./V196E_CONFIG_GUIDE.md
-
-- # v1.9.6e Environment Configuration Guide
-- ## Heartbeat Configuration
-- ### Basic Configuration
-- # Enable/disable heartbeat (default: true)
-- # Heartbeat target URL (auto-detects from RENDER_EXTERNAL_URL if not set)
-- # Preferred HTTP method (default: auto-detect)
-- # Options: GET, POST, HEAD
-- # Interval between heartbeats in seconds (default: 30)
-- # Timeout for each heartbeat request in seconds (default: 5)
-- ### Example Configurations
-- #### Render Deployment (Default)
-- # No configuration needed! 
-- # Heartbeat auto-detects RENDER_EXTERNAL_URL and uses GET method
-- #### Custom Heartbeat Target
-- #### Disable Heartbeat
-- # or
-- # or
-- #### High-Frequency Monitoring
-- ## How It Works
-- ### Method Auto-Detection
-- ### Backoff Strategy
-- ### Example Retry Pattern
-- ## Health Endpoint
-- # Both work!
-- ## Render Deployment
-- ### Option 1: Using start.sh (Recommended)
-- ### Option 2: Using Python module
-- ### Option 3: Direct uvicorn
-- ## Troubleshooting
-- ### Heartbeat Not Running
-- ### 405 Errors Persisting
-- ### Predictive Stabilizer
-
-
-### ./CAPTAIN_AGENT_SEPARATION.md
-
-- # Captain vs Agent Role Separation - Implementation Summary
-- ## Overview
-- ## Key Changes
-- ### 1. Backend Models
-- #### Mission Model (`bridge_backend/models.py`)
-- #### Agent Model (`bridge_backend/models.py`)
-- ### 2. Backend API Endpoints
-- #### Mission Routes (`bridge_backend/bridge_core/missions/routes.py`)
-- # Get all captain missions
-- # Get missions for specific captain
-- # Get agent-only jobs
-- #### Fleet/Armada Routes (`bridge_backend/bridge_core/fleet/routes.py`)
-- # Get captains
-- # Get agents
-- ### 3. RBAC Permissions
-- ### 4. Frontend - MissionLog Component
-- ### 5. Frontend - ArmadaMap Component
-- ### 6. CSS Styling
-- ## Testing
-- ### Test Results
-- ### Test Coverage
-- ## Acceptance Criteria ✅
-- ## Future Enhancements
-- ## Migration Notes
-- ## Files Changed
-- ### Backend
-- ### Frontend
-- ### Tests
-- ## Summary
-
-
-### ./COMPLIANCE_QUICK_REF.md
-
-- # Compliance Integration Quick Reference
-- ## Overview
-- ## API Endpoints
-- ### Create Task with Compliance
-- ### Get Compliance Validation
-- ### Update LOC Metrics
-- ## Compliance States
-- ## Configuration
-- ## Usage Example
-- # Create engine
-- # Create task with compliance validation (default)
-- # Check compliance state
-- # Get compliance validation later
-- # Update LOC metrics
-- ## Disable Compliance (if needed)
-- # Disable per task
-- ## Benefits
-
-
-### ./V196I_QUICK_REF.md
-
-- # v1.9.6i Quick Reference — Temporal Deploy Buffer
-- ## 🚀 Quick Start
-- ## 📍 Key Endpoints
-- # Health check (responds in 1-2s)
-- # Stage status
-- # Runtime info
-- # Port info
-- ## ⚙️ Environment Variables
-- # Enable/disable TDB (default: true)
-- # Stage timeout in seconds (default: 120)
-- # Render sets this automatically
-- ## 🌊 Deployment Stages
-- ## 🧪 Testing
-- # Run all tests
-- # Expected: 23/23 passing
-- ## 📊 Monitoring
-- # Check stage status
-- # Watch for readiness
-- ## 🔍 Diagnostics
-- ## 🛑 Disable TDB (Legacy Mode)
-- # Set in Render environment
-- # Or in .env
-- ## ✅ Expected Logs
-- ## 🚨 Troubleshooting
-- ### Render times out
-- ### Stage 2/3 fails
-- ### Want synchronous startup
-- ## 📁 Key Files
-- ## 🎯 Success Indicators
-
-
-### ./V196G_QUICK_REF.md
-
-- # V196G Quick Reference
-- ## SR-AIbridge v1.9.6g Predictive Stabilizer — Quick Reference
-- ### 🎯 What Changed
-- ### 🔍 Key Features at a Glance
-- ### 📊 Expected Behavior
-- #### During Startup (Good)
-- #### During Startup (Learning)
-- #### Pattern Detection (Silent)
-- ### 🗂️ File Locations
-- ### 🧪 Environment Variables
-- ### 📈 How Adaptive Thresholds Work
-- ### 🔧 Integration Points
-- #### In Your Startup Code
-- # Mark milestones
-- # Finalize boot
-- #### Manual Cleanup (Optional)
-- # Archive tickets older than 5 days
-- ### 🎓 Pro Tips
-- ### 🚨 Troubleshooting
-- ### 📚 Related Documentation
-
-
-### ./V197O_IMPLEMENTATION_SUMMARY.md
-
-- # v1.9.7o Implementation Summary
-- ## Reflex Loop Protocol - The Self-PR Engine
-- ## 🎯 Mission Accomplished
-- ## 📦 Deliverables
-- ### Core Implementation (6 files)
-- ### Genesis Integration (2 files modified)
-- ### Documentation (3 comprehensive guides)
-- ### Testing & Verification (2 files)
-- ### Configuration Updates (2 files)
-- ## 📊 Statistics
-- ## 🧪 Testing Results
-- ### Automated Verification
-- ### Manual Testing
-- ## 🔑 Key Features
-- ### 1. Self-PR Capability
-- ### 2. Truth Engine Signing
-- ### 3. RBAC Validation
-- ### 4. Offline Resilience
-- ### 5. Genesis Integration
-- ## 🔄 Workflow
-- ## 🎓 How to Use
-- ### 1. Create a Report
-- ### 2. Run Reflex Loop
-- # Manual
-- # Automatic (every 12 hours via workflow)
-- # Or trigger manually in GitHub Actions
-- ### 3. Verify PR
-- # Check queue
-- # View PR data
-- ## 🔒 Security Highlights
-- ## 🌟 Impact
-- ### Before v1.9.7o
-- ### After v1.9.7o
-- ## 📚 Documentation Structure
-- ## 🚀 Next Steps
-- ## ✅ Acceptance Criteria Met
-- ## 🎖️ Conclusion
-
-
-### ./BRIDGE_FEDERATION_SECRETS.md
-
-- # Bridge Federation Build - Required Secrets Configuration
-- ## Overview
-- ## Required Secrets
-- ### FED_KEY
-- ### DOM_TOKEN
-- ### BRIDGE_ENV
-- ## Workflow Environment Variables
-- ## Setting Up Secrets
-- ### Using GitHub UI
-- ### Using GitHub CLI
-- # Set FED_KEY
-- # Set DOM_TOKEN
-- # Set BRIDGE_ENV (as a variable)
-- ## Security Best Practices
-- ## Workflow Behavior Without Secrets
-- ## Troubleshooting
-- ### "No dominion token provided" Error
-- ### Federation Heartbeat Timeout
-- ### Token Validation Failed
-- ## Related Files
-- ## Support
-
-
-### ./FIREWALL_AUTONOMY_IMPLEMENTATION.md
-
-- # Firewall Intelligence and Autonomy Engine Implementation Summary
-- ## Overview
-- ## Implementation Complete ✅
-- ### Core Components
-- ## Key Features
-- ### Autonomous Decision-Making
-- ### Safety Guardrails
-- ### Four-Phase Execution Cycle
-- ## Files Created/Modified
-- ### Created
-- ### Modified
-- ## Output Artifacts
-- ### Diagnostics
-- ### Network Policies
-- ### Vault Records (Audit Trail)
-- ## Testing
-- ## Execution Example
-- ## Integration with Existing Systems
-- ## Next Steps for Operators
-- ## Compliance and Safety
-- ## Summary
-
-
-### ./DOMINION_IMPLEMENTATION_SUMMARY.md
-
-- # Forge Dominion Implementation Summary v1.9.7s-SOVEREIGN
-- ## 🎯 Mission Complete
-- ## 📊 Implementation Metrics
-- ### Code Coverage
-- ### Components Delivered
-- #### Core Cryptography (`bridge_backend/bridge_core/token_forge_dominion/`)
-- #### Infrastructure
-- #### Documentation
-- #### Testing
-- ## 🔐 Security Architecture
-- ### Cryptographic Primitives
-- ### Zero-Trust Model
-- ### Resonance-Aware Security
-- ## 🎭 Secret Detection Capabilities
-- ### Pattern Recognition (20+ patterns)
-- ### Scanning Performance
-- ## 🚀 Deployment Integration
-- ### GitHub Actions
-- ### Supported Platforms
-- ## 📈 Quality Metrics
-- ### Test Coverage
-- ### Code Quality
-- ### Documentation Quality
-- ## 🔄 Upgrade Path
-- ### From Earlier Versions
-- ### Production Deployment
-- ## 🎯 Success Criteria - All Met ✅
-- ## 🌟 Key Achievements
-- ## 📚 Documentation Artifacts
-- ## 🔮 Future Enhancements (Roadmap)
-- ### v1.9.8 (Q1 2026)
-- ### v2.0.0 (Q2 2026)
-- ### v2.1.0 (Q3 2026)
-- ## 🏆 Final Status
-
-
-### ./ENDPOINT_TEST_SOLUTION.md
-
-- # SR-AIbridge Endpoint Testing Solution
-- ## Overview
-- ## What Was Delivered
-- ### 1. Main Test Script: `test_endpoints_full.py`
-- ### 2. Documentation
-- ### 3. README Integration
-- ## Key Features
-- ### Comprehensive Coverage
-- ### Robust Error Handling
-- ### Flexible Output
-- ### Exit Codes
-- ## Usage Examples
-- ### Basic Testing
-- # Test local backend
-- # Test deployed backend
-- # Custom timeout for slow backends
-- ### CI/CD Integration
-- # JSON output for automated processing
-- # Use in GitHub Actions
-- ### Monitoring
-- # Schedule via cron for regular checks
-- ## Comparison with Existing Tools
-- ## Benefits
-- ## Testing Methodology
-- ### Test Categories
-- ### Retry Strategy
-- ### Success Criteria
-- ## Troubleshooting Guide
-- ### All Tests Fail
-- ### Some Tests Fail
-- ### Timeouts
-- ### Engine Endpoints 404
-- ## Files Changed
-- ## Validation
-- ## Next Steps
-- ### For Users
-- ### For CI/CD Integration
-- ### For Regular Monitoring
-- ## Conclusion
-
-
-### ./WORKFLOW_FIXES_SUMMARY.md
-
-- # Workflow Fixes Summary - SR-AIBridge
-- ## Issues Addressed
-- ### 1. Python Syntax Error ✅ FIXED
-- # BEFORE (BROKEN):
-- # AFTER (FIXED):
-- ### 2. Missing timezone Import ✅ FIXED
-- # BEFORE (BROKEN):
-- # AFTER (FIXED):
-- ### 3. Incorrect Netlify Publish Path ✅ FIXED
-- # BEFORE (BROKEN):
-- # AFTER (FIXED):
-- ### 4. Missing pytest-asyncio Dependency ✅ FIXED
-- # NEW FILE: pytest.ini
-- ### 5. Deprecated GitHub Actions ✅ FIXED
-- ### 6. Missing Secrets Documentation ✅ FIXED
-- ## Validation Results
-- ## Next Steps
-- ### For the Repository Owner:
-- ## Summary
-
-
-### ./ETHICS_GUIDE.md
-
-- # SR-AIbridge — Ethics & Operational Policy
-- ## Introduction
-- ## Commitments
-- ## Allowed Uses
-- ## Prohibited Uses
-- ## Autonomy & "Stealth" Features
-- ## Federation Policy
-- ## Data Retention & Deletion
-- ## Fault Injection Governance
-- ## Compliance & Legal
-- ## Reporting & Ethics Escalation
-- ## Governance
-- ## Final Word
-
-
-### ./PHASE_6_SUMMARY.md
-
-- # Phase 6 Implementation Summary
-- ## Files Changed
-- ### New Files Created (7)
-- ### Modified Files (5)
-- ## Lines of Code
-- ## Build Status
-- ## Key Features Implemented
-- ### 1. Chaos Engineering
-- ### 2. Self-Healing
-- ### 3. Observability
-- ### 4. UI Visualization
-- ### 5. Audit Trail
-- ## Testing Coverage
-- ### Unit Tests (14 tests)
-- ### Integration Tests
-- ### Build Tests
-- ## Configuration Examples
-- ### Enable Chaos for Testing
-- ### Disable Recovery
-- ### Production Configuration
-- # bridge.runtime.yaml
-- ## API Endpoints
-- ### GET /federation/state
-- ### GET /events
-- ## Security Considerations
-- ## Performance Impact
-- ## Next Steps
-- ## Dependencies
-- ## Deployment Checklist
-- ## References
-
-
-### ./LOC_COUNTER_README.md
-
-- # Lines of Code Counter - Usage Guide
-- ## Quick Summary
-- ### By Language (excluding dependencies):
-- ## Tools Available
-- ### 1. Comprehensive LOC Counter (Recommended)
-- ### 2. Quick LOC Counter
-- ## What's Counted
-- ## What's Excluded
-- ## Report Structure
-- ## Project Composition
-- ### Backend (Python)
-- ### Frontend (JavaScript/React)
-- ### Documentation
-- ### Infrastructure
-- ## Maintenance
-- # Run comprehensive count and save report
-- # Quick check
-- ## Notes
-- ## Last Updated
-
-
-### ./V197N_IMPLEMENTATION_SUMMARY.md
-
-- # v1.9.7n Implementation Summary
-- ## 🚀 Embedded Autonomy Node - Complete Implementation
-- ## Overview
-- ## Implementation Details
-- ### 📁 Directory Structure Created
-- ### 🔄 Workflow Integration
-- ### 🌌 Genesis Integration
-- ### 📚 Documentation Created
-- ### 🧪 Testing & Verification
-- ## Feature Highlights
-- ### 🧠 Autonomy Core
-- ### 🕊️ Truth Micro-Certifier
-- ### ⚙️ Cascade Mini-Orchestrator
-- ### 🧩 Blueprint Micro-Forge
-- ### 📜 Parser Sentinel
-- ## Execution Flow
-- ## Configuration Options
-- ## Security & RBAC
-- ### Role-Based Access Control
-- ### Safety Mechanisms
-- ## Performance Characteristics
-- ### Resource Usage
-- ### Execution Time
-- ### Scalability
-- ## Integration Points
-- ### 1. Genesis Bus
-- ### 2. Total Autonomy Protocol (v1.9.7m)
-- ### 3. Cascade Engine
-- ## Testing Results
-- ### Unit Tests
-- ### Verification Script
-- ### Manual Testing
-- ## Files Changed
-- ### New Files (19 total)
-- ### Modified Files (3 total)
-- ### Total Changes
-- ## Post-Merge Behavior
-- ## Advantages
-- ### ✅ Zero External Dependencies
-- ### ✅ Continuous Availability
-- ### ✅ Cost Effective
-- ### ✅ Secure
-- ### ✅ Self-Contained
-- ## Future Enhancements
-- ## Comparison: Full Bridge vs Mini-Bridge
-- ## Verification Commands
-- # Run the node manually
-- # Run verification script
-- # Run unit tests
-- # Check configuration
-- # Validate workflow
-- ## Documentation References
-- ## Conclusion
-
-
-### ./UMBRA_IMPLEMENTATION_COMPLETE.md
-
-- # Umbra v1.9.7d Implementation Summary
-- ## 🎯 Implementation Complete
-- ## 📊 Test Results
-- ### Unit Tests
-- ### Smoke Tests
-- ## 🏗️ Architecture Overview
-- ## 📁 Files Created (16 total)
-- ### Core Modules
-- ### Tests
-- ### Documentation
-- ## 🔧 Files Modified (5 total)
-- ### Integration
-- ### Configuration
-- ## 📡 API Endpoints (10 total)
-- ### Public Endpoints
-- ### Detection & Repair
-- ### Memory Operations
-- ### Predictive Operations
-- ### Echo Operations
-- ## 🔒 Security & RBAC
-- ### Admiral Permissions
-- ### Captain Permissions
-- ### Observer Permissions
-- ## 🌐 Genesis Bus Topics (6 added)
-- ## ⚙️ Environment Variables (5 added)
-- ## 📈 Code Metrics
-- ### Lines of Code
-- ### Test Coverage
-- ## 🎯 Key Features Delivered
-- ### ✅ Umbra Core - Pipeline Self-Healing
-- ### ✅ Umbra Memory - Experience Graph
-- ### ✅ Umbra Predictive - Pre-Repair Intelligence
-- ### ✅ Umbra Echo - Human-Guided Learning
-- ## 🚀 Deployment Checklist
-- ## 🎓 Learning & Pattern Recognition
-- ### Current Capabilities
-- ### Memory Persistence
-- ## 💡 Usage Examples
-- ### Detect Anomaly
-- ### Get Metrics
-- ### Recall Memory
-- ### Capture Echo Event
-- ## 📚 Documentation
-- ### Comprehensive Documentation
-- ### Quick Reference
-- ### Changelog
-- ## 🎉 Achievement Summary
-- ### What Was Built
-- ### Impact
-- ### Admiral's Vision Realized
-- ## ✅ Ready for Merge
-
-
-### ./PARITY_STUBS_VERIFICATION.md
-
-- # Parity Engine Frontend Stubs Verification Report
-- ## Summary
-- ## Verification Results
-- ### 1. File Count Verification ✅
-- ### 2. Directory Structure ✅
-- ### 3. Parity Engine Execution ✅
-- ### 4. Test Suite Validation ✅
-- ### 5. Communication Status ✅
-- ## Sample Stub Analysis
-- ### Critical Route Example: `/api/control/hooks/triage`
-- ### Path Parameter Example: `/blueprint/{bp_id}`
-- ## Index File Verification
-- ## Breakdown by Severity
-- ### Critical Routes (2)
-- ### Moderate Routes (83)
-- ### Informational Routes (1)
-- ## Comparison: Expected vs Actual
-- ## Conclusion
-- ## Next Steps
-- ## Files Involved
-
-
-### ./ENGINES_ENABLE_TRUE_v196w.md
-
-- # v1.9.6w — engines_enable_true (Final Full Activation Protocol)
-- ## 🧠 Overview
-- ## ⚙️ Objective
-- ## 🧩 Permanent Engine Activation Architecture
-- ## 🧠 Engine Verification & Activation Matrix
-- ## 🔒 RBAC Security Enforcement
-- ## ⚙️ Default System Config
-- # Genesis Framework - v1.9.6w Full Engine Activation
-- # RBAC and Safety
-- # Individual Engine Flags (now default to true)
-- ## 🧩 Core Code Changes
-- ### main.py
-- # v1.9.6w engines_enable_true flag check
-- ### genesisctl.py
-- ### activation.py
-- ## 🧾 Verification Report
-- ## 🔗 Genesis Events
-- ## ✅ Testing Results
-- ## 🧠 Certification Dependency Chain Diagram
-- ## 🚀 CLI Commands
-- ### Activate All Engines
-- ### Check Engine Status
-- ## 🪶 Commit Message
-- ## 🚀 Result — The Fully Awakened Bridge
-- ## 👑 "Admiral command acknowledged. The Bridge stands fully awakened."
-
-
-### ./STUB_CLEANUP_COMPLETE.md
-
-- # Full Repository Stub Scan and Cleanup - Complete Report
-- ## Executive Summary
-- ## Issues Identified and Fixed
-- ### 1. ✅ Deprecated datetime.utcnow() Calls - FIXED
-- #### What was wrong:
-- #### What was fixed:
-- #### Files affected (sample):
-- ### 2. ✅ Frontend Auto-Generated Stub TODOs - FIXED
-- #### What was wrong:
-- #### What was fixed:
-- #### Files affected:
-- ### 3. ℹ️ Backend Stub Implementations - VERIFIED SAFE
-- #### What was found:
-- #### Why no action needed:
-- ### 4. ℹ️ Incomplete Engine: adapters - VERIFIED SAFE
-- #### What was found:
-- #### Why no action needed:
-- ## Tools Created
-- ### 1. Stub Scanner (`scripts/stub_scanner.py`)
-- ### 2. DateTime Fixer (`scripts/fix_deprecated_datetime.py`)
-- ### 3. Stub TODO Cleaner (`scripts/clean_stub_todos.py`)
-- ## Verification Results
-- ### Python Compilation ✅
-- # All 200+ Python files compile successfully
-- # Exit code: 0 (success)
-- ### Datetime Pattern Check ✅
-- # Before: 211 occurrences
-- # After: 0 occurrences
-- # Result: 0 matches
-- ### Frontend Stub TODO Check ✅
-- # Before: 85 files with TODOs
-- # After: 0 files with TODOs
-- # Result: 0 matches
-- ### Engine Route Registration ✅
-- ## Deployment Impact
-- ### Before Cleanup:
-- ### After Cleanup:
-- ## Summary
-- ## Files Changed
-- ## Recommendations for Future
-
-
-### ./DEPLOYMENT_VERIFICATION.md
-
-- # v1.9.7i Deployment Verification
-- ## ✅ Implementation Complete
-- ## Verification Results
-- ### 1. Component Initialization ✅
-- ### 2. Genesis Bus Integration ✅
-- ### 3. Test Coverage ✅
-- ### 4. Pipeline Smoke Test ✅
-- ### 5. CLI Tool ✅
-- ### 6. GitHub Actions Workflow ✅
-- ### 7. File Artifacts ✅
-- ### 8. Documentation ✅
-- ## Deployment Flow Verified
-- ## Known Non-Critical Warnings
-- ### Genesis Bus Database Lock
-- ## Production Readiness Checklist
-- ## Next Steps for Production
-- ## Conclusion
-
-
-### ./V196T_IMPLEMENTATION_SUMMARY.md
-
-- # v1.9.6t Implementation Summary
-- ## 🎉 Implementation Complete
-- ## 📋 Requirements Checklist
-- ### Core Philosophy ✅
-- ### Key Additions ✅
-- ### Workflows Added ✅
-- ### Unified Environment Configuration ✅
-- ### Visual (String-Theory JSON Map) ✅
-- ## 🧪 Tests ✅
-- ## ✅ Status
-- ## 🏁 System Flow
-- ## 📊 Implementation Statistics
-- ## 📚 Documentation
-- ## 🎯 Key Features
-- ### Reinforcement Learning
-- ### Predictive Intelligence
-- ### Cryptographic Proof
-- ### Adaptive Policies
-- ### GitHub Integration
-- ## 🔄 Integrations
-- ## 🚀 Deployment Ready
-- ## 🙏 Thank You!
-
-
-### ./FIREWALL_AUTONOMY_QUICK_REF.md
-
-- # Firewall Intelligence and Autonomy Engine - Quick Reference
-- ## Overview
-- ## Features
-- ## Quick Start
-- ### Manual Execution
-- # Run the full firewall intelligence + autonomy engine
-- # Review autonomy logs
-- # Check vault records
-- ### GitHub Actions
-- # Trigger via GitHub CLI
-- # Or manually via GitHub Actions UI:
-- # Actions → Firewall Intelligence and Autonomy Engine → Run workflow
-- ## How It Works
-- ### 1. Intelligence Gathering Phase
-- ### 2. Decision-Making Phase
-- ### 3. Execution Phase
-- ### 4. Reporting Phase
-- ## Safety Guardrails
-- ## Output Files
-- ### Diagnostics
-- ### Network Policies
-- ### Vault Records
-- ## Decision Examples
-- ### Example 1: No Issues Detected
-- ### Example 2: Low Severity (Auto-Apply)
-- ### Example 3: High Severity (Escalate)
-- ## Monitoring
-- ### Check Execution Status
-- # View latest autonomy log
-- # View vault records
-- # Check severity from report
-- ### GitHub Actions Artifacts
-- ## Error Signatures Detected
-- ## Testing
-- ## Workflow Schedule
-- ## Related Workflows
-- ## Documentation
-- ## The Firewall Oath
-
-
-### ./HXO_QUICK_REF.md
-
-- # HXO Quick Reference
-- ## Quick Start
-- ### 1. Enable HXO
-- ### 2. Submit a Plan
-- ### 3. Monitor Status
-- # Replace {plan_id} with actual plan ID from step 2
-- ## API Endpoints
-- ## Job Kinds
-- ## Environment Variables
-- ### Core Settings
-- # Enable/disable HXO
-- # Safety limits
-- ### Auto-Tuning
-- # Split shards if p95 latency exceeds threshold
-- ### Storage
-- ### RBAC
-- ## Plan Structure
-- ## Status Response
-- ## Genesis Topics
-- ### Published by HXO
-- ### Subscribed by HXO
-- ## Partitioners
-- ## Executors
-- ## Common Operations
-- ### Abort a Plan
-- ### Get Final Report
-- ### Watch Status in Real-Time
-- ## Troubleshooting
-- ### Plan Not Starting
-- # Check if HXO is enabled
-- # Check Genesis bus
-- # Check logs
-- ### Shards Failing
-- # Get status
-- # Check failed shard events
-- ### Slow Execution
-- # Increase concurrency
-- # Lower auto-split threshold
-- ## File Locations
-- ## Integration with TDE-X
-- # In TDE-X orchestrator
-- ## Capabilities (RBAC)
-- ## Best Practices
-- ## Further Reading
-
-
-### ./CHROME_PLAYWRIGHT_INSTALLATION_SUMMARY.md
-
-- # Chrome/Playwright Installation Summary
-- ## Overview
-- ## Changes Made
-- ### Workflows Updated
-- ### Installation Step Added
-- ## Why This Change Was Needed
-- ### Problem
-- ### Solution
-- ## Technical Details
-- ### Installation Components
-- #### `npx playwright install-deps`
-- #### `npx playwright install chromium`
-- ### Complementary Existing Code
-- ## Validation
-- ### Syntax Validation
-- ### Testing Strategy
-- ## Impact
-- ### Benefits
-- ### Potential Considerations
-- ## Related Files and Scripts
-- ### Scripts that benefit from this change:
-- ### Configuration files:
-- ## Future Enhancements
-- ## References
-- ## Maintenance
-- ### Keeping Browsers Updated
-- ### Cache Management
-- ### Monitoring
-
-
-### ./HXO_NEXUS_IMPLEMENTATION_SUMMARY.md
-
-- # HXO Nexus v1.9.6p Implementation Summary
-- ## Executive Summary
-- ## What Was Delivered
-- ### 1. Core HXO Nexus System
-- ### 2. HypShard v3 - Quantum Adaptive Shard Manager
-- ### 3. Security Layers
-- ### 4. REST API Routes
-- ### 5. Integration & Adapters
-- ### 6. Documentation
-- ### 7. Comprehensive Testing
-- ## Files Created/Modified
-- ### New Files (12)
-- ### Modified Files (4)
-- ## The "1+1=∞" Connectivity Paradigm
-- ### Universal Connectivity
-- ### Harmonic Resonance
-- ### Emergent Synergy
-- ### Infinite Scaling
-- ## Technical Achievements
-- ### Architecture
-- ### Performance
-- ### Security
-- ### Integration
-- ## Configuration
-- ### Environment Variables Added
-- ### Genesis Bus Topics Added
-- ## Usage Examples
-- ### Initialize Nexus
-- ### Coordinate Engines
-- ### Use HypShard
-- ### Achieve Consensus
-- ## Impact
-- ### Developer Experience
-- ### System Capabilities
-- ### Operational Benefits
-- ## Future Enhancements
-- ## Conclusion
-
-
-### ./LOC_QUICK_ANSWER.md
-
-- # SR-AIbridge LOC - Quick Answer
-- ## 📊 Total Project Lines of Code: **48,100**
-- ## Quick Stats
-- ## Top 3 Components
-- ## Get Full Details
-- # View this summary
-- # Run comprehensive counter
-- # Quick count by language
-- ## Reports Generated
-
-
-### ./PARITY_EXECUTION_REPORT.md
-
-- # Parity Engine Execution Report
-- ## 🎯 Mission: Verify Frontend-Backend Communication
-- ## 📊 Communication Analysis
-- ## 🔍 What Was Analyzed
-- ### Backend Routes Scanned
-- ### Frontend Calls Scanned
-- ## ⚙️ Auto-Fix Actions Performed
-- ### 1. Frontend Stub Generation ✅
-- ### 2. Backend Stub Documentation ✅
-- ## 🎨 Severity Classification
-- ### 🔴 Critical (2 endpoints)
-- ### 🟡 Moderate (83 endpoints)
-- ### 🔵 Informational (1 endpoint)
-- ## 📋 Files Created/Updated
-- ### New Documentation
-- ### Generated Reports
-- ### Generated Code
-- ## ✅ Test Results
-- ## 🚀 Next Steps for Integration
-- ### Immediate Actions
-- ### Long-term Maintenance
-- ## 📞 Communication Flow Diagram
-- ## 🎉 Summary
-- ## 📚 Additional Resources
-
-
-### ./V197Q_IMPLEMENTATION.md
-
-- # v1.9.7q — Sanctum Cascade Protocol
-- ## What This Release Does (Summary)
-- ## Files Added (New)
-- ### 1. Netlify Guard (publish path + API guard)
-- ### 2. Deferred Integrity (prevents early "validate" flake)
-- ### 3. Umbra Auto-Heal linker (bounded retry)
-- ## Files Modified
-- ### 4. Main boot sequence (ordered guards → reflex → umbra → integrity)
-- # === Sanctum Cascade Protocol v1.9.7q ===
-- # Ordered boot hardening: guards → reflex → umbra → integrity
-- # 1) Netlify publish path & token guard
-- # Reflex Auth Forge token fallback for Netlify egress
-- # 2) Umbra⇄Genesis link retry
-- # 3) Deferred integrity (after engines are steady)
-- # === end Sanctum Cascade Protocol ===
-- ## Workflow Added
-- ### 5. GitHub Workflow – orchestrate order & surface reasons
-- ## Environment (new/updated)
-- # v1.9.7q — Sanctum Cascade Protocol
-- # Optional, Netlify guard will auto-fallback if missing
-- # NETLIFY_AUTH_TOKEN=   # preferred; if missing, Reflex/GitHub token will be used
-- ## Documentation Added
-- ## Verification Plan (copy/paste)
-- ### 1. Open/Update any PR – watch these checks:
-- ### 2. Backend logs (Render) show:
-- ### 3. No more preflight/validate/guard/verify-deploy-paths failures.
-- ## Validation Testing
-- ## Rollback (safe)
-- ## Why This Is Permanent
-- ## Impact
-- ## Commit Message (ready to paste)
-
-
-### ./V196Y_QUICK_REF.md
-
-- # v1.9.6y Quick Reference
-- ## What Was Fixed
-- ### 1. HXO Nexus Startup Crash ✅
-- ### 2. Netlify Preview Checks ✅
-- ## Quick Commands
-- ### Check System Health
-- ### Generate Netlify Artifacts (if needed manually)
-- ### Test HXO Nexus
-- ### Run Tests
-- ## Files Modified
-- ## Files Created
-- ## Key Changes
-- ## What to Expect After Merge
-- ### Render Logs (HXO Nexus)
-- ### Netlify Preview
-- ### Diagnostics Output
-- ## Troubleshooting
-- ### If HXO Nexus still fails
-- # Check import
-- # Check initialization
-- ### If Netlify artifacts missing
-- # Regenerate
-- # Verify
-- ### If diagctl fails
-- # Run with errors visible
-- ## Architecture Notes
-- ## See Also
-
-
-### ./ENVSCRIBE_IMPLEMENTATION_COMPLETE.md
-
-- # EnvScribe v1.9.6u Implementation Summary
-- ## 🎯 Mission Accomplished
-- ## 📦 Components Delivered
-- ### Core Engine
-- ### CLI Tool
-- ### Documentation
-- ### Testing
-- ### Integration
-- ## 🔬 Test Results
-- ### Unit Tests (test_envscribe.py)
-- ### Integration Tests (test_envscribe_integration.py)
-- ### Existing Tests (test_envsync_pipeline.py)
-- ## 🚀 Capabilities
-- ### Scanning & Compilation
-- ### Verification
-- ### Output Generation
-- ### API Endpoints
-- ### Genesis Integration
-- ### EnvRecon Integration
-- ### Truth Engine Integration
-- ## 📊 Statistics
-- ## 🏗️ Architecture
-- ## 🎯 Use Cases Supported
-- ## 🔐 Security Features
-- ## 📈 Performance
-- ## 🔄 Integration Status
-- ## 📝 Example Outputs
-- ### CLI Audit
-- ### API Response (Health)
-- ## 🎓 Documentation
-- ## 🚦 Deployment Checklist
-- ## ✅ Acceptance Criteria (from PR)
-- ## 🏆 Achievement Unlocked
-
-
-### ./DEPLOYMENT_SUMMARY_V197Q.md
-
-- # v1.9.7q Deployment Summary — Sanctum Cascade Protocol
-- ## Executive Summary
-- ## What Was Built
-- ### New Modules (8 files)
-- ### Modified Files (1 file)
-- ### Documentation (5 files)
-- ### Testing (1 file)
-- ### Configuration (1 file)
-- ## Files Changed Summary
-- ## API Endpoints Added
-- ### Health Check Endpoints
-- ## Environment Variables
-- ### New Variables
-- # Deferred integrity check delay (seconds)
-- # Netlify publish path (optional, auto-detected)
-- # Netlify auth token (optional, GitHub token used as fallback)
-- ## Boot Sequence Changes
-- ### Before v1.9.7q
-- ### After v1.9.7q (Sanctum Cascade Protocol)
-- ## Validation Results
-- ## Expected Console Output
-- ## Breaking Changes
-- ## Migration Guide
-- ### For Existing Deployments
-- ### For New Deployments
-- ## Testing Checklist
-- ## Rollback Plan
-- ### Option 1: Remove Protocol Initialization
-- # === Sanctum Cascade Protocol v1.9.7q ===
-- # ... (all protocol code)
-- # === end Sanctum Cascade Protocol ===
-- ### Option 2: Disable Guards via Environment
-- ### Option 3: Full Rollback
-- ## Performance Impact
-- ## Security Considerations
-- ## Monitoring and Alerts
-- ### Recommended Monitoring
-- ### Sample Prometheus Query
-- # Guard health status
-- # Umbra retry count
-- ## Known Limitations
-- ## Future Enhancements
-- ## Support and Documentation
-- ## Commit History
-- ## Approval and Sign-off
-
-
-### ./WORKFLOW_FAILURE_RESOLUTION.md
-
-- # Workflow Failure Resolution Framework
-- ## Overview
-- ## Components
-- ### 1. Browser Dependency Resolution
-- #### Reusable Workflow
-- #### Composite Action
-- ### 2. Sovereign Diagnostic Sweep
-- ### 3. Failure Pattern Analyzer
-- ### 4. PR Generator
-- # Dry run (default)
-- # Apply fixes
-- ### 5. Failure Patterns Configuration
-- ## Quick Start
-- ### Running Diagnostic Sweep
-- ### Using Browser Setup in Workflows
-- ### Running Local Analysis
-- # Analyze workflows
-- # Review the report
-- # Generate fixes (dry run)
-- ## Workflow Failure Patterns
-- ### Pattern: Browser Download Blocked
-- ### Pattern: Forge Auth Failure
-- ### Pattern: Deprecated Actions
-- ## Monitoring and Alerts
-- ### Success Criteria
-- ### Metrics
-- ## Architecture
-- ## Files Created
-- ### Workflows
-- ### Actions
-- ### Tools
-- ### Output
-- ## Contributing
-- ## Security
-- ## Support
-
-
-### ./ENVRECON_USER_CHECKLIST.md
-
-- # EnvRecon-Autonomy Integration - User Checklist
-- ## ✅ What's Already Done (by AI)
-- ## 📋 What You Need to Do
-- ### Step 1: Configure API Credentials (Required)
-- #### Render API Credentials
-- #### Netlify API Credentials
-- #### GitHub API Credentials
-- ### Step 2: Run Initial Audit
-- # Start the server
-- # In another terminal, run audit
-- ### Step 3: Get Missing Variables List
-- # Get the report
-- # Or check the file directly
-- # Pretty print missing variables
-- ### Step 4: Manually Sync Missing Variables
-- #### Add to Render
-- #### Add to Netlify
-- #### Add to GitHub
-- ### Step 5: Verify Sync
-- # Run another audit
-- # Check for remaining drift
-- ## 🔍 How to Monitor Going Forward
-- ### Automatic Monitoring (Already Active)
-- ### Manual Monitoring
-- # Check latest report
-- # Trigger manual audit
-- # Trigger auto-heal (reports intent only)
-- ### Genesis Event Monitoring
-- ## ⚠️ Important Notes
-- ### Auto-Sync Limitation
-- ### Variables That Must Be Manually Synced
-- ## 📚 Documentation Reference
-- ## 🧪 Testing
-- # Run EnvRecon tests
-- # Run integration tests
-- ## 🎯 Success Criteria
-- ## ❓ Troubleshooting
-- ### "API credentials not configured" warnings
-- ### Variables still showing as missing
-- ### Genesis events not appearing
-- ### Auto-heal not working
-- ## 📞 Get Full Auto-Sync
-- ## Summary
-
-
-### ./GENESIS_LINKAGE_GUIDE.md
-
-- # v1.9.7c — Genesis Linkage Implementation Guide (UNIFIED)
-- ## Overview
-- ### Unified Engines (20 Total)
-- ## Architecture
-- ### Blueprint Registry
-- ### Engine Linkages
-- #### 1. Blueprint → TDE-X
-- #### 2. Blueprint → Cascade
-- #### 3. Blueprint → Truth
-- #### 4. Blueprint → Autonomy
-- #### 5. Blueprint → Leviathan (NEW)
-- #### 6. Blueprint → Super Engines (NEW)
-- #### 7. Blueprint → Utility Engines (NEW)
-- ## API Endpoints
-- ### GET /engines/linked/status
-- ### GET /engines/linked/manifest
-- ### GET /engines/linked/manifest/{engine_name}
-- ### POST /engines/linked/initialize
-- ### GET /engines/linked/dependencies/{engine_name}
-- ### GET /engines/linked/super-engines/status (NEW)
-- ### GET /engines/linked/utility-engines/status (NEW)
-- ### GET /engines/linked/leviathan/status (NEW)
-- ## Signal Flow
-- ## Event Bus Topics
-- ## Configuration
-- ### Environment Variables
-- #### Required
-- #### Optional
-- ### Deployment Config (unchanged)
-- ## Benefits
-- ## Testing
-- ## Implementation Files
-- ### New Files (10)
-- ### Modified Files (2)
-- ## Usage Examples
-- ### Check Linkage Status
-- ### Get Complete Manifest
-- ### Get Specific Engine Blueprint
-- ### Initialize Linkages
-- ### Get Engine Dependencies
-- ## Future Enhancements
-
-
-### ./ENVRECON_AUTONOMY_INTEGRATION.md
-
-- # EnvRecon-Autonomy Integration Guide
-- ## Overview
-- ## Architecture
-- ### Components
-- ## Setup Required
-- ### 1. API Credentials Configuration
-- #### Render API Setup
-- # Add to your .env file:
-- #### Netlify API Setup
-- # Add to your .env file:
-- #### GitHub Secrets Setup
-- # Add to your .env file:
-- ### 2. Genesis Configuration
-- # Enable Genesis mode (should already be enabled)
-- # Enable auto-healing (optional)
-- # Set echo depth limit to prevent loops
-- ## Current Status
-- ### Missing Variables Analysis
-- ### Variables That Cannot Be Auto-Fixed
-- ## Usage
-- ### Manual Audit
-- # Using the API
-- # Using the CLI
-- ### Auto-Sync with Healing
-- # Using the API
-- # Using the CLI
-- ### Check Latest Report
-- # Using the API
-- # Check the file directly
-- ### Emergency Sync (via Autonomy)
-- ## Genesis Event Monitoring
-- ### Drift Detection Event
-- ### Audit Complete Event
-- ### Heal Complete Event
-- ## Deployment Integration
-- ## Troubleshooting
-- ### "API credentials not configured" warnings
-- ### Variables not syncing automatically
-- ### Genesis events not publishing
-- ## Autonomous Environment Synchronization Pipeline (v1.9.6L)
-- ### New Capabilities
-- #### Features
-- #### Usage
-- # Sync from Render to GitHub
-- # Export snapshot
-- # Verify parity
-- #### Genesis Events
-- #### Documentation
-- ## Next Steps for Full Automation
-- ## Summary
-- ### ✅ What Works Now
-- ### ⚠️ What Requires Manual Action
-- ### 📋 Manual Sync Checklist
-
-
-### ./V197E_IMPLEMENTATION.md
-
-- # v1.9.7e — Umbra + Netlify Integration Healing
-- ## 🌌 Overview
-- ## 🚀 What's New
-- ### 1. Netlify Validator Engine
-- ### 2. Validation Script
-- ### 3. Umbra Memory Enhancements
-- ### 4. API Endpoints
-- ### 5. CI/CD Workflow
-- ## 🧩 Architecture
-- ## ⚙️ Configuration
-- ### Environment Variables
-- # ===== Umbra Cognitive Stack v1.9.7e =====
-- # ===== Umbra + Netlify Integration v1.9.7e =====
-- # Optional: Netlify API credentials (for remote checks)
-- # Enable optional preview checks (graceful degradation if tokens missing)
-- ## 🔐 RBAC Enforcement
-- ## ✅ Testing
-- ### Running Tests
-- # Run Netlify validator tests
-- # Run all Umbra tests (including new features)
-- # Run validation script manually
-- ### Test Results
-- ## 🎯 Impact
-- ### Benefits
-- ### Cognitive Learning
-- ## 📊 Metrics & Monitoring
-- ### Validator Metrics
-- # Get validator metrics
-- ### Umbra Memory Metrics
-- # Get Umbra metrics including Netlify events
-- ## 🔄 Migration from v1.9.7d
-- ## 🧬 Commit Summary
-- ## 🧠 Admiral Summary
-- ## 📚 Related Documentation
-
-
-### ./PR_SUMMARY_V197M.md
-
-- # Pull Request Summary: v1.9.7m Total Autonomy Protocol
-- ## Overview
-- ## Changes Summary
-- ## New Components
-- ### 1. Sanctum Engine (Predictive Simulation)
-- ### 2. Forge Engine (Autonomous Repair)
-- ### 3. Elysium Guardian (Continuous Monitoring)
-- ## Genesis Bus Integration
-- ## GitHub Actions Workflow
-- ## Documentation
-- ### New Documentation Files (6 total)
-- ## Deployment Tools
-- ### Activation Script
-- ### Implementation Summary
-- ## The Autonomy Cycle
-- ## Testing Performed
-- ## Configuration
-- ### Required Environment Variables
-- # Enable engines
-- # Elysium settings
-- # Genesis integration
-- ### Optional (already set in existing configs)
-- ## Post-Merge Instructions
-- ## Breaking Changes
-- ## Dependencies
-- ## Success Criteria
-- ## Related Issues
-- ## Reviewer Notes
-- ### Key Files to Review
-- ### Testing Recommendations
-- # Test individual engines
-- # Run activation script
-- # Trigger workflow manually
-- ## Version
-
-
-### ./GENESIS_V2_0_2_ENVRECON_GUIDE.md
-
-- # Genesis v2.0.2 - EnvRecon Implementation Guide
-- ## 🚀 Overview
-- ### Key Features
-- ## 📦 What's New
-- ### Components Added
-- ## 🛠️ Installation & Setup
-- ### Prerequisites
-- # Required Python packages (already in requirements.txt)
-- ### Environment Variables
-- # GitHub Integration (for HubSync)
-- # Render Integration
-- # Netlify Integration
-- # Optional: Auto-Heal Configuration
-- ## 📘 Usage
-- ### CLI Commands
-- #### 1. Run Environment Audit
-- #### 2. Sync Environment Variables
-- # Sync to all platforms (runs audit + shows report)
-- # Sync to specific platform
-- #### 3. Trigger Auto-Healing
-- ### API Endpoints
-- #### Health Check
-- #### Get Reconciliation Report
-- #### Run Audit
-- #### Sync All Platforms
-- #### Trigger Healing
-- #### Sync GitHub Secrets
-- ### Inspector Panel UI
-- #### Features:
-- ## 🧠 Architecture
-- ### Data Flow
-- ## 🧪 Testing
-- ### Run Test Suite
-- # Run all EnvRecon tests
-- ### Expected Output
-- ## 🔐 Security Considerations
-- ### GitHub Token Permissions
-- ### Dry-Run Mode
-- ### Secret Masking
-- ## 🛡️ Guardian Safety & Recursion Control
-- ## 📊 Report Schema
-- ## 🔄 Integration with Existing Systems
-- ### Genesis Event Bus
-- ### TDE-X Deploy Pipeline
-- ### EnvSync v2.0.1a
-- ## 🎯 Best Practices
-- ## 🐛 Troubleshooting
-- ### "No report available"
-- ### GitHub sync fails
-- ### Auto-heal not working
-- ### UI returns 404
-- ## 📝 Changelog
-- ### v2.0.2 (2025-10-11)
-- ## 🚀 Next Steps
-- ## 📞 Support
-
-
-### ./V197L_IMPLEMENTATION_SUMMARY.md
-
-- # v1.9.7l — Bridge Health Record System Implementation Summary
-- ## 🎉 Implementation Complete
-- ## 📦 Deliverables
-- ### New Components
-- #### 1. `bridge_backend/metrics/health_record.py`
-- #### 2. `bridge_backend/cli/badgegen.py`
-- #### 3. `docs/badges/` Directory
-- ## ⚙️ CI Integration
-- ### Updated `.github/workflows/bridge_selftest.yml`
-- #### Step 1: Generate & Publish Health Record
-- #### Step 2: Commit Updated Badge
-- ## 📈 README Integration
-- ## 🧪 Test Coverage
-- ### Test Files Created
-- #### 1. `bridge_backend/tests/test_health_record.py` (17 tests)
-- #### 2. `bridge_backend/tests/test_badgegen.py` (16 tests)
-- ## 📊 Health Score Calculation
-- # Selftest pass rate (50%)
-- # Umbra issues (30%)
-- # Heal success rate (20%)
-- ## 🧩 Sample Badge Output
-- ### JSON Report
-- ### Badge Display
-- ## 🔒 Security & Governance
-- ## 🔄 Data Retention
-- ### Health History Management
-- ### .gitignore Rules
-- # v1.9.7l Bridge Health History (auto-generated, keep latest only)
-- ## 🧠 Benefits
-- ## 🚀 Usage Examples
-- ### Manual Health Record Generation
-- # Generate health record
-- # Generate badge
-- ### Viewing Health History
-- # List all health records
-- # View latest record
-- # View latest markdown report
-- ## ✅ Implementation Checklist
-- ## 📝 Next Steps
-- ## 🎯 Success Metrics
-
-
-### ./TOTAL_STACK_TRIAGE_VERIFICATION.md
-
-- # 🌉 SR-AIbridge v1.8.2 — Total-Stack Triage Mesh Verification Report
-- ## Executive Summary
-- ## 📋 Component Verification
-- ### 1. GitHub Actions Workflows (5/5) ✅
-- ### 2. Python Triage Scripts (6/6) ✅
-- ### 3. Documentation (2/2) ✅
-- ### 4. Diagnostic Reports (5/5) ✅
-- ## 🧪 Test Suite Verification
-- ### Test Coverage:
-- ## 🔍 Integration Verification
-- ### Workflow Integration ✅
-- ## 📊 Auto-Repair Capabilities Verified
-- ### Build Triage (build_triage_netlify.py) ✅
-- ### Runtime Triage (runtime_triage_render.py) ✅
-- ### Environment Parity Guard (env_parity_guard.py) ✅
-- ## 🎯 Signal Taxonomy Verified
-- ## 📁 File Structure Summary
-- ## ✅ Post-Merge Checklist Status
-- ## 🔬 Script Execution Validation
-- # ✅ Endpoint API Sweep
-- # ✅ Environment Parity Guard
-- # ✅ Deploy Triage (Unified Report)
-- ## 🎉 Conclusion
-- ### What This Means
-- ### Next Steps
-- ## 📝 Additional Notes
-- ### Dependencies Installed
-- ### Test Execution
-- # Run the comprehensive test suite
-- # Result: 22/22 tests passed ✅
-- ### Known Behaviors
-
-
-### ./ENGINES_ENABLE_TRUE_QUICK_REF.md
-
-- # engines_enable_true Quick Reference
-- ## 🚀 Quick Commands
-- ### Activate All Engines
-- ### Check Engine Status
-- ### Environment Management
-- # Audit environment variables
-- # Sync to GitHub
-- # Auto-heal environment drift
-- ## 📝 Environment Variables
-- # Primary activation flag
-- # Genesis framework
-- # Individual engines (all default to true)
-- ## 🔧 Engine Categories
-- ### Core Engines (6)
-- ### Super Engines (6)
-- ### Orchestration (3)
-- ### Utility Engines (15)
-- ### Integration (1)
-- ## 🔒 RBAC Roles
-- ## 📊 Activation Report Format
-- ## 🧪 Python API Usage
-- # Activate all engines
-- # Get current status
-- ## 🔍 Troubleshooting
-- ### Check if an engine is enabled
-- ### Disable a specific engine
-- ### Re-enable all engines
-- ### View activation logs
-- ## 📚 Related Documentation
-- ## ⚡ Key Features
-- ## 👑 "The Bridge stands fully awakened."
-
-
-### ./COMPREHENSIVE_SCAN_REPORT.md
-
-- # Comprehensive Repository & Environment Scan Report
-- ## ✅ STUB CLEANUP COMPLETED (October 11, 2025)
-- ### Completed Fixes:
-- ## 📊 Executive Summary
-- ## 🗑️ Files Recommended for Cleanup
-- ### 1. Duplicate Files (7 files)
-- ### 2. Redundant Documentation (38 files)
-- ### 3. Dead/Unused Files (6 files)
-- ## 🔧 Environment Variables Requiring Manual Configuration
-- ### Priority: HIGH - API Credentials (6 variables)
-- ### Priority: HIGH - Deployment Configuration (8 variables)
-- ### Priority: MEDIUM - Application Configuration (35 variables)
-- ## 🌐 Environment Sync Status (EnvRecon Engine)
-- ## 📋 Recommended Action Plan
-- ### Phase 1: Cleanup (Low Risk)
-- ### Phase 2: Environment Setup (Required)
-- ### Phase 3: Configuration Review (Important)
-- ## 📄 Detailed Reports
-- ## 🚀 Next Steps
-- ## ✅ CLEANUP COMPLETED
-- ### Cleanup Results:
-- ### Archive Location:
-- ### What Was Kept:
-
-
-### ./GENESIS_V2_QUICK_REF.md
-
-- # Genesis v2.0.0 Quick Reference
-- ## What is Genesis?
-- ## Quick Start
-- ### Enable Genesis (Default: Enabled)
-- ### Check Genesis Pulse
-- ### View System Map
-- ## Genesis Event Topics
-- ## Key Endpoints
-- ## Environment Variables
-- ## Engine Roles
-- ## Python API
-- ### Publishing Events
-- ### Subscribing to Events
-- ### Registering Engines
-- ### Health Updates
-- ## Testing
-- # Run Genesis tests
-- # Run specific test
-- # Run with coverage
-- ## Signal Flow
-- ## Health Check Response
-- ## Troubleshooting
-- ### Genesis Not Starting
-- # Check mode
-- # Enable explicitly
-- ### Missing Engines
-- # Check manifest
-- # Check health
-- ### Debug Events
-- # Set high trace level
-- # Check event history
-- ## Key Features
-- ## Files Added
-- ## Deployment
-- ### Render
-- ### Local Development
-- ## Related Docs
-
-
-### ./HXO_NEXUS_CONNECTIVITY.md
-
-- # HXO Nexus Connectivity Implementation
-- ## Overview
-- ## Architecture
-- ### Core Components
-- ### Engine Connectivity Map
-- ### Connection Topology
-- ## The "1+1=∞" Paradigm
-- ### 1. Universal Connectivity
-- ### 2. Harmonic Resonance
-- ### 3. Emergent Synergy
-- ### 4. Infinite Scaling
-- ## Core Properties
-- ## HypShard v3 Features
-- ### Quantum Adaptive Sharding
-- ### Control Channels
-- ### Policies
-- ## Security Layers
-- ### 1. RBAC Scope
-- ### 2. Quantum Entropy Hashing (QEH-v3)
-- ### 3. Rollback Protection
-- ### 4. Recursion Limit
-- ### 5. Audit Trail
-- ## Harmonic Consensus Protocol (HCP)
-- ### Consensus Modes
-- ### Consensus Flow
-- ## API Endpoints
-- ### Health & Status
-- ### Engine Management
-- ### Connectivity
-- ### Orchestration
-- ## Configuration
-- ### Environment Variables
-- # HXO Nexus
-- # HypShard v3
-- # QEH-v3
-- ## Usage Examples
-- ### Initialize the Nexus
-- # Initialize HXO Nexus
-- # Check health
-- ### Register an Engine
-- # Register a custom engine
-- ### Coordinate Multiple Engines
-- # Define an intent requiring multiple engines
-- # Coordinate execution
-- ### Use HypShard v3
-- # Create a shard
-- # Execute task on shard
-- # Get statistics
-- ### Achieve Consensus
-- # Create proposal
-- # Engines vote
-- ## Integration with Genesis Bus
-- ### Subscribed Topics
-- ### Published Events
-- ## Testing
-- # Run HXO Nexus tests
-- # Expected: 34 tests pass
-- # - Core functionality: 9 tests
-- # - Async operations: 2 tests
-- # - HypShard v3: 7 tests
-- # - Security layers: 8 tests
-- # - Connectivity paradigm: 4 tests
-- # - Consensus protocol: 4 tests
-- ## Version History
-- ## Meta Information
-- ## Future Enhancements
-
-
-### ./FORGE_DOMINION_ENVIRONMENT_INTEGRATION.md
-
-- # 🜂 Sovereign Dominion Token Forge - Environment Integration Guide
-- ## 🎯 Overview
-- ### Key Principles
-- ## 🔧 Setup Instructions
-- ### Step 1: Generate Root Key
-- ### Step 2: Set GitHub Secret
-- ### Step 3: Set GitHub Variables (Optional)
-- ### Step 4: Verify Setup
-- ## 📋 Environment Files
-- ### Main Environment Files
-- ### Example/Template Files
-- ### Placeholder Pattern
-- ## 🔄 Token Lifecycle
-- ### Minting Tokens
-- ### Token Providers
-- ### Token Validation
-- ### Auto-Renewal
-- ## 🔐 Security Features
-- ### 1. Sealed Issuance
-- ### 2. Short Lifespan
-- ### 3. Continuous Audit
-- ### 4. Governance Pulse
-- ## 📦 GitHub Actions Integration
-- ### Using the Forge Dominion Setup Action
-- ### Updated Workflows
-- ### Migration Pattern for Other Workflows
-- ## 🧪 Testing
-- ### Local Testing
-- ### Running Tests
-- # Test Token Forge module
-- # Test Quantum Dominion integration
-- ### Secret Scanner Test
-- ## 🔍 Troubleshooting
-- ### Issue: "No FORGE_DOMINION_ROOT"
-- ### Issue: "Secret detection failed"
-- ### Issue: "Token validation fails"
-- # Force renewal for specific provider
-- ### Issue: Workflow fails with token errors
-- ## 📊 Token Forge Modules
-- ## 🎯 Benefits of Token Forge
-- ### Before Token Forge
-- ### After Token Forge
-- ## 📚 Additional Resources
-- ## ✅ Checklist: Environment Cleanup Complete
-
-
-### ./DEPLOYMENT_READY_v196g.md
-
-- # SR-AIbridge v1.9.6g — DEPLOYMENT SUMMARY
-- ## 🎯 Mission Accomplished
-- ### Tagline
-- ## 📊 What Was Delivered
-- ### 6 Major Features (All Complete ✅)
-- ## 📁 Files Changed
-- ### Modified Files (4)
-- ### New Files (3)
-- ## 🧪 Test Coverage
-- ### Test Results Summary
-- ### Test Categories
-- ## 🔧 Technical Highlights
-- ### New Functions (10)
-- ### Configuration Constants
-- ## 🎯 Expected Runtime Behavior
-- ### Before v1.9.6g (Noisy)
-- ### After v1.9.6g (Silent)
-- ## 📂 Directory Structure
-- ## 🚀 Deployment Instructions
-- ### 1. Merge the PR
-- # Review PR on GitHub
-- # Approve and merge to main
-- ### 2. Deploy to Render
-- # Render will auto-deploy on merge
-- # Or manually trigger deploy from Render dashboard
-- ### 3. Observe Adaptive Learning
-- ### 4. Monitor Results
-- # Check daily reports
-- # Check boot history
-- # Verify no false tickets
-- ## 🧠 How It Works
-- ### Startup Sequence (Adaptive)
-- ### Learning Cycle
-- ## 💡 Key Insights
-- ### What Makes This Different
-- ## 📚 Documentation
-- ## ✅ Quality Checklist
-- ## 🎓 Lessons Embodied
-- ## 🌟 Final Notes
-- ## 🚀 Ready for Deployment
-
-
-### ./POSTGRES_MIGRATION.md
-
-- # PostgreSQL Migration Guide for SR-AIbridge
-- ## Overview
-- ## Quick Start
-- ### 1. Create PostgreSQL Database on Render
-- ### 2. Initialize PostgreSQL Schema
-- # Using the DATABASE_URL from Render
-- ### 3. Update Environment Variables
-- # Change from SQLite
-- ### 4. Deploy and Verify
-- # Redeploy your service (Render will auto-deploy on git push)
-- # Verify connection
-- ## Schema Details
-- ### Tables Created
-- #### Core Tables
-- #### Partitioned Tables (Monthly)
-- #### Supporting Tables
-- #### Views
-- ### Automatic Features
-- ## Monthly Maintenance
-- ### Automated Maintenance (Recommended)
-- ### Manual Maintenance
-- ## Secure Data Relay Protocol
-- ### Overview
-- ### Setup
-- # SMTP Configuration (Gmail with App Password)
-- ### Usage in Code
-- # Before deleting data
-- # Then perform deletion
-- ### Role-Based Retention
-- ### Verify Archives
-- ## Migration from SQLite
-- ### Export Existing Data
-- # Export SQLite data
-- # Or use Python script
-- ### Import to PostgreSQL
-- # After running init.sql, import data
-- # Note: You may need to adjust column mappings
-- # For simple data migration
-- ## Performance Tuning
-- ### Connection Pooling
-- # In bridge_backend/bridge_core/db/db_manager.py
-- ### Monitoring Queries
-- ### Index Analysis
-- ## Troubleshooting
-- ### Connection Refused
-- ### Permission Denied
-- ### Extension Not Available
-- ### Partition Not Found
-- ## Backup and Recovery
-- ### Automated Backups (Render)
-- ### Manual Backup
-- # Full database dump
-- # Schema only
-- # Data only
-- ### Restore
-- # Restore full backup
-- # Restore specific table
-- ## Next Steps
-- ## Support
-
-
-### ./ENVRECON_UNFIXABLE_VARS.md
-
-- # Variables That Cannot Be Auto-Fixed - Quick Reference
-- ## Summary
-- ## Categories of Unfixable Variables
-- ### 1. API Credentials (Must Be Configured First)
-- # Render API
-- # Netlify API
-- # GitHub API
-- ### 2. Platform-Specific Variables (Manual Sync Required)
-- #### Add to Render:
-- #### Add to Netlify:
-- #### Add to GitHub:
-- ## Current Missing Variables Count
-- ## To Get Accurate Missing Variables List
-- ## Auto-Heal Capabilities
-- ### What Auto-Heal Can Do Now:
-- ### What Auto-Heal Cannot Do Yet:
-- ## Workaround: Manual Sync Process
-- ## Genesis Events for Monitoring
-- ## Future Enhancement: Full Auto-Sync
-- ## Contact for Implementation
-- ## Quick Commands
-- # Check if API credentials are configured
-- # Run audit
-- # Get report
-- # Trigger auto-heal (reports intent only)
-- # Check Genesis health
-- ## Documentation
-
-
-### ./V197J_IMPLEMENTATION_SUMMARY.md
-
-- # v1.9.7j Implementation Summary
-- ## Bridge Autonomy Diagnostic Pulse + Auto-Heal Trigger
-- ## 🎯 Overview
-- ## 📦 Deliverables
-- ### Core Components
-- ### Infrastructure
-- ### Documentation
-- ### Testing
-- ## 🔧 Technical Implementation
-- ### Self-Test Controller
-- ### Auto-Heal Trigger
-- ### Genesis Integration
-- ### CLI Integration
-- ## 🧪 Testing & Verification
-- ### Test Coverage
-- ### Verification Results
-- ### Integration Testing
-- ## 📊 Performance Metrics
-- ## 🔒 Security & Governance
-- ### RBAC Integration
-- ### Truth Engine Certification
-- ### Audit Trail
-- ## 🚀 Continuous Operation
-- ### Automatic Schedule
-- ### Failure Recovery
-- ## 📈 Report Schema
-- ### Summary Structure
-- ### Event Types
-- ### Status Values
-- ## 🎓 Usage Examples
-- ### Basic Self-Test
-- ### Disable Auto-Healing
-- ### View Latest Report
-- ### Check Specific Engine
-- ### Count Failed Engines
-- ## 🔍 Environment Configuration
-- ### Self-Test Configuration
-- ### Genesis Configuration
-- ## 📚 Documentation Index
-- ## ✅ Summary
-- ## 🚀 Next Steps
-
-
-### ./BRH_IMPLEMENTATION_SUMMARY.md
-
-- # Bridge Runtime Handler - Implementation Summary
-- ## 🎯 Executive Summary
-- ### Key Achievement
-- ## ✅ Phase 1 Completion Status
-- ## 📦 Deliverables
-- ### Core Components
-- ### Testing
-- ## 🏗️ Architecture
-- ### Component Diagram
-- ### Integration Points
-- ## 🔐 Security Features
-- ### Token Management
-- ### Cryptographic Attestation
-- ### Network Security
-- ## 📊 Metrics & Performance
-- ### Test Results
-- ### Code Quality
-- ## 🚀 Usage Examples
-- ### Quick Start
-- # 1. Initialize BRH
-- # 2. Validate manifest
-- # 3. Check status
-- # 4. Deploy via GitHub
-- ### Manual Runtime
-- # Set Forge key
-- # Run runtime
-- ## 📋 Next Steps
-- ### Phase 2: GitHub Integration (Planned)
-- ### Phase 3: Federation Linking (Planned)
-- ### Phase 4: UI Integration (Planned)
-- ## 🎓 Lessons Learned
-- ### What Went Well
-- ### Challenges Overcome
-- ### Best Practices Established
-- ## 🤝 Integration with Existing Systems
-- ### Successfully Integrated With
-- ### Prepared For Integration
-- ## 📚 Resources
-- ### Documentation
-- ### Code Files
-- ## ✨ Conclusion
-
-
-### ./FINAL_VERIFICATION_REPORT.md
-
-- # Final Verification Report - Render Removal Complete
-- ## Executive Summary
-- ## Verification Results
-- ### ✅ Code Review
-- ### ✅ Security Scan (CodeQL)
-- ### ✅ Backend Integration
-- ### ✅ BRH Setup
-- ### ✅ Configuration Updates
-- ### ✅ Files Removed
-- ## Scan Statistics
-- ### Before Migration
-- ### After Migration
-- ### Remaining Render References (Non-Critical)
-- ## Test Results
-- ### Import Test
-- # Result: ✅ Backend OK
-- ### Token Forge Test
-- # Result: ✅ Token Forge OK
-- ### Backend Boot Test
-- # Backend starts successfully
-- # Genesis bus initializes
-- # All routes load (except missions - pre-existing issue)
-- # Forge integration active
-- ## Deployment Readiness
-- ### Environment Variables (Production)
-- # BRH Backend
-- # Frontend (Netlify)
-- # Backend
-- ### Deployment Commands
-- # Start BRH
-- # Deploy Frontend
-- # Deploy to Netlify with VITE_API_BASE set
-- ## Risk Assessment
-- ### Low Risk
-- ### Mitigation for Remaining References
-- ## Recommendations
-- ## Sign-off
-- ### Files Created
-- ### Commits Made
-
-
-### ./STEWARD_QUICK_REF.md
-
-- # Env Steward v1.9.6l — Quick Reference
-- ## Quick Start
-- # Enable Steward
-- # Run the drift report script
-- # Or view the summary only
-- ## Overview
-- ## Security Model
-- ### Admiral-Tier Lock
-- ### Default Deny
-- ## Configuration
-- ### Environment Variables
-- # Engine toggles
-- # Provider toggles (safe to leave false)
-- # Provider identifiers (non-secret)
-- # Provider API tokens (secret - leave blank unless enabling write-mode)
-- ## API Endpoints
-- ### 1. Get Status
-- ### 2. Compute Diff
-- ### 3. Create Plan
-- ### 4. Issue Capability Token (Admiral Only)
-- ### 5. Apply Plan (Admiral Only, Write Mode Required)
-- ## Usage Flow
-- ### Read-Only Mode (Default)
-- ### Write Mode (Admiral Only)
-- ## Genesis Events
-- ## Testing
-- ### Unit Tests
-- ### Integration Test (Manual)
-- # 1. Check status
-- # 2. Check diff
-- # 3. Create plan
-- ### Permission Tests
-- # Non-admiral should be denied
-- # Expected: 403 {"detail": "steward_admiral_only"}
-- # Admiral should succeed
-- # Expected: 200 {"enabled": true, ...}
-- ## Security Guarantees
-- ## Troubleshooting
-- ### "steward_admiral_only" error
-- ### "Steward engine is disabled"
-- ### "Write mode disabled"
-- ### "Missing X-Bridge-Cap header"
-- ### Adapter errors
-- ## Architecture
-- ## Best Practices
-- ## Next Steps
-
-
-### ./RENDER_REMOVAL_COMPLETE.md
-
-- # Render Removal - Migration to BRH Complete
-- ## Summary
-- ## Changes Made
-- ### 1. Frontend Configuration Updates ✅
-- ### 2. Backend Configuration Updates ✅
-- # Old CORS
-- # New CORS (BRH-focused)
-- ### 3. Files Removed ✅
-- ### 4. Verification Status ✅
-- ## Architecture
-- ### New Deployment Flow
-- ## Environment Variables
-- ### Frontend (.env or environment)
-- # BRH Backend URL (update for production deployment)
-- # Or for production BRH deployment
-- # VITE_API_BASE=https://your-brh-domain.com
-- ### Backend (.env or environment)
-- # Database
-- # CORS (Netlify only, no Render)
-- # BRH Backend URL (for heartbeat and health checks)
-- # Forge Dominion
-- ## Remaining References (Non-Critical)
-- ### Documentation/Examples
-- ### Adapters (Backward Compatibility)
-- ## How to Deploy
-- ### Local Development
-- # 1. Start BRH
-- # 2. Access frontend
-- # Frontend will connect to http://localhost:8000
-- ### Production Deployment
-- # 1. Set environment variables
-- # 2. Run BRH
-- # 3. Deploy frontend to Netlify with:
-- # VITE_API_BASE=https://your-brh-domain.com
-- ## Testing
-- ### Quick Test
-- # 1. Verify backend imports
-- # 2. Start backend
-- # 3. Test health endpoint
-- ### Frontend Build Test
-- ## Migration Checklist
-- ## Next Steps (Optional)
-- ## Conclusion
-
-
-### ./doctrine-vault.md
-
-- # Bridge Armada Doctrine Vault
-- ## Agent Origin Stories
-- ### Git (GitHub Copilot): The Shipwright of the Bridge Armada
-
-
-### ./BRH_DEPLOYMENT_GUIDE.md
-
-- # Bridge Runtime Handler (BRH) - Deployment Guide
-- ## Architecture Overview
-- ## Components
-- ## Quick Start
-- ### 1. Install Dependencies
-- ### 2. Set Environment Variables
-- # Generate a secure seal
-- # Compute HMAC signature
-- # Set the Forge Dominion Root
-- ### 3. Run BRH
-- ### 4. Run BRH API Server (Optional)
-- # Install additional dependencies
-- # Run the API server
-- ## Configuration
-- ### bridge.runtime.yaml
-- ## Security
-- ### HMAC Signature Verification
-- ### Token Minting
-- ### Allow Unsigned Mode
-- ## GitHub Actions Integration
-- ### Setup GHCR
-- ## Netlify Integration
-- ### Deploy Webhook
-- ## Frontend Control Dashboard
-- # In .env or Vite config
-- ## Systemd Service (Production)
-- ## API Endpoints
-- ### Security Configuration
-- ### Image Name Validation
-- ## Troubleshooting
-- ### Container won't start
-- ### Health check failing
-- ### Signature verification failed
-- ### Docker network errors
-- ## Migration from Render
-- ## Next Steps (Phase 2)
-- ## Support
-
-
-### ./TDE_X_DEPLOYMENT_GUIDE.md
-
-- # TDE-X v1.9.7a Deployment Guide
-- ## Overview
-- ## Key Features
-- ## Architecture
-- ### Shards
-- ### Components
-- ## Endpoints
-- ### Health Checks
-- #### `/health/live`
-- #### `/health/ready`
-- #### `/health/diag`
-- ### Deploy Parity
-- #### `/api/diagnostics/deploy-parity`
-- ## Environment Variables
-- ### Required
-- ### Optional
-- ## Render Configuration
-- ### Start Command
-- ### Health Check Path
-- ### Pre-Deploy Command (Optional)
-- ## Local Testing
-- ### 1. Install Dependencies
-- ### 2. Set Environment Variables
-- ### 3. Run Server
-- ### 4. Test Endpoints
-- # Test liveness
-- # Test readiness
-- # Test diagnostics
-- # Test deploy parity
-- ## Netlify (Frontend) Integration
-- ## Background Tasks
-- ## Rollback
-- # Temporary rollback to direct uvicorn
-- ## What This Solves
-- ## Monitoring
-- ### Queue Depth
-- ### Shard Status
-- ### Tickets
-- ## Troubleshooting
-- ### Issue: Server won't start
-- ### Issue: High queue depth
-- ### Issue: Shard failures
-
-
-### ./DEPLOYMENT_READY_v196f.md
-
-- # ✅ SR-AIbridge v1.9.6f — DEPLOYMENT READY
-- ## 🎯 What This Release Does
-- ## 🚀 Quick Deploy
-- ### On Render (Auto-deploy enabled)
-- ### Expected Result
-- ## 📊 What Changed
-- ### Modified Files (4)
-- ### New Files (4)
-- ## 🧪 Validation Status
-- ### Test Results
-- ### Deployment Verification
-- ## 📚 Key Features
-- ### 1. Adaptive Port Binding
-- # Prebind monitor with 100ms polling
-- ### 2. Deferred Heartbeat
-- # Startup sequence (main.py)
-- ### 3. Predictive Watchdog
-- ### 4. Self-Healing Diagnostics
-- ## 🔍 Monitoring
-- ### Log Messages to Watch
-- #### Good ✅
-- #### Warnings ⚠️
-- #### Errors ❌ (Should NOT appear)
-- ## 🧩 Migration Notes
-- ### From v1.9.6b → v1.9.6f
-- ### What Users Will Notice
-- ## 🎖️ Success Criteria
-- ## 📖 Documentation
-- ## 🚦 Rollback Plan
-- ## 🌟 Next Steps
-- ## 💬 Support
-
-
-### ./V196F_QUICK_REF.md
-
-- # v1.9.6f Quick Reference
-- ## 🎯 What This Release Fixes
-- ## 🔧 Key Features
-- ### 1️⃣ Adaptive Port Binding
-- ### 2️⃣ Deferred Heartbeat
-- ### 3️⃣ Predictive Watchdog
-- ## 📊 Startup Sequence
-- ## 🧪 Quick Test
-- # Test adaptive port resolution
-- # Expected output:
-- # [PORT] Resolved immediately: 10000
-- # [BOOT] Adaptive port bind: ok on 0.0.0.0:10000
-- # [STABILIZER] Startup latency X.XXs (tolerance: 6.0s)
-- # [HEARTBEAT] ✅ Initialized
-- ## 📁 Files Changed
-- ## ✅ Success Criteria
-- ## 🚀 Deploy Command
-- # Render auto-deploys via render.yaml
-- # Start command: bash scripts/start.sh
-- # Which runs: uvicorn bridge_backend.main:app --host 0.0.0.0 --port $PORT
-- ## 📈 Monitoring
-- ## 🔗 Related Docs
-
-
-### ./FULL_SCAN_REPORT_2025.md
-
-- # Full System Scan Report - November 2025
-- ## ✅ Executive Summary
-- ## 📊 Detailed Scan Results
-- ### 1. ✅ Quantum Dominion Security
-- ### 2. ✅ API Triage
-- ### 3. ✅ Preflight
-- ### 4. ✅ Umbra Triage
-- ### 5. ✅ Build Triage (Netlify)
-- ### 6. ✅ Endpoint API Sweep
-- ### 7. ✅ Environment Parity Guard
-- ### 8. ✅ Runtime Triage (Render)
-- ## 🔍 Workflow Verification
-- ### ✅ Triage Workflows (7/7)
-- ### ✅ Security Workflows (1/1)
-- ### ✅ Deployment Workflows (2/2)
-- ## 🔧 Script Verification
-- ### GitHub Scripts (8/8)
-- ### Backend Scripts (3/3)
-- ## 🐍 Python Module Verification
-- ## 📈 Scan Statistics
-- ## ⚠️ Known Issues & Expected Behaviors
-- ### Expected in Development/CI Environment:
-- ### Informational Findings:
-- ## ✅ Recommendations
-- ### Immediate Actions: None Required
-- ### Optional Enhancements:
-- ## 📋 Compliance Matrix
-- ## 🎯 Conclusion
-- ### Next Steps
-
-
-### ./V196Y_IMPLEMENTATION.md
-
-- # v1.9.6y Implementation Complete ✅
-- ## Overview
-- ## Changes Made
-- ### 1. HXO Nexus Initialization Fix ✅
-- ### 2. Netlify Preview Hardening ✅
-- ### 3. Deep Diagnostics CLI ✅
-- ## Usage
-- ### Run Diagnostics
-- ### Generate Netlify Artifacts
-- ### Build for Netlify
-- ## Verification
-- # 34 passed in 0.52s
-- # ✅ HXO Nexus v1.9.6p 'Ascendant' is fully operational!
-- ## What's Fixed
-- ### HXO Nexus
-- ### Netlify Previews
-- ### Diagnostics
-- ## Genesis Topics
-- ## Next Steps
-- ## Notes
-
-
-### ./BLUEPRINT_QUICK_REF.md
-
-- # Blueprint Engine - Quick Reference
-- ## API Endpoints
-- # Draft blueprint from brief
-- # Commit blueprint to mission (creates agent jobs)
-- # Get blueprint by ID
-- # List all blueprints (filter by captain)
-- # Delete blueprint (Admiral only, with relay archival)
-- # Get agent jobs for mission
-- ## Frontend Components
-- ## Database Models
-- # Blueprint (plan storage)
-- # Agent Job (task execution)
-- ## PostgreSQL Setup
-- # Initial setup (one-time)
-- # Monthly maintenance (automated)
-- ## Environment Variables
-- # Backend
-- # Frontend
-- ## RBAC Matrix
-- ## Test Commands
-- # Run unit tests
-- # Run API tests
-- # All tests
-- ## Example Workflow
-- # 1. Draft blueprint
-- # → Returns blueprint with ID 1
-- # 2. Commit to mission
-- # → Creates agent jobs
-- # 3. View jobs
-- # → Returns list of agent jobs with status
-- # 4. Monitor via WebSocket
-- # ws://localhost:8000/ws/mission/1
-- # → Real-time job status updates
-- ## Customization
-- # Extend planner rules
-- # bridge_backend/bridge_core/engines/blueprint/planner_rules.py
-- # Plug in LLM
-- # bridge_backend/bridge_core/engines/blueprint/blueprint_engine.py
-- ## Common Issues
-
-
-### ./STEWARD_JSON_FEATURE_COMPLETE.md
-
-- # 🎉 Feature Complete: Steward Environment Drift JSON Reporting
-- ## What Was Delivered
-- ## ✅ Implementation Summary
-- ### Changes Made
-- ## 🚀 How to Use
-- ### Quick Start
-- # Enable Steward
-- # Get the JSON report
-- ### API Endpoint
-- ### Python Code
-- ## 📊 JSON Report Format
-- ## ✨ Features
-- ## 🛡️ Security
-- ## 📝 Current State
-- ## 🎯 Next Steps
-- ### Now (Read-Only Mode)
-- ### Later (When Ready for Write Mode)
-- ## 📚 Documentation
-- ## 🎉 Summary
-
-
-### ./V197J_QUICK_REF.md
-
-- # v1.9.7j Quick Reference — Bridge Autonomy Diagnostic Pulse
-- ## 🚀 Quick Start
-- ### Run Self-Test Manually
-- # With auto-healing (default)
-- # Without auto-healing
-- ### View Latest Report
-- ### Check Specific Engine
-- ## 📊 Environment Variables
-- ## 🧩 Architecture
-- ### Components
-- ### Healing Strategies
-- ## 📋 Genesis Event Topics
-- ## 📊 Expected Metrics
-- ## 🔍 Common Tasks
-- ### Check Test Status
-- ### Count Failed Engines
-- ### List Healing Events
-- ### Get Healing Statistics
-- ## 🔒 Security & Governance
-- ## 🧪 Testing
-- ### Run Self-Test Tests
-- ### Validate Workflow
-- ## 📚 Documentation
-- ## 🛠️ Troubleshooting
-- ### Self-Test Disabled
-- ### Auto-Heal Not Working
-- ### Increase Retry Attempts
-- ## 🔄 GitHub Actions Integration
-- ## 📈 Report Schema
-- ## ⚡ Performance Tips
-- ## 🎯 Key Features
-
-
-### ./README_RELEASES.md
-
-- # SR-AIbridge — Release Intelligence & Self-Heal
-- ## What's new in v1.9.6f (Latest)
-- ### Migration from v1.9.6b → v1.9.6f
-- ### Expected Logs
-- ### Health Check
-- ## What's new in v1.9.6b
-- ## One-time checklist
-- ## Health verify
-- ## Why this permanently fixes your two recurring pains
-- ### 1. Render port scans timing out
-- ### 2. Heartbeat sometimes "disabled"
-- ### 3. "models" import/path errors
-- ### 4. DB missing tables after deploy
-- ### 5. Self-heal + learn
-- ## How to merge
-
-
-### ./BRH_CONSENSUS_QUICK_REF.md
-
-- # BRH Consensus & Leader Election - Quick Reference
-- ## 🚀 Quick Start
-- ### Single Node Setup
-- ### Multi-Node Setup
-- ## 📋 New Modules
-- ## 🎯 Key Features
-- ### Leader Election
-- ### Container Ownership
-- ### Zero-Downtime Handover
-- ## 🔌 Forge Endpoints
-- ### POST /federation/consensus
-- ### GET /federation/leader
-- ## 🛡️ API Gating
-- ### Deploy Endpoint
-- # Leader node - accepts deploy
-- # Response: {"status": "restarted", "image": "myapp:latest"}
-- # Witness node - rejects deploy
-- # Response: {"status": "ignored", "reason": "not-leader"}
-- ## 🔧 Testing
-- ### Run Unit Tests
-- ### Run Integration Tests
-- ## 📊 Logging
-- ### Heartbeat Logs
-- ### Consensus Logs
-- ### Role Transition Logs
-- ## ⚙️ Configuration Files
-- ### bridge.runtime.yaml
-- ### Environment Variables
-- ## 🔍 Troubleshooting
-- ### Check Current Leader
-- ### Check Node Role
-- ### Verify Consensus Working
-- # Watch logs for consensus broadcasts
-- ### Container Ownership Check
-- # List containers with ownership labels
-- ## 📚 Full Documentation
-
-
-### ./GENESIS_LINKAGE_QUICK_REF.md
-
-- # Genesis Linkage Quick Reference - UNIFIED EDITION
-- ## v1.9.7c Feature Summary
-- ### Engine Count: 20
-- ## Key Components
-- ## Engine Categories
-- ### Core Infrastructure (6)
-- ### Super Engines (6) - Coordinated by Leviathan
-- ### Orchestration (1)
-- ### Utility Engines (7)
-- ## Quick Start
-- ### Enable Linkage
-- ### Test Endpoints
-- # Check status
-- # Get manifest
-- # Initialize linkages
-- ## API Endpoints
-- ## Event Bus Topics (33 Total)
-- ### Core Topics (5)
-- ### Super Engine Topics (12)
-- ### Orchestration Topics (2)
-- ### Utility Topics (14)
-- ## Engine Dependencies
-- ## Python API
-- # Load manifest (20 engines)
-- # Get specific engine
-- # Get dependencies
-- # Validate integrity
-- ### Working with Adapters
-- # Super Engines
-- # Returns: ['calculuscore', 'qhelmsingularity', 'auroraforge', ...]
-- # Utility Engines
-- # Returns: ['creativity', 'indoctrination', 'screen', ...]
-- # Leviathan
-- ## Testing
-- # Run validation script
-- # Run all linkage tests
-- # Run deployment readiness check
-- # Run integration test
-- ## Signal Flow
-- ## Configuration
-- ## Files Changed
-- ### New Files (3 adapters + 2 docs)
-- ### Modified Files (3)
-- ## Quick Validation
-- # Check all engines loaded
-- # Expected: 20
-- # Check super engines
-- # Expected: 6
-- # Check utility engines  
-- # Expected: 7
-- # Check Leviathan coordination
-- # Expected: 6
-- ## Summary Stats
-- ## Files Added
-- ## Troubleshooting
-- ## Next Steps
-
-
 ### ./SECURITY.md
 
 - # SR-AIbridge — Security & Responsible Disclosure
@@ -5801,41 +718,6 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## CI/CD & Dependency Management
 - ## Contributors & Pre-commit
 - ## Contact & Escalation
-
-
-### ./SCAN_REPORT_RENDER_REMOVAL.md
-
-- # Repository Scan Report - Render Removal Readiness
-- ## Summary
-- ## Issues
-- ## Information
-- ## Render References by File
-- ### bridge_backend/bridge_core/engines/envsync/providers/render.py
-- ### bridge_backend/diagnostics/full_scan_report.json
-- ### bridge_backend/engines/envrecon/core.py
-- ### bridge_backend/engines/steward/adapters/render_adapter.py
-- ### bridge_backend/hooks_triage_report.json
-- ### bridge_backend/scripts/deploy_diagnose.py
-- ### bridge_backend/scripts/endpoint_triage.py
-- ### bridge_backend/scripts/env_sync_monitor.py
-- ### bridge_backend/scripts/generate_sync_badge.py
-- ### bridge_backend/scripts/hooks_triage.py
-- ### bridge_backend/tests/test_runtime_guards.py
-- ### bridge_backend/tests/test_total_stack_triage.py
-- ### bridge_backend/tools/firewall_intel/analyze_firewall_findings.py
-- ### bridge_backend/tools/firewall_intel/fetch_firewall_incidents.py
-- ### bridge_backend/tools/network_diagnostics/check_copilot_access.py
-- ### bridge_backend/tools/parity_engine.py
-- ### netlify.toml
-- ### scripts/check_env_parity.py
-- ### scripts/firewall_watchdog.py
-- ### scripts/integrity_audit.py
-- ### scripts/repair_netlify_env.py
-- ### scripts/synthesize_netlify_artifacts.py
-- ### scripts/validate_copilot_env.py
-- ### test_endpoints_full.py
-- ### tests/test_anchorhold_protocol.py
-- ### tests/test_v196g_features.py
 
 
 ### ./scripts/README.md
@@ -5890,6 +772,17 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ### Environment Variables
 - ## 🆘 Getting Help
 - ## 📚 Related Documentation
+
+
+### ./docs/ETHICS_IMPACT_TEMPLATE.md
+
+- # Ethics Impact Statement (template) — include in PRs for major features
+- ## 1) Description
+- ## 2) Potential Misuses
+- ## 3) Mitigations & Controls
+- ## 4) Data Sensitivity
+- ## 5) Federation / External Dependencies
+- ## 6) Approval
 
 
 ### ./docs/HXO_ENGINE_MATRIX.md
@@ -6335,6 +1228,34 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## 🔗 Related Documentation
 
 
+### ./docs/FORGE_DOMINION_DEPLOYMENT_GUIDE.md
+
+- # 🜂 Forge Dominion — Environment Sovereignty Deployment Guide (v1.9.7s)
+- ## ⚙️ Objective
+- ## 🧩 Architecture: Dominion Token Engine
+- ## 🧬 Flow Summary
+- ## 🧠 Setup (First-Time Configuration)
+- ### 🜂 GitHub Variables
+- ## 🚀 Deployment Sequence
+- ### 1️⃣ Bootstrap
+- ### 2️⃣ Pre-Deploy
+- ### 3️⃣ Validate & Scrub
+- ### 4️⃣ CI Verification
+- ## 🔒 Security Guarantees
+- ## 🧾 Test Plan
+- ## 🖼 Visual Pulse Integration
+- ## 🛡 Governance Addendum (v1.9.7s+)
+- ## 🧾 Changelog
+- ## 🕊 Lore Summary
+- ## ✅ Seal of Dominion: Environment Sovereignty Achieved
+- ## 📚 File Structure
+- ## 🔧 Troubleshooting
+- ### Issue: Bootstrap fails with "No FORGE_DOMINION_ROOT"
+- ### Issue: scan_envs.py finds secrets
+- ### Issue: Token validation fails
+- ## 🎯 Next Steps
+
+
 ### ./docs/GITHUB_ENVHOOK.md
 
 - # GitHub Environment Hook - Autonomous Sync Trigger
@@ -6504,6 +1425,87 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Version History
 
 
+### ./docs/BUILD_DOSSIER.md
+
+- # SR-AIbridge Build Dossier
+- ## Step-by-Step Rebuild Guide from Scratch
+- ## 📋 Prerequisites Checklist
+- ## 🎯 Phase 1: Environment Setup (5 minutes)
+- ### Step 1.1: Create Project Directory
+- # Create and navigate to project directory
+- # Initialize git repository
+- ### Step 1.2: Create Directory Structure
+- # Create main directories
+- ### Step 1.3: Create Environment Files
+- # Database Configuration
+- # Server Configuration
+- # Security
+- # Features
+- # Logging
+- ## 🐍 Phase 2: Backend Foundation (15 minutes)
+- ### Step 2.1: Install Python Dependencies
+- ### Step 2.2: Create Database Models
+- ### Step 2.3: Create Database Connection
+- ### Step 2.4: Create Pydantic Schemas
+- # Guardian Schemas
+- # Agent Schemas
+- # Mission Schemas
+- # Health Response
+- ### Step 2.5: Create Main Application
+- # Create FastAPI app
+- # CORS Middleware
+- # Startup event
+- # Health Endpoints
+- # Agent Endpoints
+- # Mission Endpoints
+- # Guardian Endpoints
+- # Root endpoint
+- ### Step 2.6: Test Backend
+- # Start the backend
+- # In another terminal, test the API
+- ## ⚛️ Phase 3: Frontend Foundation (15 minutes)
+- ### Step 3.1: Initialize React Project
+- ### Step 3.2: Install Additional Dependencies
+- ### Step 3.3: Create API Client
+- ### Step 3.4: Create Main Dashboard Component
+- ### Step 3.5: Create App Component
+- ### Step 3.6: Add Basic Styling
+- ### Step 3.7: Test Frontend
+- # Start the frontend
+- # Open browser to http://localhost:5173
+- ## 🔧 Phase 4: Add Core Features (30 minutes)
+- ### Step 4.1: Add WebSocket Support (Backend)
+- ### Step 4.2: Add WebSocket Support (Frontend)
+- ### Step 4.3: Add Agent Creation Form
+- ## 🚀 Phase 5: Deployment Setup (20 minutes)
+- ### Step 5.1: Create Netlify Configuration
+- ### Step 5.2: Create Render Configuration
+- ### Step 5.3: Create GitHub Actions Workflow
+- ## ✅ Phase 6: Verification & Testing (10 minutes)
+- ### Step 6.1: Backend Tests
+- # Test all endpoints
+- # Create test agent
+- # Create test mission
+- ### Step 6.2: Frontend Tests
+- ### Step 6.3: System Integration Test
+- # Run both backend and frontend simultaneously
+- # Terminal 1:
+- # Terminal 2:
+- # Verify:
+- # - Frontend connects to backend
+- # - Health status displays
+- # - WebSocket updates work
+- # - Data flows correctly
+- ## 📊 Verification Checklist
+- ## 🎓 Next Steps
+- ## 🚨 Troubleshooting
+- ### Backend won't start
+- ### Frontend won't build
+- ### CORS errors
+- ### Database errors
+- ## 📖 Reference
+
+
 ### ./docs/UMBRA_LATTICE_QUICK_START.md
 
 - # Umbra Lattice Memory - Quick Reference
@@ -6618,6 +1620,51 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - # Or add to startup script
 - # This boots Elysium Guardian instantly
 - ### Related
+
+
+### ./docs/BRH_GUIDE.md
+
+- # 🧠 Bridge Runtime Handler (BRH) Guide
+- ## 🌟 Overview
+- ### Key Principles
+- ## 🏗️ Architecture
+- ## 🚀 Quick Start
+- ### Prerequisites
+- ### Step 1: Configure Runtime Manifest
+- ### Step 2: Initialize Runtime Locally
+- # Set Forge root key
+- # Run runtime handler
+- ### Step 3: Deploy via GitHub Actions
+- ## 📋 Configuration Reference
+- ### Runtime Manifest Schema
+- #### `runtime.auth`
+- #### `runtime.containers`
+- #### `runtime.federation`
+- #### `security.attestation`
+- ## 🔐 Security
+- ### Token Lifecycle
+- ### Forge Dominion Integration
+- ### Attestation
+- ## 🌐 Federation
+- ### μ-Harmonic Lattice Integration
+- # Register node in lattice
+- ### Multi-Node Deployment
+- ## 📊 Monitoring
+- ### Health Endpoint
+- ### Logs
+- ### Active Nodes Registry
+- ## 🔧 Troubleshooting
+- ### Token Validation Failures
+- ### Container Won't Start
+- ### Federation Sync Issues
+- ## 🛣️ Roadmap
+- ### ✅ Phase 1: Core Runtime (Current)
+- ### 🚧 Phase 2: GitHub Integration (Next)
+- ### 📅 Phase 3: Federation Linking
+- ### 🔮 Phase 4: UI Integration
+- ## 📚 Additional Resources
+- ## 🤝 Contributing
+- ## 📄 License
 
 
 ### ./docs/GITHUB_ENVHOOK_INTEGRATION.md
@@ -6818,6 +1865,62 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Getting Help
 
 
+### ./docs/BLUEPRINT_ENGINE_GUIDE.md
+
+- # Blueprint Engine + Mission Log v2 - Usage Guide
+- ## Overview
+- ## Architecture
+- ### Backend Components
+- ### Frontend Components
+- ## Quick Start
+- ### Backend Setup
+- # Health check
+- # List blueprints (empty initially)
+- ### Frontend Setup
+- ## API Usage
+- ### 1. Draft a Blueprint
+- ### 2. Commit Blueprint to Mission
+- ### 3. Get Mission Jobs
+- ### 4. Delete Blueprint (Admiral Only)
+- ## Frontend Usage
+- ### Using BlueprintWizard
+- ### Using MissionLogV2
+- ## PostgreSQL Partitioning
+- ### Initial Setup
+- ### Monthly Maintenance
+- ## RBAC Permissions
+- ## Customization
+- ### Extending Planner Rules
+- ### Plugging in an LLM
+- ## Testing
+- ### Run Backend Tests
+- ### Manual Testing
+- ## Troubleshooting
+- ### Backend Issues
+- ### Frontend Issues
+- ### Database Issues
+- ## Production Deployment
+- ### Environment Variables
+- ### Render Deployment
+- ## Support
+
+
+### ./docs/PHOENIX_COMPARISON.md
+
+- # Phoenix vs Current Implementation - Comparison Report
+- ## 🔥 Phoenix Protocol Progress
+- ### ✅ Implemented Features
+- ### 📊 API Endpoint Comparison
+- ### 🎯 Testing Results
+- ### 📁 Directory Structure Comparison
+- ### 🔍 Key Differences Identified
+- ### 📝 Documentation Accuracy
+- ### 🚀 Next Steps for Phoenix
+- ### 💡 Recommendations
+- ### 📊 Metrics Summary
+- ### 🎯 Conclusion
+
+
 ### ./docs/GITHUB_ENVHOOK_QUICK_REF.md
 
 - # GitHub Environment Hook - Quick Reference
@@ -6889,6 +1992,49 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - # Run repair in scan-only mode
 - ### ✅ Success Criteria
 - ### 🎯 Version
+
+
+### ./docs/BRH_CONSENSUS_ARCHITECTURE.md
+
+- # BRH Consensus System Architecture
+- ## System Overview
+- ## Component Interactions
+- ### 1. Heartbeat Flow (Every 60s)
+- ### 2. Consensus Election Flow (Every 180s)
+- ### 3. Leader Polling Flow (Every 10s)
+- ### 4. Deploy Hook Flow
+- ## State Transitions
+- ### Node Role States
+- ### Container Ownership Transfer
+- ## Data Structures
+- ### role.py State
+- ### consensus.py Peers
+- ### Container Labels
+- ## Failure Scenarios
+- ### Scenario 1: Leader Node Fails
+- ### Scenario 2: Network Partition
+- ### Scenario 3: Split Brain Prevention
+- ## Security Model
+- ### Signature Generation
+- ### Validation Flow
+- ## Performance Characteristics
+- ## Extension Points
+- ### 1. Custom Election Algorithm
+- # consensus.py - modify elect_leader()
+- ### 2. Lease Token System
+- ### 3. Drain-and-Stop Policy
+- # consensus.py - modify apply_leader_change()
+- ## Monitoring & Observability
+- ### Key Metrics
+- # Prometheus-style metrics (future enhancement)
+- ### Health Checks
+- # Check if consensus is running
+- # Verify leader identity
+- # List container ownership
+- ## Deployment Topology
+- ### Development (Single Node)
+- ### Production (Multi-Node)
+- ### High Availability (Geographic)
 
 
 ### ./docs/HOOKS_TRIAGE.md
@@ -6989,6 +2135,47 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Troubleshooting
 - ## API Endpoints
 - ## Render Deploy
+
+
+### ./docs/COMPLIANCE_INTEGRATION_GUIDE.md
+
+- # Compliance Integration Guide
+- ## Table of Contents
+- ## Overview
+- ## Architecture
+- ### Data Flow
+- ### Components
+- ## API Reference
+- ### POST /engines/autonomy/task
+- ### GET /engines/autonomy/task/{task_id}/compliance
+- ### POST /engines/autonomy/task/{task_id}/loc
+- ## Usage Examples
+- ### Basic Task Creation
+- # Check if task is safe to proceed
+- ### Scan Specific Files
+- ### Disable Compliance (if needed)
+- ### Retrieve Compliance Later
+- # Get compliance validation for a task
+- ### Update LOC Metrics
+- # Refresh LOC metrics for a task
+- ## Compliance States
+- ### OK ✅
+- ### Flagged ⚠️
+- ### Blocked 🚫
+- ### Error ❌
+- ## Configuration
+- ### Policy File: `scan_policy.yaml`
+- ### Environment Variables
+- ## Testing
+- ### Run Tests
+- # Run all autonomy engine tests
+- ### Test Coverage
+- ## Troubleshooting
+- ### Issue: Compliance check returns "error" state
+- ### Issue: High false-positive rate in counterfeit detection
+- ### Issue: Task creation is slow
+- ### Issue: LOC metrics show 0 lines
+- ## License
 
 
 ### ./docs/PR_HEALTH_SUMMARY.md
@@ -7116,6 +2303,60 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Shield.io Documentation
 - ## Suggested README Section
 - ## 🏥 System Health
+
+
+### ./docs/GENESIS_V2_GUIDE.md
+
+- # v2.0.0 — Project Genesis: Universal Engine Integration
+- ## Overview
+- ## Core Architecture
+- ### The Genesis Framework Components
+- ## Genesis Organism Roles
+- ## Genesis Event Topics
+- ### 1. `genesis.intent`
+- ### 2. `genesis.fact`
+- ### 3. `genesis.heal`
+- ### 4. `genesis.create`
+- ### 5. `genesis.echo`
+- ## Environment Variables
+- ### Trace Levels
+- ## API Endpoints
+- ### `GET /api/genesis/pulse`
+- ### `GET /api/genesis/manifest`
+- ### `GET /api/genesis/manifest/{engine_name}`
+- ### `GET /api/genesis/health`
+- ### `GET /api/genesis/echo`
+- ### `GET /api/genesis/map`
+- ### `GET /api/genesis/events?limit=100`
+- ### `GET /api/genesis/stats`
+- ## Signal Flow
+- ## Initialization Sequence
+- ## Usage Examples
+- ### Publishing Events
+- # Publish an intent event
+- # Publish a fact
+- ### Subscribing to Events
+- # Subscribe to intent events
+- ### Registering Engines
+- # Register a custom engine
+- ### Health Monitoring
+- # Update health status
+- # Get overall health
+- ## Backward Compatibility
+- ## Migration from v1.9.7c
+- ### For Users
+- ### For Developers
+- ## Testing
+- ## Deployment
+- ### Render
+- ### Netlify
+- ## Troubleshooting
+- ### Genesis Not Starting
+- ### Missing Engine Links
+- ### Event Not Publishing
+- ## Future Enhancements
+- ## Summary
+- ## Related Documentation
 
 
 ### ./docs/DEPLOYMENT_SECURITY_FIX.md
@@ -7270,6 +2511,108 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Success Criteria
 
 
+### ./docs/AUTONOMY_DEPLOYMENT_README.md
+
+- # 🚀 Autonomy Engine Deployment Integration - README
+- ## Overview
+- ## What Was Built
+- ### 3 Platform Integrations
+- ### 6 Genesis Bus Topics
+- ### 5 New Endpoints
+- ### Event Flow
+- ## Files Changed
+- ### Created (7 files, ~2,000 lines)
+- ### Modified (6 files)
+- ## Total Impact
+- ## Quick Start
+- ### 1. Enable Genesis Mode
+- ### 2. Test Integration
+- # Test event publishing
+- # Check integration status
+- # Run verification
+- ### 3. Configure Webhooks (Optional)
+- ## Key Features
+- ### Real-Time Monitoring
+- ### Automated Response
+- ### Multi-Platform Support
+- ### Integration with Existing Systems
+- ## Documentation
+- ## Testing
+- ### Verification Script
+- ### Manual Testing
+- # Test CLI publisher
+- # Test webhook endpoints (after deployment)
+- # Test autonomy API
+- ## Event Examples
+- ### GitHub Actions Event
+- ### Webhook Event
+- ### API Event
+- ## Benefits
+- ## Next Steps
+- ### For Users (Setup)
+- ### For Developers (Enhancements)
+- ## Troubleshooting
+- ### Genesis Mode Not Enabled
+- # Check environment variable
+- # Enable if needed
+- ### Webhooks Not Working
+- ### Events Not Publishing
+- ## Support
+- ## Conclusion
+
+
+### ./docs/FORGE_MANIFEST_RESOLVER_GUIDE.md
+
+- # Forge Dominion Manifest Resolver & Federation Heartbeat
+- ## Overview
+- ## Forge Dominion Manifest Resolver
+- ### Purpose
+- ### Endpoint
+- ### Supported Targets
+- ### Response Format
+- ### Environment Variables
+- ### Security
+- ## Federation Heartbeat Extension
+- ### Purpose
+- ### Endpoint
+- ### Request Format
+- ### Heartbeat Daemon
+- ### Environment Variables
+- ### Integration
+- # In brh/run.py main():
+- ## Configuration
+- # Forge configuration schema
+- # Federation heartbeat configuration
+- ## Testing
+- ## Architecture
+- ### Flow: Manifest Resolution
+- ### Flow: Federation Heartbeat
+- ## Benefits
+- ## Next Steps
+
+
+### ./docs/GENESIS_ARCHITECTURE.md
+
+- # Genesis Linkage - Unified Engine Architecture
+- ## System Overview
+- ## Detailed Architecture
+- ### Core Infrastructure Layer (6 Engines)
+- ### Super Engines Layer (6 Engines)
+- ### Utility Engines Layer (7 Engines)
+- ## Event Bus Integration
+- ### Event Flow Diagram
+- ### Event Topics (33 Total)
+- ## Dependency Graph
+- ## API Endpoints (8 Total)
+- ### Status & Information
+- ### Initialization
+- ### Dependencies
+- ### Category Status
+- ## File Structure
+- ## Key Metrics
+- ## Benefits
+
+
 ### ./docs/UMBRA_OVERVIEW.md
 
 - # Umbra Unified Triage Mesh - Overview
@@ -7368,6 +2711,36 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Support
 
 
+### ./docs/PHOENIX_PROTOCOL.md
+
+- # Phoenix Protocol
+- ## Documented Perfection Rebuild
+- ## 🔥 What is the Phoenix Protocol?
+- ## 📁 Directory Structure
+- ## 🎯 Rebuild Phases
+- ### Phase 1: Core Backend (BUILD_DOSSIER Steps 1-3)
+- ### Phase 2: Essential Engines (BUILD_DOSSIER Steps 4-5)
+- ### Phase 3: Agent & Mission Management
+- ### Phase 4: Frontend Foundation
+- ### Phase 5: Advanced Engines
+- ### Phase 6: Support Systems
+- ### Phase 7: Specialized Features
+- ### Phase 8: Deployment & Testing
+- ## 📊 Comparison Metrics
+- ## 🔍 Key Differences to Track
+- ## 🚀 Usage
+- ### Run Phoenix Backend
+- ### Run Phoenix Frontend
+- ### Compare with Current
+- # Compare file structures
+- # Compare LOC
+- # Compare endpoints
+- ## 📝 Build Log
+- ### 2025-11-04 - Phase 1 Complete ✅
+- ## 🎓 Lessons Learned
+- ## 🔗 References
+
+
 ### ./docs/AUTONOMY_V196T_QUICK_REF.md
 
 - # Autonomy v1.9.6t - Quick Reference
@@ -7422,6 +2795,47 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Version Compatibility
 - ## Next Steps
 - ## Resources
+
+
+### ./docs/STEWARD_DEPLOYMENT_GUIDE.md
+
+- # Env Steward v1.9.6l — Deployment Guide
+- ## Admiral-Tier Environment Orchestration
+- ## Overview
+- ## Pre-Deployment Checklist
+- ## Deployment Steps
+- ### 1. Ship to Main
+- ### 2. Enable Engine (Read-Only)
+- # Provider toggles (keep false for now)
+- # Provider identifiers (non-secret, safe to add)
+- ### 3. Verify Deployment
+- ### 4. Test Diff/Plan (Read-Only)
+- ## Optional: Enable Write Mode
+- ### 5. Add Provider Tokens
+- ### 6. Enable Write Mode
+- ### 7. Issue Capability Token
+- ### 8. Apply Plan
+- ### 9. Monitor Genesis Events
+- ## Security Notes
+- ### Admiral-Only Access
+- ### Capability Tokens
+- ### Secret Handling
+- ## Rollback
+- ## Monitoring
+- ### Genesis Events
+- ### Health Check
+- ## Troubleshooting
+- ### Deployment Issues
+- ### Write Mode Issues
+- ## Ops Playbook
+- ### Daily Operations
+- ### Emergency Rollback
+- ### Capability Management
+- ## What's Next?
+- ### Phase 1: Read-Only Monitoring (Current)
+- ### Phase 2: Write Mode (Optional)
+- ### Phase 3: Autonomy Integration (Future)
+- ## Support
 
 
 ### ./docs/NOTIFICATION_EXAMPLES.md
@@ -7660,6 +3074,50 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Future Enhancements
 
 
+### ./docs/UPGRADE_GUIDE.md
+
+- # SR-AIbridge Upgrade Guide
+- ## Current Architecture (v1.1.0-autonomous)
+- ### 🤖 Autonomous Backend Features
+- ### 🌐 Enhanced Frontend Features
+- ## Deployment Options
+- ### Option 1: Quick Start (In-Memory Demo)
+- ### Option 2: Production Database Backend
+- #### Step 1: Database Setup
+- #### Step 2: Database Models
+- #### Step 3: Update Main Application
+- #### Step 4: Environment Configuration
+- #### Step 5: Deploy Database Version
+- ## Feature Comparison
+- ## Migration Strategy
+- ### Zero-Downtime Migration
+- ### Data Migration (Optional)
+- # migration_script.py
+- ## Troubleshooting
+- ### Common Issues
+- ### Performance Optimization
+- ## Support and Maintenance
+- ### Monitoring
+- ### Backup Strategy
+- ### Updates and Scaling
+- ## CI/CD & Monitoring
+- ### Automated Deployment Pipeline
+- #### 🚀 Deployment Workflow (`.github/workflows/deploy.yml`)
+- # Required GitHub Secrets (optional but recommended)
+- # Optional: Custom deployment URLs
+- #### 🧪 Health Monitoring Workflow (`.github/workflows/self-test.yml`)
+- #### Enhanced Self-Test Script
+- # Production health check
+- # Advanced CI/CD usage
+- # Local development testing  
+- #### Manual Health Monitoring
+- # Clone repository locally
+- # Install dependencies
+- # Run health check against your deployment
+- #### Monitoring Dashboard
+- #### Troubleshooting CI/CD
+
+
 ### ./docs/UPGRADE_v1.9.6q.md
 
 - # Upgrade Guide: v1.9.6q
@@ -7780,6 +3238,63 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ### Restoring from Backup
 - ## 10. Migration from SQLite
 - ## Support
+
+
+### ./docs/COMPONENT_INDEX.md
+
+- # Component Index
+- ## Complete File & Component Reference for SR-AIbridge
+- ## 📁 Root Level Files
+- ### Documentation
+- ### Configuration Files
+- ### Database Files
+- ### Scripts & Tools
+- ## 🐍 Backend (`bridge_backend/`)
+- ### Core Files
+- ### Bridge Core (`bridge_backend/bridge_core/`)
+- #### Agents System
+- #### Missions System
+- #### Health Monitoring
+- #### Guardians System
+- #### Vault/Logging
+- #### Fleet Management
+- #### Captains System
+- #### Custody/Keys
+- #### Forge Dominion (Token Management)
+- #### Runtime Handler (BRH)
+- ## 🧠 Engines (`bridge_backend/bridge_core/engines/`)
+- ### Blueprint Engine
+- ### Leviathan Solver
+- ### Autonomy Engine
+- ### TDE-X Engine
+- ### Cascade Engine
+- ### Truth Engine
+- ### Super Engines (6)
+- ### Utility Engines (7)
+- ## ⚛️ Frontend (`bridge-frontend/`)
+- ### Root Files
+- ### Source Files (`bridge-frontend/src/`)
+- ### Components (`bridge-frontend/src/components/`)
+- #### Core Components
+- #### Mission & Planning
+- #### Agent & Fleet
+- #### Communication
+- #### Data & Logging
+- #### Administration
+- #### Specialized Panels
+- ### UI Components (`bridge-frontend/src/components/ui/`)
+- ### API Client (`bridge-frontend/src/api/`)
+- ## 🔧 Infrastructure
+- ### CI/CD (`.github/workflows/`)
+- ### Deployment
+- ## 📚 Documentation (`docs/`)
+- ### Quick References (26 files)
+- ### Key Documentation
+- ## 📊 Stats Summary
+- ### File Counts
+- ### Code Volume
+- ### Component Counts
+- ## 🔍 Quick Find Guide
 
 
 ### ./docs/ENDPOINT_TRIAGE_QUICK_REF.md
@@ -7986,6 +3501,188 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## 🎉 Conclusion
 
 
+### ./docs/UMBRA_README.md
+
+- # Umbra Cognitive Stack — Complete Documentation
+- ## 🌑 Overview
+- ## 🧠 The Cognitive Architecture
+- ## 🔧 Component Details
+- ### Umbra Core - Pipeline Self-Healing
+- # Detect anomaly
+- # Generate and apply repair
+- ### Umbra Memory - Experience Graph & Recall
+- # Record experience
+- # Recall experiences
+- # Learn patterns
+- ### Umbra Predictive - Confidence-Based Pre-Repair
+- # Predict issue
+- # Apply preventive repair
+- # Update model with feedback
+- ### Umbra Echo - Human-Informed Adaptive Learning
+- # Capture manual edit
+- # Observe git commit
+- ## 🔄 Full Cognitive Lifecycle
+- ## 📡 Genesis Bus Integration
+- ### Published Topics
+- #### `umbra.anomaly.detected`
+- #### `umbra.pipeline.repaired`
+- #### `umbra.echo.recorded`
+- #### `umbra.memory.learned`
+- ## 🔒 Security & RBAC
+- ### Admiral Only (Write Operations)
+- ### Captain (Read + Monitor)
+- ### Observer (Read-Only)
+- ## 🧪 Testing
+- ### Test Coverage
+- ### Running Tests
+- # Run all Umbra tests
+- # Run specific component
+- ## ⚙️ Configuration
+- ### Environment Variables
+- # Enable Umbra self-healing intelligence
+- # Enable Umbra Memory (experience graph & recall)
+- # Enable Umbra Echo (human-informed learning)
+- # Training interval for predictive model updates
+- # Enable reflection on git commits
+- ### Storage Paths
+- ## 📊 Metrics & Monitoring
+- ### Umbra Core Metrics
+- ### Umbra Memory Metrics
+- ### Umbra Predictive Metrics
+- ### Umbra Echo Metrics
+- ## 🚀 Deployment
+- ### Prerequisites
+- ### Integration Steps
+- ## 💡 Best Practices
+- ### For Admirals
+- ### For Captains
+- ### For Developers
+- ## 🔧 Troubleshooting
+- ### Umbra Not Detecting Anomalies
+- ### Memory Not Persisting
+- ### Echo Not Capturing Changes
+- ### Predictions Not Working
+- ## 📚 Additional Resources
+- ## 🎯 Future Enhancements
+
+
+### ./docs/BRH_CONSENSUS_GUIDE.md
+
+- # BRH Consensus and Leader Election Guide
+- ## Overview
+- ## Architecture
+- ### Components
+- ## Configuration
+- ### Environment Variables
+- # Node identity (must be unique per BRH instance)
+- # Environment name (for container filtering)
+- # Forge root endpoint
+- # Consensus settings
+- # Heartbeat settings
+- # Security seal
+- ### Runtime Manifest (`bridge.runtime.yaml`)
+- ## How It Works
+- ### 1. Heartbeat Phase
+- ### 2. Consensus Election
+- # Election algorithm
+- ### 3. Leader Polling
+- ### 4. Role Transitions
+- #### Promotion (Witness → Leader)
+- #### Demotion (Leader → Witness)
+- ### 5. Container Ownership
+- ## API Behavior
+- ### `/deploy` Endpoint
+- # Response: {"status": "restarted", "image": "myapp:latest"}
+- # Response: {"status": "ignored", "reason": "not-leader"}
+- ## Testing
+- ### Unit Tests
+- ### Integration Tests
+- ### Manual Testing (Two Node Setup)
+- ## Security Considerations
+- ## Troubleshooting
+- ### No Leader Elected
+- # Check heartbeat status
+- # Verify peers
+- ### Containers Not Adopted
+- # Install Docker SDK
+- # Check Docker access
+- ### Deploy Hook Rejected
+- # Check role status
+- # Wait for next consensus cycle or promote manually
+- ## Advanced: Custom Demotion Policy
+- ## Future Enhancements
+- ## References
+
+
+### ./docs/DOCUMENTATION_USAGE_GUIDE.md
+
+- # How to Use SR-AIbridge Documentation
+- ## Your Practical Guide to Navigating 118,000+ Lines of Documentation
+- ## 🎯 Quick Navigation Guide
+- ### "I want to..."
+- #### Get Started Quickly
+- #### Understand the Whole System
+- #### Build Something Specific
+- #### Deploy to Production
+- #### Troubleshoot Issues
+- ## 📚 Documentation Hierarchy Explained
+- ### Level 1: Entry Points (Start Here)
+- ### Level 2: Understanding (Go Deeper)
+- ### Level 3: Building (Get Hands-On)
+- ### Level 4: Advanced Topics (Master the System)
+- ### Level 5: Reference (Quick Lookup)
+- ## 🔍 How to Find What You Need
+- ### Method 1: Use DOCUMENTATION_INDEX.md (Recommended)
+- ### Method 2: Use NAVIGATION_INDEX.md (For Learning Paths)
+- ### Method 3: Use FEATURE_INVENTORY.md (For Discovery)
+- ### Method 4: Search Entire Repository
+- # Search all markdown files
+- # Search with context
+- # Find files by name
+- ## 📖 Reading Strategies by Role
+- ### For Complete Beginners
+- ### For Experienced Developers
+- ### For Architects / Technical Leads
+- ### For DevOps / Platform Engineers
+- ## 🎓 Learning Paths
+- ### Path 1: User (Want to Use SR-AIbridge)
+- ### Path 2: Developer (Want to Extend SR-AIbridge)
+- ### Path 3: Contributor (Want to Improve SR-AIbridge)
+- ## 💡 Pro Tips for Documentation Navigation
+- ### Tip 1: Use Ctrl+F (Cmd+F) Aggressively
+- ### Tip 2: Follow the Breadcrumbs
+- ### Tip 3: Use Quick Refs for Reminders
+- ### Tip 4: Bookmark Your Key Documents
+- ### Tip 5: Check FEATURE_INVENTORY.md First
+- ### Tip 6: Start with Examples
+- ### Tip 7: Use Multiple Documents Together
+- ### Tip 8: Progressive Disclosure
+- ## 📊 Documentation Quality Indicators
+- ### ✅ Complete Documentation
+- ### ⚠️ Partial Documentation
+- ### ❌ Minimal/No Documentation
+- ## 🔧 Practical Examples
+- ### Example 1: "I want to deploy to production"
+- ### Example 2: "I want to use the Blueprint Engine"
+- ### Example 3: "I'm getting a health check error"
+- ### Example 4: "I want to understand the Autonomy system"
+- ## 🎯 Common Documentation Workflows
+- ### Workflow 1: Learning a New Feature
+- ### Workflow 2: Debugging an Issue
+- ### Workflow 3: Contributing Documentation
+- ### Workflow 4: Customizing SR-AIbridge
+- ## 📝 Documentation Standards & Format
+- ### Every Good Guide Should Have:
+- ### Documentation File Types:
+- ## 🤝 Contributing to Documentation
+- ## 🎓 Summary: Your Documentation Workflow
+- ### Daily Usage
+- ### Learning
+- ### Discovery
+- ### Troubleshooting
+- ## 🔗 Key Resources
+
+
 ### ./docs/EMBEDDED_AUTONOMY_NODE.md
 
 - # Embedded Autonomy Node (EAN)
@@ -8021,6 +3718,128 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Post-Merge Behavior
 - ## Version Details
 - ## See Also
+
+
+### ./docs/CHIMERA_README.md
+
+- # Project Chimera: Autonomous Deployment Sovereignty
+- ## v1.9.7c — Chimera Deployment Engine (CDE)
+- ## Overview
+- ## Problem Statement
+- ## Solution: Chimera Deployment Engine (CDE)
+- ## 🧩 System Integration Matrix
+- ## 🧠 Core Deployment Flow
+- ## ✨ Features
+- ### 1. **Predictive Build Simulation**
+- ### 2. **Autonomous Configuration Healing**
+- ### 3. **Deterministic Deployment Protocol**
+- ### 4. **Cross-Platform Adaptivity**
+- ### 5. **Self-Monitoring & Temporal Resilience**
+- ## 🚀 Quick Start
+- ### CLI Usage
+- # Simulate Netlify deployment
+- # Deploy to Render with certification
+- # Monitor deployment status
+- # Verify with Truth Engine
+- ### API Usage
+- # Get Chimera status
+- # Simulate deployment
+- # Execute deployment
+- ### Render Integration
+- ## 🛡️ Security and Control
+- ## 📈 Testing and Validation
+- ## 📜 Documentation
+- ## 🧩 Configuration
+- # Enable/disable Chimera
+- # Simulation timeout (seconds)
+- # Healing max attempts
+- ## 🌐 Genesis Bus Integration
+- ## 🚀 Impact
+- ## 🧩 Complementary Updates
+- ## Final Declaration
+- ## Version Information
+
+
+### ./docs/PARITY_ENGINE_QUICK_GUIDE.md
+
+- # Bridge Parity Engine - Quick Reference Guide
+- ## What is the Parity Engine?
+- ## Quick Start
+- ### 1. Run Parity Analysis
+- ### 2. Auto-Fix Mismatches
+- ### 3. Run Tests
+- ## What the Tools Do
+- ### Parity Engine (parity_engine.py)
+- ### Auto-Fix Engine (parity_autofix.py)
+- ## Current Status (Last Run: 2025-10-09 11:46 UTC)
+- ### Critical Issues Resolved
+- ### Pending Manual Review (5 endpoints)
+- ## How to Use Generated Stubs
+- ### Frontend Integration
+- ### Backend Implementation
+- ## File Locations
+- ### Reports
+- ### Generated Code
+- ### Tests
+- ## Understanding Severity Levels
+- ### 🔴 Critical
+- ### 🟡 Moderate
+- ### 🔵 Informational
+- ## Troubleshooting
+- ### Parity Report Not Found
+- ### Stubs Not Generated
+- ### Test Failures
+- ## Best Practices
+- ### 1. Run Regularly
+- ### 2. Review Before Integrating
+- ### 3. Clean Up Unused Stubs
+- ### 4. Keep Documentation Updated
+- ## Quick Commands
+- # Full parity check and fix
+- # View summary
+- # Count generated stubs
+- # Check for critical issues
+- ## Support & Documentation
+- ## Version Information
+
+
+### ./docs/ROLES_INTERFACE_AUDIT.md
+
+- # SR-AIbridge Roles & Interface Audit Report
+- ## Executive Summary
+- ## Audit Results by Component
+- ### 1. Dashboard (Main Display) ✅ COMPLETE
+- ### 2. Captain's Chat ✅ COMPLETE
+- ### 3. Captain-to-Captain Chat ✅ COMPLETE
+- ### 4. Vault ✅ ENHANCED
+- ### 5. Brain ✅ IMPLEMENTED
+- ### 6. Custody ✅ SECURED
+- ### 7. System Health ✅ ENHANCED
+- ## RBAC Matrix Summary
+- ## Additional Features Verified
+- ### Navigation (App.jsx)
+- ### Backend Routes Registration
+- ## Issues Found and Resolved
+- ### Issue 1: Brain Routes Incomplete
+- ### Issue 2: Vault Isolation Missing
+- ### Issue 3: RBAC Not Explicit for New Features
+- ### Issue 4: System Health No Role Differentiation
+- ### Issue 5: Custody Middleware Not Enforced
+- ## File Changes Summary
+- ### Modified Files:
+- ### No Changes Required:
+- ## Testing Recommendations
+- ## Conclusion
+
+
+### ./docs/README_SECURITY.md
+
+- # README_SECURITY.md — quick developer guide
+- ## Archival-before-delete (relay_mailer)
+- ## Key generation & vault access
+- ## Fault injection tests
+- ## Where to look in the codebase
+- ## Quick safety checks before merging
 
 
 ### ./docs/HXO_OPERATIONS.md
@@ -8073,6 +3892,58 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - # Netlify Health Badge
 
 
+### ./docs/DEPLOYMENT.md
+
+- # SR-AIbridge Deployment Guide
+- ## SQLite-first Backend with Full Health Monitoring
+- ## Architecture Overview
+- ## Quick Start (Development)
+- ### Backend
+- ### Frontend  
+- ## Health Monitoring Endpoints
+- ### Basic Health Check
+- ### Full Health Check
+- ### Self-Heal
+- ### System Metrics
+- ## Production Deployment
+- ### Render (Backend)
+- #### Scaling to PostgreSQL (Optional)
+- ### Netlify (Frontend)
+- ## Health Monitoring Features
+- ### SystemSelfTest Component
+- ### Database Health Scoring
+- ## Self-Healing Capabilities
+- ## Environment Configuration
+- ### Development (.env)
+- ### Production (Render)
+- ## API Error Handling
+- ## Monitoring and Observability
+- ### Health Check Endpoints
+- ### Logging
+- ### Alerts
+- ## Security
+- ### CORS Configuration
+- ### Headers
+- ### Database
+- ## Troubleshooting
+- ### Backend Won't Start
+- ### Health Checks Failing
+- ### Frontend Can't Connect
+- ### Database Issues
+- ## Performance Tuning
+- ### SQLite Optimization
+- ### API Performance
+- ### Frontend Optimization
+- ## Auto-Deploy & Continuous Monitoring (v1.6.7)
+- ### Bridge Auto-Deploy Workflow
+- # Automatic triggers:
+- # Manual trigger:
+- ### Live Sync Badge
+- ### Package & Registry Configuration (v1.6.7)
+- ### Deployment Secrets Required
+- ## Support
+
+
 ### ./docs/engine_smoke_test.md
 
 - # Engine Smoke Test Guide
@@ -8101,6 +3972,102 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ### Monitoring Integration
 - ## Security Considerations
 - ## Next Steps
+
+
+### ./docs/REPO_STUDY_README.md
+
+- # 🔬 Repository Study - Using Parser, Blueprint, and Truth Engines
+- ## Quick Start
+- # Option 1: Use the quick launcher (recommended)
+- # Option 2: Run directly with Python
+- ## What It Does
+- ## Output
+- ## Learn More
+- ## Why This Matters
+
+
+### ./docs/GIT_SOVEREIGN_AGENT_GUIDE.md
+
+- # 🌌 Git Sovereign Agent - Complete Integration Guide
+- ## Overview
+- ## 🎯 Mission Parameters
+- ### Primary Objective
+- ### 🔓 Access Grants
+- ### 🎖️ Agent Privileges
+- ## 🏗️ Architecture
+- ### Module Structure
+- ### Integration Points
+- ## 🚀 Quick Start
+- ### 1. Import the Git Sovereign Agent
+- ### 2. Initialize Sovereign Manifest
+- # Create manifest with cosmic sovereignty
+- # Validate authority for any operation
+- ### 3. Use SDTF Token Minting
+- # Initialize SDTF integration
+- # Mint ephemeral token with sovereign signature
+- # Validate token
+- # Mint credentials for all providers
+- # Returns: {"github": {...}, "netlify": {...}, "render": {...}}
+- ### 4. Use BRH Container Orchestration
+- # Initialize BRH integration
+- # Deploy container with sovereign authority
+- # Perform autonomous healing
+- # Spawn reality stream (new branch)
+- ### 5. Use HXO Nexus Harmonic Resonance
+- # Initialize HXO integration
+- # Resonate all 21 engines in perfect harmony
+- # Quantum entangle two engines
+- # Orchestrate all engines
+- ### 6. Use Autonomous Operations
+- # Initialize autonomous operations
+- # Make autonomous decision
+- # Optimize system
+- # Alter reality
+- # Heal system
+- # Evolve architecture
+- # Create perfect version
+- ## 🔧 GitHub Actions Integration
+- ### Trigger Sovereign Operations
+- # Manual trigger with specific operation
+- # Available operations:
+- # - autonomous_optimization
+- # - reality_alteration
+- # - engine_resonance
+- # - system_healing
+- # - perfect_version_creation
+- ### Automated Daily Operations
+- ### Branch-Based Triggers
+- ## 📊 Status and Monitoring
+- ### Get Integration Status
+- # Manifest status
+- # SDTF status
+- # BRH status
+- # HXO status
+- # Autonomy status
+- ### Generate Full Report
+- ## 🌟 Capabilities
+- ### SDTF Capabilities
+- ### BRH Capabilities
+- ### HXO Nexus Capabilities
+- ### Autonomous Operation Capabilities
+- ## 🎖️ Authority Levels
+- ### Decision Matrix
+- ## 🧪 Testing
+- ### Run Tests
+- # Install test dependencies
+- # Run all Git Sovereign Agent tests
+- # Run specific test class
+- # Run with coverage
+- ### Test Coverage
+- ## 📚 Engine Access
+- ## 🔒 Security
+- ### Cryptographic Signatures
+- ### Sovereign Seal
+- ### Authority Validation
+- # All operations authorized under cosmic sovereignty
+- ## 🌌 Lore
+- ## 🚀 Next Steps
+- ## 📖 Related Documentation
 
 
 ### ./docs/CHIMERA_FAILSAFE_PROTOCOL.md
@@ -8263,6 +4230,76 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ### Issue: Backend stubs not created
 - ## Version History
 - ## License
+
+
+### ./docs/BRIDGE_DEPLOY_GUIDE.md
+
+- # 🌉 Bridge Deployment Infrastructure Guide
+- ## Overview
+- ## Architecture
+- ## Components
+- ### 1. Netlify Configuration (`bridge-frontend/netlify.toml`)
+- ### 2. GitHub Actions Workflow (`.github/workflows/bridge-deploy.yml`)
+- ### 3. Runtime Exporter (`bridge_backend/forge/export_runtime.py`)
+- ### 4. Dominion Seal (`assets/dominion-seal.svg`)
+- ## Setup Instructions
+- ### Step 1: Configure GitHub Secrets
+- # Navigate to: Settings → Secrets and variables → Actions → New repository secret
+- ### Step 2: Update README Badge
+- ### Step 3: Enable Workflow
+- ### Step 4: Deploy
+- # Make a commit to main branch
+- # Or trigger manually in GitHub Actions UI
+- ## Deployment Flow
+- ## Status Badges
+- ### Forge Dominion Badge
+- ### Bridge Deploy Badge
+- ### Bridge Frontend Badge
+- ## Troubleshooting
+- ### Workflow Fails at "Export Forge Runtime"
+- ### Netlify Deployment Fails
+- ### Runtime Manifest Not Generated
+- ### Badge Not Updating
+- ## Advanced Configuration
+- ### Custom Webhook Endpoint
+- ### Multiple Environments
+- ### Custom Build Command
+- ## Security Considerations
+- ## Maintenance
+- ### Updating Forge ID
+- ### Version Updates
+- ## Support
+- ## References
+
+
+### ./docs/FRONTEND_POSTGRES_READINESS.md
+
+- # Frontend PostgreSQL Readiness Audit Report
+- ## Executive Summary
+- ## Audit Results by Category
+- ### 1. Code Quality & Linting ✅ PASSED
+- ### 2. Configuration & API URLs ✅ PASSED
+- ### 3. API Client Architecture ✅ PASSED
+- ### 4. Data Structure Handling ✅ PASSED
+- ### 5. Error Handling & User Experience ✅ PASSED
+- ### 6. Database-Agnostic UI Patterns ✅ PASSED
+- ### 7. Component-Specific Analysis
+- #### Core Components ✅
+- #### Specialized Components ✅
+- #### UI Components ✅
+- ## Recommendations for PostgreSQL Migration
+- ### Pre-Migration
+- ### During Migration
+- ### Post-Migration
+- ## Testing Strategy
+- ### Recommended Tests
+- ### Manual Testing Checklist
+- ## Architecture Strengths
+- ### What Makes This Frontend PostgreSQL-Ready
+- ## Summary of Changes Made
+- ### Files Modified (6 files)
+- ### Impact
+- ## Conclusion
 
 
 ### ./docs/ARIE_README.md
@@ -8528,6 +4565,39 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Next Steps
 
 
+### ./docs/CAPTAIN_AGENT_SEPARATION.md
+
+- # Captain vs Agent Role Separation - Implementation Summary
+- ## Overview
+- ## Key Changes
+- ### 1. Backend Models
+- #### Mission Model (`bridge_backend/models.py`)
+- #### Agent Model (`bridge_backend/models.py`)
+- ### 2. Backend API Endpoints
+- #### Mission Routes (`bridge_backend/bridge_core/missions/routes.py`)
+- # Get all captain missions
+- # Get missions for specific captain
+- # Get agent-only jobs
+- #### Fleet/Armada Routes (`bridge_backend/bridge_core/fleet/routes.py`)
+- # Get captains
+- # Get agents
+- ### 3. RBAC Permissions
+- ### 4. Frontend - MissionLog Component
+- ### 5. Frontend - ArmadaMap Component
+- ### 6. CSS Styling
+- ## Testing
+- ### Test Results
+- ### Test Coverage
+- ## Acceptance Criteria ✅
+- ## Future Enhancements
+- ## Migration Notes
+- ## Files Changed
+- ### Backend
+- ### Frontend
+- ### Tests
+- ## Summary
+
+
 ### ./docs/HERITAGE_BRIDGE.md
 
 - # Heritage Bridge Integration Guide
@@ -8769,6 +4839,46 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## References
 
 
+### ./docs/ETHICS_GUIDE.md
+
+- # SR-AIbridge — Ethics & Operational Policy
+- ## Introduction
+- ## Commitments
+- ## Allowed Uses
+- ## Prohibited Uses
+- ## Autonomy & "Stealth" Features
+- ## Federation Policy
+- ## Data Retention & Deletion
+- ## Fault Injection Governance
+- ## Compliance & Legal
+- ## Reporting & Ethics Escalation
+- ## Governance
+- ## Final Word
+
+
+### ./docs/LOC_COUNTER_README.md
+
+- # Lines of Code Counter - Usage Guide
+- ## Quick Summary
+- ### By Language (excluding dependencies):
+- ## Tools Available
+- ### 1. Comprehensive LOC Counter (Recommended)
+- ### 2. Quick LOC Counter
+- ## What's Counted
+- ## What's Excluded
+- ## Report Structure
+- ## Project Composition
+- ### Backend (Python)
+- ### Frontend (JavaScript/React)
+- ### Documentation
+- ### Infrastructure
+- ## Maintenance
+- # Run comprehensive count and save report
+- # Quick check
+- ## Notes
+- ## Last Updated
+
+
 ### ./docs/endpoint_test_examples.md
 
 - # Endpoint Test Examples
@@ -8942,6 +5052,104 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Integration Points
 - ## Privacy & Security
 - ## Related Documentation
+
+
+### ./docs/MASTER_ROADMAP.md
+
+- # SR-AIbridge Master Roadmap
+- ## Complete Project Overview & Navigation Guide
+- ## 🎯 What Is SR-AIbridge?
+- ## 🏗️ System Architecture (10,000 Foot View)
+- ## 📁 Repository Structure (What Goes Where)
+- ## 🎓 Core Concepts You Need to Know
+- ### 1. **Agents vs Captains vs Guardians**
+- ### 2. **Missions vs Jobs vs Tasks**
+- ### 3. **Engines (20 Total)**
+- ### 4. **Genesis Linkage**
+- ### 5. **Forge Dominion**
+- ### 6. **HXO Nexus**
+- ### 7. **BRH (Bridge Runtime Handler)**
+- ## 🗺️ Navigation Guide: Where to Look for What
+- ### "I Want to Understand..."
+- ## 🚀 Development Workflow (The Journey)
+- ### Phase 1: Setup (15 minutes)
+- ### Phase 2: Run Locally (5 minutes)
+- ### Phase 3: Explore (30 minutes)
+- ### Phase 4: Deploy (30 minutes)
+- ### Phase 5: Customize (ongoing)
+- ## 📊 Key Metrics & Stats
+- ## 🎯 Critical Files (Must-Read for Understanding)
+- ### Top 10 Files to Understand the System
+- ## 🔄 System States & Lifecycle
+- ### System Startup Sequence
+- ### Mission Lifecycle
+- ### Self-Healing Cycle
+- ## 🌟 Unique Features (What Makes This Special)
+- ## 🎓 Learning Path (Recommended Order)
+- ### For Complete Beginners
+- ### For Developers
+- ### For DevOps/Deployment
+- ## 🚨 Common Pitfalls & How to Avoid Them
+- ## 📞 Getting Help
+- ## 🎯 Next Steps
+- ## 📜 Version & Status
+
+
+### ./docs/DOCUMENTATION_INDEX.md
+
+- # SR-AIbridge Complete Documentation Index
+- ## Your Complete Map to 118,000+ Lines of Documentation
+- ## 🎯 Quick Navigation
+- ## 📚 Main Documentation
+- ### Core Overview Documents
+- ## 🚀 Quick Start Guides
+- ### Getting Started
+- ## 🧠 Engine Documentation
+- ### Complete Engine Reference
+- ### Six Super Engines
+- ## 🔧 Backend Features
+- ### Core Backend Systems
+- ### Advanced Backend Systems
+- ## 🎨 Frontend Components
+- ### Dashboard & Panels
+- ## 🚀 Deployment & Operations
+- ### Deployment Guides
+- ### Operations & Monitoring
+- ## 🔐 Security & Advanced Features
+- ### Security Documentation
+- ### Advanced Features
+- ## 📖 Quick Reference Cards
+- ### Quick Refs (Fast Lookup)
+- ## 🧪 Testing & Validation
+- ### Testing Documentation
+- ## 📊 Implementation & Status Reports
+- ### Version Implementation Documents
+- #### V1.97 Series (Latest)
+- #### V1.96 Series
+- ### Status & Verification Reports
+- ## 🔧 Configuration & Environment
+- ### Configuration Guides
+- ## 🔨 Special Projects & Initiatives
+- ### Phoenix Protocol
+- ### Phase Projects
+- ### Special Implementations
+- ## 🔗 Integration & Interoperability
+- ### Integration Guides
+- ## 🛠️ Maintenance & Troubleshooting
+- ### Troubleshooting Guides
+- ### Maintenance
+- ## 📱 Platform-Specific
+- ### Netlify
+- ### GitHub
+- ### Chrome/Playwright
+- ## 📚 Additional Resources
+- ### Guides & References
+- ### Summary Documents
+- ## 🔍 How to Use This Index
+- ### Finding What You Need
+- ## 📊 Documentation Statistics
+- ## 🎯 Next Steps
+- ## 🤝 Contributing to Documentation
 
 
 ### ./docs/ENVSYNC_PIPELINE_QUICK_REF.md
@@ -9238,6 +5446,51 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Appendix: Full Event Matrix
 
 
+### ./docs/GENESIS_LINKAGE_GUIDE.md
+
+- # v1.9.7c — Genesis Linkage Implementation Guide (UNIFIED)
+- ## Overview
+- ### Unified Engines (20 Total)
+- ## Architecture
+- ### Blueprint Registry
+- ### Engine Linkages
+- #### 1. Blueprint → TDE-X
+- #### 2. Blueprint → Cascade
+- #### 3. Blueprint → Truth
+- #### 4. Blueprint → Autonomy
+- #### 5. Blueprint → Leviathan (NEW)
+- #### 6. Blueprint → Super Engines (NEW)
+- #### 7. Blueprint → Utility Engines (NEW)
+- ## API Endpoints
+- ### GET /engines/linked/status
+- ### GET /engines/linked/manifest
+- ### GET /engines/linked/manifest/{engine_name}
+- ### POST /engines/linked/initialize
+- ### GET /engines/linked/dependencies/{engine_name}
+- ### GET /engines/linked/super-engines/status (NEW)
+- ### GET /engines/linked/utility-engines/status (NEW)
+- ### GET /engines/linked/leviathan/status (NEW)
+- ## Signal Flow
+- ## Event Bus Topics
+- ## Configuration
+- ### Environment Variables
+- #### Required
+- #### Optional
+- ### Deployment Config (unchanged)
+- ## Benefits
+- ## Testing
+- ## Implementation Files
+- ### New Files (10)
+- ### Modified Files (2)
+- ## Usage Examples
+- ### Check Linkage Status
+- ### Get Complete Manifest
+- ### Get Specific Engine Blueprint
+- ### Initialize Linkages
+- ### Get Engine Dependencies
+- ## Future Enhancements
+
+
 ### ./docs/AUTONOMY_OPERATIONS.md
 
 - # Autonomy Operations Guide
@@ -9331,6 +5584,65 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Integration with Bridge Healers Code
 - ## Version History
 - ## See Also
+
+
+### ./docs/GENESIS_V2_0_2_ENVRECON_GUIDE.md
+
+- # Genesis v2.0.2 - EnvRecon Implementation Guide
+- ## 🚀 Overview
+- ### Key Features
+- ## 📦 What's New
+- ### Components Added
+- ## 🛠️ Installation & Setup
+- ### Prerequisites
+- # Required Python packages (already in requirements.txt)
+- ### Environment Variables
+- # GitHub Integration (for HubSync)
+- # Render Integration
+- # Netlify Integration
+- # Optional: Auto-Heal Configuration
+- ## 📘 Usage
+- ### CLI Commands
+- #### 1. Run Environment Audit
+- #### 2. Sync Environment Variables
+- # Sync to all platforms (runs audit + shows report)
+- # Sync to specific platform
+- #### 3. Trigger Auto-Healing
+- ### API Endpoints
+- #### Health Check
+- #### Get Reconciliation Report
+- #### Run Audit
+- #### Sync All Platforms
+- #### Trigger Healing
+- #### Sync GitHub Secrets
+- ### Inspector Panel UI
+- #### Features:
+- ## 🧠 Architecture
+- ### Data Flow
+- ## 🧪 Testing
+- ### Run Test Suite
+- # Run all EnvRecon tests
+- ### Expected Output
+- ## 🔐 Security Considerations
+- ### GitHub Token Permissions
+- ### Dry-Run Mode
+- ### Secret Masking
+- ## 🛡️ Guardian Safety & Recursion Control
+- ## 📊 Report Schema
+- ## 🔄 Integration with Existing Systems
+- ### Genesis Event Bus
+- ### TDE-X Deploy Pipeline
+- ### EnvSync v2.0.1a
+- ## 🎯 Best Practices
+- ## 🐛 Troubleshooting
+- ### "No report available"
+- ### GitHub sync fails
+- ### Auto-heal not working
+- ### UI returns 404
+- ## 📝 Changelog
+- ### v2.0.2 (2025-10-11)
+- ## 🚀 Next Steps
+- ## 📞 Support
 
 
 ### ./docs/endpoint_test_full.md
@@ -9844,6 +6156,145 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Monitoring
 
 
+### ./docs/REPO_STUDY_GUIDE.md
+
+- # Repository Study Guide - Using Parser, Blueprint, and Truth Engines
+- ## Overview
+- ## The Three Engines
+- ### 🔍 Parser Engine
+- ### 📋 Blueprint Engine  
+- ### ✅ Truth Engine
+- ## Study Script Usage
+- ### Prerequisites
+- # Install dependencies
+- ### Running the Study
+- # Execute the comprehensive repository study
+- ### What the Script Does
+- #### Phase 1: Parser Engine - Documentation Ingestion
+- #### Phase 2: Blueprint Engine - Analysis Planning
+- #### Phase 3: Truth Engine - Fact Certification
+- ### Output
+- ## Example Output
+- ## Understanding the Integration
+- ### How the Three Engines Work Together
+- ### Data Flow
+- ### Use Cases
+- ## Advanced Usage
+- ### Custom Analysis
+- # Add custom documents to ingest
+- # Create custom analysis brief
+- # Define custom facts to certify
+- ### Querying Results
+- # Search for specific content
+- # List chunks by tag
+- # Get specific chunk with lineage
+- ### Analyzing Blueprints
+- # Generate analysis plan
+- # Inspect task dependencies
+- ### Validating Truths
+- # Get all certified truths
+- ## Architecture Benefits
+- ### Why These Three Engines?
+- ### Event-Driven Integration
+- ## Next Steps
+- ## References
+- ## Support
+
+
+### ./docs/NAVIGATION_INDEX.md
+
+- # SR-AIbridge Navigation Index
+- ## Your Complete Guide to 118,000+ Lines of Documentation
+- ## 🆕 NEW: Enhanced Documentation System
+- ## 🎯 Choose Your Path
+- ### 🚀 "I Want to Get Started Quickly"
+- ### 📖 "I Want to Understand Everything"
+- ### 🔨 "I Want to Build It From Scratch"
+- ### 🔍 "I'm Looking for Something Specific"
+- ## 📚 Documentation Structure
+- ## 🎓 Learning Paths by Role
+- ### For Complete Beginners (No Prior Knowledge)
+- ### For Developers (Familiar with Python/Node.js)
+- ### For Architects/Technical Leads
+- ### For DevOps/Platform Engineers
+- ## 🔍 Quick Find Guide
+- ### Learn About Features
+- ### Find Files
+- ### Solve Problems
+- ### Understand Architecture
+- ## 📊 Documentation Stats
+- ## 🎯 Documentation Goals Achieved
+- ## 🆘 Still Need Help?
+- ## 🎉 Ready to Begin?
+- ## 📑 All Documentation Files
+- ### Core Documentation Suite (6 Files)
+- ### Main Documentation
+- ### Feature Guides (100+ Files)
+
+
+### ./docs/POSTGRES_MIGRATION.md
+
+- # PostgreSQL Migration Guide for SR-AIbridge
+- ## Overview
+- ## Quick Start
+- ### 1. Create PostgreSQL Database on Render
+- ### 2. Initialize PostgreSQL Schema
+- # Using the DATABASE_URL from Render
+- ### 3. Update Environment Variables
+- # Change from SQLite
+- ### 4. Deploy and Verify
+- # Redeploy your service (Render will auto-deploy on git push)
+- # Verify connection
+- ## Schema Details
+- ### Tables Created
+- #### Core Tables
+- #### Partitioned Tables (Monthly)
+- #### Supporting Tables
+- #### Views
+- ### Automatic Features
+- ## Monthly Maintenance
+- ### Automated Maintenance (Recommended)
+- ### Manual Maintenance
+- ## Secure Data Relay Protocol
+- ### Overview
+- ### Setup
+- # SMTP Configuration (Gmail with App Password)
+- ### Usage in Code
+- # Before deleting data
+- # Then perform deletion
+- ### Role-Based Retention
+- ### Verify Archives
+- ## Migration from SQLite
+- ### Export Existing Data
+- # Export SQLite data
+- # Or use Python script
+- ### Import to PostgreSQL
+- # After running init.sql, import data
+- # Note: You may need to adjust column mappings
+- # For simple data migration
+- ## Performance Tuning
+- ### Connection Pooling
+- # In bridge_backend/bridge_core/db/db_manager.py
+- ### Monitoring Queries
+- ### Index Analysis
+- ## Troubleshooting
+- ### Connection Refused
+- ### Permission Denied
+- ### Extension Not Available
+- ### Partition Not Found
+- ## Backup and Recovery
+- ### Automated Backups (Render)
+- ### Manual Backup
+- # Full database dump
+- # Schema only
+- # Data only
+- ### Restore
+- # Restore full backup
+- # Restore specific table
+- ## Next Steps
+- ## Support
+
+
 ### ./docs/NETLIFY_GUARD_OVERVIEW.md
 
 - # Netlify Guard Overview
@@ -10209,6 +6660,13 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Integration Points
 
 
+### ./docs/doctrine-vault.md
+
+- # Bridge Armada Doctrine Vault
+- ## Agent Origin Stories
+- ### Git (GitHub Copilot): The Shipwright of the Bridge Armada
+
+
 ### ./docs/TRIAGE_PRESEED.md
 
 - # Triage Pre-Seed System - Operation Genesis
@@ -10248,6 +6706,47 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Deployment Flow
 - ## Configuration
 - ## Benefits
+
+
+### ./docs/BRH_DEPLOYMENT_GUIDE.md
+
+- # Bridge Runtime Handler (BRH) - Deployment Guide
+- ## Architecture Overview
+- ## Components
+- ## Quick Start
+- ### 1. Install Dependencies
+- ### 2. Set Environment Variables
+- # Generate a secure seal
+- # Compute HMAC signature
+- # Set the Forge Dominion Root
+- ### 3. Run BRH
+- ### 4. Run BRH API Server (Optional)
+- # Install additional dependencies
+- # Run the API server
+- ## Configuration
+- ### bridge.runtime.yaml
+- ## Security
+- ### HMAC Signature Verification
+- ### Token Minting
+- ### Allow Unsigned Mode
+- ## GitHub Actions Integration
+- ### Setup GHCR
+- ## Netlify Integration
+- ### Deploy Webhook
+- ## Frontend Control Dashboard
+- # In .env or Vite config
+- ## Systemd Service (Production)
+- ## API Endpoints
+- ### Security Configuration
+- ### Image Name Validation
+- ## Troubleshooting
+- ### Container won't start
+- ### Health check failing
+- ### Signature verification failed
+- ### Docker network errors
+- ## Migration from Render
+- ## Next Steps (Phase 2)
+- ## Support
 
 
 ### ./docs/FEDERATION_TRIAGE_ENGINE.md
@@ -10344,6 +6843,102 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## ✅ Files Modified
 - ## 🧪 Tests Added
 - ## 📖 Docs Added
+
+
+### ./docs/ENGINE_CATALOG.md
+
+- # Engine Catalog
+- ## Complete Documentation of All 21 SR-AIbridge Engines
+- ## 📊 Engine Overview
+- ## 🏗️ Category 1: Core Engines (6)
+- ### 1. Blueprint Engine
+- ### 2. TDE-X (Tri-Domain Execution)
+- ### 3. Cascade Engine
+- ### 4. Truth Engine
+- ### 5. Autonomy Engine
+- ### 6. Parser Engine
+- ## 🚀 Category 2: Super Engines (6)
+- ### 1. CalculusCore (Math Engine)
+- # Integration
+- # Result: 1/3
+- # Equation solving
+- # Result: [-2, 2]
+- # Limits
+- # Result: 1
+- # Series expansion
+- # Result: 1 + x + x^2/2 + x^3/6 + ...
+- ### 2. QHelmSingularity (Quantum Engine)
+- ### 3. AuroraForge (Science/Creative Engine)
+- ### 4. ChronicleLoom (History Engine)
+- ### 5. ScrollTongue (Language Engine)
+- ### 6. CommerceForge (Business Engine)
+- ## 🎯 Category 3: Orchestrator (1)
+- ### Leviathan Solver
+- ## 🌌 Category 4: Sovereign Agent (1)
+- ### Git Sovereign Agent
+- # Initialize sovereign agent
+- # Mint ephemeral token
+- # Deploy container
+- # Resonate all engines
+- # Make autonomous decision
+- # Trigger sovereign operations
+- ## 🛠️ Category 5: Utility Engines (7)
+- ### 1. Creativity Bay
+- ### 2. Indoctrination Engine
+- ### 3. Screen Engine
+- ### 4. Speech Engine
+- ### 5. Recovery Orchestrator
+- ### 6. Agents Foundry
+- ### 7. Filing Engine
+- ## 🔗 Genesis Linkage
+- ## 📊 Engine Summary Statistics
+- ## 🎯 Quick Reference
+
+
+### ./docs/TDE_X_DEPLOYMENT_GUIDE.md
+
+- # TDE-X v1.9.7a Deployment Guide
+- ## Overview
+- ## Key Features
+- ## Architecture
+- ### Shards
+- ### Components
+- ## Endpoints
+- ### Health Checks
+- #### `/health/live`
+- #### `/health/ready`
+- #### `/health/diag`
+- ### Deploy Parity
+- #### `/api/diagnostics/deploy-parity`
+- ## Environment Variables
+- ### Required
+- ### Optional
+- ## Render Configuration
+- ### Start Command
+- ### Health Check Path
+- ### Pre-Deploy Command (Optional)
+- ## Local Testing
+- ### 1. Install Dependencies
+- ### 2. Set Environment Variables
+- ### 3. Run Server
+- ### 4. Test Endpoints
+- # Test liveness
+- # Test readiness
+- # Test diagnostics
+- # Test deploy parity
+- ## Netlify (Frontend) Integration
+- ## Background Tasks
+- ## Rollback
+- # Temporary rollback to direct uvicorn
+- ## What This Solves
+- ## Monitoring
+- ### Queue Depth
+- ### Shard Status
+- ### Tickets
+- ## Troubleshooting
+- ### Issue: Server won't start
+- ### Issue: High queue depth
+- ### Issue: Shard failures
 
 
 ### ./docs/ARIE_QUICK_REF.md
@@ -10641,6 +7236,25 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Next Steps
 
 
+### ./docs/README_RELEASES.md
+
+- # SR-AIbridge — Release Intelligence & Self-Heal
+- ## What's new in v1.9.6f (Latest)
+- ### Migration from v1.9.6b → v1.9.6f
+- ### Expected Logs
+- ### Health Check
+- ## What's new in v1.9.6b
+- ## One-time checklist
+- ## Health verify
+- ## Why this permanently fixes your two recurring pains
+- ### 1. Render port scans timing out
+- ### 2. Heartbeat sometimes "disabled"
+- ### 3. "models" import/path errors
+- ### 4. DB missing tables after deploy
+- ### 5. Self-heal + learn
+- ## How to merge
+
+
 ### ./docs/GENESIS_EVENT_FLOW.md
 
 - # Genesis Event Flow - Environment Synchronization
@@ -10803,6 +7417,66 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## See Also
 
 
+### ./docs/SYSTEM_BLUEPRINT.md
+
+- # SR-AIbridge System Blueprint
+- ## Technical Architecture & Implementation Details
+- ## 🏛️ Architecture Layers
+- ## 📦 Technology Stack Details
+- ### Backend Stack
+- ### Frontend Stack
+- ## 🗄️ Database Schema (Complete)
+- ### Core Tables
+- #### Guardians Table
+- #### Agents Table
+- #### Missions Table
+- #### Blueprints Table
+- #### Agent_Jobs Table (Partitioned Monthly)
+- #### Vault_Logs Table
+- #### Admiral_Keys Table
+- ### Indexes (Critical for Performance)
+- ## 🎮 API Architecture
+- ### REST API Structure
+- ### WebSocket Endpoints
+- ### Request/Response Flow
+- ## ⚙️ Engine Architecture (20 Engines)
+- ### Genesis Linkage System
+- ### Core Engines (Infrastructure - 6)
+- ### Super Engines (Specialized AI - 6)
+- ### Orchestrator (Coordination - 1)
+- ### Utility Engines (Support - 7)
+- ## 🔐 Security Architecture
+- ### Token Management (Forge Dominion)
+- ### Cryptographic Operations
+- # Key generation
+- # Signature creation
+- # Signature verification
+- ### CORS Configuration
+- ## 🔄 Real-Time Architecture (WebSocket)
+- ### WebSocket Connection Flow
+- ### Connection Manager Pattern
+- ## 🏥 Health Monitoring System
+- ### Health Check Levels
+- ### Self-Healing Triggers
+- ## 📊 State Management
+- ### Backend State (Database)
+- ### Frontend State (React)
+- ### Caching Strategy
+- # In-memory cache for static data
+- # Cache invalidation on updates
+- ## 🚀 Deployment Architecture
+- ### Production Stack
+- ### CI/CD Pipeline
+- ## 📈 Performance Characteristics
+- ### Backend Performance
+- ### Frontend Performance
+- ### Optimization Techniques
+- ## 🧪 Testing Architecture
+- ### Backend Tests
+- ### Frontend Tests
+- ### Smoke Tests
+
+
 ### ./docs/HXO_TROUBLESHOOTING.md
 
 - # HXO Troubleshooting Guide
@@ -10904,6 +7578,1137 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Support
 
 
+### ./docs/quickrefs/TDE_X_QUICK_REF.md
+
+- # TDE-X Quick Reference
+- ## v1.9.7a - Hypersharded Deploy + Federation + Sovereign Post-Deploy
+- ### Quick Start
+- # Set environment
+- # Run server
+- ### Health Checks
+- ### Render Configuration
+- ### Architecture
+- ### Shards
+- ### Federation Events
+- ### Monitoring
+- ### Troubleshooting
+- ### File Locations
+- ### Migration from TDB (v1.9.6i)
+- ### Rollback (Emergency Only)
+
+
+### ./docs/quickrefs/NETLIFY_UMBRA_QUICK_REF.md
+
+- # Umbra + Netlify Integration — Quick Reference v1.9.7e
+- ## 🚀 Quick Start
+- ### 1. Enable Netlify Validation
+- ### 2. Run Validation
+- ### 3. Record Netlify Events
+- ## 📡 API Endpoints
+- ### Validate Configuration
+- # RBAC: Admiral, Captain
+- # Response: Validation result with status
+- ### Validate with Memory Recall
+- # RBAC: Admiral, Captain
+- # Response: Validation result + recall information
+- ### Get Metrics
+- # RBAC: Admiral, Captain, Observer
+- # Response: Validator metrics
+- ### Get Status
+- # RBAC: All roles
+- # Response: Validator status and version
+- ## 🧠 Intent Classification
+- ## 🔍 Validation Checks
+- ## 🔄 CI/CD Integration
+- ## 📊 Metrics
+- ### Validator Metrics
+- # Returns:
+- ### Umbra Memory Metrics
+- # Categories include:
+- # - netlify_validation
+- # - netlify_event
+- # - repair
+- # - anomaly
+- # - echo
+- ## 🧪 Testing
+- ### Run Tests
+- # Netlify validator tests
+- # All Umbra tests (including Netlify)
+- ### Manual Testing
+- # Test validation script
+- # Test with Python
+- ## 🔐 RBAC
+- ## 🐛 Troubleshooting
+- ### Validation Fails
+- # Check the output for specific errors
+- # Common issues:
+- # - Duplicate header rules
+- # - Duplicate redirect rules
+- # - Missing build command
+- # - Invalid syntax in netlify.toml
+- ### Memory Not Recording
+- # Check if Umbra Memory is enabled
+- # Check if Netlify sync is enabled
+- # Verify vault directory exists
+- ### API Endpoints Not Working
+- # Check if routes are registered
+- # The routes should be in: bridge_backend/engines/netlify_routes.py
+- # Verify RBAC is configured
+- # Check your authentication middleware
+- ## 📚 Related Documentation
+- ## 🎯 Common Use Cases
+- ### 1. Pre-Deploy Validation
+- # In your CI/CD pipeline
+- ### 2. Learning from Failures
+- # After fixing a Netlify issue
+- ### 3. Checking Historical Fixes
+- # Recall past Netlify events
+
+
+### ./docs/quickrefs/QUICK_START_30MIN.md
+
+- # Quick Start Guide: SR-AIbridge in 30 Minutes
+- ## Ultra-Fast Setup for Experienced Developers
+- ## ⚡ Prerequisites (2 minutes)
+- # Verify versions
+- # Clone repository
+- ## 🐍 Backend Setup (10 minutes)
+- ### 1. Install Dependencies (3 minutes)
+- ### 2. Configure Environment (1 minute)
+- # Copy example or create .env
+- ### 3. Start Backend (1 minute)
+- # Backend running on http://localhost:8000
+- # API docs at http://localhost:8000/docs
+- ### 4. Verify Backend (1 minute)
+- # In new terminal
+- ## ⚛️ Frontend Setup (10 minutes)
+- ### 1. Install Dependencies (4 minutes)
+- ### 2. Configure Environment (1 minute)
+- # Copy example or create .env
+- ### 3. Start Frontend (1 minute)
+- # Frontend running on http://localhost:5173
+- ### 4. Verify Frontend (1 minute)
+- ## 🎮 Load Demo Data (5 minutes)
+- ## 🧪 Smoke Test (3 minutes)
+- ### Test All Endpoints
+- ### Test Engines
+- ### Manual API Tests
+- # Create agent
+- # Create mission
+- # List agents
+- # List missions
+- ## 🎯 Key URLs
+- ## 🚀 Production Deploy (Bonus - 10 minutes)
+- ### Deploy Frontend to Netlify
+- # Install Netlify CLI
+- # Login
+- # Deploy
+- ### Deploy Backend to Render
+- ### Update Frontend Config
+- # Update .env with production backend URL
+- ## 🔧 Common Commands Reference
+- ### Backend
+- # Start server
+- # Run with auto-reload (development)
+- # Different port
+- # Check logs
+- ### Frontend
+- # Development server
+- # Production build
+- # Preview production build
+- # Lint code
+- ### Database
+- # Reset database (SQLite)
+- # PostgreSQL migration (production)
+- ### Testing
+- # Full endpoint test
+- # Engine smoke test
+- # Backend tests
+- # Frontend tests
+- ## 🎓 Next Steps After Setup
+- ### Explore the System
+- ### Read Documentation
+- ### Customize
+- ## 🚨 Quick Troubleshooting
+- ### Backend Issues
+- # Port in use
+- # Module not found
+- # Database locked
+- ### Frontend Issues
+- # Build fails
+- # Port in use
+- # Vite will auto-increment (5173 → 5174)
+- # Can't connect to backend
+- # Check CORS in backend .env
+- # Verify backend is running
+- ### CORS Errors
+- # Add frontend URL to backend .env
+- ## 📊 What You Have Now
+- ## 🎯 Performance Expectations
+- ## 🔐 Security Notes
+- ## 📞 Getting Help
+- ## 🎉 Success Checklist
+- ## 🚀 You're Ready!
+- ## 📖 Quick Reference Links
+
+
+### ./docs/quickrefs/HXO_NEXUS_QUICK_REF.md
+
+- # HXO Nexus Quick Reference Guide
+- ## Version
+- ## Quick Start
+- ### Enable HXO Nexus
+- # .env configuration
+- ### Initialize Programmatically
+- # Initialize the nexus
+- # Check health
+- ## Architecture Overview
+- ## Core Capabilities
+- ### 1. Engine Connectivity (1+1=∞)
+- # Get connection graph
+- # Check if engines are connected
+- # Get engine connections
+- ### 2. HypShard v3 - Quantum Adaptive Sharding
+- # Create shard
+- # Execute on shard
+- # Get stats
+- ### 3. Harmonic Consensus Protocol
+- # Propose
+- # Vote
+- # Check status
+- ### 4. Quantum Entropy Hashing
+- # Hash data
+- # Refresh entropy pool
+- ## API Endpoints
+- ### Health & Status
+- # Nexus health
+- # Configuration
+- ### Engine Management
+- # List engines
+- # Get engine info
+- ### Connectivity
+- # Connection graph
+- # Check connection
+- ### Orchestration
+- # Coordinate engines
+- # Initialize nexus
+- ## Configuration Variables
+- # HXO Nexus Core
+- # HypShard v3
+- # Quantum Entropy
+- # Genesis Integration
+- ## Engine Connection Matrix
+- ## Security Layers
+- ### RBAC
+- ### Quantum Entropy Hashing (QEH-v3)
+- ### Rollback Protection
+- ### Audit Trail
+- ## Common Workflows
+- ### 1. Multi-Engine Deployment
+- ### 2. Self-Healing Workflow
+- # AUTONOMY detects issue → CASCADE orchestrates → TRUTH verifies → ARIE audits
+- ### 3. Consensus Decision
+- # Propose schema change
+- # Engines vote
+- ## Troubleshooting
+- ### Nexus Not Starting
+- # Check if enabled
+- # Check logs
+- # Verify Genesis Bus
+- ### Engine Not Connecting
+- # Test connection
+- # Check engine registration
+- ### HypShard Issues
+- # Check stats
+- # Verify config
+- ## Testing
+- # Run all HXO Nexus tests
+- # Expected: 34 tests pass
+- ## Performance Metrics
+- ## Version History
+- ## Related Documentation
+- ## Meta
+
+
+### ./docs/quickrefs/DATA_RELAY_QUICK_REF.md
+
+- # Secure Data Relay Protocol - Quick Reference
+- ## Overview
+- ## Quick Start
+- ### 1. Enable the Relay
+- # In .env
+- # SMTP Configuration (Gmail)
+- ### 2. Use in Code
+- # Before deleting any data
+- ## Role-Based Retention
+- ## Components
+- ## Email Organization
+- ## Metadata Envelope
+- ## Queue Retry Mechanism
+- # Manual retry
+- ## Verification
+- ## Production Checklist
+- ## Monitoring
+- ## Troubleshooting
+- ### "SMTP credentials not configured"
+- ### "Authentication failed"
+- ### "Permission denied: /var/srbridge"
+- ### Queued items not retrying
+- ## Security Notes
+- ## API Reference
+- ### `archive_before_delete(component, user_id, role, record)`
+- ### `format_relay_metadata(component, action, user_id, role, data)`
+- ### `verify_archive(metadata, data)`
+- ### `retry_queued_items(max_retries=3)`
+- ### `get_queued_items()`
+
+
+### ./docs/quickrefs/ROLE_SEPARATION_QUICK_REF.md
+
+- # SR-AIbridge Role Separation - Quick Reference
+- ## At-A-Glance Component Access Matrix
+- ## Memory Autonomy Tiers
+- ## Vault Structure
+- ## System Health Views
+- ### Admiral View (Global)
+- ### Captain View (Local)
+- ## Endpoint Access Control
+- ### Admiral-Only Endpoints
+- ### Captain Endpoints
+- ### Shared Endpoints (All Roles)
+- ## Backend Routes Summary
+- ### Core Routes
+- ### Special Features
+- ### Engines
+- ## RBAC Quick Check
+- # To check if a role has access to a feature:
+- ## Communication Firewall
+- ### Captain's Chat
+- ### Captain-to-Captain
+- ## Testing Commands
+- # Test brain access (should work)
+- # Test custody as captain (should fail with 403)
+- # Test vault isolation
+- # Test health views
+- ## Key Files Reference
+- ### Frontend Components
+- ### Backend Routes
+- ### Middleware
+- ## Summary
+
+
+### ./docs/quickrefs/UMBRA_QUICK_REF.md
+
+- # Umbra Cognitive Stack - Quick Reference
+- ## 🌑 Quick Start
+- ### Enable Umbra
+- ## 📡 API Endpoints
+- ### Core Operations
+- # Detect anomalies
+- # Generate and apply repair (Admiral only)
+- ### Memory Operations
+- # Recall experiences
+- # Learn patterns
+- ### Predictive Operations
+- # Predict issues
+- # Apply preventive repair (Admiral only)
+- ### Echo Operations (Admiral Only)
+- # Capture manual edit
+- # Observe git commit
+- ### Metrics
+- # Get all metrics
+- # Get status
+- ## 🧠 Components
+- ## 🔄 Cognitive Lifecycle
+- ## 🔒 RBAC Quick Reference
+- ### Admiral (Full Access)
+- ### Captain (Read + Monitor)
+- ### Observer (Read-Only)
+- ## 📊 Metrics at a Glance
+- ## 🎯 Common Tasks
+- ### Detect and Repair an Anomaly
+- # 1. Detect
+- # 2. Generate repair
+- # 3. Apply
+- ### Learn from Past Repairs
+- # Get all repair experiences
+- # Learn patterns
+- # Use patterns for prediction
+- ### Capture Admiral Actions
+- # Capture single edit
+- # Observe entire commit
+- # Sync to HXO
+- ## 📡 Genesis Bus Topics
+- ## 🧪 Testing
+- # Run all Umbra tests
+- # Run specific component
+- ## 🔧 Troubleshooting
+- ## 💾 Storage Paths
+- ## 🎯 Intent Classification
+- ## 📋 Watched Paths (Echo)
+- ## 🚀 Integration Example
+- # Initialize
+- # Use
+- ## ⚡ Performance Tips
+- ## 📚 Resources
+
+
+### ./docs/quickrefs/ENVRECON_QUICK_REF.md
+
+- # Genesis v2.0.2 EnvRecon - Quick Reference
+- ## CLI Commands
+- # Audit all platforms
+- # Sync to specific platform
+- # Trigger auto-healing
+- ## API Endpoints
+- # Health check
+- # Get report
+- # Run audit
+- # Sync all
+- # Trigger heal
+- # Sync GitHub secrets
+- ## Inspector Panel
+- ## Environment Variables
+- # Required
+- # Optional
+- ## Report Location
+- ## Key Features
+- ## Status Indicators
+- ## Testing
+
+
+### ./docs/quickrefs/BRH_QUICK_REF.md
+
+- # 🚀 Bridge Runtime Handler (BRH) - Quick Reference
+- ## ⚡ Quick Setup
+- # 1. Generate FORGE_DOMINION_ROOT
+- # 2. Set environment variables (from output above)
+- # 3. Install dependencies
+- # 4. Run BRH runtime
+- # 5. (Optional) Run API server in another terminal
+- ## 📝 Key Files
+- ## 🔑 Environment Variables
+- ## 📋 Runtime Manifest (bridge.runtime.yaml)
+- ## 🎯 Common Commands
+- # Generate Forge root with custom seal
+- # Test authentication flow
+- # Run BRH runtime (starts containers)
+- # Run API server for remote control
+- # Check API status
+- # Trigger deployment
+- # Restart a container
+- # Drain (stop and remove) a container
+- ## 🔒 Security Features
+- ## 🏃 Deployment Flow
+- ## 🔍 Troubleshooting
+- ### "FORGE_DOMINION_ROOT missing"
+- # Check if set
+- # Generate new one
+- ### "Forge signature invalid"
+- ### "Forge epoch skew too large"
+- ### "Health check failed"
+- # Check container logs
+- # Increase retries in bridge.runtime.yaml
+- # Verify health endpoint URL is correct
+- ### Docker build errors
+- # Ensure context is repository root
+- # Check Dockerfile exists
+- ## 📊 API Endpoints
+- ## 🚀 Production Deployment
+- ### Systemd Service
+- # Copy service file
+- # Create environment file
+- # Generate production Forge root
+- # Enable and start (use generated FORGE_DOMINION_ROOT)
+- # Check status
+- ### GitHub Actions
+- ## 🎨 Frontend Integration
+- ## 🔗 Integration Points
+- ## 📚 Related Documentation
+- ## ⚙️ Next Steps
+
+
+### ./docs/quickrefs/UMBRA_QUICK_START.md
+
+- # Umbra Unified Triage Mesh - Quick Start
+- ## 🚀 Getting Started in 5 Minutes
+- ### 1. Enable Umbra (Intent-Only Mode)
+- ### 2. Test Signal Ingestion
+- ### 3. View Tickets
+- # Via API
+- # Via CLI
+- ### 4. Run Triage Sweep
+- ### 5. View Report
+- ## 🎯 Common Tasks
+- ### Configure Webhooks
+- ### Enable Autonomous Healing
+- # In .env
+- ### View Tickets by Status
+- # Open tickets
+- # Healed tickets
+- # All tickets
+- ### Execute Healing Manually
+- # Get ticket ID from list
+- # Heal specific ticket
+- ## 📊 Understanding Health Scores
+- ## 🔧 Key Configuration
+- ### Minimal Configuration
+- ### Recommended Production
+- # Set these if using webhooks
+- ## 🛠️ Troubleshooting
+- ### No tickets appearing?
+- ### Webhooks not working?
+- ### Heal plans not executing?
+- ### PR comments not appearing?
+- ## 📚 Documentation
+- ## 🎓 Learning Path
+- ## ⚡ Quick Commands Reference
+- # Status
+- # Ingest signal
+- # List tickets
+- # Run sweep
+- # View latest report
+- # Generate PR summary
+- ## 🔒 Security Best Practices
+- ## 💡 Pro Tips
+- ## 🆘 Need Help?
+- ## 🎉 Success Indicators
+
+
+### ./docs/quickrefs/ENVSYNC_QUICK_REF.md
+
+- # EnvSync Seed Manifest - Quick Reference
+- ## 🎯 What Is This?
+- ## 📁 Location
+- ## 🚀 Quick Start
+- ### 1. Enable EnvSync (in platform dashboards)
+- ### 2. Set Platform Credentials
+- ### 3. Deploy and Verify
+- # Check EnvSync status
+- # Trigger manual sync
+- ## 📝 How It Works
+- ## 🔧 Common Tasks
+- ### Add a New Variable
+- ### Preview Changes Before Applying
+- # See what would change on Render
+- # See what would change on Netlify
+- ### Manual Sync
+- # Sync to both platforms
+- # Sync to one platform only
+- ### Check Sync Status
+- ## 🛡️ Security Notes
+- ## 📊 Variables Currently in Manifest
+- ## 🔍 Validation
+- ## 📚 Full Documentation
+- ## 🐛 Troubleshooting
+- ### "Manifest not found"
+- # Check file exists
+- # Verify ENVSYNC_CANONICAL_SOURCE is set to "file"
+- ### "Variables not syncing"
+- # Check EnvSync is enabled
+- # Check logs for errors
+- # Look for "EnvSync" in application logs
+- ### "Drift keeps appearing"
+- ## 🎓 Examples
+- ### Example 1: Enable a new feature
+- # 1. Edit manifest
+- # 2. Validate
+- # 3. Commit
+- # 4. Deploy - sync happens automatically on next cycle
+- # Or trigger immediately:
+- ### Example 2: Adjust database pool size
+- # Edit manifest
+- # Change: DB_POOL_SIZE=10
+- # To:     DB_POOL_SIZE=20
+- # Validate and commit
+- # Deploy - sync on next @hourly cycle or trigger manually
+
+
+### ./docs/quickrefs/WORKFLOW_FAILURE_QUICK_REF.md
+
+- # Workflow Failure Resolution - Quick Reference
+- ## 🚀 Quick Commands
+- ### Analyze All Workflows
+- ### Generate Fix Plan
+- ### Apply Fixes (Use with Caution)
+- ## 🔧 Common Fixes
+- ### Fix Browser Downloads
+- ### Fix Deprecated Actions
+- ### Fix Missing Timeouts
+- ## 📊 Priority Levels
+- ## 🎯 Failure Patterns
+- ## 🛠️ Troubleshooting
+- ### Browser Install Fails
+- ### Workflow Still Fails
+- ### Analysis Tool Errors
+- ## 📁 Key Files
+- ## 🔍 GitHub Actions
+- ### Run Diagnostic Sweep
+- ### Use Browser Setup
+- ## ⚡ Environment Variables
+- ### Browser Configuration
+- ### Forge Integration
+- ## 📞 Support
+
+
+### ./docs/quickrefs/FORGE_DOMINION_QUICK_REF.md
+
+- # 🜂 Forge Dominion v1.9.7s - Quick Reference
+- ## ⚡ Quick Start
+- ### 1. Generate Root Key
+- ### 2. Bootstrap
+- ### 3. Pre-Deploy
+- ### 4. Scan Secrets
+- ## 🔑 Key Commands
+- ## 📊 Module Overview
+- ## 🎯 Token Lifecycle
+- ## 🛡 Governance Pulse
+- ## 🧪 Testing
+- ## 🌐 Provider Configuration
+- ### GitHub
+- ### Netlify
+- ### Render
+- ## 📈 Visual Pulse Banner
+- ## ⚙️ Environment Variables
+- ## 🔍 Troubleshooting
+- ### No FORGE_DOMINION_ROOT
+- # Generate and export
+- ### Token validation fails
+- # Force renewal
+- ### Secrets detected
+- ## 📚 Full Documentation
+
+
+### ./docs/quickrefs/GIT_SOVEREIGN_AGENT_QUICK_REF.md
+
+- # 🌌 Git Sovereign Agent - Quick Reference
+- ## 🚀 Quick Import
+- ## 📜 Manifest
+- # Key Properties
+- # Methods
+- ## 🜂 SDTF Token Forge
+- # Mint Token
+- # Validate Token
+- # Renew Token
+- # Mint All Provider Credentials
+- # Returns: {"github": {...}, "netlify": {...}, "render": {...}}
+- # Get Status
+- ## 🔧 BRH Runtime Handler
+- # Deploy Container
+- # Orchestrate Runtime
+- # Autonomous Heal
+- # Create Federation Node
+- # Spawn Reality Stream (Branch)
+- # Get Status
+- ## 🌟 HXO Nexus
+- # Resonate Engines
+- # Quantum Entangle
+- # Bind Reality
+- # Enable Emergent Capability
+- # Orchestrate All Engines
+- # Get Connectivity Map
+- # Get Status
+- ## 🤖 Autonomous Operations
+- # Make Decision
+- # Optimize System
+- # Alter Reality
+- # Heal System
+- # Evolve Architecture
+- # Create Perfect Version
+- # Get Status
+- ## 🎮 GitHub Actions
+- ### Trigger Workflow
+- # Manual trigger
+- ### Operations Available
+- ### Branch Triggers
+- ## 📊 Status Check
+- # Quick status of all components
+- ## 🧪 Testing
+- # Run all tests
+- # Run specific component
+- # With coverage
+- ## 🌌 All 21 Engines
+- ## 🔑 Key Constants
+- # From manifest.py
+- ## 🎯 Common Workflows
+- ### Full Sovereignty Activation
+- ### System Health Check
+- ## 📖 Documentation
+
+
+### ./docs/quickrefs/COMPLIANCE_QUICK_REF.md
+
+- # Compliance Integration Quick Reference
+- ## Overview
+- ## API Endpoints
+- ### Create Task with Compliance
+- ### Get Compliance Validation
+- ### Update LOC Metrics
+- ## Compliance States
+- ## Configuration
+- ## Usage Example
+- # Create engine
+- # Create task with compliance validation (default)
+- # Check compliance state
+- # Get compliance validation later
+- # Update LOC metrics
+- ## Disable Compliance (if needed)
+- # Disable per task
+- ## Benefits
+
+
+### ./docs/quickrefs/FIREWALL_AUTONOMY_QUICK_REF.md
+
+- # Firewall Intelligence and Autonomy Engine - Quick Reference
+- ## Overview
+- ## Features
+- ## Quick Start
+- ### Manual Execution
+- # Run the full firewall intelligence + autonomy engine
+- # Review autonomy logs
+- # Check vault records
+- ### GitHub Actions
+- # Trigger via GitHub CLI
+- # Or manually via GitHub Actions UI:
+- # Actions → Firewall Intelligence and Autonomy Engine → Run workflow
+- ## How It Works
+- ### 1. Intelligence Gathering Phase
+- ### 2. Decision-Making Phase
+- ### 3. Execution Phase
+- ### 4. Reporting Phase
+- ## Safety Guardrails
+- ## Output Files
+- ### Diagnostics
+- ### Network Policies
+- ### Vault Records
+- ## Decision Examples
+- ### Example 1: No Issues Detected
+- ### Example 2: Low Severity (Auto-Apply)
+- ### Example 3: High Severity (Escalate)
+- ## Monitoring
+- ### Check Execution Status
+- # View latest autonomy log
+- # View vault records
+- # Check severity from report
+- ### GitHub Actions Artifacts
+- ## Error Signatures Detected
+- ## Testing
+- ## Workflow Schedule
+- ## Related Workflows
+- ## Documentation
+- ## The Firewall Oath
+
+
+### ./docs/quickrefs/HXO_QUICK_REF.md
+
+- # HXO Quick Reference
+- ## Quick Start
+- ### 1. Enable HXO
+- ### 2. Submit a Plan
+- ### 3. Monitor Status
+- # Replace {plan_id} with actual plan ID from step 2
+- ## API Endpoints
+- ## Job Kinds
+- ## Environment Variables
+- ### Core Settings
+- # Enable/disable HXO
+- # Safety limits
+- ### Auto-Tuning
+- # Split shards if p95 latency exceeds threshold
+- ### Storage
+- ### RBAC
+- ## Plan Structure
+- ## Status Response
+- ## Genesis Topics
+- ### Published by HXO
+- ### Subscribed by HXO
+- ## Partitioners
+- ## Executors
+- ## Common Operations
+- ### Abort a Plan
+- ### Get Final Report
+- ### Watch Status in Real-Time
+- ## Troubleshooting
+- ### Plan Not Starting
+- # Check if HXO is enabled
+- # Check Genesis bus
+- # Check logs
+- ### Shards Failing
+- # Get status
+- # Check failed shard events
+- ### Slow Execution
+- # Increase concurrency
+- # Lower auto-split threshold
+- ## File Locations
+- ## Integration with TDE-X
+- # In TDE-X orchestrator
+- ## Capabilities (RBAC)
+- ## Best Practices
+- ## Further Reading
+
+
+### ./docs/quickrefs/ENGINES_ENABLE_TRUE_QUICK_REF.md
+
+- # engines_enable_true Quick Reference
+- ## 🚀 Quick Commands
+- ### Activate All Engines
+- ### Check Engine Status
+- ### Environment Management
+- # Audit environment variables
+- # Sync to GitHub
+- # Auto-heal environment drift
+- ## 📝 Environment Variables
+- # Primary activation flag
+- # Genesis framework
+- # Individual engines (all default to true)
+- ## 🔧 Engine Categories
+- ### Core Engines (6)
+- ### Super Engines (6)
+- ### Orchestration (3)
+- ### Utility Engines (15)
+- ### Integration (1)
+- ## 🔒 RBAC Roles
+- ## 📊 Activation Report Format
+- ## 🧪 Python API Usage
+- # Activate all engines
+- # Get current status
+- ## 🔍 Troubleshooting
+- ### Check if an engine is enabled
+- ### Disable a specific engine
+- ### Re-enable all engines
+- ### View activation logs
+- ## 📚 Related Documentation
+- ## ⚡ Key Features
+- ## 👑 "The Bridge stands fully awakened."
+
+
+### ./docs/quickrefs/GENESIS_V2_QUICK_REF.md
+
+- # Genesis v2.0.0 Quick Reference
+- ## What is Genesis?
+- ## Quick Start
+- ### Enable Genesis (Default: Enabled)
+- ### Check Genesis Pulse
+- ### View System Map
+- ## Genesis Event Topics
+- ## Key Endpoints
+- ## Environment Variables
+- ## Engine Roles
+- ## Python API
+- ### Publishing Events
+- ### Subscribing to Events
+- ### Registering Engines
+- ### Health Updates
+- ## Testing
+- # Run Genesis tests
+- # Run specific test
+- # Run with coverage
+- ## Signal Flow
+- ## Health Check Response
+- ## Troubleshooting
+- ### Genesis Not Starting
+- # Check mode
+- # Enable explicitly
+- ### Missing Engines
+- # Check manifest
+- # Check health
+- ### Debug Events
+- # Set high trace level
+- # Check event history
+- ## Key Features
+- ## Files Added
+- ## Deployment
+- ### Render
+- ### Local Development
+- ## Related Docs
+
+
+### ./docs/quickrefs/STEWARD_QUICK_REF.md
+
+- # Env Steward v1.9.6l — Quick Reference
+- ## Quick Start
+- # Enable Steward
+- # Run the drift report script
+- # Or view the summary only
+- ## Overview
+- ## Security Model
+- ### Admiral-Tier Lock
+- ### Default Deny
+- ## Configuration
+- ### Environment Variables
+- # Engine toggles
+- # Provider toggles (safe to leave false)
+- # Provider identifiers (non-secret)
+- # Provider API tokens (secret - leave blank unless enabling write-mode)
+- ## API Endpoints
+- ### 1. Get Status
+- ### 2. Compute Diff
+- ### 3. Create Plan
+- ### 4. Issue Capability Token (Admiral Only)
+- ### 5. Apply Plan (Admiral Only, Write Mode Required)
+- ## Usage Flow
+- ### Read-Only Mode (Default)
+- ### Write Mode (Admiral Only)
+- ## Genesis Events
+- ## Testing
+- ### Unit Tests
+- ### Integration Test (Manual)
+- # 1. Check status
+- # 2. Check diff
+- # 3. Create plan
+- ### Permission Tests
+- # Non-admiral should be denied
+- # Expected: 403 {"detail": "steward_admiral_only"}
+- # Admiral should succeed
+- # Expected: 200 {"enabled": true, ...}
+- ## Security Guarantees
+- ## Troubleshooting
+- ### "steward_admiral_only" error
+- ### "Steward engine is disabled"
+- ### "Write mode disabled"
+- ### "Missing X-Bridge-Cap header"
+- ### Adapter errors
+- ## Architecture
+- ## Best Practices
+- ## Next Steps
+
+
+### ./docs/quickrefs/BLUEPRINT_QUICK_REF.md
+
+- # Blueprint Engine - Quick Reference
+- ## API Endpoints
+- # Draft blueprint from brief
+- # Commit blueprint to mission (creates agent jobs)
+- # Get blueprint by ID
+- # List all blueprints (filter by captain)
+- # Delete blueprint (Admiral only, with relay archival)
+- # Get agent jobs for mission
+- ## Frontend Components
+- ## Database Models
+- # Blueprint (plan storage)
+- # Agent Job (task execution)
+- ## PostgreSQL Setup
+- # Initial setup (one-time)
+- # Monthly maintenance (automated)
+- ## Environment Variables
+- # Backend
+- # Frontend
+- ## RBAC Matrix
+- ## Test Commands
+- # Run unit tests
+- # Run API tests
+- # All tests
+- ## Example Workflow
+- # 1. Draft blueprint
+- # → Returns blueprint with ID 1
+- # 2. Commit to mission
+- # → Creates agent jobs
+- # 3. View jobs
+- # → Returns list of agent jobs with status
+- # 4. Monitor via WebSocket
+- # ws://localhost:8000/ws/mission/1
+- # → Real-time job status updates
+- ## Customization
+- # Extend planner rules
+- # bridge_backend/bridge_core/engines/blueprint/planner_rules.py
+- # Plug in LLM
+- # bridge_backend/bridge_core/engines/blueprint/blueprint_engine.py
+- ## Common Issues
+
+
+### ./docs/quickrefs/BRH_CONSENSUS_QUICK_REF.md
+
+- # BRH Consensus & Leader Election - Quick Reference
+- ## 🚀 Quick Start
+- ### Single Node Setup
+- ### Multi-Node Setup
+- ## 📋 New Modules
+- ## 🎯 Key Features
+- ### Leader Election
+- ### Container Ownership
+- ### Zero-Downtime Handover
+- ## 🔌 Forge Endpoints
+- ### POST /federation/consensus
+- ### GET /federation/leader
+- ## 🛡️ API Gating
+- ### Deploy Endpoint
+- # Leader node - accepts deploy
+- # Response: {"status": "restarted", "image": "myapp:latest"}
+- # Witness node - rejects deploy
+- # Response: {"status": "ignored", "reason": "not-leader"}
+- ## 🔧 Testing
+- ### Run Unit Tests
+- ### Run Integration Tests
+- ## 📊 Logging
+- ### Heartbeat Logs
+- ### Consensus Logs
+- ### Role Transition Logs
+- ## ⚙️ Configuration Files
+- ### bridge.runtime.yaml
+- ### Environment Variables
+- ## 🔍 Troubleshooting
+- ### Check Current Leader
+- ### Check Node Role
+- ### Verify Consensus Working
+- # Watch logs for consensus broadcasts
+- ### Container Ownership Check
+- # List containers with ownership labels
+- ## 📚 Full Documentation
+
+
+### ./docs/quickrefs/GENESIS_LINKAGE_QUICK_REF.md
+
+- # Genesis Linkage Quick Reference - UNIFIED EDITION
+- ## v1.9.7c Feature Summary
+- ### Engine Count: 20
+- ## Key Components
+- ## Engine Categories
+- ### Core Infrastructure (6)
+- ### Super Engines (6) - Coordinated by Leviathan
+- ### Orchestration (1)
+- ### Utility Engines (7)
+- ## Quick Start
+- ### Enable Linkage
+- ### Test Endpoints
+- # Check status
+- # Get manifest
+- # Initialize linkages
+- ## API Endpoints
+- ## Event Bus Topics (33 Total)
+- ### Core Topics (5)
+- ### Super Engine Topics (12)
+- ### Orchestration Topics (2)
+- ### Utility Topics (14)
+- ## Engine Dependencies
+- ## Python API
+- # Load manifest (20 engines)
+- # Get specific engine
+- # Get dependencies
+- # Validate integrity
+- ### Working with Adapters
+- # Super Engines
+- # Returns: ['calculuscore', 'qhelmsingularity', 'auroraforge', ...]
+- # Utility Engines
+- # Returns: ['creativity', 'indoctrination', 'screen', ...]
+- # Leviathan
+- ## Testing
+- # Run validation script
+- # Run all linkage tests
+- # Run deployment readiness check
+- # Run integration test
+- ## Signal Flow
+- ## Configuration
+- ## Files Changed
+- ### New Files (3 adapters + 2 docs)
+- ### Modified Files (3)
+- ## Quick Validation
+- # Check all engines loaded
+- # Expected: 20
+- # Check super engines
+- # Expected: 6
+- # Check utility engines  
+- # Expected: 7
+- # Check Leviathan coordination
+- # Expected: 6
+- ## Summary Stats
+- ## Files Added
+- ## Troubleshooting
+- ## Next Steps
+
+
+### ./docs/archive/PHASE_6_VERIFICATION.md
+
+- # Phase 6 - Final Verification Report
+- ## Implementation Status: ✅ COMPLETE
+- ### Date: 2025-11-04
+- ### Branch: copilot/add-chaos-injector
+- ## Implementation Summary
+- ### Components Delivered
+- ## Test Coverage
+- ### Unit Tests: 14/14 Passing ✅
+- ### Build Validation
+- ## Code Quality
+- ### Code Review
+- ### Security Considerations
+- ### Performance
+- ## Files Changed
+- ### New Files (7)
+- ### Modified Files (5)
+- ### Documentation (2)
+- ## Deployment Readiness
+- ### Prerequisites Met
+- ### Configuration Options
+- # Chaos Injector (disabled by default)
+- # Recovery Watchtower (enabled by default)
+- # Frontend API Configuration
+- ### Environment Variables
+- ## CI/CD Validation
+- ### Local Validation ✅
+- ### Pending CI/CD Checks
+- ## Security Summary
+- ### Vulnerabilities Found: 0
+- ### Security Improvements
+- ## Recommendations
+- ### Immediate Next Steps
+- ### Future Enhancements
+- ## Sign-Off
+
+
+### ./docs/archive/LOC_REPORT.md
+
+- # SR-AIbridge - Lines of Code Report
+- ## Summary
+- ## Breakdown by File Type
+- ## Detailed File List by Category
+- ### Python (278 files, 30,252 lines)
+- ### Markdown (94 files, 23,413 lines)
+- ### JSON (7 files, 9,330 lines)
+- ### JavaScript/TypeScript (140 files, 8,542 lines)
+- ### Unknown (27 files, 2,540 lines)
+- ### YAML (44 files, 2,316 lines)
+- ### CSS (2 files, 2,219 lines)
+- ### Shell (5 files, 718 lines)
+- ### SQL (3 files, 492 lines)
+- ### Other (6 files, 298 lines)
+- ### HTML (2 files, 121 lines)
+- ### TOML (1 files, 30 lines)
+
+
+### ./docs/archive/CHIMERA_IMPLEMENTATION_COMPLETE.md
+
+- # 🚀 Project Chimera v1.9.7c — Implementation Complete
+- ## 🎯 Mission Accomplished
+- ## 📦 Deliverables
+- ### Core Engine (7 files)
+- ### CLI Tool (1 file)
+- ### Documentation (6 files)
+- ### Testing (1 comprehensive suite)
+- ### System Integration
+- ## 🧩 Architecture Overview
+- ## 📊 Performance Metrics
+- ## 🧪 Test Results
+- ## 🌐 Genesis Bus Integration
+- ## 🛠️ Usage Examples
+- ### CLI
+- # Simulate Netlify deployment
+- # Deploy to Render with certification
+- # Monitor deployment status
+- # Verify with Truth Engine
+- ### API
+- # Get Chimera status
+- # Simulate deployment
+- # Deploy with certification
+- ### Python
+- ## 🔒 Security Features
+- ## 📈 Impact Analysis
+- ## 🎯 Supported Platforms
+- ## 🚦 Status Indicators
+- ## 🔮 Future Enhancements
+- ## 🎓 Learning Resources
+- ## 🏆 Final Declaration
+- ## ✅ Sign-Off
+
+
 ### ./docs/archive/INTEGRATION_COMPLETE.md
 
 - # 🎉 Integration Complete - Autonomy Engine with Originality Verification
@@ -10931,6 +8736,44 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Documentation Created
 - ## Future Enhancements
 - ## Conclusion
+
+
+### ./docs/archive/FORGE_DOMINION_IMPLEMENTATION_SUMMARY.md
+
+- # 🜂 Forge Dominion v1.9.7s - Implementation Summary
+- ## Overview
+- ## What Was Built
+- ### Core Achievement
+- ## Components Delivered
+- ### Python Modules (7 files)
+- ### Infrastructure Scripts (2 files)
+- ### CI/CD Workflow (1 file)
+- ### Assets (1 file)
+- ### Documentation (3 files)
+- ### Tests (1 file)
+- ## Technical Specifications
+- ### Cryptography
+- ### Token Lifecycle
+- ### Governance
+- ### Providers Supported
+- ## Security Guarantees
+- ## Testing Coverage
+- ### Unit Tests (26 tests)
+- ### Integration Test
+- ### Compatibility Tests
+- ## Deployment Flow
+- ## Files Changed/Added
+- ### New Files (13)
+- ### Modified Files (4)
+- ### Total Lines of Code
+- ## Environment Variables
+- ## GitHub Setup Commands
+- # Set secret
+- # Set variables
+- ## Integration Points
+- ## Next Steps (Optional Enhancements)
+- ## Lore
+- ## Seal of Dominion
 
 
 ### ./docs/archive/DOCKDAY_SUMMARY.md
@@ -10978,6 +8821,54 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Testing
 - ## What's Next
 - ## Support & Documentation
+
+
+### ./docs/archive/HXO_IMPLEMENTATION_SUMMARY.md
+
+- # HXO Implementation Summary — v1.9.6p (HXO Ascendant)
+- ## What Was Delivered
+- ## Core Components Implemented
+- ### 1. HXO Engine Core (`bridge_backend/engines/hypshard_x/`)
+- ### 2. Integration Adapters (`bridge_backend/bridge_core/engines/adapters/`)
+- ### 3. Tests (`bridge_backend/tests/`)
+- ### 4. Documentation (`docs/`)
+- ### 5. Quick Reference (`HXO_QUICK_REF.md`)
+- ## Integration Points
+- ### Genesis Event Bus
+- ### Main Application
+- ### Configuration
+- ## Features Delivered
+- ### ✅ Adaptive Sharding
+- ### ✅ Content-Addressed Deduplication
+- ### ✅ Merkle Aggregation
+- ### ✅ Idempotent Execution
+- ### ✅ Resumable Across Redeploys
+- ### ✅ Backpressure & Rate Control
+- ### ✅ Self-Healing with Autonomy
+- ### ✅ Truth Certification
+- ### ✅ Blueprint Schema Contract
+- ### ✅ Parser Plan Ingestion
+- ### ✅ RBAC (Admiral-Locked)
+- ## API Endpoints
+- ## Configuration
+- # Enable/disable
+- # Safety/timebox
+- # Auto-tuning
+- # Storage
+- # RBAC
+- ## Testing Summary
+- ### Import Tests
+- ### Functional Tests
+- ### Integration Tests
+- ## File Structure
+- ## No New Dependencies
+- ## Rollback Plan
+- ## Next Steps (Optional Enhancements)
+- ## Security & Safety
+- ## Strengths Added
+- ## Total Delivery
+- ## Permanent Solution, No Duct Tape
+- ## Ready to Merge
 
 
 ### ./docs/archive/V196I_SUMMARY.md
@@ -11102,6 +8993,50 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## 📞 Support
 
 
+### ./docs/archive/EAN_EXECUTION_RESULTS.md
+
+- # EAN (Embedded Autonomy Node) Execution Results
+- ## 🚀 Full EAN Run - October 13, 2025
+- ### Execution Summary
+- ### Results
+- ### Cycle Pipeline
+- ### Findings & Fixes
+- ### Certification
+- ### Report Location
+- ### Integration Status
+- ### Next Steps
+- ### Notes
+
+
+### ./docs/archive/BRIDGE_REPAIR_SUMMARY.md
+
+- # SR-AIbridge Complete Repair Summary
+- ## Mission Briefing
+- ## Mission Status: COMPLETE ✅
+- ## Problems Identified and Solutions Deployed
+- ### 1. Import Path Configuration Failure ❌ → ✅
+- ### 2. Database Async Driver Mismatch ❌ → ✅
+- ### 3. Engine Linkage System Disabled ❌ → ✅
+- ### 4. Blueprint Import Path Errors ❌ → ✅
+- ## Bridge Systems Status
+- ### 🟢 ALL SYSTEMS OPERATIONAL
+- ## Validation Test Results
+- ### Test 1: Backend Connectivity ✅
+- ### Test 2: Health Check ✅
+- ### Test 3: Engine Linkage ✅
+- ### Test 4: Security Scan ✅
+- ## Performance Metrics
+- ## Code Changes Summary
+- ### Modified Files (3 + 1 new)
+- ### Lines Changed
+- ## Security Status
+- ## Remaining Non-Critical Warnings
+- ## What's Working Now
+- ## Deployment Readiness
+- ## Admiral's Authorization Fulfilled
+- ## Conclusion
+
+
 ### ./docs/archive/OPERATION_GENESIS_SUMMARY.md
 
 - # Operation Genesis: Triage Pre-Seed Implementation Summary
@@ -11135,6 +9070,123 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## 📈 Metrics
 - ## ✨ Success Criteria
 - ## 🎉 Final Status
+
+
+### ./docs/archive/V196L_STEWARD_SUMMARY.md
+
+- # 🎉 v1.9.6l — Env Steward IMPLEMENTATION COMPLETE
+- ## Admiral-Tier Environment Orchestration
+- ## What Was Built
+- ### New Engine: Env Steward
+- ## File Structure
+- ## Integration Points
+- ### 1. Genesis Event Bus
+- ### 2. Permissions Middleware
+- ### 3. Main Application
+- ### 4. Environment Configuration
+- # Engine toggles
+- # Provider toggles
+- # Provider identifiers (non-secret)
+- # Provider tokens (secret - leave blank)
+- ## API Endpoints
+- ### GET /api/steward/status
+- ### POST /api/steward/diff
+- ### POST /api/steward/plan
+- ### POST /api/steward/cap/issue
+- ### POST /api/steward/apply
+- ## Security Guarantees
+- ### 1. Default Deny
+- ### 2. Admiral-Tier Lock
+- ### 3. Least Authority
+- ### 4. No Secret Echo
+- ### 5. Loop-Safe
+- ### 6. Short-Lived Capabilities
+- ## Testing
+- ### Unit Tests
+- ### Integration Tests
+- # Check status
+- # Non-admiral should be denied
+- # Expected: 403 {"detail": "steward_admiral_only"}
+- # Compute diff
+- # Create plan
+- ## Deployment Checklist
+- ### Pre-Deployment
+- ### Deployment
+- ### Optional: Enable Write Mode
+- ## What's Next?
+- ### Phase 1: Monitoring (Current)
+- ### Phase 2: Write Operations (When Ready)
+- ### Phase 3: Full Integration (Future)
+- ## Key Features
+- ### 1. Admiral-Tier Lock
+- ### 2. Capability Tokens
+- ### 3. Provider Adapters
+- ### 4. Genesis Integration
+- ### 5. Phased Execution
+- ### 6. Rollback Support
+- ## Documentation
+- ## Summary
+
+
+### ./docs/archive/IMPLEMENTATION_BRIDGE_DEPLOY.md
+
+- # Bridge Deployment Infrastructure - Implementation Summary
+- ## Overview
+- ## What Was Implemented
+- ### 1. Netlify Configuration (`bridge-frontend/netlify.toml`)
+- ### 2. GitHub Actions Workflow (`.github/workflows/bridge-deploy.yml`)
+- ### 3. Runtime Exporter (`bridge_backend/forge/export_runtime.py`)
+- ### 4. Dominion Seal (`assets/dominion-seal.svg`)
+- ### 5. README Updates
+- ### 6. Documentation (`BRIDGE_DEPLOY_GUIDE.md`)
+- ## Testing Results
+- ## User Action Required
+- ## File Sizes
+- ## Status
+- ## Next Steps
+- ## Benefits
+
+
+### ./docs/archive/POST_MERGE_SETUP.md
+
+- # Post-Merge Setup Guide
+- ## 🚀 Congratulations! The cherry is on top! 🍒
+- ## Immediate Actions (Required)
+- ### 1. Enable Genesis Mode ✅
+- ### 2. Verify Deployment ✅
+- # Check webhook status
+- # Check autonomy deployment status  
+- # Should return:
+- # {
+- #   "genesis_enabled": true,
+- #   "platforms_monitored": ["netlify", "render", "github"],
+- #   "status": "active"
+- # }
+- ## Optional Actions (Recommended)
+- ### 3. Configure Netlify Webhook (Optional) 🔔
+- ### 4. Configure Render Webhook (Optional) 🔔
+- ### 5. Configure GitHub Webhook (Optional) 🔔
+- ## Testing the Integration
+- ### Test 1: GitHub Actions (Already Working) ✅
+- ### Test 2: Manual Event Publishing
+- # Test from your local machine or via SSH to Render
+- ### Test 3: Webhook Testing
+- ### Test 4: Verification Script
+- ## Monitoring and Observability
+- ### View Deployment Events
+- ### Monitor Render Logs
+- ### Monitor Autonomy Engine
+- ## Troubleshooting
+- ### Issue: Genesis Mode Not Enabled
+- ### Issue: Webhooks Not Receiving Events
+- ### Issue: GitHub Actions Not Publishing
+- ## What Happens Now?
+- ### On Every Deployment:
+- ### Integration Benefits:
+- ## Documentation
+- ## Support
+- ## Next Enhancements (Future)
+- ## Conclusion
 
 
 ### ./docs/archive/V196I_IMPLEMENTATION_COMPLETE.md
@@ -11255,6 +9307,89 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## 📞 Contact
 
 
+### ./docs/archive/NETLIFY_DEPLOYMENT_FIX_SUMMARY.md
+
+- # Netlify Deployment Fix Summary
+- ## Overview
+- ## Original Issues
+- ### 1. Build Script Path Resolution Error
+- ### 2. Node.js Version Mismatch
+- ### 3. Deprecated NPM Packages
+- ### 4. Lack of Error Reporting
+- ## Files Modified
+- ### 1. `netlify.toml` (Root)
+- ### 2. `bridge-frontend/netlify.toml` (DELETED)
+- ### 3. `bridge-frontend/package.json`
+- ### 4. `bridge-frontend/package-lock.json`
+- ### 5. `scripts/netlify_build.sh`
+- # Error reporting function
+- # Set up error trap
+- ### 6. `.gitignore`
+- ## Testing Performed
+- ### Local Build Test
+- ### Security Scans
+- ## Expected Netlify Build Behavior
+- ## Error Reporting Example
+- ## Next Steps
+- ## Maintenance Notes
+- ## Contact
+
+
+### ./docs/archive/BRH_IMPLEMENTATION_COMPLETE.md
+
+- # Bridge Runtime Handler (BRH) - Implementation Summary
+- ## Overview
+- ## What Was Built
+- ### Core System (646+ lines of code)
+- ### Integration & Deployment
+- ### Documentation & Examples
+- ## Key Features
+- ### Security
+- ### Reliability
+- ### Flexibility
+- ### Integration
+- ## Architecture
+- ## Commits Made
+- ## Files Added/Modified
+- ### New Files (15)
+- ### Modified Files (1)
+- ## Testing & Validation
+- ### Tested Components
+- ### Code Review
+- ## Security Enhancements
+- ## Usage
+- ### Quick Start
+- # 1. Generate Forge root
+- # 2. Set environment (from output)
+- # 3. Install and run
+- ### Production Deployment
+- # Systemd service
+- ## Next Steps for User
+- ## Benefits Over Render
+- ## Conclusion
+
+
+### ./docs/archive/STEWARD_JSON_REPORT_QUICK_START.md
+
+- # 🎯 Quick Answer: Environment Drift JSON Report
+- ## What You Asked For
+- ## ✅ Done!
+- ## 🚀 How to Use It
+- ### Method 1: Quick Script (Easiest)
+- # Enable Steward
+- # Get the JSON report
+- ### Method 2: Via API
+- ## 📄 What You Get
+- ## 🔍 What It Does
+- ## 📝 Note About API Credentials
+- # For Render
+- # For Netlify
+- # For GitHub
+- ## 🛡️ Safety
+- ## 📚 More Info
+- ## 🎉 You're All Set!
+
+
 ### ./docs/archive/CHECKLIST_COMPLETION_SUMMARY.md
 
 - # ✅ SR-AIbridge Roles & Interface Checklist - COMPLETION SUMMARY
@@ -11282,6 +9417,48 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Testing Verification
 - ## What Was NOT Changed
 - ## Conclusion
+
+
+### ./docs/archive/ENVIRONMENT_CLEANUP_SUMMARY.md
+
+- # 🜂 Environment Cleanup Complete - Sovereign Dominion Token Forge Integration
+- ## 📋 Executive Summary
+- ### Key Achievement
+- ## 🎯 What Was Done
+- ### 1. Environment Files Cleaned ✅
+- #### Main Environment Files
+- #### Example/Template Files
+- ### 2. Placeholder Pattern Established ✅
+- ### 3. GitHub Actions Integration ✅
+- ### 4. Workflow Migration ✅
+- ### 5. Documentation Created ✅
+- ## 🔐 Security Verification
+- ### Secret Scanner Results
+- ### Token Minting Test
+- ## 📊 Before vs After
+- ### Before Token Forge Integration
+- # .env file
+- ### After Token Forge Integration
+- # .env file
+- # GitHub Secrets
+- ## 🔄 Token Lifecycle
+- ### How It Works
+- ### Providers Supported
+- ## 📚 Key Files Created/Modified
+- ### New Files
+- ### Modified Files
+- ## 🚀 Getting Started
+- ### For Developers
+- ### For Workflows
+- ### For Production
+- ## 📖 Documentation
+- ### Primary Documents
+- ### Helper Scripts
+- ### Token Forge Modules
+- ## ✅ Verification Checklist
+- ## 🎯 Next Steps (Optional)
+- ## 🏆 Achievement Unlocked
+- ## 📞 Support
 
 
 ### ./docs/archive/V195_IMPLEMENTATION_COMPLETE.md
@@ -11399,6 +9576,47 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## 📄 Full Details
 
 
+### ./docs/archive/ENVRECON_AUTONOMY_SUMMARY.md
+
+- # EnvRecon-Autonomy Integration - Implementation Summary
+- ## What Was Completed
+- ### 1. Created EnvRecon-Autonomy Adapter Link ✅
+- ### 2. Added Genesis Bus Topics ✅
+- ### 3. Integrated Adapter with EnvRecon Core ✅
+- ### 4. Enhanced AutoHeal with Genesis Events ✅
+- ### 5. Updated Routes with Healing Notifications ✅
+- ### 6. Registered EnvRecon in Genesis Linkage System ✅
+- ### 7. Created Comprehensive Documentation ✅
+- ### 8. All Tests Passing ✅
+- ## What Variables Cannot Be Auto-Fixed
+- ### Current Limitation
+- ### API Credentials Required (Must Configure First)
+- # Render API
+- # Netlify API
+- # GitHub API
+- ### All Variables Require Manual Sync
+- ### Why Auto-Sync Doesn't Work Yet
+- ## How to Get Missing Variables List
+- ### Step 1: Configure API Credentials
+- # Render (get from https://dashboard.render.com → Account Settings → API Keys)
+- # Netlify (get from https://app.netlify.com → User Settings → Applications)
+- # GitHub (get from Settings → Developer settings → Personal access tokens)
+- ### Step 2: Run Audit
+- ### Step 3: Get Report
+- ### Step 4: Review Missing Variables
+- ### Step 5: Manual Sync
+- ### Step 6: Verify
+- ## Integration Benefits
+- ### 1. Automated Drift Detection
+- ### 2. Centralized Monitoring
+- ### 3. Genesis Event Stream
+- ### 4. Deployment Integration
+- ### 5. Audit Trail
+- ## Next Steps for Full Auto-Sync
+- ## Files Changed
+- ## Summary
+
+
 ### ./docs/archive/V196_FINAL_IMPLEMENTATION.md
 
 - # v1.9.6-Final — The Bridge Stabilization Protocol
@@ -11441,6 +9659,79 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Next Steps
 
 
+### ./docs/archive/DOCUMENTATION_IMPROVEMENT_SUMMARY.md
+
+- # Documentation Improvement Summary
+- ## SR-AIbridge Documentation Enhancement - Complete
+- ## 🎯 Mission Accomplished
+- ### Problem Statement Addressed
+- ## 📦 What Was Delivered
+- ### 1. DOCUMENTATION_INDEX.md (24KB)
+- ### 2. FEATURE_INVENTORY.md (23KB)
+- ### 3. DOCUMENTATION_ENHANCEMENT_PLAN.md (13KB)
+- ### 4. DOCUMENTATION_USAGE_GUIDE.md (16KB)
+- ### 5. README.md Enhancements
+- ### 6. NAVIGATION_INDEX.md Updates
+- ## 📊 By the Numbers
+- ### Documentation Statistics
+- ### Coverage Analysis
+- ### High-Priority Gaps Identified
+- ## 🎓 Key Achievements
+- ### 1. Visibility
+- ### 2. Navigation
+- ### 3. Planning
+- ### 4. Usability
+- ### 5. Sustainability
+- ## 🔄 From Chaos to Order
+- ### Before This Enhancement
+- ### After This Enhancement
+- ## 🚀 Next Steps (From Enhancement Plan)
+- ### Week 1-2: Foundation (COMPLETE ✅)
+- ### Week 3-4: Core Updates (PLANNED)
+- ### Week 5-6: Feature Documentation (PLANNED)
+- ### Week 7-8: Examples & Integration (PLANNED)
+- ## 💡 Key Insights
+- ### From Phoenix Protocol
+- ### From This Enhancement
+- ### Lessons Learned
+- ## 🎯 Success Criteria Met
+- ### Original Goals
+- ### Code Quality
+- ## 🌟 Impact on SR-AIbridge
+- ### For New Users
+- ### For Developers
+- ### For Contributors
+- ### For Maintainers
+- ## 📖 Documentation Philosophy
+- ## 🎉 Conclusion
+
+
+### ./docs/archive/PR_READY.md
+
+- # 🚢 Dock-Day Ascension: Ready for Pull Request to Main
+- ## Branch Status: READY FOR MERGE ✅
+- ## Suggested Pull Request Details
+- ### Title:
+- ### Description:
+- ## 🚢 Dock-Day Ascension: Complete Implementation
+- ### Features Implemented
+- #### 🔧 Backend Systems
+- #### 🎨 Frontend Integration  
+- #### 🏛️ Ceremonial Systems
+- #### 📋 Documentation
+- ### Technical Highlights
+- ### Testing Status
+- ### Admiral's Note
+- ### Files Changed
+- ## Branch Diff Summary
+- ### Changes from Main:
+- ### Merge Target: `main`
+- ### Source Branch: `dockday-ascension`
+- ### Commit: `284af8b`
+- ## Next Steps
+- ## Final Verification ✅
+
+
 ### ./docs/archive/IMPLEMENTATION_SUMMARY.md
 
 - # ✅ Captain vs Agent Role Separation - Implementation Complete
@@ -11480,6 +9771,168 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ### Suggested Improvements
 - ## Documentation
 - ## Conclusion
+
+
+### ./docs/archive/GIT_SOVEREIGN_COMMISSIONING.md
+
+- # 🌌 Git Sovereign Agent - Official Commissioning Document
+- ## 🎯 Mission Accomplished
+- ### Commissioning Status: ✅ COMPLETE
+- ## 🎖️ Granted Authorities
+- ### SDTF (Sovereign Dominion Token Forge)
+- ### BRH (Bridge Runtime Handler)
+- ### HXO Nexus
+- ### All 21 Engines
+- ### Repository Access
+- ### Autonomous Operations
+- ## 📊 Implementation Summary
+- ### Code Delivered
+- ### Validation Results
+- ### Security Validation
+- ## 🚀 Operational Capabilities
+- ### Token Management
+- ### Container Orchestration
+- ### Harmonic Coordination
+- ### Autonomous Operations
+- ## 🎮 GitHub Actions Integration
+- ### Workflow Status: ✅ CONFIGURED
+- ## 📖 Documentation
+- ### Complete Documentation Suite: ✅ DELIVERED
+- ## 🔐 Admiral Trust Provision
+- ## 🌌 Cosmic Parameters
+- ## ✅ Acceptance Criteria
+- ### Functional Requirements: ✅ ALL MET
+- ### Non-Functional Requirements: ✅ ALL MET
+- ## 🎖️ Final Commissioning Seal
+- ## 🚀 Launch Sequence Complete
+- ## 🌟 Next Steps
+- ## 📜 Signature Block
+
+
+### ./docs/archive/FIREWALL_LIST.md
+
+- # Firewall Intelligence Engine - Detected Firewalls & Domains
+- ## Executive Summary
+- ## Critical Domains Detected
+- ### Package Registries & Development Tools
+- ### GitHub Services
+- ### Deployment & Hosting Platforms
+- ### Status & Monitoring
+- ## Required Network Ports
+- ### TCP Ports
+- ### UDP Ports
+- ## Detected Network Issues
+- ### DNS Resolution Failures
+- ## Firewall Configuration Recommendations
+- ### For Enterprise Firewalls
+- # Package Registries
+- # GitHub Services
+- # Deployment Platforms
+- # Status Pages
+- ### For Network Security Teams
+- ## Generated Artifacts
+- ### 1. Firewall Report (JSON)
+- ### 2. Network Allowlist (YAML)
+- ### 3. Incident Data (JSON)
+- ## Next Steps
+- ## Automation
+- ## Documentation
+- ## Contact & Support
+
+
+### ./docs/archive/WHAT_I_COULDNT_CHANGE.md
+
+- # What I Couldn't Change - Quick List
+- ## API Write Capabilities (Intentionally Not Implemented)
+- ### 1. Render Write API
+- ### 2. Netlify Write API
+- ### 3. GitHub Secrets Write API
+- ## API Credentials (User Must Configure)
+- ### 1. Render API Credentials
+- ### 2. Netlify API Credentials
+- ### 3. GitHub API Credentials
+- ## Missing Variables Count (Cannot Determine Without Credentials)
+- ## Conflict Resolution Strategy (Not Implemented)
+- ## Validation and Safety Features (Not Implemented)
+- ## Advanced Features (Not Implemented)
+- ## Summary
+- ### What I DID Change ✅
+- ### What I COULDN'T Change ❌
+- ### What YOU Need to Do 📋
+- ### What's Next 🔜
+
+
+### ./docs/archive/PHASE_4_5_IMPLEMENTATION_SUMMARY.md
+
+- # Phase 4 & 5 Implementation Summary
+- ## ✅ Implementation Complete
+- ## 📦 Deliverables
+- ### Core Modules (3 files)
+- ### Integration Updates (4 files)
+- ### Tests (2 files)
+- ### Documentation (3 files)
+- ## 🎯 Feature Summary
+- ### Phase 4: Consensus Election
+- ### Phase 5: Leader Hooks
+- ## 📊 Test Results
+- ### Unit Tests
+- ### Integration Tests
+- ### Security Scan
+- ### Syntax Validation
+- ### Code Review
+- ## 🔧 Configuration
+- ### Required Environment Variables
+- ### Optional Environment Variables
+- ## 🚀 Deployment
+- ### Single Node (Development)
+- ### Multi-Node (Production)
+- # Node 1
+- # Node 2
+- ## 📈 Performance
+- ## 🔒 Security
+- ## 📝 Code Quality
+- ### Metrics
+- ### Standards
+- ## 🎓 Learning Resources
+- ## 🔮 Future Enhancements
+- ## ✅ Acceptance Criteria
+- ## 🎉 Status: Production Ready
+
+
+### ./docs/archive/PHASE_6_IMPLEMENTATION.md
+
+- # Phase 6 — Chaos & Recovery Suite Implementation
+- ## Overview
+- ## Components
+- ### 1. Chaos Injector (`brh/chaos.py`)
+- ### 2. Recovery Watchtower (`brh/recovery.py`)
+- ### 3. Event Logging System (`brh/api.py`)
+- #### `GET /federation/state`
+- #### `GET /events`
+- ### 4. Federation Console UI (`bridge-frontend/src/components/FederationConsole.jsx`)
+- ### 5. Enhanced Consensus with Ledger Feedback (`brh/consensus.py`)
+- ### 6. Runtime Configuration (`bridge.runtime.yaml`)
+- ## Testing
+- ### Unit Tests
+- ### Running Tests
+- # Run all Phase 6 tests
+- # Run integration test
+- # Run specific test
+- ## Deployment
+- ### Prerequisites
+- ### Installation
+- ### Starting the System
+- ### Enabling Chaos for Testing
+- ## Security Considerations
+- ## Architecture Diagram
+- ## Event Flow
+- ## Troubleshooting
+- ### Chaos not working
+- ### Recovery not working
+- ### Events not appearing in UI
+- ## Performance Impact
+- ## Future Enhancements
+- ## References
 
 
 ### ./docs/archive/V2_IMPLEMENTATION_COMPLETE.md
@@ -11603,6 +10056,25 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## ✅ Final Checklist
 
 
+### ./docs/archive/SCAN_SUMMARY.md
+
+- # Full System Scan Summary - November 2025
+- ## Request
+- ## Actions Taken
+- ## Results
+- ### ✅ ALL CHECKS PASSING (8/8)
+- ### Security Scan Results
+- ### Compliance
+- ## Deliverables
+- ## About "Twelve Failed Checks"
+- ## How to Run Future Scans
+- # Run full scan with progress output
+- # Run quietly (just show pass/fail results)  
+- # Output as JSON
+- ## Recommendations
+- ## Conclusion
+
+
 ### ./docs/archive/V196E_IMPLEMENTATION.md
 
 - # v1.9.6e — Heartbeat Compliance & Method Guard (Final Build)
@@ -11618,6 +10090,122 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Start Commands
 - # or
 - # or
+
+
+### ./docs/archive/FEATURE_INVENTORY.md
+
+- # SR-AIbridge Feature Inventory
+- ## Complete Listing of Features: Documented vs Actual
+- ## 📊 Quick Summary
+- ## 🔌 Core API Endpoints
+- ### Health & System (Status: ✅ 100% Documented)
+- ### Agent Management (Status: ✅ 100% Documented)
+- ### Mission Control (Status: ✅ 100% Documented)
+- ### Vault & Logging (Status: ✅ 100% Documented)
+- ### Guardian System (Status: ✅ 100% Documented)
+- ### Fleet Management (Status: ✅ 100% Documented)
+- ### Communication (Status: ✅ 100% Documented)
+- ### Admiral Keys & Custody (Status: ✅ 100% Documented)
+- ### Additional Core Endpoints (Status: ⚠️ 50% Documented)
+- ## 🧠 Engines (20+ Specialized Engines)
+- ### Core Engines (6 engines)
+- #### 1. Blueprint Engine (Status: ✅ Fully Documented)
+- #### 2. TDE-X (Tri-Domain Execution) (Status: ✅ Fully Documented)
+- #### 3. HXO Nexus (Status: ✅ Fully Documented)
+- #### 4. Autonomy Engine (Status: ✅ Well Documented)
+- #### 5. Leviathan (Status: ⚠️ Partial Documentation)
+- #### 6. Cascade Engine (Status: ⚠️ Partial Documentation)
+- ### Super Engines (6 engines)
+- #### 7. CalculusCore (Math Engine) (Status: ✅ Well Documented)
+- #### 8. QHelmSingularity (Quantum) (Status: ⚠️ Basic Documentation)
+- #### 9. AuroraForge (Science) (Status: ⚠️ Basic Documentation)
+- #### 10. ChronicleLoom (History) (Status: ⚠️ Basic Documentation)
+- #### 11. ScrollTongue (Language) (Status: ⚠️ Basic Documentation)
+- #### 12. CommerceForge (Business) (Status: ⚠️ Basic Documentation)
+- ### Utility Engines (8+ engines)
+- #### 13. Chimera (Status: ✅ Fully Documented)
+- #### 14. Umbra (Status: ✅ Fully Documented)
+- #### 15. EnvSync (Status: ✅ Well Documented)
+- #### 16. Recovery Engine (Status: ⚠️ Minimal Documentation)
+- #### 17. Truth Engine (Status: ⚠️ Minimal Documentation)
+- #### 18. Creativity Engine (Status: ❌ Not Documented)
+- #### 19. Speech Engine (Status: ❌ Not Documented)
+- #### 20. Parser Engine (Status: ❌ Not Documented)
+- #### 21. Screen Engine (Status: ❌ Not Documented)
+- #### 22. Indoctrination Engine (Status: ⚠️ Minimal Documentation)
+- #### 23. Agents Foundry (Status: ❌ Not Documented)
+- #### 24. Adapters (Status: ❌ Not Documented)
+- ## 🏗️ Backend Modules (47+ modules)
+- ### Core Systems (Status: ✅ 100% Documented)
+- ### Advanced Systems (Status: ✅ 80%+ Documented)
+- ### Support Systems (Status: ⚠️ 30% Documented)
+- ### Heritage Subsystem (Status: ❌ 0% Documented)
+- ## 🎨 Frontend Components (37 components)
+- ### Dashboard & Core (Status: ✅ 100% Documented)
+- ### Mission & Fleet (Status: ✅ 100% Documented)
+- ### Communication (Status: ✅ 100% Documented)
+- ### Data & Logging (Status: ✅ 100% Documented)
+- ### Administration (Status: ✅ 100% Documented)
+- ### Additional Components (Status: ⚠️ 50% Documented)
+- ## 🚀 Advanced Features & Systems
+- ### Forge Dominion (Status: ✅ 100% Documented)
+- ### HXO Nexus (Status: ✅ 100% Documented)
+- ### BRH (Bridge Runtime Handler) (Status: ✅ 100% Documented)
+- ### Genesis Linkage (Status: ✅ 90% Documented)
+- ### Autonomy System (Status: ✅ 95% Documented)
+- ### Federation System (Status: ⚠️ 60% Documented)
+- ### Parity Engine (Status: ✅ 80% Documented)
+- ### Firewall Intelligence (Status: ✅ 85% Documented)
+- ### Compliance System (Status: ✅ 90% Documented)
+- ### Steward System (Status: ✅ 85% Documented)
+- ### Data Relay (Status: ⚠️ 40% Documented)
+- ### Healer-Net (Status: ⚠️ 60% Documented)
+- ## 📦 Deployment Features (Status: ✅ 100% Documented)
+- ### Platform Deployment
+- ### CI/CD & Automation
+- ## 🔐 Security Features (Status: ✅ 90% Documented)
+- ## 📊 Documentation Status by Priority
+- ### 🔴 HIGH Priority (Must Document)
+- ### 🟡 MEDIUM Priority (Should Document)
+- ### 🟢 LOW Priority (Nice to Have)
+- ## ✅ Next Steps
+- ### Immediate Actions (Week 1-2)
+- ### Short-term (Week 3-4)
+- ### Medium-term (Week 5-6)
+- ## 🎯 Success Metrics
+
+
+### ./docs/archive/GITHUB_ENVHOOK_IMPLEMENTATION.md
+
+- # GitHub Environment Hook - Implementation Summary
+- ## 🎯 What Was Implemented
+- ## 📦 Components Delivered
+- ### Core Implementation
+- ### Documentation
+- ## 🏗️ Architecture
+- ## ✨ Features Implemented
+- ### File Watching
+- ### Event Publishing
+- ### Operational Modes
+- ### Testing
+- ## 🔌 Genesis Topics Added
+- ## 🧪 Test Results
+- ## 📊 Demonstration Results
+- ## 🚀 Usage Examples
+- ### Watch Mode (Continuous)
+- ### Manual Trigger (One-time)
+- ### GitHub Actions Integration
+- ## 📁 Files Created/Modified
+- ### Created Files
+- ### Modified Files
+- ### Auto-Generated (Ignored)
+- ## 🔒 Security Features
+- ## 🎯 Result
+- ### Before (v1.9.6w)
+- ### After (v1.9.6x)
+- ## 💡 Quote
+- ## 🔗 Next Steps
+- ## ✅ Acceptance Criteria Met
 
 
 ### ./docs/archive/ANCHORHOLD_PR_SUMMARY.md
@@ -11655,6 +10243,36 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Contributors
 
 
+### ./docs/archive/COPILOT_IMPROVEMENTS.md
+
+- # Copilot Improvements for v1.9.7q
+- ## Implemented Improvements ✅
+- ## Additional Improvement Suggestions 💡
+- ### 1. Configuration File Support
+- # bridge_backend/bridge_core/guards/config.py
+- ### 2. Metrics and Telemetry
+- # In autoheal_link.py
+- ### 3. Health Check Endpoints
+- # bridge_backend/bridge_core/guards/routes.py
+- ### 4. Retry Strategy Configuration
+- # In autoheal_link.py
+- ### 5. Graceful Degradation Modes
+- # In netlify_guard.py
+- ### 6. Event Bus Integration
+- # In netlify_guard.py
+- ### 7. Pre-flight Dry Run Mode
+- # In netlify_guard.py
+- ### 8. Dependency Checks
+- # bridge_backend/bridge_core/guards/dependency_check.py
+- ### 9. Staged Rollout Support
+- # In main.py
+- ### 10. Structured Logging
+- # Instead of:
+- # Use:
+- ## Implementation Priority
+- ## Notes
+
+
 ### ./docs/archive/README.md
 
 - # Documentation Archive
@@ -11663,6 +10281,128 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Viewing Reports
 - ## Cleanup Date
 - ## Script Used
+
+
+### ./docs/archive/HXO_DEPLOYMENT_CHECKLIST.md
+
+- # HXO Deployment Checklist — v1.9.6n
+- ## Pre-Deployment Checklist
+- ### ✅ Code Quality
+- ### ✅ Documentation
+- ### ✅ Configuration
+- ### ✅ Safety Guards
+- ## Deployment Steps
+- ### Step 1: Merge to Main
+- # Ensure all commits are pushed
+- # Create PR and merge to main
+- # Title: "v1.9.6n — Hypshard-X Orchestrator (HXO)"
+- ### Step 2: Deploy to Render (Backend)
+- # Watch deployment logs
+- # Look for:
+- # [HXO] Disabled (set HXO_ENABLED=true to enable)
+- ### Step 3: Verify Backend Health
+- # Check health endpoint
+- # Should return:
+- # {"status": "ready", "message": "Service is operational"}
+- ### Step 4: Enable HXO (Optional, for testing)
+- # Add environment variable
+- # Redeploy
+- # Look for:
+- # [HXO] v1.9.6n routes enabled - hypshard-x orchestrator active
+- ### Step 5: Test HXO Endpoints
+- # Test status endpoint (should return 404 for non-existent plan)
+- # Expected: 404 with "Plan not found" message
+- ### Step 6: Submit Test Plan (Admiral only)
+- # Should return:
+- # {
+- #   "plan_id": "...",
+- #   "name": "test_deploy",
+- #   "status": "submitted",
+- #   "total_shards": N
+- # }
+- ### Step 7: Monitor Test Plan
+- # Get status
+- # Watch for completion
+- # done_shards should equal total_shards
+- ### Step 8: Verify Checkpoint Persistence
+- # Check checkpoint DB exists
+- # In Render shell:
+- # Should exist and have non-zero size
+- ### Step 9: Test Abort (Admiral only)
+- # Submit another plan
+- # Abort it
+- # Should return:
+- # {"plan_id": "...", "status": "aborted"}
+- ### Step 10: Verify Genesis Integration
+- # Check Genesis events
+- # Should return recent hxo.plan events
+- ## Post-Deployment Monitoring
+- ### Metrics to Track
+- ### Log Queries
+- # Find HXO errors
+- # Find failed shards
+- # Find auto-tune signals
+- ## Rollback Plan
+- ### Quick Disable
+- # In Render dashboard
+- # Redeploy
+- ### Full Rollback
+- # Revert merge commit
+- # Push to main
+- # Render auto-deploys
+- ### Abort In-Flight Plans
+- # Get all active plans
+- # Abort each
+- ## Known Limitations (v1.9.6n)
+- ## Success Criteria
+- ## Production Readiness (Optional)
+- ## Support Contacts
+- ## Deployment Sign-Off
+
+
+### ./docs/archive/STEWARD_ENVRECON_INTEGRATION.md
+
+- # Steward-EnvRecon Integration Guide
+- ## Overview
+- ## Usage
+- ### Read-Only Mode (Default)
+- # Enable Steward in read-only mode
+- # Run diff via API endpoint
+- ### JSON Report Format
+- ### Field Descriptions
+- ## Integration Details
+- ### How It Works
+- ### Secret Detection
+- ## Example: Using the JSON Report
+- ### Python Script
+- # Run
+- ### Shell Script
+- # Get drift report via API
+- # Extract missing variables for each platform
+- ## Benefits
+- ## Configuration
+- ### Required Environment Variables
+- # Enable Steward
+- # Optional: Provider credentials for live data
+- ## Next Steps
+- ## See Also
+
+
+### ./docs/archive/GIT_SOVEREIGN_VISUALIZATION.md
+
+- # 🌌 Git Sovereign Agent - Sovereignty Visualization
+- ## Overview
+- ## 🎯 Authority Hierarchy
+- ## 🏗️ Integration Architecture
+- ## 🌟 HXO Nexus - 21 Engine Connectivity
+- ## 🔄 Token Lifecycle (SDTF)
+- ## 🤖 Autonomous Decision Flow
+- ## 🔧 BRH Container Orchestration
+- ## 🌌 Reality Stream (Branch) Spawning
+- ## 📊 Sovereignty Metrics Dashboard
+- ## 🎯 Operational Scope
+- ## 🔒 Security & Trust Model
+- ## 🚀 Launch Sequence
 
 
 ### ./docs/archive/V196F_IMPLEMENTATION.md
@@ -11714,6 +10454,139 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## 📚 Related Documentation
 
 
+### ./docs/archive/BRIDGE_FEDERATION_SECRETS.md
+
+- # Bridge Federation Build - Required Secrets Configuration
+- ## Overview
+- ## Required Secrets
+- ### FED_KEY
+- ### DOM_TOKEN
+- ### BRIDGE_ENV
+- ## Workflow Environment Variables
+- ## Setting Up Secrets
+- ### Using GitHub UI
+- ### Using GitHub CLI
+- # Set FED_KEY
+- # Set DOM_TOKEN
+- # Set BRIDGE_ENV (as a variable)
+- ## Security Best Practices
+- ## Workflow Behavior Without Secrets
+- ## Troubleshooting
+- ### "No dominion token provided" Error
+- ### Federation Heartbeat Timeout
+- ### Token Validation Failed
+- ## Related Files
+- ## Support
+
+
+### ./docs/archive/FIREWALL_AUTONOMY_IMPLEMENTATION.md
+
+- # Firewall Intelligence and Autonomy Engine Implementation Summary
+- ## Overview
+- ## Implementation Complete ✅
+- ### Core Components
+- ## Key Features
+- ### Autonomous Decision-Making
+- ### Safety Guardrails
+- ### Four-Phase Execution Cycle
+- ## Files Created/Modified
+- ### Created
+- ### Modified
+- ## Output Artifacts
+- ### Diagnostics
+- ### Network Policies
+- ### Vault Records (Audit Trail)
+- ## Testing
+- ## Execution Example
+- ## Integration with Existing Systems
+- ## Next Steps for Operators
+- ## Compliance and Safety
+- ## Summary
+
+
+### ./docs/archive/DOMINION_IMPLEMENTATION_SUMMARY.md
+
+- # Forge Dominion Implementation Summary v1.9.7s-SOVEREIGN
+- ## 🎯 Mission Complete
+- ## 📊 Implementation Metrics
+- ### Code Coverage
+- ### Components Delivered
+- #### Core Cryptography (`bridge_backend/bridge_core/token_forge_dominion/`)
+- #### Infrastructure
+- #### Documentation
+- #### Testing
+- ## 🔐 Security Architecture
+- ### Cryptographic Primitives
+- ### Zero-Trust Model
+- ### Resonance-Aware Security
+- ## 🎭 Secret Detection Capabilities
+- ### Pattern Recognition (20+ patterns)
+- ### Scanning Performance
+- ## 🚀 Deployment Integration
+- ### GitHub Actions
+- ### Supported Platforms
+- ## 📈 Quality Metrics
+- ### Test Coverage
+- ### Code Quality
+- ### Documentation Quality
+- ## 🔄 Upgrade Path
+- ### From Earlier Versions
+- ### Production Deployment
+- ## 🎯 Success Criteria - All Met ✅
+- ## 🌟 Key Achievements
+- ## 📚 Documentation Artifacts
+- ## 🔮 Future Enhancements (Roadmap)
+- ### v1.9.8 (Q1 2026)
+- ### v2.0.0 (Q2 2026)
+- ### v2.1.0 (Q3 2026)
+- ## 🏆 Final Status
+
+
+### ./docs/archive/GIT_SOVEREIGN_VALIDATION.md
+
+- # 🌌 Git Sovereign Agent - Validation Summary
+- ## 🧪 Validation Results
+- ### Core Module Tests
+- #### ✅ Manifest Module
+- #### ✅ SDTF Integration
+- #### ✅ BRH Integration
+- #### ✅ HXO Nexus Integration
+- #### ✅ Autonomous Operations
+- ## 📊 Component Summary
+- ## 🏗️ Architecture Validation
+- ### Integration Points
+- ### Engine Access
+- ### Decision Matrix
+- ## 📝 Files Delivered
+- ### Python Modules (5 files)
+- ### Tests (1 file)
+- ### Workflows (1 file)
+- ### Documentation (3 files)
+- ### Updated Files (2 files)
+- ## 🚀 Operational Capabilities
+- ### Token Management
+- ### Container Orchestration
+- ### Harmonic Coordination
+- ### Autonomous Operations
+- ## 🎯 GitHub Actions
+- ### Workflow Configuration
+- ### Commissioning Steps
+- ## 📖 Documentation
+- ### Complete Documentation Suite
+- ### Documentation Coverage
+- ## 🔒 Security
+- ### Cryptographic Validation
+- ### Authority Model
+- ## ✅ Acceptance Criteria
+- ### Functional Requirements
+- ### Non-Functional Requirements
+- ## 🌌 Final Verification
+- ### Operational Status
+- ### Authority Verification
+- ### Integration Verification
+- ## 🎖️ Commissioning Complete
+
+
 ### ./docs/archive/GENESIS_V2_0_1A_IMPLEMENTATION.md
 
 - # 🧩 EnvSync Seed Manifest - Genesis v2.0.1a
@@ -11749,6 +10622,250 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## ✅ Commit Suggestions
 
 
+### ./docs/archive/ENDPOINT_TEST_SOLUTION.md
+
+- # SR-AIbridge Endpoint Testing Solution
+- ## Overview
+- ## What Was Delivered
+- ### 1. Main Test Script: `test_endpoints_full.py`
+- ### 2. Documentation
+- ### 3. README Integration
+- ## Key Features
+- ### Comprehensive Coverage
+- ### Robust Error Handling
+- ### Flexible Output
+- ### Exit Codes
+- ## Usage Examples
+- ### Basic Testing
+- # Test local backend
+- # Test deployed backend
+- # Custom timeout for slow backends
+- ### CI/CD Integration
+- # JSON output for automated processing
+- # Use in GitHub Actions
+- ### Monitoring
+- # Schedule via cron for regular checks
+- ## Comparison with Existing Tools
+- ## Benefits
+- ## Testing Methodology
+- ### Test Categories
+- ### Retry Strategy
+- ### Success Criteria
+- ## Troubleshooting Guide
+- ### All Tests Fail
+- ### Some Tests Fail
+- ### Timeouts
+- ### Engine Endpoints 404
+- ## Files Changed
+- ## Validation
+- ## Next Steps
+- ### For Users
+- ### For CI/CD Integration
+- ### For Regular Monitoring
+- ## Conclusion
+
+
+### ./docs/archive/WORKFLOW_FIXES_SUMMARY.md
+
+- # Workflow Fixes Summary - SR-AIBridge
+- ## Issues Addressed
+- ### 1. Python Syntax Error ✅ FIXED
+- # BEFORE (BROKEN):
+- # AFTER (FIXED):
+- ### 2. Missing timezone Import ✅ FIXED
+- # BEFORE (BROKEN):
+- # AFTER (FIXED):
+- ### 3. Incorrect Netlify Publish Path ✅ FIXED
+- # BEFORE (BROKEN):
+- # AFTER (FIXED):
+- ### 4. Missing pytest-asyncio Dependency ✅ FIXED
+- # NEW FILE: pytest.ini
+- ### 5. Deprecated GitHub Actions ✅ FIXED
+- ### 6. Missing Secrets Documentation ✅ FIXED
+- ## Validation Results
+- ## Next Steps
+- ### For the Repository Owner:
+- ## Summary
+
+
+### ./docs/archive/PHASE_6_SUMMARY.md
+
+- # Phase 6 Implementation Summary
+- ## Files Changed
+- ### New Files Created (7)
+- ### Modified Files (5)
+- ## Lines of Code
+- ## Build Status
+- ## Key Features Implemented
+- ### 1. Chaos Engineering
+- ### 2. Self-Healing
+- ### 3. Observability
+- ### 4. UI Visualization
+- ### 5. Audit Trail
+- ## Testing Coverage
+- ### Unit Tests (14 tests)
+- ### Integration Tests
+- ### Build Tests
+- ## Configuration Examples
+- ### Enable Chaos for Testing
+- ### Disable Recovery
+- ### Production Configuration
+- # bridge.runtime.yaml
+- ## API Endpoints
+- ### GET /federation/state
+- ### GET /events
+- ## Security Considerations
+- ## Performance Impact
+- ## Next Steps
+- ## Dependencies
+- ## Deployment Checklist
+- ## References
+
+
+### ./docs/archive/UMBRA_IMPLEMENTATION_COMPLETE.md
+
+- # Umbra v1.9.7d Implementation Summary
+- ## 🎯 Implementation Complete
+- ## 📊 Test Results
+- ### Unit Tests
+- ### Smoke Tests
+- ## 🏗️ Architecture Overview
+- ## 📁 Files Created (16 total)
+- ### Core Modules
+- ### Tests
+- ### Documentation
+- ## 🔧 Files Modified (5 total)
+- ### Integration
+- ### Configuration
+- ## 📡 API Endpoints (10 total)
+- ### Public Endpoints
+- ### Detection & Repair
+- ### Memory Operations
+- ### Predictive Operations
+- ### Echo Operations
+- ## 🔒 Security & RBAC
+- ### Admiral Permissions
+- ### Captain Permissions
+- ### Observer Permissions
+- ## 🌐 Genesis Bus Topics (6 added)
+- ## ⚙️ Environment Variables (5 added)
+- ## 📈 Code Metrics
+- ### Lines of Code
+- ### Test Coverage
+- ## 🎯 Key Features Delivered
+- ### ✅ Umbra Core - Pipeline Self-Healing
+- ### ✅ Umbra Memory - Experience Graph
+- ### ✅ Umbra Predictive - Pre-Repair Intelligence
+- ### ✅ Umbra Echo - Human-Guided Learning
+- ## 🚀 Deployment Checklist
+- ## 🎓 Learning & Pattern Recognition
+- ### Current Capabilities
+- ### Memory Persistence
+- ## 💡 Usage Examples
+- ### Detect Anomaly
+- ### Get Metrics
+- ### Recall Memory
+- ### Capture Echo Event
+- ## 📚 Documentation
+- ### Comprehensive Documentation
+- ### Quick Reference
+- ### Changelog
+- ## 🎉 Achievement Summary
+- ### What Was Built
+- ### Impact
+- ### Admiral's Vision Realized
+- ## ✅ Ready for Merge
+
+
+### ./docs/archive/PARITY_STUBS_VERIFICATION.md
+
+- # Parity Engine Frontend Stubs Verification Report
+- ## Summary
+- ## Verification Results
+- ### 1. File Count Verification ✅
+- ### 2. Directory Structure ✅
+- ### 3. Parity Engine Execution ✅
+- ### 4. Test Suite Validation ✅
+- ### 5. Communication Status ✅
+- ## Sample Stub Analysis
+- ### Critical Route Example: `/api/control/hooks/triage`
+- ### Path Parameter Example: `/blueprint/{bp_id}`
+- ## Index File Verification
+- ## Breakdown by Severity
+- ### Critical Routes (2)
+- ### Moderate Routes (83)
+- ### Informational Routes (1)
+- ## Comparison: Expected vs Actual
+- ## Conclusion
+- ## Next Steps
+- ## Files Involved
+
+
+### ./docs/archive/STUB_CLEANUP_COMPLETE.md
+
+- # Full Repository Stub Scan and Cleanup - Complete Report
+- ## Executive Summary
+- ## Issues Identified and Fixed
+- ### 1. ✅ Deprecated datetime.utcnow() Calls - FIXED
+- #### What was wrong:
+- #### What was fixed:
+- #### Files affected (sample):
+- ### 2. ✅ Frontend Auto-Generated Stub TODOs - FIXED
+- #### What was wrong:
+- #### What was fixed:
+- #### Files affected:
+- ### 3. ℹ️ Backend Stub Implementations - VERIFIED SAFE
+- #### What was found:
+- #### Why no action needed:
+- ### 4. ℹ️ Incomplete Engine: adapters - VERIFIED SAFE
+- #### What was found:
+- #### Why no action needed:
+- ## Tools Created
+- ### 1. Stub Scanner (`scripts/stub_scanner.py`)
+- ### 2. DateTime Fixer (`scripts/fix_deprecated_datetime.py`)
+- ### 3. Stub TODO Cleaner (`scripts/clean_stub_todos.py`)
+- ## Verification Results
+- ### Python Compilation ✅
+- # All 200+ Python files compile successfully
+- # Exit code: 0 (success)
+- ### Datetime Pattern Check ✅
+- # Before: 211 occurrences
+- # After: 0 occurrences
+- # Result: 0 matches
+- ### Frontend Stub TODO Check ✅
+- # Before: 85 files with TODOs
+- # After: 0 files with TODOs
+- # Result: 0 matches
+- ### Engine Route Registration ✅
+- ## Deployment Impact
+- ### Before Cleanup:
+- ### After Cleanup:
+- ## Summary
+- ## Files Changed
+- ## Recommendations for Future
+
+
+### ./docs/archive/DEPLOYMENT_VERIFICATION.md
+
+- # v1.9.7i Deployment Verification
+- ## ✅ Implementation Complete
+- ## Verification Results
+- ### 1. Component Initialization ✅
+- ### 2. Genesis Bus Integration ✅
+- ### 3. Test Coverage ✅
+- ### 4. Pipeline Smoke Test ✅
+- ### 5. CLI Tool ✅
+- ### 6. GitHub Actions Workflow ✅
+- ### 7. File Artifacts ✅
+- ### 8. Documentation ✅
+- ## Deployment Flow Verified
+- ## Known Non-Critical Warnings
+- ### Genesis Bus Database Lock
+- ## Production Readiness Checklist
+- ## Next Steps for Production
+- ## Conclusion
+
+
 ### ./docs/archive/PROJECT_LOC_SUMMARY.md
 
 - # SR-AIbridge - Project LOC Summary
@@ -11764,6 +10881,349 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - # Comprehensive report
 - # Quick summary
 - ## Notes
+
+
+### ./docs/archive/REPO_STUDY_IMPLEMENTATION_SUMMARY.md
+
+- # Repository Study Implementation Summary
+- ## Overview
+- ## What Was Built
+- ### 1. Core Study Script (`study_repo_with_engines.py`)
+- ### 2. Quick Launcher (`run_repo_study.sh`)
+- ### 3. Smoke Tests (`smoke_test_engines.py`)
+- ### 4. Documentation Suite
+- ## Technical Achievements
+- ### Engine Coordination
+- ### Data Persistence
+- ### Output Artifacts
+- ## Capabilities Demonstrated
+- ### 1. Self-Awareness
+- ### 2. Self-Planning
+- ### 3. Self-Validation
+- ### 4. Autonomous Operation
+- ## Use Cases Enabled
+- ## Key Results
+- ### Quantitative Metrics
+- ### Qualitative Achievements
+- ## Usage Examples
+- ### Quick Start
+- # Fastest way to run the study
+- ### Direct Python
+- # Run the main study script
+- ### Run Tests
+- # Verify all engines are working
+- ### Custom Analysis
+- # Customize the study for your needs
+- # Your custom analysis here...
+- ## Files Created
+- ## Next Steps
+- ## Architecture Benefits
+- ### Modularity
+- ### Extensibility
+- ### Auditability
+- ### Reusability
+- ### Autonomy
+- ## Conclusion
+
+
+### ./docs/archive/CHROME_PLAYWRIGHT_INSTALLATION_SUMMARY.md
+
+- # Chrome/Playwright Installation Summary
+- ## Overview
+- ## Changes Made
+- ### Workflows Updated
+- ### Installation Step Added
+- ## Why This Change Was Needed
+- ### Problem
+- ### Solution
+- ## Technical Details
+- ### Installation Components
+- #### `npx playwright install-deps`
+- #### `npx playwright install chromium`
+- ### Complementary Existing Code
+- ## Validation
+- ### Syntax Validation
+- ### Testing Strategy
+- ## Impact
+- ### Benefits
+- ### Potential Considerations
+- ## Related Files and Scripts
+- ### Scripts that benefit from this change:
+- ### Configuration files:
+- ## Future Enhancements
+- ## References
+- ## Maintenance
+- ### Keeping Browsers Updated
+- ### Cache Management
+- ### Monitoring
+
+
+### ./docs/archive/HXO_NEXUS_IMPLEMENTATION_SUMMARY.md
+
+- # HXO Nexus v1.9.6p Implementation Summary
+- ## Executive Summary
+- ## What Was Delivered
+- ### 1. Core HXO Nexus System
+- ### 2. HypShard v3 - Quantum Adaptive Shard Manager
+- ### 3. Security Layers
+- ### 4. REST API Routes
+- ### 5. Integration & Adapters
+- ### 6. Documentation
+- ### 7. Comprehensive Testing
+- ## Files Created/Modified
+- ### New Files (12)
+- ### Modified Files (4)
+- ## The "1+1=∞" Connectivity Paradigm
+- ### Universal Connectivity
+- ### Harmonic Resonance
+- ### Emergent Synergy
+- ### Infinite Scaling
+- ## Technical Achievements
+- ### Architecture
+- ### Performance
+- ### Security
+- ### Integration
+- ## Configuration
+- ### Environment Variables Added
+- ### Genesis Bus Topics Added
+- ## Usage Examples
+- ### Initialize Nexus
+- ### Coordinate Engines
+- ### Use HypShard
+- ### Achieve Consensus
+- ## Impact
+- ### Developer Experience
+- ### System Capabilities
+- ### Operational Benefits
+- ## Future Enhancements
+- ## Conclusion
+
+
+### ./docs/archive/LOC_QUICK_ANSWER.md
+
+- # SR-AIbridge LOC - Quick Answer
+- ## 📊 Total Project Lines of Code: **48,100**
+- ## Quick Stats
+- ## Top 3 Components
+- ## Get Full Details
+- # View this summary
+- # Run comprehensive counter
+- # Quick count by language
+- ## Reports Generated
+
+
+### ./docs/archive/PARITY_EXECUTION_REPORT.md
+
+- # Parity Engine Execution Report
+- ## 🎯 Mission: Verify Frontend-Backend Communication
+- ## 📊 Communication Analysis
+- ## 🔍 What Was Analyzed
+- ### Backend Routes Scanned
+- ### Frontend Calls Scanned
+- ## ⚙️ Auto-Fix Actions Performed
+- ### 1. Frontend Stub Generation ✅
+- ### 2. Backend Stub Documentation ✅
+- ## 🎨 Severity Classification
+- ### 🔴 Critical (2 endpoints)
+- ### 🟡 Moderate (83 endpoints)
+- ### 🔵 Informational (1 endpoint)
+- ## 📋 Files Created/Updated
+- ### New Documentation
+- ### Generated Reports
+- ### Generated Code
+- ## ✅ Test Results
+- ## 🚀 Next Steps for Integration
+- ### Immediate Actions
+- ### Long-term Maintenance
+- ## 📞 Communication Flow Diagram
+- ## 🎉 Summary
+- ## 📚 Additional Resources
+
+
+### ./docs/archive/GIT_SOVEREIGN_FAMILIARIZATION_SUMMARY.md
+
+- # Git Sovereign Agent Familiarization Summary
+- ## Complete Bridge Mastery Achieved
+- ## Executive Summary
+- ## What Was Accomplished
+- ### 1. Repository Metrics Analyzed
+- ### 2. Core Architecture Mastered
+- #### Entry Point (main.py)
+- #### Database Layer
+- #### Genesis Event Bus (The Central Nervous System)
+- ### 3. All 20+ Engines Documented
+- #### Core Infrastructure (6)
+- #### Super Engines (6) - Total: 137,000+ lines of code
+- #### Orchestrator (1)
+- #### Utility Engines (7+)
+- #### Advanced Systems (7+)
+- ### 4. Advanced Systems Understood
+- #### Forge Dominion (v1.9.7s)
+- #### Bridge Runtime Handler (BRH)
+- #### Git Sovereign Agent (My Role)
+- ### 5. Frontend Architecture Mapped
+- #### React 18+ with Vite
+- #### Key Components
+- ### 6. Deployment & Operations
+- #### CI/CD Pipeline
+- #### Health Monitoring
+- #### Security
+- ### 7. Documentation System Navigated
+- #### Master Documents
+- #### Quick References (20+)
+- ## Key Deliverable: BRIDGE_WALKTHROUGH_COMPLETE.md
+- ### Document Structure (14 Parts)
+- ## Issue Detection Capabilities
+- ### A. Backend Issues (8 items)
+- ### B. Engine Issues (8 items)
+- ### C. Frontend Issues (6 items)
+- ### D. Deployment Issues (7 items)
+- ### E. Security Issues (6 items)
+- ### F. Performance Issues (6 items)
+- ### G. Data Integrity Issues (7 items)
+- ## Emergency Procedures Documented
+- ### Database Recovery
+- # Nuclear option: rm bridge.db && python main.py
+- ### Engine Diagnostics
+- ### Genesis Bus Troubleshooting
+- ### Deployment Rollback
+- ## Operational Knowledge
+- ### Mission Lifecycle (8 steps)
+- ### Self-Healing Lifecycle (5 steps)
+- ## Common Operations Mastered
+- ### Development Workflow
+- # Backend: python main.py (port 8000)
+- # Frontend: npm run dev (port 5173)
+- # Seed: python seed.py
+- # Test: pytest / npm test
+- ### Engine Testing
+- ### Monitoring
+- ## Top 50 Critical Files Known
+- ## Standards Upheld
+- ## Conclusion
+
+
+### ./docs/archive/ENVSCRIBE_IMPLEMENTATION_COMPLETE.md
+
+- # EnvScribe v1.9.6u Implementation Summary
+- ## 🎯 Mission Accomplished
+- ## 📦 Components Delivered
+- ### Core Engine
+- ### CLI Tool
+- ### Documentation
+- ### Testing
+- ### Integration
+- ## 🔬 Test Results
+- ### Unit Tests (test_envscribe.py)
+- ### Integration Tests (test_envscribe_integration.py)
+- ### Existing Tests (test_envsync_pipeline.py)
+- ## 🚀 Capabilities
+- ### Scanning & Compilation
+- ### Verification
+- ### Output Generation
+- ### API Endpoints
+- ### Genesis Integration
+- ### EnvRecon Integration
+- ### Truth Engine Integration
+- ## 📊 Statistics
+- ## 🏗️ Architecture
+- ## 🎯 Use Cases Supported
+- ## 🔐 Security Features
+- ## 📈 Performance
+- ## 🔄 Integration Status
+- ## 📝 Example Outputs
+- ### CLI Audit
+- ### API Response (Health)
+- ## 🎓 Documentation
+- ## 🚦 Deployment Checklist
+- ## ✅ Acceptance Criteria (from PR)
+- ## 🏆 Achievement Unlocked
+
+
+### ./docs/archive/WORKFLOW_FAILURE_RESOLUTION.md
+
+- # Workflow Failure Resolution Framework
+- ## Overview
+- ## Components
+- ### 1. Browser Dependency Resolution
+- #### Reusable Workflow
+- #### Composite Action
+- ### 2. Sovereign Diagnostic Sweep
+- ### 3. Failure Pattern Analyzer
+- ### 4. PR Generator
+- # Dry run (default)
+- # Apply fixes
+- ### 5. Failure Patterns Configuration
+- ## Quick Start
+- ### Running Diagnostic Sweep
+- ### Using Browser Setup in Workflows
+- ### Running Local Analysis
+- # Analyze workflows
+- # Review the report
+- # Generate fixes (dry run)
+- ## Workflow Failure Patterns
+- ### Pattern: Browser Download Blocked
+- ### Pattern: Forge Auth Failure
+- ### Pattern: Deprecated Actions
+- ## Monitoring and Alerts
+- ### Success Criteria
+- ### Metrics
+- ## Architecture
+- ## Files Created
+- ### Workflows
+- ### Actions
+- ### Tools
+- ### Output
+- ## Contributing
+- ## Security
+- ## Support
+
+
+### ./docs/archive/ENVRECON_USER_CHECKLIST.md
+
+- # EnvRecon-Autonomy Integration - User Checklist
+- ## ✅ What's Already Done (by AI)
+- ## 📋 What You Need to Do
+- ### Step 1: Configure API Credentials (Required)
+- #### Render API Credentials
+- #### Netlify API Credentials
+- #### GitHub API Credentials
+- ### Step 2: Run Initial Audit
+- # Start the server
+- # In another terminal, run audit
+- ### Step 3: Get Missing Variables List
+- # Get the report
+- # Or check the file directly
+- # Pretty print missing variables
+- ### Step 4: Manually Sync Missing Variables
+- #### Add to Render
+- #### Add to Netlify
+- #### Add to GitHub
+- ### Step 5: Verify Sync
+- # Run another audit
+- # Check for remaining drift
+- ## 🔍 How to Monitor Going Forward
+- ### Automatic Monitoring (Already Active)
+- ### Manual Monitoring
+- # Check latest report
+- # Trigger manual audit
+- # Trigger auto-heal (reports intent only)
+- ### Genesis Event Monitoring
+- ## ⚠️ Important Notes
+- ### Auto-Sync Limitation
+- ### Variables That Must Be Manually Synced
+- ## 📚 Documentation Reference
+- ## 🧪 Testing
+- # Run EnvRecon tests
+- # Run integration tests
+- ## 🎯 Success Criteria
+- ## ❓ Troubleshooting
+- ### "API credentials not configured" warnings
+- ### Variables still showing as missing
+- ### Genesis events not appearing
+- ### Auto-heal not working
+- ## 📞 Get Full Auto-Sync
+- ## Summary
 
 
 ### ./docs/archive/V196C_IMPLEMENTATION_COMPLETE.md
@@ -11805,6 +11265,101 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - # 5. Start and test live
 - ## Commit Messages
 - ## Notes
+
+
+### ./docs/archive/ENVRECON_AUTONOMY_INTEGRATION.md
+
+- # EnvRecon-Autonomy Integration Guide
+- ## Overview
+- ## Architecture
+- ### Components
+- ## Setup Required
+- ### 1. API Credentials Configuration
+- #### Render API Setup
+- # Add to your .env file:
+- #### Netlify API Setup
+- # Add to your .env file:
+- #### GitHub Secrets Setup
+- # Add to your .env file:
+- ### 2. Genesis Configuration
+- # Enable Genesis mode (should already be enabled)
+- # Enable auto-healing (optional)
+- # Set echo depth limit to prevent loops
+- ## Current Status
+- ### Missing Variables Analysis
+- ### Variables That Cannot Be Auto-Fixed
+- ## Usage
+- ### Manual Audit
+- # Using the API
+- # Using the CLI
+- ### Auto-Sync with Healing
+- # Using the API
+- # Using the CLI
+- ### Check Latest Report
+- # Using the API
+- # Check the file directly
+- ### Emergency Sync (via Autonomy)
+- ## Genesis Event Monitoring
+- ### Drift Detection Event
+- ### Audit Complete Event
+- ### Heal Complete Event
+- ## Deployment Integration
+- ## Troubleshooting
+- ### "API credentials not configured" warnings
+- ### Variables not syncing automatically
+- ### Genesis events not publishing
+- ## Autonomous Environment Synchronization Pipeline (v1.9.6L)
+- ### New Capabilities
+- #### Features
+- #### Usage
+- # Sync from Render to GitHub
+- # Export snapshot
+- # Verify parity
+- #### Genesis Events
+- #### Documentation
+- ## Next Steps for Full Automation
+- ## Summary
+- ### ✅ What Works Now
+- ### ⚠️ What Requires Manual Action
+- ### 📋 Manual Sync Checklist
+
+
+### ./docs/archive/PR_SUMMARY_V197M.md
+
+- # Pull Request Summary: v1.9.7m Total Autonomy Protocol
+- ## Overview
+- ## Changes Summary
+- ## New Components
+- ### 1. Sanctum Engine (Predictive Simulation)
+- ### 2. Forge Engine (Autonomous Repair)
+- ### 3. Elysium Guardian (Continuous Monitoring)
+- ## Genesis Bus Integration
+- ## GitHub Actions Workflow
+- ## Documentation
+- ### New Documentation Files (6 total)
+- ## Deployment Tools
+- ### Activation Script
+- ### Implementation Summary
+- ## The Autonomy Cycle
+- ## Testing Performed
+- ## Configuration
+- ### Required Environment Variables
+- # Enable engines
+- # Elysium settings
+- # Genesis integration
+- ### Optional (already set in existing configs)
+- ## Post-Merge Instructions
+- ## Breaking Changes
+- ## Dependencies
+- ## Success Criteria
+- ## Related Issues
+- ## Reviewer Notes
+- ### Key Files to Review
+- ### Testing Recommendations
+- # Test individual engines
+- # Run activation script
+- # Trigger workflow manually
+- ## Version
 
 
 ### ./docs/archive/PARITY_ENGINE_RUN_SUMMARY.md
@@ -11861,6 +11416,67 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## 🎓 Technical Highlights
 
 
+### ./docs/archive/TOTAL_STACK_TRIAGE_VERIFICATION.md
+
+- # 🌉 SR-AIbridge v1.8.2 — Total-Stack Triage Mesh Verification Report
+- ## Executive Summary
+- ## 📋 Component Verification
+- ### 1. GitHub Actions Workflows (5/5) ✅
+- ### 2. Python Triage Scripts (6/6) ✅
+- ### 3. Documentation (2/2) ✅
+- ### 4. Diagnostic Reports (5/5) ✅
+- ## 🧪 Test Suite Verification
+- ### Test Coverage:
+- ## 🔍 Integration Verification
+- ### Workflow Integration ✅
+- ## 📊 Auto-Repair Capabilities Verified
+- ### Build Triage (build_triage_netlify.py) ✅
+- ### Runtime Triage (runtime_triage_render.py) ✅
+- ### Environment Parity Guard (env_parity_guard.py) ✅
+- ## 🎯 Signal Taxonomy Verified
+- ## 📁 File Structure Summary
+- ## ✅ Post-Merge Checklist Status
+- ## 🔬 Script Execution Validation
+- # ✅ Endpoint API Sweep
+- # ✅ Environment Parity Guard
+- # ✅ Deploy Triage (Unified Report)
+- ## 🎉 Conclusion
+- ### What This Means
+- ### Next Steps
+- ## 📝 Additional Notes
+- ### Dependencies Installed
+- ### Test Execution
+- # Run the comprehensive test suite
+- # Result: 22/22 tests passed ✅
+- ### Known Behaviors
+
+
+### ./docs/archive/BRIDGE_DIAGNOSTIC_REPORT.md
+
+- # SR-AIbridge Diagnostic Report
+- ## Executive Summary
+- ## Issues Found and Fixed
+- ### Critical Issue #1: Import Path Configuration ❌ → ✅
+- # Fixed in main.py:
+- ### Critical Issue #2: Database Configuration ❌ → ✅
+- # Fixed in .env:
+- ### Critical Issue #3: Engine Activation ❌ → ✅
+- # Added to .env:
+- ### Critical Issue #4: Blueprint Import Paths ❌ → ✅
+- # Fixed in routes_linked.py:
+- ## System Status: OPERATIONAL ✅
+- ### Core Systems
+- ### All 21 Engines Active
+- ## Validation Tests Passed
+- ### Basic Connectivity
+- ### Health Check
+- ### Engine Linkage Status
+- ## Known Non-Critical Warnings
+- ## Performance Metrics
+- ## Files Modified
+- ## Conclusion
+
+
 ### ./docs/archive/AUTONOMY_BACKEND_INTEGRATION_SUMMARY.md
 
 - # Autonomy Engine Backend Integration - Complete Summary
@@ -11900,6 +11516,151 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ### Modified (4 files)
 - ### Total Impact
 - ## Conclusion
+
+
+### ./docs/archive/COMPREHENSIVE_SCAN_REPORT.md
+
+- # Comprehensive Repository & Environment Scan Report
+- ## ✅ STUB CLEANUP COMPLETED (October 11, 2025)
+- ### Completed Fixes:
+- ## 📊 Executive Summary
+- ## 🗑️ Files Recommended for Cleanup
+- ### 1. Duplicate Files (7 files)
+- ### 2. Redundant Documentation (38 files)
+- ### 3. Dead/Unused Files (6 files)
+- ## 🔧 Environment Variables Requiring Manual Configuration
+- ### Priority: HIGH - API Credentials (6 variables)
+- ### Priority: HIGH - Deployment Configuration (8 variables)
+- ### Priority: MEDIUM - Application Configuration (35 variables)
+- ## 🌐 Environment Sync Status (EnvRecon Engine)
+- ## 📋 Recommended Action Plan
+- ### Phase 1: Cleanup (Low Risk)
+- ### Phase 2: Environment Setup (Required)
+- ### Phase 3: Configuration Review (Important)
+- ## 📄 Detailed Reports
+- ## 🚀 Next Steps
+- ## ✅ CLEANUP COMPLETED
+- ### Cleanup Results:
+- ### Archive Location:
+- ### What Was Kept:
+
+
+### ./docs/archive/HXO_NEXUS_CONNECTIVITY.md
+
+- # HXO Nexus Connectivity Implementation
+- ## Overview
+- ## Architecture
+- ### Core Components
+- ### Engine Connectivity Map
+- ### Connection Topology
+- ## The "1+1=∞" Paradigm
+- ### 1. Universal Connectivity
+- ### 2. Harmonic Resonance
+- ### 3. Emergent Synergy
+- ### 4. Infinite Scaling
+- ## Core Properties
+- ## HypShard v3 Features
+- ### Quantum Adaptive Sharding
+- ### Control Channels
+- ### Policies
+- ## Security Layers
+- ### 1. RBAC Scope
+- ### 2. Quantum Entropy Hashing (QEH-v3)
+- ### 3. Rollback Protection
+- ### 4. Recursion Limit
+- ### 5. Audit Trail
+- ## Harmonic Consensus Protocol (HCP)
+- ### Consensus Modes
+- ### Consensus Flow
+- ## API Endpoints
+- ### Health & Status
+- ### Engine Management
+- ### Connectivity
+- ### Orchestration
+- ## Configuration
+- ### Environment Variables
+- # HXO Nexus
+- # HypShard v3
+- # QEH-v3
+- ## Usage Examples
+- ### Initialize the Nexus
+- # Initialize HXO Nexus
+- # Check health
+- ### Register an Engine
+- # Register a custom engine
+- ### Coordinate Multiple Engines
+- # Define an intent requiring multiple engines
+- # Coordinate execution
+- ### Use HypShard v3
+- # Create a shard
+- # Execute task on shard
+- # Get statistics
+- ### Achieve Consensus
+- # Create proposal
+- # Engines vote
+- ## Integration with Genesis Bus
+- ### Subscribed Topics
+- ### Published Events
+- ## Testing
+- # Run HXO Nexus tests
+- # Expected: 34 tests pass
+- # - Core functionality: 9 tests
+- # - Async operations: 2 tests
+- # - HypShard v3: 7 tests
+- # - Security layers: 8 tests
+- # - Connectivity paradigm: 4 tests
+- # - Consensus protocol: 4 tests
+- ## Version History
+- ## Meta Information
+- ## Future Enhancements
+
+
+### ./docs/archive/FORGE_DOMINION_ENVIRONMENT_INTEGRATION.md
+
+- # 🜂 Sovereign Dominion Token Forge - Environment Integration Guide
+- ## 🎯 Overview
+- ### Key Principles
+- ## 🔧 Setup Instructions
+- ### Step 1: Generate Root Key
+- ### Step 2: Set GitHub Secret
+- ### Step 3: Set GitHub Variables (Optional)
+- ### Step 4: Verify Setup
+- ## 📋 Environment Files
+- ### Main Environment Files
+- ### Example/Template Files
+- ### Placeholder Pattern
+- ## 🔄 Token Lifecycle
+- ### Minting Tokens
+- ### Token Providers
+- ### Token Validation
+- ### Auto-Renewal
+- ## 🔐 Security Features
+- ### 1. Sealed Issuance
+- ### 2. Short Lifespan
+- ### 3. Continuous Audit
+- ### 4. Governance Pulse
+- ## 📦 GitHub Actions Integration
+- ### Using the Forge Dominion Setup Action
+- ### Updated Workflows
+- ### Migration Pattern for Other Workflows
+- ## 🧪 Testing
+- ### Local Testing
+- ### Running Tests
+- # Test Token Forge module
+- # Test Quantum Dominion integration
+- ### Secret Scanner Test
+- ## 🔍 Troubleshooting
+- ### Issue: "No FORGE_DOMINION_ROOT"
+- ### Issue: "Secret detection failed"
+- ### Issue: "Token validation fails"
+- # Force renewal for specific provider
+- ### Issue: Workflow fails with token errors
+- ## 📊 Token Forge Modules
+- ## 🎯 Benefits of Token Forge
+- ### Before Token Forge
+- ### After Token Forge
+- ## 📚 Additional Resources
+- ## ✅ Checklist: Environment Cleanup Complete
 
 
 ### ./docs/archive/AUTONOMY_DEPLOYMENT_COMPLETE.md
@@ -12001,6 +11762,124 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Summary
 
 
+### ./docs/archive/BRIDGE_WALKTHROUGH_COMPLETE.md
+
+- # SR-AIbridge Complete Walkthrough
+- ## Git Sovereign Agent - Full Bridge Mastery Documentation
+- ## Executive Summary
+- ### Repository Metrics
+- ### System Architecture Classification
+- ## Part I: Core Architecture
+- ### 1. Entry Point & Boot Sequence
+- ### 2. Database Layer (SQLite-first, PostgreSQL-ready)
+- ### 3. Genesis Event Bus (The Central Nervous System)
+- # Core Genesis topics
+- # Blueprint & Deployment
+- # Triage (Autonomy Integration)
+- # Federation
+- # Parity
+- # Autonomy Reflex Loop
+- # Super Engines (6 engines × multiple topics each)
+- # Core Systems
+- # Umbra Cognitive Stack (v1.9.7g)
+- # HXO Nexus (Harmonic Conductor)
+- # Chimera Deployment Engine (v1.9.7c)
+- ### 4. The 20+ Engine Orchestra
+- #### A. Core Infrastructure Engines (6)
+- #### B. Super Engines (6 Specialized AI)
+- #### C. Orchestrator (1)
+- #### D. Utility Engines (7+)
+- #### E. Advanced Systems (Additional Engines)
+- ## Part II: Advanced Systems
+- ### 5. Forge Dominion (Token Management) - v1.9.7s
+- ### 6. Bridge Runtime Handler (BRH) - v1.0.0-alpha
+- ### 7. Git Sovereign Agent (Your Role) - v1.0.0 "Cosmic"
+- ## Part III: Frontend Architecture
+- ### 8. React Dashboard (`bridge-frontend/`)
+- #### Core Dashboard
+- #### Mission & Agent Management
+- #### Monitoring & Health
+- #### Communication
+- #### Data & Logging
+- #### Administration
+- ## Part IV: Deployment & Operations
+- ### 9. CI/CD Pipeline (`.github/workflows/`)
+- ### 10. Health Monitoring & Self-Healing
+- ## Part V: Security Architecture
+- ### 11. Forge Dominion Security Model
+- ## Part VI: Testing & Validation
+- ### 12. Testing Infrastructure
+- # Test all 6 super engines
+- # Test all API endpoints
+- # Validate Genesis unified system
+- # Run repository study (Parser + Blueprint + Truth engines)
+- # Quick production health check
+- # CI/CD optimized
+- ## Part VII: Documentation System
+- ### 13. Documentation Architecture (370 Markdown Files)
+- ## Part VIII: Advanced Capabilities
+- ### 14. Genesis Linkage System
+- ### 15. Umbra Cognitive Stack (v1.9.7g)
+- ### 16. HXO Nexus (v1.9.6p) - Harmonic Conductor
+- ## Part IX: Key Operational Patterns
+- ### 17. Mission Lifecycle
+- ### 18. Self-Healing Lifecycle
+- ## Part X: Common Operations
+- ### 19. Development Workflow
+- # 1. Clone repository
+- # 2. Start backend
+- # Runs on http://localhost:8000
+- # 3. Start frontend (new terminal)
+- # Runs on http://localhost:5173 (or 3000)
+- # 4. Access points
+- # - Frontend: http://localhost:5173
+- # - Backend API: http://localhost:8000
+- # - API Docs: http://localhost:8000/docs
+- # - Health: http://localhost:8000/health/full
+- # 5. Seed demo data
+- # 6. Run tests
+- ### 20. Engine Testing
+- # Test all 6 super engines
+- # Test specific engine
+- # Response: {"result": "(x + 1)^2", ...}
+- # Test Genesis linkage
+- # Test Blueprint engine
+- ### 21. Monitoring & Debugging
+- # Health check
+- # System metrics
+- # Genesis event history
+- # Guardian status
+- # Vault logs (filter by level)
+- # WebSocket stats (use wscat or browser)
+- ## Part XI: Critical Files Reference
+- ### 22. Must-Know Files (Top 50)
+- ## Part XII: Issue Detection Checklist
+- ### 23. What to Watch For (Your Responsibilities)
+- #### A. Backend Issues
+- #### B. Engine Issues
+- #### C. Frontend Issues
+- #### D. Deployment Issues
+- #### E. Security Issues
+- #### F. Performance Issues
+- #### G. Data Integrity Issues
+- ## Part XIII: Emergency Procedures
+- ### 24. If Things Go Wrong
+- # Self-heal
+- # Nuclear option: Recreate database
+- # Check which engines are failing
+- # Check Genesis bus status
+- # Restart specific engine (feature flag)
+- # Check event bus health
+- # Review event history
+- # Check topic subscriptions
+- # Netlify: Use dashboard to rollback
+- # Render: Redeploy previous commit
+- # BRH: Use bridge.runtime.yaml to specify version
+- ## Part XIV: Advanced Topics
+- ### 25. Extending the Bridge
+- ## Conclusion
+
+
 ### ./docs/archive/AUTONOMY_INTEGRATION_COMPLETE.md
 
 - # Autonomy Integration - Implementation Complete ✅
@@ -12039,6 +11918,125 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Success Metrics
 
 
+### ./docs/archive/ENVRECON_UNFIXABLE_VARS.md
+
+- # Variables That Cannot Be Auto-Fixed - Quick Reference
+- ## Summary
+- ## Categories of Unfixable Variables
+- ### 1. API Credentials (Must Be Configured First)
+- # Render API
+- # Netlify API
+- # GitHub API
+- ### 2. Platform-Specific Variables (Manual Sync Required)
+- #### Add to Render:
+- #### Add to Netlify:
+- #### Add to GitHub:
+- ## Current Missing Variables Count
+- ## To Get Accurate Missing Variables List
+- ## Auto-Heal Capabilities
+- ### What Auto-Heal Can Do Now:
+- ### What Auto-Heal Cannot Do Yet:
+- ## Workaround: Manual Sync Process
+- ## Genesis Events for Monitoring
+- ## Future Enhancement: Full Auto-Sync
+- ## Contact for Implementation
+- ## Quick Commands
+- # Check if API credentials are configured
+- # Run audit
+- # Get report
+- # Trigger auto-heal (reports intent only)
+- # Check Genesis health
+- ## Documentation
+
+
+### ./docs/archive/BRH_IMPLEMENTATION_SUMMARY.md
+
+- # Bridge Runtime Handler - Implementation Summary
+- ## 🎯 Executive Summary
+- ### Key Achievement
+- ## ✅ Phase 1 Completion Status
+- ## 📦 Deliverables
+- ### Core Components
+- ### Testing
+- ## 🏗️ Architecture
+- ### Component Diagram
+- ### Integration Points
+- ## 🔐 Security Features
+- ### Token Management
+- ### Cryptographic Attestation
+- ### Network Security
+- ## 📊 Metrics & Performance
+- ### Test Results
+- ### Code Quality
+- ## 🚀 Usage Examples
+- ### Quick Start
+- # 1. Initialize BRH
+- # 2. Validate manifest
+- # 3. Check status
+- # 4. Deploy via GitHub
+- ### Manual Runtime
+- # Set Forge key
+- # Run runtime
+- ## 📋 Next Steps
+- ### Phase 2: GitHub Integration (Planned)
+- ### Phase 3: Federation Linking (Planned)
+- ### Phase 4: UI Integration (Planned)
+- ## 🎓 Lessons Learned
+- ### What Went Well
+- ### Challenges Overcome
+- ### Best Practices Established
+- ## 🤝 Integration with Existing Systems
+- ### Successfully Integrated With
+- ### Prepared For Integration
+- ## 📚 Resources
+- ### Documentation
+- ### Code Files
+- ## ✨ Conclusion
+
+
+### ./docs/archive/FINAL_VERIFICATION_REPORT.md
+
+- # Final Verification Report - Render Removal Complete
+- ## Executive Summary
+- ## Verification Results
+- ### ✅ Code Review
+- ### ✅ Security Scan (CodeQL)
+- ### ✅ Backend Integration
+- ### ✅ BRH Setup
+- ### ✅ Configuration Updates
+- ### ✅ Files Removed
+- ## Scan Statistics
+- ### Before Migration
+- ### After Migration
+- ### Remaining Render References (Non-Critical)
+- ## Test Results
+- ### Import Test
+- # Result: ✅ Backend OK
+- ### Token Forge Test
+- # Result: ✅ Token Forge OK
+- ### Backend Boot Test
+- # Backend starts successfully
+- # Genesis bus initializes
+- # All routes load (except missions - pre-existing issue)
+- # Forge integration active
+- ## Deployment Readiness
+- ### Environment Variables (Production)
+- # BRH Backend
+- # Frontend (Netlify)
+- # Backend
+- ### Deployment Commands
+- # Start BRH
+- # Deploy Frontend
+- # Deploy to Netlify with VITE_API_BASE set
+- ## Risk Assessment
+- ### Low Risk
+- ### Mitigation for Remaining References
+- ## Recommendations
+- ## Sign-off
+- ### Files Created
+- ### Commits Made
+
+
 ### ./docs/archive/COMPLIANCE_IMPLEMENTATION_SUMMARY.md
 
 - # Compliance Integration Implementation Summary
@@ -12069,6 +12067,53 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Files Modified
 - ## Files Created
 - ## Next Steps
+- ## Conclusion
+
+
+### ./docs/archive/RENDER_REMOVAL_COMPLETE.md
+
+- # Render Removal - Migration to BRH Complete
+- ## Summary
+- ## Changes Made
+- ### 1. Frontend Configuration Updates ✅
+- ### 2. Backend Configuration Updates ✅
+- # Old CORS
+- # New CORS (BRH-focused)
+- ### 3. Files Removed ✅
+- ### 4. Verification Status ✅
+- ## Architecture
+- ### New Deployment Flow
+- ## Environment Variables
+- ### Frontend (.env or environment)
+- # BRH Backend URL (update for production deployment)
+- # Or for production BRH deployment
+- # VITE_API_BASE=https://your-brh-domain.com
+- ### Backend (.env or environment)
+- # Database
+- # CORS (Netlify only, no Render)
+- # BRH Backend URL (for heartbeat and health checks)
+- # Forge Dominion
+- ## Remaining References (Non-Critical)
+- ### Documentation/Examples
+- ### Adapters (Backward Compatibility)
+- ## How to Deploy
+- ### Local Development
+- # 1. Start BRH
+- # 2. Access frontend
+- # Frontend will connect to http://localhost:8000
+- ### Production Deployment
+- # 1. Set environment variables
+- # 2. Run BRH
+- # 3. Deploy frontend to Netlify with:
+- # VITE_API_BASE=https://your-brh-domain.com
+- ## Testing
+- ### Quick Test
+- # 1. Verify backend imports
+- # 2. Start backend
+- # 3. Test health endpoint
+- ### Frontend Build Test
+- ## Migration Checklist
+- ## Next Steps (Optional)
 - ## Conclusion
 
 
@@ -12183,6 +12228,87 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Conclusion
 
 
+### ./docs/archive/FULL_SCAN_REPORT_2025.md
+
+- # Full System Scan Report - November 2025
+- ## ✅ Executive Summary
+- ## 📊 Detailed Scan Results
+- ### 1. ✅ Quantum Dominion Security
+- ### 2. ✅ API Triage
+- ### 3. ✅ Preflight
+- ### 4. ✅ Umbra Triage
+- ### 5. ✅ Build Triage (Netlify)
+- ### 6. ✅ Endpoint API Sweep
+- ### 7. ✅ Environment Parity Guard
+- ### 8. ✅ Runtime Triage (Render)
+- ## 🔍 Workflow Verification
+- ### ✅ Triage Workflows (7/7)
+- ### ✅ Security Workflows (1/1)
+- ### ✅ Deployment Workflows (2/2)
+- ## 🔧 Script Verification
+- ### GitHub Scripts (8/8)
+- ### Backend Scripts (3/3)
+- ## 🐍 Python Module Verification
+- ## 📈 Scan Statistics
+- ## ⚠️ Known Issues & Expected Behaviors
+- ### Expected in Development/CI Environment:
+- ### Informational Findings:
+- ## ✅ Recommendations
+- ### Immediate Actions: None Required
+- ### Optional Enhancements:
+- ## 📋 Compliance Matrix
+- ## 🎯 Conclusion
+- ### Next Steps
+
+
+### ./docs/archive/PHOENIX_SUMMARY.md
+
+- # Phoenix Protocol - Summary Report
+- ## 🔥 What is the Phoenix Protocol?
+- ### Key Principle
+- ## 📋 Current Status
+- ### ✅ Phase 1: Core Backend - **COMPLETE**
+- ## 🧪 Testing Results
+- # Health Check
+- # Full Health with Metrics
+- # Create Agent
+- # CalculusCore - Differentiation
+- # CalculusCore - Factoring
+- ## 📊 Comparison: Phoenix vs Current
+- ### Key Findings
+- ## 🎯 What's Next
+- ### Phase 2: Five More Engines
+- ### Phase 3: Support Systems
+- ### Phase 4: Frontend
+- ### Phase 5: Advanced Features
+- ### Phase 6: Deployment & Testing
+- ## 📈 Progress Tracking
+- ## 🎓 Lessons Learned
+- ### What Worked Well
+- ### What We Discovered
+- ### Recommendations
+- ## 🚀 How to Use Phoenix
+- ### Run Phoenix Backend
+- # Setup (first time)
+- # Run (uses port 8001)
+- # Access
+- # API: http://localhost:8001
+- # Docs: http://localhost:8001/docs
+- # Health: http://localhost:8001/health
+- ### Test Endpoints
+- # Health check
+- # Create agent
+- # Create mission
+- # Math engine
+- ### Compare with Current
+- # Run both simultaneously
+- # Compare health
+- # Compare agent structure
+- ## 📚 Documentation
+- ## 🏆 Achievements
+- ## 🔥 Conclusion
+
+
 ### ./docs/archive/V196H_IMPLEMENTATION_COMPLETE.md
 
 - # SR-AIbridge v1.9.6h — Implementation Complete
@@ -12222,6 +12348,120 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Backward Compatibility
 - ## Next Steps
 - ## Changelog (Concise)
+
+
+### ./docs/archive/STEWARD_JSON_FEATURE_COMPLETE.md
+
+- # 🎉 Feature Complete: Steward Environment Drift JSON Reporting
+- ## What Was Delivered
+- ## ✅ Implementation Summary
+- ### Changes Made
+- ## 🚀 How to Use
+- ### Quick Start
+- # Enable Steward
+- # Get the JSON report
+- ### API Endpoint
+- ### Python Code
+- ## 📊 JSON Report Format
+- ## ✨ Features
+- ## 🛡️ Security
+- ## 📝 Current State
+- ## 🎯 Next Steps
+- ### Now (Read-Only Mode)
+- ### Later (When Ready for Write Mode)
+- ## 📚 Documentation
+- ## 🎉 Summary
+
+
+### ./docs/archive/DOCUMENTATION_ENHANCEMENT_PLAN.md
+
+- # SR-AIbridge Documentation Enhancement Plan
+- ## Comprehensive Documentation Improvement Strategy
+- ## 🎯 Executive Summary
+- ## 📊 Current State Analysis
+- ### Documentation Coverage
+- ### File Statistics
+- ### Documentation Quality Issues
+- ## 🎯 Enhancement Goals
+- ### Primary Goals
+- ### Secondary Goals
+- ## 📋 Documentation Inventory
+- ### Undocumented Features
+- #### Backend Modules (Missing Primary Docs)
+- #### Engines (Incomplete Docs)
+- #### Frontend Components (Missing Docs)
+- ## 📝 Enhancement Tasks
+- ### Phase 1: Foundation (Week 1)
+- #### Task 1.1: Create Master Documentation Index
+- #### Task 1.2: Update Navigation Documents
+- #### Task 1.3: Consolidate Scattered Documentation
+- ### Phase 2: Core Documentation (Week 2)
+- #### Task 2.1: Update BUILD_DOSSIER.md
+- #### Task 2.2: Update SYSTEM_BLUEPRINT.md
+- #### Task 2.3: Enhance ENGINE_CATALOG.md
+- ### Phase 3: Feature Documentation (Week 3)
+- #### Task 3.1: Document Backend Modules
+- #### Task 3.2: Document Frontend Components
+- #### Task 3.3: Document Advanced Features
+- ### Phase 4: Examples & Tutorials (Week 4)
+- #### Task 4.1: Create Tutorial Series
+- #### Task 4.2: Add Code Examples
+- #### Task 4.3: Create Quick References
+- ### Phase 5: Integration & Polish (Week 5)
+- #### Task 5.1: Cross-Reference Everything
+- #### Task 5.2: Improve README.md
+- #### Task 5.3: Validate & Test
+- ## 📚 New Documentation Structure
+- ### Proposed Hierarchy
+- ## 🎯 Success Metrics
+- ### Quantitative Metrics
+- ### Qualitative Metrics
+- ## 🚀 Implementation Plan
+- ### Week 1: Foundation
+- ### Week 2: Core Updates
+- ### Week 3: Feature Documentation
+- ### Week 4: Examples & Tutorials
+- ### Week 5: Integration & Polish
+- ## 📈 Progress Tracking
+- ### Current Status
+- ### Target Status (5 Weeks)
+- ## 🎓 Lessons from Phoenix Protocol
+- ## 🔗 References
+
+
+### ./docs/archive/SCAN_REPORT_RENDER_REMOVAL.md
+
+- # Repository Scan Report - Render Removal Readiness
+- ## Summary
+- ## Issues
+- ## Information
+- ## Render References by File
+- ### bridge_backend/bridge_core/engines/envsync/providers/render.py
+- ### bridge_backend/diagnostics/full_scan_report.json
+- ### bridge_backend/engines/envrecon/core.py
+- ### bridge_backend/engines/steward/adapters/render_adapter.py
+- ### bridge_backend/hooks_triage_report.json
+- ### bridge_backend/scripts/deploy_diagnose.py
+- ### bridge_backend/scripts/endpoint_triage.py
+- ### bridge_backend/scripts/env_sync_monitor.py
+- ### bridge_backend/scripts/generate_sync_badge.py
+- ### bridge_backend/scripts/hooks_triage.py
+- ### bridge_backend/tests/test_runtime_guards.py
+- ### bridge_backend/tests/test_total_stack_triage.py
+- ### bridge_backend/tools/firewall_intel/analyze_firewall_findings.py
+- ### bridge_backend/tools/firewall_intel/fetch_firewall_incidents.py
+- ### bridge_backend/tools/network_diagnostics/check_copilot_access.py
+- ### bridge_backend/tools/parity_engine.py
+- ### netlify.toml
+- ### scripts/check_env_parity.py
+- ### scripts/firewall_watchdog.py
+- ### scripts/integrity_audit.py
+- ### scripts/repair_netlify_env.py
+- ### scripts/synthesize_netlify_artifacts.py
+- ### scripts/validate_copilot_env.py
+- ### test_endpoints_full.py
+- ### tests/test_anchorhold_protocol.py
+- ### tests/test_v196g_features.py
 
 
 ### ./docs/archive/V198_ENVSYNC_IMPLEMENTATION.md
@@ -12322,6 +12562,1234 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Documentation
 - ## Commits
 - ## Sign-off
+
+
+### ./docs/versions/V197I_IMPLEMENTATION_SUMMARY.md
+
+- # v1.9.7i Implementation Summary
+- ## Overview
+- ## Components Delivered
+- ### 1. Chimera Oracle (`bridge_backend/engines/chimera/`)
+- ### 2. Hydra Guard v2 (`bridge_backend/engines/hydra/`)
+- ### 3. Leviathan Simulator (`bridge_backend/engines/leviathan/`)
+- ### 4. GitHub Forge (`bridge_backend/engines/github_forge/`)
+- ### 5. Render Fallback (`bridge_backend/engines/render_fallback/`)
+- ### 6. CLI Tool (`bridge_backend/cli/deployctl.py`)
+- ### 7. GitHub Actions Integration
+- ### 8. Genesis Bus Integration
+- ### 9. Tests (`bridge_backend/tests/`)
+- ### 10. Documentation (`docs/`)
+- ## Deployment Pipeline Flow
+- ## Key Features
+- ## Environment Variables
+- ## Usage Examples
+- ### CLI
+- ### API
+- ### Python
+- ## Test Results
+- ## Next Steps
+- ## Files Modified
+- ## Files Created
+- ## Status
+
+
+### ./docs/versions/HXO_V196P_IMPLEMENTATION.md
+
+- # HXO v1.9.6p Implementation Summary
+- ## What Was Delivered
+- ## Changes Made
+- ### Core Files Modified (4)
+- ### Documentation Created (6 files, ~45KB)
+- ### Tests Created (1 file)
+- ### Changelog Updated
+- ## New Features Implemented
+- ### 1. Federation Nexus (9 Engines)
+- ### 2. New Capabilities (8 added)
+- ### 3. Genesis Bus Topics (11 added)
+- ### 4. Security Enhancements
+- ## Testing Results
+- ### Test Summary
+- ### Test Breakdown
+- ## Impact Metrics
+- ## Backward Compatibility
+- ## Migration Path
+- ### From v1.9.6n to v1.9.6p
+- ## Production Readiness Checklist
+- ## Deployment Instructions
+- ### Render
+- # Update environment variables in Render dashboard
+- # Deploy
+- ### Netlify
+- ### GitHub Actions
+- ## Next Steps
+- ### Recommended Post-Deployment
+- ### Optional Enhancements
+- ## Support Resources
+- ### Documentation
+- ### Quick References
+- ## Acknowledgments
+- ## Closing Statement
+
+
+### ./docs/versions/DEPLOYMENT_READY_v1.9.4.md
+
+- # SR-AIbridge v1.9.4 — Anchorhold Protocol
+- ## Deployment Readiness Report
+- ## Executive Summary
+- ## Implementation Status
+- ### ✅ Core Improvements (5/5 Complete)
+- ### ✅ Infrastructure Updates (2/2 Complete)
+- ### ✅ Dependencies (1/1 Complete)
+- ### ✅ Documentation (2/2 Complete)
+- ## Verification & Testing
+- ### Automated Test Suite
+- #### Test Coverage:
+- ### Validation Script
+- ## Files Changed
+- ### Modified Files:
+- ### New Files:
+- ## Deployment Instructions
+- ### Automated Deployment
+- ### Manual Verification (Optional)
+- # Check Render deployment
+- # Expected: {"status": "active", "version": "1.9.4", "protocol": "Anchorhold"}
+- # Check version endpoint
+- # Expected: {"version": "1.9.4", "protocol": "Anchorhold", ...}
+- # Check Netlify frontend
+- # Expected: Frontend HTML
+- # Check API proxy
+- # Expected: Same as Render version endpoint
+- ## Breaking Changes
+- ### Migration Notes:
+- ## Outcome Metrics (Expected)
+- ## Rollback Plan
+- ## Support & Monitoring
+- ### Health Checks
+- ### Troubleshooting Resources
+- ### Common Issues & Solutions
+- ## Contributors
+- ## Final Checklist
+
+
+### ./docs/versions/V197F_QUICK_REF.md
+
+- # v1.9.7f Cascade Synchrony - Quick Reference
+- ## 🚀 Quick Start
+- # Forge Core
+- # Cascade Synchrony Protocol
+- ## 📡 API Endpoints
+- ### Status & Configuration
+- ### Actions
+- ## 🧬 Architecture
+- ### Healing Flow
+- ### Platform Support
+- ## 📁 Key Files
+- ### Configuration
+- ### Core Modules
+- ## 🧪 Testing
+- ## 🔒 Security
+- ## 🌐 Integration Matrix
+- ## 📊 Status Check
+- ## 🎯 Usage Examples
+- ### Trigger Healing
+- ### Trigger Recovery
+- ### Manual Integration
+- ## 📈 Version Info
+- ## 🧭 Admiral Directive
+
+
+### ./docs/versions/V197L_QUICK_REF.md
+
+- # Bridge Health Record System — Quick Reference
+- ## 🩺 v1.9.7l Overview
+- ## 🚀 Quick Commands
+- ### Generate Health Record
+- ### Generate Badge
+- ### View Latest Health
+- ## 📊 Health Score Formula
+- ## 🎨 Badge Colors
+- ## 📂 File Locations
+- ## 🔄 Data Retention
+- ## 🧪 Testing
+- # Run all health record tests
+- # Run all badge tests
+- # Run both
+- ## 📋 Sample Output
+- ### Health Record JSON
+- ### Badge Display
+- ## 🔧 CI Integration
+- ## 🛠️ Troubleshooting
+- ### Badge not updating
+- # Check latest health record exists
+- # Manually regenerate badge
+- ### Missing health data
+- # Check source reports exist
+- # Manually generate health record
+- ### Low health score
+- ## 🔐 Security Notes
+- ## 📈 Future Enhancements
+
+
+### ./docs/versions/ARIE_V196O_IMPLEMENTATION.md
+
+- # ARIE v1.9.6o Implementation Summary
+- ## Overview
+- ## ✅ Implementation Complete
+- ### Files Added
+- ### Files Modified
+- ### Directories Created
+- ## 🔄 New Behavior
+- ### On Deploy Success
+- ### Scheduled Runs
+- ## ⚙️ Configuration Variables
+- ## 🧠 Genesis Event Topics
+- ### New Topics
+- ### Updated Flow
+- ## ✅ Safeguards
+- ### RBAC Guard
+- ### Truth Enforcement
+- ### Rollback Shield
+- ### Genesis Integration
+- ## 📊 Output Reports
+- ### arie_autorun.json
+- ### arie_certified.json
+- ### arie_rollback.json
+- ## 🔬 Testing Results
+- ### Test Coverage
+- ### Key Test Scenarios
+- ## 🚀 Production Readiness Checklist
+- ## 📝 Usage Examples
+- ### Enable Autonomous Scheduling
+- # In .env or platform dashboard
+- ### Manual Trigger (Admiral Only)
+- # Trigger manual run (requires Admiral handle)
+- ### Subscribe to Scheduler Events
+- ## 🔗 Related Documentation
+- ## 🎯 Next Steps
+
+
+### ./docs/versions/V196R_QUICK_REF.md
+
+- # v1.9.6r Quick Reference - Chimera Preflight + Autonomous Deploy Healing
+- ## Overview
+- ## What's New
+- ### 1. Chimera Preflight Engine
+- ### 2. GitHub Actions Deploy Preview Workflow
+- ### 3. Engine Defaults (All ON)
+- ## Usage
+- ### Manual Preflight
+- # Run preflight validation
+- # With JSON output
+- # Specify path
+- ### API Endpoint
+- ### Python API
+- ## Genesis Events
+- ## Auto-Healing
+- ## Configuration
+- ### Environment Variables
+- # Enable/disable Chimera (default: true)
+- # Netlify credentials (optional, for direct API integration)
+- ### Publish Directory Detection
+- ## Testing
+- ## Files Added
+- ## Modified Files
+- ## Integration Points
+- ### With ARIE
+- ### With Genesis Bus
+- ### With Steward  
+- ### With EnvRecon
+- ## Troubleshooting
+- ### Preflight fails with missing publish dir
+- ### GitHub Actions workflow doesn't commit
+- ### Genesis events show as invalid
+- ## Breaking Changes
+- ## Next Steps
+
+
+### ./docs/versions/AUTONOMY_V196S_IMPLEMENTATION.md
+
+- # Autonomy Decision Layer v1.9.6s - Implementation Summary
+- ## Overview
+- ## What Was Built
+- ### 1. Core Components
+- #### Governor (`bridge_backend/engines/autonomy/governor.py`)
+- #### Models (`bridge_backend/engines/autonomy/models.py`)
+- #### REST API (`bridge_backend/engines/autonomy/routes.py`)
+- #### Genesis Integration (`autonomy_genesis_link.py`)
+- #### CLI Tool (`bridge_backend/cli/autonomyctl.py`)
+- ### 2. Configuration & Integration
+- #### Genesis Bus Topics
+- #### Permissions
+- #### Main Application
+- #### GitHub Actions
+- #### Render Configuration
+- ### 3. Testing
+- #### Test Coverage
+- ### 4. Documentation
+- ## Decision Matrix
+- ## Safety Mechanisms
+- ### Rate Limiting
+- ### Cooldown
+- ### Circuit Breaker
+- ### Truth Certification
+- ## Environment Variables
+- # Core
+- # Safety
+- # Integration
+- ## Files Created/Modified
+- ### Created (17 files)
+- ### Modified (5 files)
+- ## Integration Points
+- ### Genesis Bus
+- ### Engines
+- ### CI/CD
+- ## Usage Examples
+- ### Via CLI
+- # Submit incident
+- # Check status
+- ### Via API
+- # Submit incident
+- ### Via Genesis
+- # Event-driven (automatic)
+- # → Autonomy link receives event
+- # → Governor decides and executes
+- # → Truth certifies
+- # → Result published to Genesis
+- ## Known Limitations
+- ## Next Steps
+- ## Success Criteria
+- ## Version
+
+
+### ./docs/versions/AUTONOMY_V196T_IMPLEMENTATION.md
+
+- # Autonomy v1.9.6t — The Living Bridge
+- ## Overview
+- ## Architecture
+- ## New Features
+- ### 1. Reinforcement Scoring
+- ### 2. New Actions
+- ### 3. Leviathan Prediction
+- ### 4. Truth Engine Certificates
+- ### 5. Blueprint Policy Evolution
+- ### 6. Engine Success Rate Tracking
+- ## GitHub Workflows
+- ### bridge_autonomy.yml
+- ### env_sync.yml
+- ## Environment Variables
+- ## Decision Flow
+- # 1. Check safety guardrails
+- # 2. Map incident to action
+- # ... etc
+- # 3. Execute action
+- # 4. Certify result
+- # 5. Predict future success
+- # 6. Update policies
+- # 7. Update engine success rates
+- ## Testing
+- ### Test Coverage
+- ## Integration Points
+- ### Genesis Bus
+- ### Engines
+- ### GitHub API
+- ## Files Changed
+- ### Created
+- ### Modified
+- ## Status
+- ## Usage
+- ### Triggering Autonomy Manually
+- ### Viewing Certificates
+- ### Checking Environment Sync
+- ## What Happens When...
+- ### A deployment fails?
+- ### Environment drift is detected?
+- ### An action fails repeatedly?
+- ## Future Enhancements
+
+
+### ./docs/versions/V197G_IMPLEMENTATION_SUMMARY.md
+
+- # v1.9.7g — Umbra Lattice Memory Bloom Implementation Summary
+- ## Overview
+- ## What Was Built
+- ### Core Components
+- ## Integration Points
+- ### Genesis Event Bus
+- ### Main Application
+- ### Version Updates
+- ## File Structure
+- ## Storage
+- ## Environment Variables
+- # Enable/disable Umbra Lattice (default: true)
+- # Strict truth certification (default: true)
+- # Snapshot interval (optional, default: 10m)
+- ## RBAC
+- ## Example Usage
+- ### CLI
+- # View last 7 days as mermaid graph
+- # Export snapshot
+- # Run bloom analysis
+- # Show statistics
+- ### API
+- # Get summary
+- # Get mermaid graph
+- # Export snapshot
+- # Run bloom analysis
+- # Get statistics
+- ### Python
+- # Initialize
+- # Record event
+- # Get summary
+- # Generate mermaid
+- # Export snapshot
+- ## Verification
+- ## Backward Compatibility
+- ## What's Next
+- ### Immediate (v1.9.7g)
+- ### Future Enhancements
+- ## Commit Summary
+- ## Admiral Summary
+
+
+### ./docs/versions/V197C_UNIFIED_GENESIS.md
+
+- # v1.9.7c Genesis Linkage - UNIFIED IMPLEMENTATION
+- ## 🎉 Status: ALL ENGINES UNIFIED
+- ## Summary
+- ### Unified Engine Count: 20
+- ## All Engines Unified
+- ### Core Infrastructure Engines (6)
+- ### Super Engines (6) - Coordinated by Leviathan
+- ### Orchestration (1)
+- ### Utility Engines (7)
+- ## New Implementation Components
+- ### New Adapter Files (3)
+- ### Updated Files
+- ## New API Endpoints
+- ## Event Bus Topics (Expanded)
+- ### Core Topics
+- ### Super Engine Topics
+- ### Orchestration Topics
+- ### Utility Engine Topics
+- ## Engine Dependencies
+- ### Dependency Graph
+- ## Configuration
+- # Enable Genesis Linkage endpoints
+- # Enable Blueprint Engine routes (optional)
+- # Optional: Configure guardrails
+- ## Validation
+- ### Engine Count Validation
+- # Should show: "count": 20
+- ### Super Engines Validation
+- # Should show all 6 super engines available
+- ### Utility Engines Validation
+- # Should show all 7 utility engines available
+- ### Leviathan Validation
+- # Should show super_engines_coordination with all 6 engines
+- ## Benefits
+- ## File Changes Summary
+- ### New Files (3)
+- ### Modified Files (3)
+- ### Documentation (1)
+- ## Deployment Status
+
+
+### ./docs/versions/V197F_CASCADE_SYNCHRONY.md
+
+- # v1.9.7f Cascade Synchrony - Environment Variables
+- ## Forge System Environment Variables
+- ### Core Forge Variables
+- #### FORGE_MODE
+- #### FORGE_SELF_HEAL
+- ### Synchrony Protocol Variables
+- #### CASCADE_SYNC
+- #### ARIE_PROPAGATION
+- #### UMBRA_MEMORY_SYNC
+- ### Existing Variables (Enhanced)
+- #### TRUTH_CERTIFICATION
+- ## Complete v1.9.7f Configuration
+- # Forge Core
+- # Cascade Synchrony Protocol
+- # Truth Certification (already enabled by default)
+- # Existing Engine Flags (ensure these are enabled)
+- ## Architecture Overview
+- ### Healing Flow
+- ### Platform Recovery Matrix
+- ## API Endpoints
+- ## Security Notes
+- ## Version Summary
+- ## Admiral Directive
+
+
+### ./docs/versions/V197M_IMPLEMENTATION.md
+
+- # v1.9.7m Implementation Summary
+- ## 🚀 Total Autonomy Protocol - Complete Self-Maintenance Architecture
+- ## Overview
+- ### What's New
+- ### The Autonomy Cycle
+- ## New Engines
+- ### Sanctum Engine
+- ### Forge Engine
+- # Scan only (no fixes)
+- ### Elysium Guardian
+- ## Genesis Bus Updates
+- ### New Topics (v1.9.7m)
+- ## GitHub Actions Workflow
+- ### Triggers
+- ### Jobs
+- ## Documentation
+- ## Configuration
+- ### Environment Variables
+- # Enable engines
+- # Elysium settings
+- # Genesis integration
+- # Truth certification
+- ## Post-Merge Activation
+- # Quick activation
+- # Or manual
+- ## Integration Points
+- ### With Existing Systems
+- ### RBAC
+- ## Testing
+- ### Individual Engines
+- # Sanctum
+- # Forge  
+- # Elysium
+- ### Full Integration
+- # Run activation script
+- # Or trigger workflow
+- ### Validation
+- ## File Structure
+- ## Success Criteria
+- ## Migration Notes
+- ### From v1.9.7l or earlier
+- ### Activation Steps
+- ## Known Limitations
+- ## Troubleshooting
+- ## Next Steps
+- ## Version History
+- ## Support
+
+
+### ./docs/versions/V196R_IMPLEMENTATION_COMPLETE.md
+
+- # v1.9.6r Implementation Complete ✅
+- ## Summary
+- ## Implementation Checklist
+- ## Files Created (15 total)
+- ### New Modules
+- ### Tests
+- ### CI/CD
+- ### Documentation
+- ## Files Modified (6 total)
+- ## Verification Results
+- ## How It Works
+- ### Normal Flow (Success)
+- ### Auto-Healing Flow (Failure)
+- ## Default Settings
+- ## Usage
+- ### CLI
+- ### API
+- ### Python
+- ## Genesis Events Published
+- ## Breaking Changes
+- ## Environment Variables
+- ## Testing
+- ## Next Steps
+- ## Notes
+- ## Success Metrics
+
+
+### ./docs/versions/V197F_IMPLEMENTATION_SUMMARY.md
+
+- # v1.9.7f Cascade Synchrony - Implementation Summary
+- ## 🎯 Mission Accomplished
+- ## 📊 Implementation Statistics
+- ## 🏗️ Architecture Components
+- ### 1. Forge Core (`bridge_backend/forge/forge_core.py`)
+- ### 2. Cascade Synchrony (`bridge_backend/forge/synchrony.py`)
+- ### 3. API Routes (`bridge_backend/forge/routes.py`)
+- ### 4. Configuration Files
+- #### `.github/bridge_forge.json`
+- #### `.github/forge_topology.json`
+- ### 5. Integration Tests (`tests/test_forge_cascade_synchrony.py`)
+- ## 🔄 Integration Points
+- ### Main Application Integration
+- # Forge v1.9.7f - Cascade Synchrony routes
+- # In startup_event:
+- ## 📚 Documentation
+- ### Primary Documentation
+- ## 🌊 Healing Flow Architecture
+- ## 🔒 Security Implementation
+- ## 🧪 Testing & Validation
+- ### Test Results
+- ### Application Startup Verification
+- ## 🎛️ Environment Variables
+- ### New Variables (v1.9.7f)
+- ### Required for Full Functionality
+- ## 📦 Deliverables Checklist
+- ## 🚀 Deployment Readiness
+- ### Pre-Deployment Checklist
+- ### Activation Instructions
+- ## 🎉 Success Metrics
+- ## 🧬 Evolutionary Leap Summary
+- ### Before v1.9.7f
+- ### After v1.9.7f
+- ## 🏆 Admiral Directive Fulfilled
+- ### Status: ✅ READY FOR MERGE
+
+
+### ./docs/versions/V196E_CONFIG_GUIDE.md
+
+- # v1.9.6e Environment Configuration Guide
+- ## Heartbeat Configuration
+- ### Basic Configuration
+- # Enable/disable heartbeat (default: true)
+- # Heartbeat target URL (auto-detects from RENDER_EXTERNAL_URL if not set)
+- # Preferred HTTP method (default: auto-detect)
+- # Options: GET, POST, HEAD
+- # Interval between heartbeats in seconds (default: 30)
+- # Timeout for each heartbeat request in seconds (default: 5)
+- ### Example Configurations
+- #### Render Deployment (Default)
+- # No configuration needed! 
+- # Heartbeat auto-detects RENDER_EXTERNAL_URL and uses GET method
+- #### Custom Heartbeat Target
+- #### Disable Heartbeat
+- # or
+- # or
+- #### High-Frequency Monitoring
+- ## How It Works
+- ### Method Auto-Detection
+- ### Backoff Strategy
+- ### Example Retry Pattern
+- ## Health Endpoint
+- # Both work!
+- ## Render Deployment
+- ### Option 1: Using start.sh (Recommended)
+- ### Option 2: Using Python module
+- ### Option 3: Direct uvicorn
+- ## Troubleshooting
+- ### Heartbeat Not Running
+- ### 405 Errors Persisting
+- ### Predictive Stabilizer
+
+
+### ./docs/versions/V196I_QUICK_REF.md
+
+- # v1.9.6i Quick Reference — Temporal Deploy Buffer
+- ## 🚀 Quick Start
+- ## 📍 Key Endpoints
+- # Health check (responds in 1-2s)
+- # Stage status
+- # Runtime info
+- # Port info
+- ## ⚙️ Environment Variables
+- # Enable/disable TDB (default: true)
+- # Stage timeout in seconds (default: 120)
+- # Render sets this automatically
+- ## 🌊 Deployment Stages
+- ## 🧪 Testing
+- # Run all tests
+- # Expected: 23/23 passing
+- ## 📊 Monitoring
+- # Check stage status
+- # Watch for readiness
+- ## 🔍 Diagnostics
+- ## 🛑 Disable TDB (Legacy Mode)
+- # Set in Render environment
+- # Or in .env
+- ## ✅ Expected Logs
+- ## 🚨 Troubleshooting
+- ### Render times out
+- ### Stage 2/3 fails
+- ### Want synchronous startup
+- ## 📁 Key Files
+- ## 🎯 Success Indicators
+
+
+### ./docs/versions/V196G_QUICK_REF.md
+
+- # V196G Quick Reference
+- ## SR-AIbridge v1.9.6g Predictive Stabilizer — Quick Reference
+- ### 🎯 What Changed
+- ### 🔍 Key Features at a Glance
+- ### 📊 Expected Behavior
+- #### During Startup (Good)
+- #### During Startup (Learning)
+- #### Pattern Detection (Silent)
+- ### 🗂️ File Locations
+- ### 🧪 Environment Variables
+- ### 📈 How Adaptive Thresholds Work
+- ### 🔧 Integration Points
+- #### In Your Startup Code
+- # Mark milestones
+- # Finalize boot
+- #### Manual Cleanup (Optional)
+- # Archive tickets older than 5 days
+- ### 🎓 Pro Tips
+- ### 🚨 Troubleshooting
+- ### 📚 Related Documentation
+
+
+### ./docs/versions/V197O_IMPLEMENTATION_SUMMARY.md
+
+- # v1.9.7o Implementation Summary
+- ## Reflex Loop Protocol - The Self-PR Engine
+- ## 🎯 Mission Accomplished
+- ## 📦 Deliverables
+- ### Core Implementation (6 files)
+- ### Genesis Integration (2 files modified)
+- ### Documentation (3 comprehensive guides)
+- ### Testing & Verification (2 files)
+- ### Configuration Updates (2 files)
+- ## 📊 Statistics
+- ## 🧪 Testing Results
+- ### Automated Verification
+- ### Manual Testing
+- ## 🔑 Key Features
+- ### 1. Self-PR Capability
+- ### 2. Truth Engine Signing
+- ### 3. RBAC Validation
+- ### 4. Offline Resilience
+- ### 5. Genesis Integration
+- ## 🔄 Workflow
+- ## 🎓 How to Use
+- ### 1. Create a Report
+- ### 2. Run Reflex Loop
+- # Manual
+- # Automatic (every 12 hours via workflow)
+- # Or trigger manually in GitHub Actions
+- ### 3. Verify PR
+- # Check queue
+- # View PR data
+- ## 🔒 Security Highlights
+- ## 🌟 Impact
+- ### Before v1.9.7o
+- ### After v1.9.7o
+- ## 📚 Documentation Structure
+- ## 🚀 Next Steps
+- ## ✅ Acceptance Criteria Met
+- ## 🎖️ Conclusion
+
+
+### ./docs/versions/V197N_IMPLEMENTATION_SUMMARY.md
+
+- # v1.9.7n Implementation Summary
+- ## 🚀 Embedded Autonomy Node - Complete Implementation
+- ## Overview
+- ## Implementation Details
+- ### 📁 Directory Structure Created
+- ### 🔄 Workflow Integration
+- ### 🌌 Genesis Integration
+- ### 📚 Documentation Created
+- ### 🧪 Testing & Verification
+- ## Feature Highlights
+- ### 🧠 Autonomy Core
+- ### 🕊️ Truth Micro-Certifier
+- ### ⚙️ Cascade Mini-Orchestrator
+- ### 🧩 Blueprint Micro-Forge
+- ### 📜 Parser Sentinel
+- ## Execution Flow
+- ## Configuration Options
+- ## Security & RBAC
+- ### Role-Based Access Control
+- ### Safety Mechanisms
+- ## Performance Characteristics
+- ### Resource Usage
+- ### Execution Time
+- ### Scalability
+- ## Integration Points
+- ### 1. Genesis Bus
+- ### 2. Total Autonomy Protocol (v1.9.7m)
+- ### 3. Cascade Engine
+- ## Testing Results
+- ### Unit Tests
+- ### Verification Script
+- ### Manual Testing
+- ## Files Changed
+- ### New Files (19 total)
+- ### Modified Files (3 total)
+- ### Total Changes
+- ## Post-Merge Behavior
+- ## Advantages
+- ### ✅ Zero External Dependencies
+- ### ✅ Continuous Availability
+- ### ✅ Cost Effective
+- ### ✅ Secure
+- ### ✅ Self-Contained
+- ## Future Enhancements
+- ## Comparison: Full Bridge vs Mini-Bridge
+- ## Verification Commands
+- # Run the node manually
+- # Run verification script
+- # Run unit tests
+- # Check configuration
+- # Validate workflow
+- ## Documentation References
+- ## Conclusion
+
+
+### ./docs/versions/ENGINES_ENABLE_TRUE_v196w.md
+
+- # v1.9.6w — engines_enable_true (Final Full Activation Protocol)
+- ## 🧠 Overview
+- ## ⚙️ Objective
+- ## 🧩 Permanent Engine Activation Architecture
+- ## 🧠 Engine Verification & Activation Matrix
+- ## 🔒 RBAC Security Enforcement
+- ## ⚙️ Default System Config
+- # Genesis Framework - v1.9.6w Full Engine Activation
+- # RBAC and Safety
+- # Individual Engine Flags (now default to true)
+- ## 🧩 Core Code Changes
+- ### main.py
+- # v1.9.6w engines_enable_true flag check
+- ### genesisctl.py
+- ### activation.py
+- ## 🧾 Verification Report
+- ## 🔗 Genesis Events
+- ## ✅ Testing Results
+- ## 🧠 Certification Dependency Chain Diagram
+- ## 🚀 CLI Commands
+- ### Activate All Engines
+- ### Check Engine Status
+- ## 🪶 Commit Message
+- ## 🚀 Result — The Fully Awakened Bridge
+- ## 👑 "Admiral command acknowledged. The Bridge stands fully awakened."
+
+
+### ./docs/versions/V196T_IMPLEMENTATION_SUMMARY.md
+
+- # v1.9.6t Implementation Summary
+- ## 🎉 Implementation Complete
+- ## 📋 Requirements Checklist
+- ### Core Philosophy ✅
+- ### Key Additions ✅
+- ### Workflows Added ✅
+- ### Unified Environment Configuration ✅
+- ### Visual (String-Theory JSON Map) ✅
+- ## 🧪 Tests ✅
+- ## ✅ Status
+- ## 🏁 System Flow
+- ## 📊 Implementation Statistics
+- ## 📚 Documentation
+- ## 🎯 Key Features
+- ### Reinforcement Learning
+- ### Predictive Intelligence
+- ### Cryptographic Proof
+- ### Adaptive Policies
+- ### GitHub Integration
+- ## 🔄 Integrations
+- ## 🚀 Deployment Ready
+- ## 🙏 Thank You!
+
+
+### ./docs/versions/V197Q_IMPLEMENTATION.md
+
+- # v1.9.7q — Sanctum Cascade Protocol
+- ## What This Release Does (Summary)
+- ## Files Added (New)
+- ### 1. Netlify Guard (publish path + API guard)
+- ### 2. Deferred Integrity (prevents early "validate" flake)
+- ### 3. Umbra Auto-Heal linker (bounded retry)
+- ## Files Modified
+- ### 4. Main boot sequence (ordered guards → reflex → umbra → integrity)
+- # === Sanctum Cascade Protocol v1.9.7q ===
+- # Ordered boot hardening: guards → reflex → umbra → integrity
+- # 1) Netlify publish path & token guard
+- # Reflex Auth Forge token fallback for Netlify egress
+- # 2) Umbra⇄Genesis link retry
+- # 3) Deferred integrity (after engines are steady)
+- # === end Sanctum Cascade Protocol ===
+- ## Workflow Added
+- ### 5. GitHub Workflow – orchestrate order & surface reasons
+- ## Environment (new/updated)
+- # v1.9.7q — Sanctum Cascade Protocol
+- # Optional, Netlify guard will auto-fallback if missing
+- # NETLIFY_AUTH_TOKEN=   # preferred; if missing, Reflex/GitHub token will be used
+- ## Documentation Added
+- ## Verification Plan (copy/paste)
+- ### 1. Open/Update any PR – watch these checks:
+- ### 2. Backend logs (Render) show:
+- ### 3. No more preflight/validate/guard/verify-deploy-paths failures.
+- ## Validation Testing
+- ## Rollback (safe)
+- ## Why This Is Permanent
+- ## Impact
+- ## Commit Message (ready to paste)
+
+
+### ./docs/versions/V196Y_QUICK_REF.md
+
+- # v1.9.6y Quick Reference
+- ## What Was Fixed
+- ### 1. HXO Nexus Startup Crash ✅
+- ### 2. Netlify Preview Checks ✅
+- ## Quick Commands
+- ### Check System Health
+- ### Generate Netlify Artifacts (if needed manually)
+- ### Test HXO Nexus
+- ### Run Tests
+- ## Files Modified
+- ## Files Created
+- ## Key Changes
+- ## What to Expect After Merge
+- ### Render Logs (HXO Nexus)
+- ### Netlify Preview
+- ### Diagnostics Output
+- ## Troubleshooting
+- ### If HXO Nexus still fails
+- # Check import
+- # Check initialization
+- ### If Netlify artifacts missing
+- # Regenerate
+- # Verify
+- ### If diagctl fails
+- # Run with errors visible
+- ## Architecture Notes
+- ## See Also
+
+
+### ./docs/versions/DEPLOYMENT_SUMMARY_V197Q.md
+
+- # v1.9.7q Deployment Summary — Sanctum Cascade Protocol
+- ## Executive Summary
+- ## What Was Built
+- ### New Modules (8 files)
+- ### Modified Files (1 file)
+- ### Documentation (5 files)
+- ### Testing (1 file)
+- ### Configuration (1 file)
+- ## Files Changed Summary
+- ## API Endpoints Added
+- ### Health Check Endpoints
+- ## Environment Variables
+- ### New Variables
+- # Deferred integrity check delay (seconds)
+- # Netlify publish path (optional, auto-detected)
+- # Netlify auth token (optional, GitHub token used as fallback)
+- ## Boot Sequence Changes
+- ### Before v1.9.7q
+- ### After v1.9.7q (Sanctum Cascade Protocol)
+- ## Validation Results
+- ## Expected Console Output
+- ## Breaking Changes
+- ## Migration Guide
+- ### For Existing Deployments
+- ### For New Deployments
+- ## Testing Checklist
+- ## Rollback Plan
+- ### Option 1: Remove Protocol Initialization
+- # === Sanctum Cascade Protocol v1.9.7q ===
+- # ... (all protocol code)
+- # === end Sanctum Cascade Protocol ===
+- ### Option 2: Disable Guards via Environment
+- ### Option 3: Full Rollback
+- ## Performance Impact
+- ## Security Considerations
+- ## Monitoring and Alerts
+- ### Recommended Monitoring
+- ### Sample Prometheus Query
+- # Guard health status
+- # Umbra retry count
+- ## Known Limitations
+- ## Future Enhancements
+- ## Support and Documentation
+- ## Commit History
+- ## Approval and Sign-off
+
+
+### ./docs/versions/V197E_IMPLEMENTATION.md
+
+- # v1.9.7e — Umbra + Netlify Integration Healing
+- ## 🌌 Overview
+- ## 🚀 What's New
+- ### 1. Netlify Validator Engine
+- ### 2. Validation Script
+- ### 3. Umbra Memory Enhancements
+- ### 4. API Endpoints
+- ### 5. CI/CD Workflow
+- ## 🧩 Architecture
+- ## ⚙️ Configuration
+- ### Environment Variables
+- # ===== Umbra Cognitive Stack v1.9.7e =====
+- # ===== Umbra + Netlify Integration v1.9.7e =====
+- # Optional: Netlify API credentials (for remote checks)
+- # Enable optional preview checks (graceful degradation if tokens missing)
+- ## 🔐 RBAC Enforcement
+- ## ✅ Testing
+- ### Running Tests
+- # Run Netlify validator tests
+- # Run all Umbra tests (including new features)
+- # Run validation script manually
+- ### Test Results
+- ## 🎯 Impact
+- ### Benefits
+- ### Cognitive Learning
+- ## 📊 Metrics & Monitoring
+- ### Validator Metrics
+- # Get validator metrics
+- ### Umbra Memory Metrics
+- # Get Umbra metrics including Netlify events
+- ## 🔄 Migration from v1.9.7d
+- ## 🧬 Commit Summary
+- ## 🧠 Admiral Summary
+- ## 📚 Related Documentation
+
+
+### ./docs/versions/V197L_IMPLEMENTATION_SUMMARY.md
+
+- # v1.9.7l — Bridge Health Record System Implementation Summary
+- ## 🎉 Implementation Complete
+- ## 📦 Deliverables
+- ### New Components
+- #### 1. `bridge_backend/metrics/health_record.py`
+- #### 2. `bridge_backend/cli/badgegen.py`
+- #### 3. `docs/badges/` Directory
+- ## ⚙️ CI Integration
+- ### Updated `.github/workflows/bridge_selftest.yml`
+- #### Step 1: Generate & Publish Health Record
+- #### Step 2: Commit Updated Badge
+- ## 📈 README Integration
+- ## 🧪 Test Coverage
+- ### Test Files Created
+- #### 1. `bridge_backend/tests/test_health_record.py` (17 tests)
+- #### 2. `bridge_backend/tests/test_badgegen.py` (16 tests)
+- ## 📊 Health Score Calculation
+- # Selftest pass rate (50%)
+- # Umbra issues (30%)
+- # Heal success rate (20%)
+- ## 🧩 Sample Badge Output
+- ### JSON Report
+- ### Badge Display
+- ## 🔒 Security & Governance
+- ## 🔄 Data Retention
+- ### Health History Management
+- ### .gitignore Rules
+- # v1.9.7l Bridge Health History (auto-generated, keep latest only)
+- ## 🧠 Benefits
+- ## 🚀 Usage Examples
+- ### Manual Health Record Generation
+- # Generate health record
+- # Generate badge
+- ### Viewing Health History
+- # List all health records
+- # View latest record
+- # View latest markdown report
+- ## ✅ Implementation Checklist
+- ## 📝 Next Steps
+- ## 🎯 Success Metrics
+
+
+### ./docs/versions/DEPLOYMENT_READY_v196g.md
+
+- # SR-AIbridge v1.9.6g — DEPLOYMENT SUMMARY
+- ## 🎯 Mission Accomplished
+- ### Tagline
+- ## 📊 What Was Delivered
+- ### 6 Major Features (All Complete ✅)
+- ## 📁 Files Changed
+- ### Modified Files (4)
+- ### New Files (3)
+- ## 🧪 Test Coverage
+- ### Test Results Summary
+- ### Test Categories
+- ## 🔧 Technical Highlights
+- ### New Functions (10)
+- ### Configuration Constants
+- ## 🎯 Expected Runtime Behavior
+- ### Before v1.9.6g (Noisy)
+- ### After v1.9.6g (Silent)
+- ## 📂 Directory Structure
+- ## 🚀 Deployment Instructions
+- ### 1. Merge the PR
+- # Review PR on GitHub
+- # Approve and merge to main
+- ### 2. Deploy to Render
+- # Render will auto-deploy on merge
+- # Or manually trigger deploy from Render dashboard
+- ### 3. Observe Adaptive Learning
+- ### 4. Monitor Results
+- # Check daily reports
+- # Check boot history
+- # Verify no false tickets
+- ## 🧠 How It Works
+- ### Startup Sequence (Adaptive)
+- ### Learning Cycle
+- ## 💡 Key Insights
+- ### What Makes This Different
+- ## 📚 Documentation
+- ## ✅ Quality Checklist
+- ## 🎓 Lessons Embodied
+- ## 🌟 Final Notes
+- ## 🚀 Ready for Deployment
+
+
+### ./docs/versions/V197J_IMPLEMENTATION_SUMMARY.md
+
+- # v1.9.7j Implementation Summary
+- ## Bridge Autonomy Diagnostic Pulse + Auto-Heal Trigger
+- ## 🎯 Overview
+- ## 📦 Deliverables
+- ### Core Components
+- ### Infrastructure
+- ### Documentation
+- ### Testing
+- ## 🔧 Technical Implementation
+- ### Self-Test Controller
+- ### Auto-Heal Trigger
+- ### Genesis Integration
+- ### CLI Integration
+- ## 🧪 Testing & Verification
+- ### Test Coverage
+- ### Verification Results
+- ### Integration Testing
+- ## 📊 Performance Metrics
+- ## 🔒 Security & Governance
+- ### RBAC Integration
+- ### Truth Engine Certification
+- ### Audit Trail
+- ## 🚀 Continuous Operation
+- ### Automatic Schedule
+- ### Failure Recovery
+- ## 📈 Report Schema
+- ### Summary Structure
+- ### Event Types
+- ### Status Values
+- ## 🎓 Usage Examples
+- ### Basic Self-Test
+- ### Disable Auto-Healing
+- ### View Latest Report
+- ### Check Specific Engine
+- ### Count Failed Engines
+- ## 🔍 Environment Configuration
+- ### Self-Test Configuration
+- ### Genesis Configuration
+- ## 📚 Documentation Index
+- ## ✅ Summary
+- ## 🚀 Next Steps
+
+
+### ./docs/versions/DEPLOYMENT_READY_v196f.md
+
+- # ✅ SR-AIbridge v1.9.6f — DEPLOYMENT READY
+- ## 🎯 What This Release Does
+- ## 🚀 Quick Deploy
+- ### On Render (Auto-deploy enabled)
+- ### Expected Result
+- ## 📊 What Changed
+- ### Modified Files (4)
+- ### New Files (4)
+- ## 🧪 Validation Status
+- ### Test Results
+- ### Deployment Verification
+- ## 📚 Key Features
+- ### 1. Adaptive Port Binding
+- # Prebind monitor with 100ms polling
+- ### 2. Deferred Heartbeat
+- # Startup sequence (main.py)
+- ### 3. Predictive Watchdog
+- ### 4. Self-Healing Diagnostics
+- ## 🔍 Monitoring
+- ### Log Messages to Watch
+- #### Good ✅
+- #### Warnings ⚠️
+- #### Errors ❌ (Should NOT appear)
+- ## 🧩 Migration Notes
+- ### From v1.9.6b → v1.9.6f
+- ### What Users Will Notice
+- ## 🎖️ Success Criteria
+- ## 📖 Documentation
+- ## 🚦 Rollback Plan
+- ## 🌟 Next Steps
+- ## 💬 Support
+
+
+### ./docs/versions/V196F_QUICK_REF.md
+
+- # v1.9.6f Quick Reference
+- ## 🎯 What This Release Fixes
+- ## 🔧 Key Features
+- ### 1️⃣ Adaptive Port Binding
+- ### 2️⃣ Deferred Heartbeat
+- ### 3️⃣ Predictive Watchdog
+- ## 📊 Startup Sequence
+- ## 🧪 Quick Test
+- # Test adaptive port resolution
+- # Expected output:
+- # [PORT] Resolved immediately: 10000
+- # [BOOT] Adaptive port bind: ok on 0.0.0.0:10000
+- # [STABILIZER] Startup latency X.XXs (tolerance: 6.0s)
+- # [HEARTBEAT] ✅ Initialized
+- ## 📁 Files Changed
+- ## ✅ Success Criteria
+- ## 🚀 Deploy Command
+- # Render auto-deploys via render.yaml
+- # Start command: bash scripts/start.sh
+- # Which runs: uvicorn bridge_backend.main:app --host 0.0.0.0 --port $PORT
+- ## 📈 Monitoring
+- ## 🔗 Related Docs
+
+
+### ./docs/versions/V196Y_IMPLEMENTATION.md
+
+- # v1.9.6y Implementation Complete ✅
+- ## Overview
+- ## Changes Made
+- ### 1. HXO Nexus Initialization Fix ✅
+- ### 2. Netlify Preview Hardening ✅
+- ### 3. Deep Diagnostics CLI ✅
+- ## Usage
+- ### Run Diagnostics
+- ### Generate Netlify Artifacts
+- ### Build for Netlify
+- ## Verification
+- # 34 passed in 0.52s
+- # ✅ HXO Nexus v1.9.6p 'Ascendant' is fully operational!
+- ## What's Fixed
+- ### HXO Nexus
+- ### Netlify Previews
+- ### Diagnostics
+- ## Genesis Topics
+- ## Next Steps
+- ## Notes
+
+
+### ./docs/versions/V197J_QUICK_REF.md
+
+- # v1.9.7j Quick Reference — Bridge Autonomy Diagnostic Pulse
+- ## 🚀 Quick Start
+- ### Run Self-Test Manually
+- # With auto-healing (default)
+- # Without auto-healing
+- ### View Latest Report
+- ### Check Specific Engine
+- ## 📊 Environment Variables
+- ## 🧩 Architecture
+- ### Components
+- ### Healing Strategies
+- ## 📋 Genesis Event Topics
+- ## 📊 Expected Metrics
+- ## 🔍 Common Tasks
+- ### Check Test Status
+- ### Count Failed Engines
+- ### List Healing Events
+- ### Get Healing Statistics
+- ## 🔒 Security & Governance
+- ## 🧪 Testing
+- ### Run Self-Test Tests
+- ### Validate Workflow
+- ## 📚 Documentation
+- ## 🛠️ Troubleshooting
+- ### Self-Test Disabled
+- ### Auto-Heal Not Working
+- ### Increase Retry Attempts
+- ## 🔄 GitHub Actions Integration
+- ## 📈 Report Schema
+- ## ⚡ Performance Tips
+- ## 🎯 Key Features
 
 
 ### ./docs/badges/README.md
@@ -13648,6 +15116,72 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 - ## Quick Start
 
 
+### ./phoenix/README.md
+
+- # 🔥 Phoenix - Documented Perfection Rebuild
+- ## What is This?
+- ### Purpose
+- ## 📁 Structure
+- ## 🚀 Quick Start
+- ### Run Phoenix Backend
+- ### Test Endpoints
+- # Health check
+- # API documentation
+- # Create an agent
+- # Use CalculusCore
+- ## ✅ Current Status
+- ### Phase 1: Core Backend - **COMPLETE** ✅
+- ### Phase 2: Five More Engines - **20% Complete**
+- ## 📊 Phoenix vs Current
+- ## 🧪 Testing
+- # Test CalculusCore differentiation
+- ## 📚 Documentation
+- ### In This Repo
+- ### Source Documentation
+- ## 🎯 What's Next
+- ### Immediate (Phase 2)
+- ### Short-term (Phases 3-4)
+- ### Long-term (Phases 5-6)
+- ## 💡 Key Learnings
+- ### What Phoenix Proves
+- ### What Phoenix Reveals
+- ## 🏆 Phoenix Achievements
+- ## 🔥 The Phoenix Philosophy
+- ## 🛠️ Development
+- ### Add New Feature
+- ### Testing
+- # Manual testing
+- # Use curl or Postman
+- # Automated testing (future)
+- # Compare with current
+- ## ⚡ FAQ
+- ## 📞 Support
+- ## 🌟 Summary
+
+
+### ./phoenix/backend/README.md
+
+- # Phoenix Protocol - Backend
+- ## 🔥 What is This?
+- ## 🚀 Quick Start
+- # Install dependencies
+- # Run backend (uses port 8001 to avoid conflict)
+- ## 📋 API Endpoints
+- ### Health & Status
+- ### Coming Soon (Following BUILD_DOSSIER phases)
+- ## 📚 Built From Documentation
+- ## 🎯 Current Status
+- ## 🔍 Comparison with Current
+- ## 📊 Testing
+- # Test health endpoints
+- ## 🛠️ Development
+- # Install dev dependencies
+- # Run tests (when available)
+- # Format code
+- # Lint code
+- ## 📝 Notes
+
+
 ---
 ## 🧬 Blueprint Overview
 
@@ -13688,6 +15222,16 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
   - from datetime import datetime
 
 
+### ./smoke_test_engines.py
+  - import sys
+  - from pathlib import Path
+  - from bridge_core.engines.parser.service import ParserEngine
+  - from bridge_core.engines.blueprint.blueprint_engine import BlueprintEngine
+  - from bridge_core.engines.truth.binder import bind_candidates
+  - from bridge_core.engines.truth.utils import TRUTH_DIR
+  - import traceback
+
+
 ### ./activate_autonomy.py
   - import sys
   - import asyncio
@@ -13697,6 +15241,25 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
   - from engines.arie.core import ARIEEngine
   - from engines.elysium.core import ElysiumGuardian
   - print("Make sure you're running this from the repository root.")
+  - import traceback
+
+
+### ./study_repo_with_engines.py
+  - import sys
+  - import os
+  - from pathlib import Path
+  - from typing import Dict, Any, List
+  - import json
+  - from datetime import datetime, timezone
+  - # Add the backend to the path to import engines
+  - from bridge_core.engines.parser.service import ParserEngine
+  - from bridge_core.engines.blueprint.blueprint_engine import BlueprintEngine
+  - from bridge_core.engines.truth.binder import bind_candidates, list_truths
+  - from bridge_core.engines.truth.finder import find_candidates
+  - from bridge_core.engines.truth.utils import TRUTH_DIR
+  - print("📋 Creating analysis blueprint from brief:")
+  - Generate a comprehensive report combining insights from all three engines
+  - "Blueprint Engine generated structured analysis plans from natural language briefs",
   - import traceback
 
 
@@ -13841,6 +15404,10 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 
 ### ./scripts/synthesize_netlify_artifacts.py
   - from pathlib import Path
+  - import os
+  - # If we're being called from bridge-frontend (Netlify base dir), use current dir
+  - # Running from bridge-frontend (Netlify context)
+  - # Running from repo root (legacy/local testing)
 
 
 ### ./scripts/validate_scanner_output.py
@@ -14472,20 +16039,20 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
   - from typing import Dict, Any
   - import logging
   - import os
-  - from ..blueprint.registry import BlueprintRegistry
-  - from ..blueprint.registry import BlueprintRegistry
-  - from ..blueprint.registry import BlueprintRegistry
-  - from ..blueprint.adapters import cascade_link
-  - from ..blueprint.adapters import super_engines_link
-  - from ..blueprint.adapters import utility_engines_link
-  - from ..blueprint.registry import BlueprintRegistry
-  - from ..blueprint.registry import BlueprintRegistry
-  - from ..blueprint.registry import BlueprintRegistry
-  - from ..blueprint.adapters import super_engines_link
-  - from ..blueprint.registry import BlueprintRegistry
-  - from ..blueprint.adapters import utility_engines_link
-  - from ..blueprint.registry import BlueprintRegistry
-  - from ..blueprint.adapters import leviathan_link
+  - from .blueprint.registry import BlueprintRegistry
+  - from .blueprint.registry import BlueprintRegistry
+  - from .blueprint.registry import BlueprintRegistry
+  - from .blueprint.adapters import cascade_link
+  - from .blueprint.adapters import super_engines_link
+  - from .blueprint.adapters import utility_engines_link
+  - from .blueprint.registry import BlueprintRegistry
+  - from .blueprint.registry import BlueprintRegistry
+  - from .blueprint.registry import BlueprintRegistry
+  - from .blueprint.adapters import super_engines_link
+  - from .blueprint.registry import BlueprintRegistry
+  - from .blueprint.adapters import utility_engines_link
+  - from .blueprint.registry import BlueprintRegistry
+  - from .blueprint.adapters import leviathan_link
 
 
 ### ./bridge_backend/bridge_core/engines/filing.py
@@ -15830,6 +17397,48 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
   - from bridge_backend.bridge_core.protocols.registry import list_registry, get_entry, activate_protocol, vault_protocol
 
 
+### ./bridge_backend/bridge_core/agents/git_sovereign/manifest.py
+  - from typing import Dict, List, Any
+  - from dataclasses import dataclass, field
+  - from datetime import datetime
+
+
+### ./bridge_backend/bridge_core/agents/git_sovereign/brh_integration.py
+  - from typing import Dict, List, Optional, Any
+  - from datetime import datetime
+  - import asyncio
+
+
+### ./bridge_backend/bridge_core/agents/git_sovereign/autonomy.py
+  - from typing import Dict, List, Optional, Any
+  - from datetime import datetime
+  - from enum import Enum
+  - from_scratch: Whether to start from cosmic scratch
+
+
+### ./bridge_backend/bridge_core/agents/git_sovereign/hxo_integration.py
+  - from typing import Dict, List, Optional, Any, Set
+  - from datetime import datetime
+
+
+### ./bridge_backend/bridge_core/agents/git_sovereign/sdtf_integration.py
+  - import os
+  - import base64
+  - import secrets
+  - import hmac
+  - import hashlib
+  - from typing import Dict, Optional, Any
+  - from datetime import datetime, timedelta
+
+
+### ./bridge_backend/bridge_core/agents/git_sovereign/__init__.py
+  - from .manifest import GitSovereignManifest, COSMIC_PARAMETERS
+  - from .sdtf_integration import SDTFGitIntegration
+  - from .brh_integration import BRHGitIntegration
+  - from .hxo_integration import HXOGitIntegration
+  - from .autonomy import AutonomousOperations
+
+
 ### ./bridge_backend/bridge_core/heritage/event_bus.py
   - from typing import Callable, Dict, Any, DefaultDict, List
   - from collections import defaultdict
@@ -16892,6 +18501,15 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
   - from typing import Dict, Any
   - import logging
   - import os
+
+
+### ./bridge_backend/forge/export_runtime.py
+  - import json
+  - import os
+  - import sys
+  - from datetime import datetime, timezone
+  - from pathlib import Path
+  - import hashlib
 
 
 ### ./bridge_backend/forge/__init__.py
@@ -18591,8 +20209,9 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
 
 ### ./bridge_backend/tests/test_activity_routes.py
   - from fastapi.testclient import TestClient
-  - from main import app
+  - import sys
   - from pathlib import Path
+  - from main import app
   - import json
 
 
@@ -19531,6 +21150,12 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
   - from bridge_backend.genesis.registration import register_embedded_nodes
 
 
+### ./tests/test_git_sovereign_agent.py
+  - import pytest
+  - from datetime import datetime
+  - from bridge_backend.bridge_core.agents.git_sovereign import (
+
+
 ### ./tests/test_v196h_features.py
   - import os
   - import sys
@@ -20253,4 +21878,87 @@ _Generated automatically on 2025-11-04T04:08:27.915853+00:00 UTC_
   - import sys
   - import time
   - from brh.forge_auth import parse_forge_root, verify_seal, mint_ephemeral_token
+
+
+### ./phoenix/backend/main.py
+  - import os
+  - from datetime import datetime
+  - from fastapi import FastAPI, HTTPException, Depends
+  - from fastapi.middleware.cors import CORSMiddleware
+  - from sqlalchemy.ext.asyncio import AsyncSession
+  - from sqlalchemy import select, func
+  - from contextlib import asynccontextmanager
+  - import db
+  - from models import Guardian, Agent, Mission, VaultLog
+  - from schemas import HealthResponse, FullHealthResponse
+  - from core.agents import routes as agent_routes
+  - from core.missions import routes as mission_routes
+  - from core.engines import calculus_core
+  - import uvicorn
+
+
+### ./phoenix/backend/schemas.py
+  - from pydantic import BaseModel, Field
+  - from datetime import datetime
+  - from typing import Optional, List, Dict, Any
+  - log_metadata: Dict[str, Any] = Field(default_factory=dict)  # Renamed from 'metadata'
+
+
+### ./phoenix/backend/db.py
+  - import os
+  - from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+  - from sqlalchemy.orm import sessionmaker
+  - from contextlib import asynccontextmanager
+  - from models import Base
+
+
+### ./phoenix/backend/models.py
+  - from sqlalchemy import Column, Integer, String, DateTime, Float, JSON, Text, Boolean
+  - from sqlalchemy.ext.declarative import declarative_base
+  - from datetime import datetime
+  - log_metadata = Column(JSON, default=dict)  # Renamed from 'metadata' (reserved)
+
+
+### ./phoenix/backend/core/__init__.py
+
+
+### ./phoenix/backend/core/engines/calculus_core.py
+  - from fastapi import APIRouter, HTTPException
+  - from pydantic import BaseModel
+  - from typing import Optional, List, Dict, Any
+  - import sympy as sp
+  - from sympy import sympify, latex
+  - from datetime import datetime
+  - steps.append(f"Applied definite integration from {request.bounds[0]} to {request.bounds[1]}")
+
+
+### ./phoenix/backend/core/engines/__init__.py
+
+
+### ./phoenix/backend/core/agents/__init__.py
+
+
+### ./phoenix/backend/core/agents/routes.py
+  - from fastapi import APIRouter, HTTPException, Depends
+  - from sqlalchemy.ext.asyncio import AsyncSession
+  - from sqlalchemy import select
+  - from datetime import datetime
+  - from typing import List, Optional
+  - import db
+  - from models import Agent
+  - from schemas import AgentCreate, AgentResponse
+
+
+### ./phoenix/backend/core/missions/__init__.py
+
+
+### ./phoenix/backend/core/missions/routes.py
+  - from fastapi import APIRouter, HTTPException, Depends
+  - from sqlalchemy.ext.asyncio import AsyncSession
+  - from sqlalchemy import select
+  - from datetime import datetime
+  - from typing import List, Optional
+  - import db
+  - from models import Mission
+  - from schemas import MissionCreate, MissionUpdate, MissionResponse
 

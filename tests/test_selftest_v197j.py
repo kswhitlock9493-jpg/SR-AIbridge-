@@ -223,7 +223,7 @@ class TestWorkflow:
             workflow = yaml.safe_load(f)
         
         assert "name" in workflow
-        assert workflow["name"] == "Bridge Autonomy Diagnostic Pulse"
+        assert workflow["name"] == "Bridge Autonomy Diagnostic Pulse (Autonomous Mode)"
         # YAML parses 'on' as True (boolean), so check for True key
         assert True in workflow or "on" in workflow
         assert "jobs" in workflow

@@ -641,7 +641,12 @@ async def startup_triage():
 
 @app.api_route("/", methods=["GET", "HEAD"])
 async def root():
-    return {"ok": True, "version": app.version}
+    return {
+        "ok": True,
+        "status": "active",
+        "version": app.version,
+        "environment": os.getenv("ENVIRONMENT", "production")
+    }
 
 @app.get("/api/version")
 def get_version():
