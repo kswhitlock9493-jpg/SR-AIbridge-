@@ -9,12 +9,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: '22' }
+        with: 
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 'bridge-frontend/package-lock.json'
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('bridge-frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
 
       - name: Install Chrome Dependencies
         run: |
           # Install Playwright browser dependencies
-          npx playwright install-deps
+          npx playwright install-deps chromium
           npx playwright install chromium
 
       - name: Install & Dry Build (monorepo aware)
