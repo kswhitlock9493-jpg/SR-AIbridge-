@@ -191,13 +191,20 @@ def test_record_and_report():
                 "failed": []
             }
             
-            report = engine._record_and_report(execution)
+            browser_check = {
+                "checked": True,
+                "blocked_domains": [],
+                "actions_taken": []
+            }
+            
+            report = engine._record_and_report(execution, browser_check)
             
             assert report["session_id"] == engine.session_id
             assert report["execution_summary"]["actions_executed"] == 1
             assert report["execution_summary"]["actions_skipped"] == 0
             assert report["execution_summary"]["actions_failed"] == 0
             assert "guardrails_enforced" in report
+            assert "browser_download_check" in report
             
             # Verify log file was created
             assert os.path.exists(autonomy_log)
@@ -206,6 +213,7 @@ def test_record_and_report():
             with open(autonomy_log, 'r') as f:
                 logged_report = json.load(f)
                 assert logged_report["session_id"] == engine.session_id
+
 
 
 def test_full_integration_no_issues():
