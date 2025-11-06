@@ -18,7 +18,7 @@ Your problem statement was:
 ## 📚 Your New Documentation System
 
 ### 1. Master Index (START HERE!)
-**[DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)** - Your map to everything
+**[DOCUMENTATION_INDEX.md](docs/DOCUMENTATION_INDEX.md)** - Your map to everything
 
 - Find any of 150+ documentation files in seconds
 - Organized by category: Engines, Backend, Frontend, Deployment, etc.
@@ -31,7 +31,7 @@ Your problem statement was:
 ---
 
 ### 2. Feature Inventory
-**[FEATURE_INVENTORY.md](FEATURE_INVENTORY.md)** - See what exists
+**[FEATURE_INVENTORY.md](docs/archive/FEATURE_INVENTORY.md)** - See what exists
 
 - Complete list of 100+ features
 - Documentation status for each (✅ Documented / ⚠️ Partial / ❌ Missing)
@@ -43,7 +43,7 @@ Your problem statement was:
 ---
 
 ### 3. Usage Guide
-**[DOCUMENTATION_USAGE_GUIDE.md](DOCUMENTATION_USAGE_GUIDE.md)** - Navigate efficiently
+**[DOCUMENTATION_USAGE_GUIDE.md](docs/DOCUMENTATION_USAGE_GUIDE.md)** - Navigate efficiently
 
 - Role-based learning paths (Beginner, Developer, Architect, DevOps)
 - Pro tips for finding things fast
@@ -55,7 +55,7 @@ Your problem statement was:
 ---
 
 ### 4. Enhancement Plan
-**[DOCUMENTATION_ENHANCEMENT_PLAN.md](DOCUMENTATION_ENHANCEMENT_PLAN.md)** - The roadmap
+**[DOCUMENTATION_ENHANCEMENT_PLAN.md](docs/archive/DOCUMENTATION_ENHANCEMENT_PLAN.md)** - The roadmap
 
 - 5-week plan to go from 60% to 95% documentation coverage
 - What's being improved and when
@@ -66,7 +66,7 @@ Your problem statement was:
 ---
 
 ### 5. Improvement Summary
-**[DOCUMENTATION_IMPROVEMENT_SUMMARY.md](DOCUMENTATION_IMPROVEMENT_SUMMARY.md)** - What we did
+**[DOCUMENTATION_IMPROVEMENT_SUMMARY.md](docs/archive/DOCUMENTATION_IMPROVEMENT_SUMMARY.md)** - What we did
 
 - Complete summary of this enhancement
 - Before/after comparison
@@ -81,7 +81,7 @@ Your problem statement was:
 
 ### Method 1: Use the Master Index (Recommended)
 ```
-1. Open DOCUMENTATION_INDEX.md
+1. Open docs/DOCUMENTATION_INDEX.md
 2. Ctrl+F (Cmd+F) to search for your topic
 3. Click the link
 4. Read and build!
@@ -89,15 +89,15 @@ Your problem statement was:
 
 ### Method 2: Browse the Feature Inventory
 ```
-1. Open FEATURE_INVENTORY.md
+1. Open docs/archive/FEATURE_INVENTORY.md
 2. Find your category (Engines, Backend, Frontend, etc.)
 3. See what's documented
-4. Jump to docs via DOCUMENTATION_INDEX.md
+4. Jump to docs via docs/DOCUMENTATION_INDEX.md
 ```
 
 ### Method 3: Follow a Learning Path
 ```
-1. Open NAVIGATION_INDEX.md
+1. Open docs/NAVIGATION_INDEX.md
 2. Choose your role/goal
 3. Follow the suggested path
 4. Progress through docs in order
@@ -133,22 +133,22 @@ Your problem statement was:
 ### If You're New to SR-AIbridge
 ```
 1. Start: README.md (15 min overview)
-2. Navigate: NAVIGATION_INDEX.md (choose your path)
-3. Quick start: QUICK_START_30MIN.md (get running)
-4. Reference: DOCUMENTATION_INDEX.md (as needed)
+2. Navigate: docs/NAVIGATION_INDEX.md (choose your path)
+3. Quick start: docs/quickrefs/QUICK_START_30MIN.md (get running)
+4. Reference: docs/DOCUMENTATION_INDEX.md (as needed)
 ```
 
 ### If You're a Developer
 ```
 1. Overview: README.md (skim, 10 min)
-2. Architecture: MASTER_ROADMAP.md + SYSTEM_BLUEPRINT.md (1 hour)
-3. Features: FEATURE_INVENTORY.md (see what exists, 20 min)
-4. Deep dive: Use DOCUMENTATION_INDEX.md to find specific topics
+2. Architecture: docs/MASTER_ROADMAP.md + docs/SYSTEM_BLUEPRINT.md (1 hour)
+3. Features: docs/archive/FEATURE_INVENTORY.md (see what exists, 20 min)
+4. Deep dive: Use docs/DOCUMENTATION_INDEX.md to find specific topics
 ```
 
 ### If You're Looking for Something Specific
 ```
-1. Go to: DOCUMENTATION_INDEX.md
+1. Go to: docs/DOCUMENTATION_INDEX.md
 2. Search: Ctrl+F for your topic
 3. Click: Link to documentation
 4. Build: Follow the guide
@@ -158,9 +158,9 @@ Your problem statement was:
 
 ## 💡 Pro Tips
 
-1. **Bookmark DOCUMENTATION_INDEX.md** - Your Swiss Army knife for navigation
+1. **Bookmark docs/DOCUMENTATION_INDEX.md** - Your Swiss Army knife for navigation
 2. **Use Ctrl+F** - Search is your friend in 150+ docs
-3. **Check FEATURE_INVENTORY.md first** - See if feature exists and is documented
+3. **Check docs/archive/FEATURE_INVENTORY.md first** - See if feature exists and is documented
 4. **Follow role-based paths** - Faster learning for your use case
 5. **Use quick refs** - Fast lookup after you understand a feature
 
@@ -189,7 +189,7 @@ Your problem statement was:
 - System monitoring
 - And 34 more components!
 
-**All indexed and documented in DOCUMENTATION_INDEX.md** ✅
+**All indexed and documented in docs/DOCUMENTATION_INDEX.md** ✅
 
 ---
 
@@ -204,11 +204,11 @@ Your problem statement was:
 - Navigation enhanced
 
 ### Next Phase (Weeks 3-4)
-- Complete ENGINE_CATALOG.md with all engines
+- Complete docs/ENGINE_CATALOG.md with all engines
 - Document Heritage system
 - Create complete API reference
-- Update BUILD_DOSSIER.md
-- Enhance SYSTEM_BLUEPRINT.md
+- Update docs/BUILD_DOSSIER.md
+- Enhance docs/SYSTEM_BLUEPRINT.md
 
 ### Future (Weeks 5-8)
 - Document remaining 40% of features
@@ -222,11 +222,11 @@ Your problem statement was:
 
 Want to help improve documentation?
 
-1. Check **FEATURE_INVENTORY.md** for undocumented features
-2. See **DOCUMENTATION_ENHANCEMENT_PLAN.md** for priorities
+1. Check **docs/archive/FEATURE_INVENTORY.md** for undocumented features
+2. See **docs/archive/DOCUMENTATION_ENHANCEMENT_PLAN.md** for priorities
 3. Follow existing doc formats
 4. Submit PR with new documentation
-5. Update DOCUMENTATION_INDEX.md to include it
+5. Update docs/DOCUMENTATION_INDEX.md to include it
 
 **All contributions welcome!**
 
@@ -249,13 +249,13 @@ You now have:
 
 ## 🎉 Start Exploring!
 
-**Your next step**: Open [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md) and explore what's available.
+**Your next step**: Open [DOCUMENTATION_INDEX.md](docs/DOCUMENTATION_INDEX.md) and explore what's available.
 
-**Can't find something?** Check [FEATURE_INVENTORY.md](FEATURE_INVENTORY.md) to see if it exists and its documentation status.
+**Can't find something?** Check [FEATURE_INVENTORY.md](docs/archive/FEATURE_INVENTORY.md) to see if it exists and its documentation status.
 
-**Want guidance?** Follow a learning path in [NAVIGATION_INDEX.md](NAVIGATION_INDEX.md).
+**Want guidance?** Follow a learning path in [NAVIGATION_INDEX.md](docs/NAVIGATION_INDEX.md).
 
-**Ready to build?** Jump to [QUICK_START_30MIN.md](QUICK_START_30MIN.md) and get running!
+**Ready to build?** Jump to [QUICK_START_30MIN.md](docs/quickrefs/QUICK_START_30MIN.md) and get running!
 
 ---
 

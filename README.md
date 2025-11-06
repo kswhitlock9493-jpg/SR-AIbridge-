@@ -68,14 +68,14 @@ SR-AIbridge is a comprehensive, production-ready platform for managing AI agents
 
 | Document | Purpose | Time | Best For |
 |----------|---------|------|----------|
-| **[📋 DOCUMENTATION_INDEX](DOCUMENTATION_INDEX.md)** | **Master index of all documentation** | 10 min | **ULTIMATE REFERENCE** |
-| **[📍 NAVIGATION_INDEX](NAVIGATION_INDEX.md)** | Choose your learning path | 5 min | Everyone - START HERE |
-| **[🚀 QUICK_START_30MIN](QUICK_START_30MIN.md)** | Get running fast | 30 min | Experienced developers |
-| **[🗺️ MASTER_ROADMAP](MASTER_ROADMAP.md)** | Complete project map | 30 min | Understanding the system |
-| **[🏗️ SYSTEM_BLUEPRINT](SYSTEM_BLUEPRINT.md)** | Technical architecture | 1 hour | Architects & developers |
-| **[🔨 BUILD_DOSSIER](BUILD_DOSSIER.md)** | Rebuild from scratch | 1-2 hours | Learning by building |
-| **[🧠 ENGINE_CATALOG](ENGINE_CATALOG.md)** | All 20+ engines | 45 min | Engine documentation |
-| **[📑 COMPONENT_INDEX](COMPONENT_INDEX.md)** | Find any file | 15 min | Quick reference |
+| **[📋 DOCUMENTATION_INDEX](docs/DOCUMENTATION_INDEX.md)** | **Master index of all documentation** | 10 min | **ULTIMATE REFERENCE** |
+| **[📍 NAVIGATION_INDEX](docs/NAVIGATION_INDEX.md)** | Choose your learning path | 5 min | Everyone - START HERE |
+| **[🚀 QUICK_START_30MIN](docs/quickrefs/QUICK_START_30MIN.md)** | Get running fast | 30 min | Experienced developers |
+| **[🗺️ MASTER_ROADMAP](docs/MASTER_ROADMAP.md)** | Complete project map | 30 min | Understanding the system |
+| **[🏗️ SYSTEM_BLUEPRINT](docs/SYSTEM_BLUEPRINT.md)** | Technical architecture | 1 hour | Architects & developers |
+| **[🔨 BUILD_DOSSIER](docs/BUILD_DOSSIER.md)** | Rebuild from scratch | 1-2 hours | Learning by building |
+| **[🧠 ENGINE_CATALOG](docs/ENGINE_CATALOG.md)** | All 20+ engines | 45 min | Engine documentation |
+| **[📑 COMPONENT_INDEX](docs/COMPONENT_INDEX.md)** | Find any file | 15 min | Quick reference |
 
 ### 📊 Documentation Coverage
 - **150+ markdown files** covering every feature
@@ -86,7 +86,7 @@ SR-AIbridge is a comprehensive, production-ready platform for managing AI agents
 - **100+ API endpoints** documented
 - **20+ quick reference cards** for fast lookup
 
-**NEW**: Can't find something? Check [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md) - the complete map of **ALL** documentation.
+**NEW**: Can't find something? Check [DOCUMENTATION_INDEX.md](docs/DOCUMENTATION_INDEX.md) - the complete map of **ALL** documentation.
 
 **Goal**: Zero to sovereign in 30 minutes. Complete mastery through comprehensive, navigable documentation.
 
