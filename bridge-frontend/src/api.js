@@ -42,7 +42,8 @@ class APIClient {
       }
     }
     
-    // Default: prepend "api-" and replace slashes
+    // Default: prepend "api" and replace slashes with dashes
+    // e.g., /users/profile -> /api-users-profile
     return `/api${endpoint.replace(/\//g, '-')}`;
   }
 
