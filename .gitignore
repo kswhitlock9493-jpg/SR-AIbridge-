@@ -18,6 +18,8 @@ bridge-frontend/netlify/functions/*
 !bridge-frontend/netlify/functions/health.ts
 !bridge-frontend/netlify/functions/telemetry.ts
 !bridge-frontend/netlify/functions/hello.ts
+# Include API endpoint functions
+!bridge-frontend/netlify/functions/api-*.js
 
 __pycache__/
 *.cache
