@@ -295,9 +295,11 @@ class TestMetadataValidation:
         
         token = generate_ephemeral_token("test_service", ttl=300, metadata=metadata)
         
-        # Token should have 5 parts (including metadata)
+        # Token format: service:timestamp:expiry:signature:metadata
+        # Should have 5 parts when metadata is included
+        EXPECTED_TOKEN_PARTS_WITH_METADATA = 5
         parts = token.split(":")
-        assert len(parts) == 5
+        assert len(parts) == EXPECTED_TOKEN_PARTS_WITH_METADATA
         assert parts[0] == "test_service"
     
     def test_generate_token_with_metadata_enforcement(self, monkeypatch):
@@ -465,6 +467,36 @@ class TestMetadataValidation:
         
         # Should not raise exception
         validate_metadata(metadata, require_metadata=True)
+    
+    def test_validate_malformed_token(self, monkeypatch):
+        """Test validation rejects malformed tokens."""
+        test_root = "test_forge_root_key_12345678901234567890"
+        monkeypatch.setenv("FORGE_DOMINION_ROOT", test_root)
+        
+        reset_forge()
+        
+        # Test various malformed tokens
+        malformed_tokens = [
+            "",  # Empty token
+            "invalid",  # Too few parts
+            "a:b:c",  # Too few parts
+            "a:b:c:d:e:f",  # Too many parts
+            "service:" + "x" * 10000,  # Token too long
+            None,  # None token
+        ]
+        
+        for token in malformed_tokens:
+            if token is None:
+                # None should return False, not crash
+                try:
+                    result = validate_ephemeral_token(token)
+                    assert result is False
+                except (TypeError, AttributeError):
+                    # Expected for None
+                    pass
+            else:
+                result = validate_ephemeral_token(token)
+                assert result is False, f"Token should be invalid: {token[:50] if len(token) > 50 else token}"
 
 
 if __name__ == "__main__":

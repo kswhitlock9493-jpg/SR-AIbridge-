@@ -12,8 +12,11 @@ import hashlib
 import time
 import json
 import base64
+import logging
 from typing import Optional, Dict, Any, List
 from datetime import datetime, timedelta
+
+logger = logging.getLogger(__name__)
 
 
 # Required metadata fields for secure token creation
@@ -25,6 +28,9 @@ REQUIRED_METADATA_FIELDS = [
     "access_scope",
     "audit_trail_id"
 ]
+
+# Constants
+SECONDS_PER_DAY = 86400  # Used for timestamp validation clock skew tolerance
 
 
 class MetadataValidationError(Exception):
@@ -80,7 +86,7 @@ def validate_metadata(metadata: Optional[Dict[str, Any]], require_metadata: bool
             datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
         elif isinstance(timestamp, (int, float)):
             # Unix timestamp
-            if timestamp < 0 or timestamp > time.time() + 86400:  # Allow 1 day in future for clock skew
+            if timestamp < 0 or timestamp > time.time() + SECONDS_PER_DAY:  # Allow 1 day in future for clock skew
                 raise MetadataValidationError(
                     "creation_timestamp is outside valid range"
                 )
@@ -259,11 +265,13 @@ class SecretForge:
             # Validate metadata even if not enforcing (to catch errors early)
             try:
                 validate_metadata(metadata, require_metadata=False)
-            except MetadataValidationError:
-                # If validation fails but enforcement is not enabled, allow it
-                # but log a warning
+            except MetadataValidationError as e:
+                # If validation fails but enforcement is not enabled, log warning and allow it
                 if not enforce:
-                    pass
+                    logger.warning(
+                        f"Token metadata validation failed but enforcement is disabled: {e}. "
+                        "Consider enabling SOVEREIGN_GIT=true for strict validation."
+                    )
                 else:
                     raise
             
@@ -302,8 +310,17 @@ class SecretForge:
             True if valid and not expired, False otherwise
         """
         try:
+            # Input validation
+            if not token or not isinstance(token, str):
+                return False
+            
+            # Limit token length to prevent abuse
+            if len(token) > 10000:  # Reasonable max length
+                return False
+            
             parts = token.split(":")
-            if len(parts) < 4:
+            # Token should have 4 or 5 parts (service:timestamp:expiry:signature[:metadata])
+            if len(parts) < 4 or len(parts) > 5:
                 return False
             
             service = parts[0]
@@ -311,6 +328,10 @@ class SecretForge:
             expiry = int(parts[2])
             signature = parts[3]
             metadata_encoded = parts[4] if len(parts) > 4 else None
+            
+            # Validate service name (basic sanitization)
+            if not service or len(service) > 100:
+                return False
             
             # Check if metadata is required
             enforce = require_metadata or os.getenv("SOVEREIGN_GIT", "").lower() == "true"
