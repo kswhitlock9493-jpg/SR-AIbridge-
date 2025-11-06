@@ -470,6 +470,42 @@ python main.py  # Will auto-create new database
 pip install -r requirements.txt --force-reinstall
 ```
 
+**Frontend Shows "Connecting..." or Backend Connection Failed:**
+
+If the frontend displays a "Connecting..." state or shows a "Backend Connection Failed" banner:
+
+1. **Check if BRH backend is running:**
+   ```bash
+   # Start BRH (Bridge Runtime Handler)
+   python -m brh.run
+   ```
+   Default port is 8000. Verify it's accessible at `http://localhost:8000/health`
+
+2. **Verify backend URL configuration:**
+   The frontend defaults to `http://localhost:8000`. To use a different URL:
+   ```bash
+   cd bridge-frontend
+   VITE_API_BASE=http://your-backend-url:8000 npm run build
+   ```
+
+3. **Check backend health:**
+   ```bash
+   curl http://localhost:8000/health
+   # Should return: {"status":"healthy"}
+   ```
+
+4. **Review network/firewall settings:**
+   - Ensure port 8000 is not blocked
+   - Check CORS settings in backend if using a different domain
+   - Verify no ad blockers or browser extensions blocking requests
+
+5. **Check browser console for errors:**
+   - Open Developer Tools (F12)
+   - Look for network errors or CORS issues
+   - Verify the API URL the frontend is trying to connect to
+
+See [BRH Deployment Guide](docs/BRH_DEPLOYMENT_GUIDE.md#frontend-configuration) for detailed frontend configuration instructions.
+
 ### Deployment Verification & Compliance (v1.6.6)
 
 **Bridge Compliance Checks:**
