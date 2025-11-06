@@ -2,6 +2,17 @@ import config from './config';
 
 const API_BASE_URL = config.API_BASE_URL;
 
+// Map endpoint paths to Netlify Function names (when using Netlify Functions)
+const NETLIFY_ENDPOINT_MAP = {
+  '/status': '/api-status',
+  '/agents': '/api-agents',
+  '/missions': '/api-missions',
+  '/vault/logs': '/api-vault-logs',
+  '/armada/status': '/api-armada-status',
+  '/health': '/api-system-health',
+  '/activity': '/api-activity'
+};
+
 // Enhanced API client with retry logic and robust error handling
 class APIClient {
   constructor(baseURL, options = {}) {
@@ -9,9 +20,35 @@ class APIClient {
     this.defaultTimeout = options.timeout || 10000;
     this.maxRetries = options.maxRetries || 3;
     this.baseRetryDelay = options.baseRetryDelay || 1000;
+    this.isNetlifyFunctions = baseURL.includes('/.netlify/functions');
+  }
+
+  // Transform endpoint for Netlify Functions if needed
+  transformEndpoint(endpoint) {
+    if (!this.isNetlifyFunctions) {
+      return endpoint;
+    }
+    
+    // For Netlify Functions, map the endpoint to the function name
+    // First check exact matches
+    if (NETLIFY_ENDPOINT_MAP[endpoint]) {
+      return NETLIFY_ENDPOINT_MAP[endpoint];
+    }
+    
+    // Check for partial matches (e.g., /missions?captain=x -> /api-missions?captain=x)
+    for (const [key, value] of Object.entries(NETLIFY_ENDPOINT_MAP)) {
+      if (endpoint.startsWith(key)) {
+        return endpoint.replace(key, value);
+      }
+    }
+    
+    // Default: prepend "api-" and replace slashes
+    return `/api${endpoint.replace(/\//g, '-')}`;
   }
 
   async request(endpoint, options = {}) {
+    // Transform endpoint if using Netlify Functions
+    const transformedEndpoint = this.transformEndpoint(endpoint);
     const {
       method = 'GET',
       headers = {},
@@ -20,7 +57,7 @@ class APIClient {
       retries = this.maxRetries
     } = options;
 
-    const url = `${this.baseURL}${endpoint}`;
+    const url = `${this.baseURL}${transformedEndpoint}`;
     const requestHeaders = {
       'Content-Type': 'application/json',
       ...headers

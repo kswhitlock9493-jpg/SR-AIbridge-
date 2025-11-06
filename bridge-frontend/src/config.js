@@ -4,7 +4,7 @@
 // Determine API base URL with proper precedence:
 // 1. VITE_API_BASE (Vite standard)
 // 2. REACT_APP_API_URL (React standard, supported via vite.config.js)
-// 3. Production default (bridge.sr-aibridge.com) for deployed builds
+// 3. Production default (Netlify Functions) for deployed builds
 // 4. Localhost for development mode
 const getApiBase = () => {
   // Check for explicit environment variables
@@ -20,8 +20,9 @@ const getApiBase = () => {
     return "http://localhost:8000";
   }
   
-  // Production default - BRH backend
-  return "https://bridge.sr-aibridge.com";
+  // Production default - Use Netlify Functions (relative paths)
+  // When deployed, /.netlify/functions/* will be available
+  return "/.netlify/functions";
 };
 
 export const API_BASE = getApiBase();

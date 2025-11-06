@@ -8,7 +8,7 @@
   environment = { FORGE_DOMINION_ROOT = "", REVIEW_ID = "", SECRETS_SCAN_OMIT_KEYS = "FORGE_DOMINION_ROOT", SECRETS_SCAN_OMIT_PATHS = "brh/*,docs/*,codex/*,netlify/functions/forge-resolver.js,infra/*,netlify.toml" }
 
 [functions]
-  directory = "netlify/functions"
+  directory = "bridge-frontend/netlify/functions"
 
 # Security headers
 [[headers]]
