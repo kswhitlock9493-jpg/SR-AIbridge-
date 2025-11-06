@@ -1,6 +1,6 @@
 // Netlify Function: System Health endpoint
 // GET /.netlify/functions/api-system-health
-export default async function handler(request, context) {
+export default async function handler(_request, _context) {
   return new Response(
     JSON.stringify({
       status: "healthy",

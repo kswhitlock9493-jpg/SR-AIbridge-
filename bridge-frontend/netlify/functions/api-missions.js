@@ -1,6 +1,6 @@
 // Netlify Function: Missions endpoint
 // GET /.netlify/functions/api-missions
-export default async function handler(request, context) {
+export default async function handler(_request, _context) {
   return new Response(
     JSON.stringify({
       missions: [

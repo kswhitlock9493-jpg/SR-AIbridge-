@@ -1,6 +1,6 @@
 // Netlify Function: Status endpoint
 // GET /.netlify/functions/api-status
-export default async function handler(request, context) {
+export default async function handler(_request, _context) {
   return new Response(
     JSON.stringify({
       agentsOnline: 3,

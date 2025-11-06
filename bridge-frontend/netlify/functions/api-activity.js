@@ -1,6 +1,6 @@
 // Netlify Function: Activity endpoint
 // GET /.netlify/functions/api-activity
-export default async function handler(request, context) {
+export default async function handler(_request, _context) {
   const now = Date.now();
   return new Response(
     JSON.stringify({

@@ -1,6 +1,6 @@
 // Netlify Function: Vault Logs endpoint
 // GET /.netlify/functions/api-vault-logs
-export default async function handler(request, context) {
+export default async function handler(_request, _context) {
   return new Response(
     JSON.stringify({
       logs: [
