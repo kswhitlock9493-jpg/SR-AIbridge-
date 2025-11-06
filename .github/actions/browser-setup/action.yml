@@ -24,8 +24,12 @@ runs:
       if: inputs.skip-chromium != 'true'
       shell: bash
       run: |
-        echo "🔧 Installing Chromium browser..."
-        npx playwright install chromium || echo "⚠️ Chromium install failed (non-critical)"
+        echo "🔧 Skipping Chromium browser download (using system browser to avoid firewall blocks)..."
+        echo "⚠️ System browser or pre-cached browser will be used instead"
+      env:
+        PUPPETEER_SKIP_DOWNLOAD: "true"
+        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
+        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
     
     - name: Configure Browser Environment Variables
       shell: bash
