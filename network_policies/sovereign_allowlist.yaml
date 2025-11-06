@@ -1,5 +1,5 @@
 version: 1.0.0
-last_updated: '2025-11-05T05:16:40.275165+00:00'
+last_updated: '2025-11-06T12:48:35.243572+00:00'
 domains:
   critical:
   - api.netlify.com
@@ -12,6 +12,12 @@ domains:
   - pypi.org
   monitoring:
   - sentry.io
+  browser_downloads:
+  - googlechromelabs.github.io
+  - storage.googleapis.com
+  - edgedl.me.gvt1.com
+  - playwright.azureedge.net
+  - cdn.playwright.dev
 ip_ranges:
   netlify:
   - 44.211.0.0/16

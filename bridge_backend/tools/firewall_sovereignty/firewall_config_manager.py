@@ -59,6 +59,12 @@ class FirewallConfigManager:
                 ],
                 "monitoring": [
                     "sentry.io"
+                ],
+                "browser_downloads": [
+                    "googlechromelabs.github.io",
+                    "storage.googleapis.com",
+                    "edgedl.me.gvt1.com",
+                    "playwright.azureedge.net"
                 ]
             },
             "ip_ranges": {
@@ -144,6 +150,16 @@ class FirewallConfigManager:
                     "destination": "infrastructure_domains",
                     "protocol": "https",
                     "enabled": True
+                },
+                {
+                    "id": "allow_browser_downloads",
+                    "action": "allow",
+                    "priority": 85,
+                    "source": "any",
+                    "destination": "browser_download_domains",
+                    "protocol": "https",
+                    "enabled": True,
+                    "description": "Allow browser downloads for Playwright/Puppeteer (Chrome, Chromium, etc.)"
                 },
                 {
                     "id": "block_unknown",

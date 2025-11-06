@@ -1,5 +1,5 @@
 version: 1.0.0
-last_updated: '2025-11-05T05:16:40.277094+00:00'
+last_updated: '2025-11-06T12:48:19.103259+00:00'
 rules:
 - id: allow_critical_domains
   action: allow
@@ -15,6 +15,15 @@ rules:
   destination: infrastructure_domains
   protocol: https
   enabled: true
+- id: allow_browser_downloads
+  action: allow
+  priority: 85
+  source: any
+  destination: browser_download_domains
+  protocol: https
+  enabled: true
+  description: Allow browser downloads for Playwright/Puppeteer (Chrome, Chromium,
+    etc.)
 - id: block_unknown
   action: log_and_notify
   priority: 10
