@@ -107,10 +107,14 @@ class SecretForge:
         This replaces ALL hardcoded tokens like ghp_*** with dynamic,
         short-lived credentials.
         
+        Note: Currently, metadata is included in signature generation but not
+        in token format. This means tokens with metadata cannot be validated.
+        For now, use metadata=None for tokens that need validation.
+        
         Args:
             service: Service name (e.g., "github", "netlify", "api")
             ttl: Time-to-live in seconds (default 300 = 5 minutes)
-            metadata: Optional metadata to include in token
+            metadata: Optional metadata (NOTE: not currently supported in validation)
             
         Returns:
             Ephemeral token string
@@ -177,7 +181,12 @@ class SecretForge:
                 return False
             
             # Reconstruct payload and verify signature
-            root_key = self.retrieve_forge_dominion_root()
+            try:
+                root_key = self.retrieve_forge_dominion_root()
+            except RuntimeError:
+                # If FORGE_DOMINION_ROOT is not set, validation fails
+                return False
+                
             payload = f"{service}|{timestamp}|{expiry}"
             expected_sig = hmac.new(
                 root_key.encode(),

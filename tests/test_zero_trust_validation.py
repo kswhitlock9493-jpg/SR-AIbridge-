@@ -255,10 +255,6 @@ password = "hardcoded_password_123"
         results = scanner.scan_file(test_file)
         
         assert results["file"] == "test.py"
-        
-        results = scanner.scan_file(test_file)
-        
-        assert results["file"] == "test.py"
         assert len(results["findings"]) > 0
         assert any(f["severity"] in ["critical", "high"] for f in results["findings"])
     

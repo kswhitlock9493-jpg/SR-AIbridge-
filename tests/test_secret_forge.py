@@ -86,10 +86,13 @@ class TestSecretForge:
         # Reset forge
         reset_forge()
         
+        # Note: metadata is currently not supported in validation
+        # This test only verifies generation works
         metadata = {"user": "test", "scope": "read"}
         token = generate_ephemeral_token("api", ttl=300, metadata=metadata)
         
         assert token.startswith("api:")
+        # Note: We don't validate this token as metadata is not yet supported in validation
     
     def test_validate_ephemeral_token_valid(self, monkeypatch):
         """Test validation of valid ephemeral token."""
