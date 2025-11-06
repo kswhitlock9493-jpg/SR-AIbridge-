@@ -7,7 +7,7 @@ import api from '../api';
 import Tree from './ui/Tree';
 import AgentDeliberationPanel from './AgentDeliberationPanel';
 
-export default function MissionLogV2({ missionId }) {
+export default function MissionLogV2({ missionId, captain: _captain }) {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

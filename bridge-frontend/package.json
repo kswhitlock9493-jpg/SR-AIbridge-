@@ -87,7 +87,7 @@
         }
       ],
       "react/prop-types": "off",
-      "no-unused-vars": ["error", { "varsIgnorePattern": "^React$" }]
+      "no-unused-vars": ["error", { "varsIgnorePattern": "^React$", "argsIgnorePattern": "^_" }]
     }
   },
   "browserslist": {
