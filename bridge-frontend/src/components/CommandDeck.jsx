@@ -10,6 +10,7 @@ import {
 } from '../api';
 import config from '../config';
 import UnifiedLeviathanPanel from './leviathan/UnifiedLeviathanPanel';
+import '../styles/command-deck.css';
 
 const API_BASE_URL = config.API_BASE_URL;
 
