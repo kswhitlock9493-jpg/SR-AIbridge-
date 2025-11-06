@@ -162,7 +162,9 @@ class WebSocketService {
         try {
           callback(data);
         } catch (error) {
-          console.error(`Error in WebSocket event listener for '${event}':`, error);
+          // Sanitize event name to prevent format string injection
+          const sanitizedEvent = String(event).replace(/[^\w-]/g, '_');
+          console.error('Error in WebSocket event listener for event:', sanitizedEvent, error);
         }
       });
     }

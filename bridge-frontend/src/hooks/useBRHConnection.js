@@ -28,7 +28,7 @@ export function useBRHConnection(options = {}) {
   });
 
   const intervalRef = useRef(null);
-  const mountedRef = useRef(true);
+  const mountedRef = useRef(false);
 
   /**
    * Connect to BRH backend
@@ -155,7 +155,7 @@ export function useRealtimeData(endpoint, options = {}) {
   const [error, setError] = useState(null);
   const [lastUpdate, setLastUpdate] = useState(null);
 
-  const mountedRef = useRef(true);
+  const mountedRef = useRef(false);
   const intervalRef = useRef(null);
 
   const fetchData = useCallback(async () => {

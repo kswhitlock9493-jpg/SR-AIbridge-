@@ -15,6 +15,9 @@ const SystemMonitor = () => {
   const [selfHealLoading, setSelfHealLoading] = useState(false);
   const [selfHealResult, setSelfHealResult] = useState(null);
 
+  // Constants
+  const REFETCH_DELAY_MS = 2000; // Wait 2 seconds after heal before refetching
+
   // Parse health data
   const status = healthData?.status || 'unknown';
   const components = healthData?.components || {};
@@ -70,7 +73,7 @@ const SystemMonitor = () => {
       // Refetch health after heal
       setTimeout(() => {
         refetch();
-      }, 2000);
+      }, REFETCH_DELAY_MS);
     } catch (err) {
       setSelfHealResult({ success: false, error: err.message });
     } finally {
