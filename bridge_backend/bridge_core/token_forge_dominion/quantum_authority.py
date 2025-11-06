@@ -15,6 +15,7 @@ from typing import Dict, Optional, Any
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from cryptography.hazmat.backends import default_backend
+from .secret_forge import retrieve_environment
 
 
 class QuantumAuthority:
@@ -32,7 +33,8 @@ class QuantumAuthority:
         """
         self.root_key = self._get_or_generate_root_key(root_key)
         self.version = "1.9.7s"
-        self.mode = os.getenv("FORGE_DOMINION_MODE", "sovereign")
+        # Use forge to retrieve environment variable
+        self.mode = retrieve_environment("FORGE_DOMINION_MODE", "sovereign")
         
     def _get_or_generate_root_key(self, root_key: Optional[str]) -> bytes:
         """
@@ -47,7 +49,8 @@ class QuantumAuthority:
         if root_key:
             return base64.urlsafe_b64decode(root_key + "==")
         
-        env_key = os.getenv("FORGE_DOMINION_ROOT")
+        # Use forge to retrieve environment variable
+        env_key = retrieve_environment("FORGE_DOMINION_ROOT")
         if env_key:
             return base64.urlsafe_b64decode(env_key + "==")
         

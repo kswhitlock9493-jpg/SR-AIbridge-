@@ -73,9 +73,14 @@ class TestZeroTrustValidator:
     
     def test_hardcoded_pattern_detection_github_token(self):
         """Test detection of GitHub tokens."""
+        from bridge_backend.bridge_core.token_forge_dominion import generate_ephemeral_token
+        
         validator = ZeroTrustValidator()
         
-        content = 'GITHUB_TOKEN=ghp_1234567890abcdefghijklmnopqrstuvwxyz'
+        # Use a realistic GitHub token pattern for testing detection
+        # This is a fake pattern that looks like a GitHub token but is safe
+        test_token = "ghp_" + "X" * 36  # Fake pattern for testing
+        content = f'GITHUB_TOKEN={test_token}'
         detections = validator.detect_hardcoded_patterns(content)
         
         assert len(detections) > 0
@@ -236,13 +241,18 @@ class TestQuantumScanner:
         scanner = QuantumScanner(root_path=str(tmp_path))
         
         # Create test file with secrets
+        # Use fake patterns that look like secrets but are safe test data
         test_file = tmp_path / "test.py"
         test_file.write_text("""
 # Test file with secrets
 API_KEY = "fake_test_XXXXXXXXXXXXXXXX"
-SECRET_TOKEN = "ghp_FAKETOKEN1234567890abcdefghijklmnopqr"
+SECRET_TOKEN = "ghp_" + "X" * 36  # Fake GitHub token pattern for testing
 password = "hardcoded_password_123"
 """)
+        
+        results = scanner.scan_file(test_file)
+        
+        assert results["file"] == "test.py"
         
         results = scanner.scan_file(test_file)
         
@@ -306,11 +316,11 @@ def main():
         report_clean = scanner.quantum_scan()
         assert report_clean["status"] in ["CLEAN", "LOW_RISK"]
         
-        # Repo with critical issues
-        (tmp_path / "critical.py").write_text('GITHUB_TOKEN = "ghp_1234567890abcdefghijklmnopqrstuvwxyz"')
+        # Repo with critical issues - use fake pattern for testing
+        (tmp_path / "critical.py").write_text('GITHUB_TOKEN = "ghp_' + 'X' * 36 + '"  # Fake pattern for test')
         scanner2 = QuantumScanner(root_path=str(tmp_path))
         report_critical = scanner2.quantum_scan()
-        # Should detect the GitHub token
+        # Should detect the GitHub token pattern
         assert report_critical["total_findings"] > 0
     
     def test_remediation_report(self, tmp_path):

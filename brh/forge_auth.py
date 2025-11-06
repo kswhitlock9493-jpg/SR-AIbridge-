@@ -6,6 +6,14 @@ import time
 import urllib.parse as up
 from dataclasses import dataclass
 
+# Import secret forge for sovereign secret retrieval
+try:
+    from bridge_backend.bridge_core.token_forge_dominion.secret_forge import retrieve_environment
+except ImportError:
+    # Fallback for environments where bridge_backend is not available
+    def retrieve_environment(key: str, default=None):
+        return os.getenv(key, default)
+
 
 @dataclass
 class ForgeContext:
@@ -16,7 +24,8 @@ class ForgeContext:
     sig: str
 
 
-FORGE_ENV = os.getenv("FORGE_DOMINION_ROOT", "")
+# Use forge to retrieve environment variable
+FORGE_ENV = retrieve_environment("FORGE_DOMINION_ROOT", "")
 
 
 def parse_forge_root(raw: str = FORGE_ENV) -> ForgeContext:
@@ -34,8 +43,9 @@ def parse_forge_root(raw: str = FORGE_ENV) -> ForgeContext:
 def verify_seal(ctx: ForgeContext, *, skew_seconds: int = 900) -> None:
     """HMAC-SHA256 over '<root>|<env>|<epoch>' using DOMINION_SEAL.
        Rejects if time skew > ±15 min or sig mismatch (unless allow_unsigned)."""
-    seal = os.getenv("DOMINION_SEAL", "")
-    allow_unsigned = os.getenv("BRH_ALLOW_UNSIGNED", "false").lower() == "true"
+    # Use forge to retrieve environment variables
+    seal = retrieve_environment("DOMINION_SEAL", "")
+    allow_unsigned = retrieve_environment("BRH_ALLOW_UNSIGNED", "false").lower() == "true"
     if not seal:
         if allow_unsigned:
             return
@@ -53,6 +63,7 @@ def verify_seal(ctx: ForgeContext, *, skew_seconds: int = 900) -> None:
 
 def mint_ephemeral_token(ctx: ForgeContext) -> str:
     """Deterministic, short-lived token (Phase-1). Replace with SDTF call in Phase-2."""
-    seal = os.getenv("DOMINION_SEAL", "dev-seal")
+    # Use forge to retrieve environment variable
+    seal = retrieve_environment("DOMINION_SEAL", "dev-seal")
     msg = f"{ctx.root}|{ctx.env}|{ctx.epoch}|mint".encode()
     return hmac.new(seal.encode(), msg, hashlib.sha256).hexdigest()[:40]
