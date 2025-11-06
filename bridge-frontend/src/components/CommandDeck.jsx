@@ -69,14 +69,17 @@ const CommandDeck = () => {
       }));
 
       const dataFetchers = [
-        getStatus,
-        getAgents,
-        getMissions,
+        getStatus,     // index 0 - critical
+        getAgents,     // index 1 - critical
+        getMissions,   // index 2 - critical
         getVaultLogs,
         getArmadaStatus,
         getSystemHealth,
         getActivity
       ];
+
+      // Define critical endpoint indices
+      const CRITICAL_ENDPOINTS = [0, 1, 2]; // status, agents, missions
 
       const results = await Promise.allSettled(dataFetchers.map(fetcher => fetcher()));
       
@@ -121,13 +124,13 @@ const CommandDeck = () => {
 
       // Check if any critical endpoints failed
       const criticalFailures = results.filter((result, index) => 
-        result.status === 'rejected' && [0, 1, 2].includes(index) // status, agents, missions
+        result.status === 'rejected' && CRITICAL_ENDPOINTS.includes(index)
       );
 
       if (criticalFailures.length > 0) {
         updates.error = `${criticalFailures.length} critical endpoint(s) failed`;
         // If ALL critical endpoints failed, it's a connection issue
-        if (criticalFailures.length === 3) {
+        if (criticalFailures.length === CRITICAL_ENDPOINTS.length) {
           updates.connectionStatus = 'failed';
         } else {
           updates.connectionStatus = 'degraded';
