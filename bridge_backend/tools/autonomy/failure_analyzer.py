@@ -27,11 +27,12 @@ class FailurePatternAnalyzer:
             "fix_template": {
                 "add_step": {
                     "name": "Install Chrome Dependencies",
-                    "run": "npx playwright install-deps\nnpx playwright install chromium"
+                    "run": "npx playwright install-deps"
                 },
                 "add_env": {
                     "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD": "true",
-                    "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD": "false"
+                    "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD": "true",
+                    "PUPPETEER_SKIP_DOWNLOAD": "true"
                 }
             }
         },
@@ -167,7 +168,11 @@ class FailurePatternAnalyzer:
             
             # Check for missing browser setup in workflows that need it
             if "playwright" in content.lower() or "puppeteer" in content.lower():
-                if "PUPPETEER_SKIP" not in content and "playwright install" not in content:
+                # Check for browser setup with proper skip flags (flexible matching)
+                has_install_deps = bool(re.search(r'playwright\s+install-deps', content, re.IGNORECASE))
+                has_skip_flags = "PUPPETEER_SKIP" in content or "PLAYWRIGHT_SKIP" in content
+                
+                if not has_skip_flags and not has_install_deps:
                     issue = {
                         "file": file_path,
                         "pattern": "missing_browser_setup",
@@ -176,7 +181,14 @@ class FailurePatternAnalyzer:
                         "solution": "add_browser_setup",
                         "auto_fixable": True,
                         "fix_template": {
-                            "add_step": "- name: Setup Browsers\n  run: |\n    npx playwright install-deps\n    npx playwright install chromium"
+                            "add_step": (
+                                "- name: Setup Browsers\n"
+                                "  run: npx playwright install-deps\n"
+                                "  env:\n"
+                                "    PUPPETEER_SKIP_DOWNLOAD: \"true\"\n"
+                                "    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: \"true\"\n"
+                                "    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: \"true\""
+                            )
                         }
                     }
                     self.issues.append(issue)

@@ -27,9 +27,12 @@ jobs:
 
       - name: Install Chrome Dependencies
         run: |
-          # Install Playwright browser dependencies
+          # Install system dependencies for Playwright only (skip browser downloads)
           npx playwright install-deps
-          npx playwright install chromium
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
 
       - run: pip install requests python-dotenv
 
@@ -51,6 +54,9 @@ jobs:
         env:
           BRIDGE_URL: ${{ secrets.BRIDGE_URL }}
           BRIDGE_SLACK_WEBHOOK: ${{ secrets.BRIDGE_SLACK_WEBHOOK }}
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
         run: |
           cd bridge-frontend
           npm ci
