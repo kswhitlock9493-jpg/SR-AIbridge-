@@ -29,12 +29,17 @@ export PUPPETEER_SKIP_DOWNLOAD=true
 export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true
 export NPM_CONFIG_PRODUCTION=false
 
+# Change to bridge-frontend directory where the actual frontend code lives
+cd bridge-frontend
+
 # Check if frontend has a build script and build it
 if [ -f "package.json" ] && jq -e '.scripts.build' package.json >/dev/null 2>&1; then
-  echo "📦 Installing npm dependencies..."
+  echo "📦 Installing npm dependencies in bridge-frontend..."
   npm ci --no-audit --prefer-offline
   echo "🔨 Building frontend..."
   npm run build
+  echo "📂 Build output:"
+  ls -la dist/
 else
   echo "📝 Creating minimal dist for preview..."
   mkdir -p dist
