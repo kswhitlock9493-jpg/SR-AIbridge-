@@ -8,7 +8,10 @@ import {
   getSystemHealth,
   getActivity 
 } from '../api';
+import config from '../config';
 import UnifiedLeviathanPanel from './leviathan/UnifiedLeviathanPanel';
+
+const API_BASE_URL = config.API_BASE_URL;
 
 // Command Deck - Enhanced Dashboard with better error handling and UX
 const CommandDeck = () => {
@@ -123,7 +126,12 @@ const CommandDeck = () => {
 
       if (criticalFailures.length > 0) {
         updates.error = `${criticalFailures.length} critical endpoint(s) failed`;
-        updates.connectionStatus = 'degraded';
+        // If ALL critical endpoints failed, it's a connection issue
+        if (criticalFailures.length === 3) {
+          updates.connectionStatus = 'failed';
+        } else {
+          updates.connectionStatus = 'degraded';
+        }
       }
 
       setDashboardState(prev => ({ ...prev, ...updates }));
@@ -193,8 +201,36 @@ const CommandDeck = () => {
         </div>
       </div>
 
+      {/* Backend Connection Error Banner */}
+      {(dashboardState.connectionStatus === 'failed' || dashboardState.connectionStatus === 'degraded') && (
+        <div className="error-banner backend-config-notice">
+          <div className="error-content">
+            <span className="error-icon">🔌</span>
+            <div className="error-message">
+              <strong>Backend Connection Failed</strong>
+              <p>Cannot connect to BRH (Bridge Runtime Handler) backend at <code>{API_BASE_URL}</code></p>
+              <details className="config-details">
+                <summary>Configuration Help</summary>
+                <div className="config-help">
+                  <p><strong>To configure the backend:</strong></p>
+                  <ol>
+                    <li>Start BRH: <code>python -m brh.run</code> (default port: 8000)</li>
+                    <li>Or set <code>VITE_API_BASE</code> environment variable to your backend URL</li>
+                    <li>For Netlify deployment, configure backend URL in build settings</li>
+                  </ol>
+                  <p><strong>Current API Base:</strong> <code>{API_BASE_URL}</code></p>
+                </div>
+              </details>
+            </div>
+          </div>
+          <button onClick={fetchCommandDeckData} className="retry-btn">
+            Retry Connection
+          </button>
+        </div>
+      )}
+
       {/* Error Banner */}
-      {dashboardState.error && (
+      {dashboardState.error && dashboardState.connectionStatus === 'connected' && (
         <div className="error-banner">
           <span className="error-icon">⚠️</span>
           <span className="error-message">Error: {dashboardState.error}</span>

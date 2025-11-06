@@ -347,6 +347,109 @@
   gap: 0.5rem;
 }
 
+/* Backend Configuration Notice */
+.backend-config-notice {
+  background: rgba(255, 193, 7, 0.15);
+  border: 2px solid rgba(255, 193, 7, 0.6);
+  flex-direction: column;
+  align-items: stretch;
+  padding: 1.5rem;
+}
+
+.backend-config-notice .error-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.backend-config-notice .error-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.backend-config-notice .error-message {
+  flex: 1;
+}
+
+.backend-config-notice .error-message strong {
+  display: block;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #ffc107;
+}
+
+.backend-config-notice .error-message p {
+  margin: 0.5rem 0;
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.backend-config-notice .error-message code {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: #4fc3f7;
+}
+
+.config-details {
+  margin-top: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+.config-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #ffc107;
+  margin-bottom: 0.5rem;
+  user-select: none;
+}
+
+.config-details summary:hover {
+  color: #ffdb4d;
+}
+
+.config-help {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.config-help p {
+  margin: 0.5rem 0;
+}
+
+.config-help strong {
+  color: #ffc107;
+}
+
+.config-help ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.config-help li {
+  margin: 0.5rem 0;
+  color: #fff;
+}
+
+.backend-config-notice .retry-btn {
+  align-self: flex-end;
+  background: #ffc107;
+  color: #000;
+  font-weight: 600;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+.backend-config-notice .retry-btn:hover {
+  background: #ffdb4d;
+}
+
 .error-icon {
   font-size: 1.2rem;
 }
