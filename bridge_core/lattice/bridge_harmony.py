@@ -14,10 +14,9 @@ This module provides:
 """
 
 import sys
-import json
 from pathlib import Path
-from typing import Dict, List, Set, Optional
-from dataclasses import dataclass, asdict
+from typing import Dict, List, Optional, Any
+from dataclasses import dataclass
 
 
 @dataclass
@@ -62,7 +61,7 @@ class BridgeHarmonyOrchestrator:
         Auto-discover all bridge engines across the repository.
         
         Scans for:
-        - Core engines (Blueprint, TDE-X, Cascade, Truth, Autonomy, Parser)
+        - Core engines (Blueprint, HXO Nexus, Cascade, Truth, Autonomy, Parser)
         - Super engines (Leviathan, CalculusCore, QHelmSingularity, etc.)
         - Utility engines (Creativity Bay, Screen, Speech, etc.)
         """
@@ -152,31 +151,35 @@ class BridgeHarmonyOrchestrator:
     
     def _determine_dependencies(self, name: str, category: str) -> List[str]:
         """Determine engine dependencies for auto-wiring."""
-        # All engines depend on Genesis Bus for event communication
-        deps = ["Genesis_Bus"]
-        
-        # Core engines have additional dependencies
+        # Core engines have specific dependencies
         if category == "core":
             if name == "HXO_Nexus":
-                deps.extend(["Umbra_Lattice", "Blueprint", "Genesis_Bus"])
+                return ["Genesis_Bus", "Umbra_Lattice", "Blueprint"]
             elif name == "Cascade":
-                deps.extend(["Blueprint", "HXO_Nexus"])
+                return ["Genesis_Bus", "Blueprint", "HXO_Nexus"]
             elif name == "Autonomy":
-                deps.extend(["Truth", "HXO_Nexus", "Umbra_Lattice"])
+                return ["Genesis_Bus", "Truth", "HXO_Nexus", "Umbra_Lattice"]
+            else:
+                return ["Genesis_Bus"]
                 
-        # Super engines connect through Leviathan
-        if category == "super" and name != "Leviathan":
-            deps.append("Leviathan")
-            deps.append("HXO_Nexus")
+        # Super engines connect through Leviathan and HXO
+        if category == "super":
+            if name == "Leviathan":
+                return ["Genesis_Bus"]
+            else:
+                return ["Genesis_Bus", "Leviathan", "HXO_Nexus"]
             
         # Utility engines may depend on specific core services
         if category == "utility":
             if name == "Umbra_Lattice":
-                deps.extend(["Genesis_Bus", "Truth"])
+                return ["Genesis_Bus", "Truth"]
             elif name in ["ARIE", "Chimera_Oracle", "Triage_Federation"]:
-                deps.extend(["Autonomy", "Umbra_Lattice"])
+                return ["Genesis_Bus", "Autonomy", "Umbra_Lattice"]
+            else:
+                return ["Genesis_Bus"]
                 
-        return list(set(deps))  # Remove duplicates
+        # Default: all engines connect to Genesis Bus
+        return ["Genesis_Bus"]
     
     def _determine_endpoints(self, name: str, category: str) -> List[str]:
         """Determine communication endpoints for each engine."""
@@ -305,7 +308,7 @@ class BridgeHarmonyOrchestrator:
             
         return broken_count
     
-    def establish_bridge_resonance(self) -> Dict[str, any]:
+    def establish_bridge_resonance(self) -> Dict[str, Any]:
         """
         Establish harmonic resonance across all bridge components.
         
