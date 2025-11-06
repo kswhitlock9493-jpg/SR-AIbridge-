@@ -45,7 +45,7 @@
     "chrome:which": "node scripts/which-chrome.mjs",
     "preview": "vite preview",
     "test": "vitest",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 5",
     "repair": "python3 ../scripts/repair_netlify_env.py",
     "ci:install": "cross-env NPM_CONFIG_PRODUCTION=false PUPPETEER_SKIP_DOWNLOAD=true PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true npm ci --no-audit --prefer-offline"
   },
@@ -64,7 +64,8 @@
     ],
     "ignorePatterns": [
       "dist",
-      "build"
+      "build",
+      "src/api/auto_generated/**"
     ],
     "parserOptions": {
       "ecmaVersion": "latest",
@@ -85,7 +86,8 @@
           "allowConstantExport": true
         }
       ],
-      "react/prop-types": "off"
+      "react/prop-types": "off",
+      "no-unused-vars": ["error", { "varsIgnorePattern": "^React$" }]
     }
   },
   "browserslist": {

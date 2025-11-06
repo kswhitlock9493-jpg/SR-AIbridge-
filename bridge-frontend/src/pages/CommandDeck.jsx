@@ -19,7 +19,7 @@ export default function CommandDeck() {
         setFailed(failedEndpoints);
       });
       setStatus(healthStatus);
-      setFailed(Object.entries(results).filter(([_, v]) => v.startsWith('Failed')).map(f => f[0]));
+      setFailed(Object.entries(results).filter(([, v]) => v.startsWith('Failed')).map(f => f[0]));
     })();
   }, [apiBase]);
 
