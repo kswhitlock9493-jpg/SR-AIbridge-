@@ -8,7 +8,10 @@ import {
   getSystemHealth,
   getActivity 
 } from '../api';
+import config from '../config';
 import UnifiedLeviathanPanel from './leviathan/UnifiedLeviathanPanel';
+
+const API_BASE_URL = config.API_BASE_URL;
 
 // Command Deck - Enhanced Dashboard with better error handling and UX
 const CommandDeck = () => {
@@ -66,14 +69,17 @@ const CommandDeck = () => {
       }));
 
       const dataFetchers = [
-        getStatus,
-        getAgents,
-        getMissions,
+        getStatus,     // index 0 - critical
+        getAgents,     // index 1 - critical
+        getMissions,   // index 2 - critical
         getVaultLogs,
         getArmadaStatus,
         getSystemHealth,
         getActivity
       ];
+
+      // Define critical endpoint indices
+      const CRITICAL_ENDPOINTS = [0, 1, 2]; // status, agents, missions
 
       const results = await Promise.allSettled(dataFetchers.map(fetcher => fetcher()));
       
@@ -118,12 +124,17 @@ const CommandDeck = () => {
 
       // Check if any critical endpoints failed
       const criticalFailures = results.filter((result, index) => 
-        result.status === 'rejected' && [0, 1, 2].includes(index) // status, agents, missions
+        result.status === 'rejected' && CRITICAL_ENDPOINTS.includes(index)
       );
 
       if (criticalFailures.length > 0) {
         updates.error = `${criticalFailures.length} critical endpoint(s) failed`;
-        updates.connectionStatus = 'degraded';
+        // If ALL critical endpoints failed, it's a connection issue
+        if (criticalFailures.length === CRITICAL_ENDPOINTS.length) {
+          updates.connectionStatus = 'failed';
+        } else {
+          updates.connectionStatus = 'degraded';
+        }
       }
 
       setDashboardState(prev => ({ ...prev, ...updates }));
@@ -193,8 +204,36 @@ const CommandDeck = () => {
         </div>
       </div>
 
+      {/* Backend Connection Error Banner */}
+      {(dashboardState.connectionStatus === 'failed' || dashboardState.connectionStatus === 'degraded') && (
+        <div className="error-banner backend-config-notice">
+          <div className="error-content">
+            <span className="error-icon">🔌</span>
+            <div className="error-message">
+              <strong>Backend Connection Failed</strong>
+              <p>Cannot connect to BRH (Bridge Runtime Handler) backend at <code>{API_BASE_URL}</code></p>
+              <details className="config-details">
+                <summary>Configuration Help</summary>
+                <div className="config-help">
+                  <p><strong>To configure the backend:</strong></p>
+                  <ol>
+                    <li>Start BRH: <code>python -m brh.run</code> (default port: 8000)</li>
+                    <li>Or set <code>VITE_API_BASE</code> environment variable to your backend URL</li>
+                    <li>For Netlify deployment, configure backend URL in build settings</li>
+                  </ol>
+                  <p><strong>Current API Base:</strong> <code>{API_BASE_URL}</code></p>
+                </div>
+              </details>
+            </div>
+          </div>
+          <button onClick={fetchCommandDeckData} className="retry-btn">
+            Retry Connection
+          </button>
+        </div>
+      )}
+
       {/* Error Banner */}
-      {dashboardState.error && (
+      {dashboardState.error && dashboardState.connectionStatus === 'connected' && (
         <div className="error-banner">
           <span className="error-icon">⚠️</span>
           <span className="error-message">Error: {dashboardState.error}</span>

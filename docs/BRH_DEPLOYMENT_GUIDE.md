@@ -273,6 +273,70 @@ docker network rm brh_net
 python -m brh.run
 ```
 
+## Frontend Configuration
+
+The SR-AIbridge frontend needs to be configured to connect to your BRH backend.
+
+### Default Configuration
+
+By default, the production build connects to `http://localhost:8000` for BRH deployments.
+
+### Environment Variables
+
+You can override the backend URL using environment variables:
+
+**Primary method (Vite standard):**
+```bash
+export VITE_API_BASE=http://your-brh-server:8000
+```
+
+**Alternative method (React standard):**
+```bash
+export REACT_APP_API_URL=http://your-brh-server:8000
+```
+
+### Build with Custom Backend URL
+
+```bash
+cd bridge-frontend
+VITE_API_BASE=http://your-brh-server:8000 npm run build
+```
+
+### Netlify Deployment
+
+For Netlify deployments, set the environment variable in your Netlify site settings:
+
+1. Go to Site Settings → Build & Deploy → Environment Variables
+2. Add `VITE_API_BASE` with your BRH backend URL
+3. Rebuild the site
+
+### Verification
+
+After deployment, if the backend is not reachable, the UI will display:
+- Status indicator showing "Offline" or "Degraded"
+- A prominent "Backend Connection Failed" banner
+- Configuration help with instructions to start BRH
+- Current API base URL being used
+
+The banner includes a collapsible "Configuration Help" section with:
+- Command to start BRH: `python -m brh.run` (default port: 8000)
+- Environment variable configuration instructions
+- Current API base URL display
+
+### Local Development
+
+For local development, the frontend automatically uses `http://localhost:8000`:
+
+```bash
+cd bridge-frontend
+npm run dev
+```
+
+Then in another terminal, start BRH:
+```bash
+python -m brh.run
+```
+
 ## Migration from Render
 
 1. Set up BRH on your server with Docker
