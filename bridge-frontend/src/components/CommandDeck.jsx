@@ -104,13 +104,19 @@ const CommandDeck = () => {
         updates.status = statusResult.value;
       }
       if (agentsResult.status === 'fulfilled') {
-        updates.agents = Array.isArray(agentsResult.value) ? agentsResult.value : [];
+        const agentsData = agentsResult.value;
+        updates.agents = Array.isArray(agentsData) ? agentsData : 
+                        (agentsData?.agents ? agentsData.agents : []);
       }
       if (missionsResult.status === 'fulfilled') {
-        updates.missions = Array.isArray(missionsResult.value) ? missionsResult.value : [];
+        const missionsData = missionsResult.value;
+        updates.missions = Array.isArray(missionsData) ? missionsData : 
+                          (missionsData?.missions ? missionsData.missions : []);
       }
       if (vaultResult.status === 'fulfilled') {
-        updates.vaultLogs = Array.isArray(vaultResult.value) ? vaultResult.value : [];
+        const vaultData = vaultResult.value;
+        updates.vaultLogs = Array.isArray(vaultData) ? vaultData : 
+                           (vaultData?.logs ? vaultData.logs : []);
       }
       if (armadaResult.status === 'fulfilled') {
         updates.armadaStatus = armadaResult.value || {};
@@ -119,7 +125,9 @@ const CommandDeck = () => {
         updates.systemHealth = healthResult.value || {};
       }
       if (activityResult.status === 'fulfilled') {
-        updates.activity = Array.isArray(activityResult.value) ? activityResult.value : [];
+        const activityData = activityResult.value;
+        updates.activity = Array.isArray(activityData) ? activityData : 
+                          (activityData?.activity ? activityData.activity : []);
       }
 
       // Check if any critical endpoints failed
@@ -170,8 +178,8 @@ const CommandDeck = () => {
     </div>
   );
 
-  // Loading state
-  if (dashboardState.loading && !dashboardState.status.admiral) {
+  // Loading state - only show spinner on initial load
+  if (dashboardState.loading && dashboardState.connectionStatus === 'connecting') {
     return (
       <div className="command-deck loading">
         <div className="loading-spinner">
