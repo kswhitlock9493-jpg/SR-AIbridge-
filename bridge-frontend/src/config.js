@@ -1,6 +1,30 @@
 // Centralized environment gateway
-// Default to localhost for BRH (Bridge Runtime Handler) development
-export const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
+// Production-first configuration with development fallback
+
+// Determine API base URL with proper precedence:
+// 1. VITE_API_BASE (Vite standard)
+// 2. REACT_APP_API_URL (React standard, supported via vite.config.js)
+// 3. Production default (bridge.sr-aibridge.com) for deployed builds
+// 4. Localhost for development mode
+const getApiBase = () => {
+  // Check for explicit environment variables
+  if (import.meta.env.VITE_API_BASE) {
+    return import.meta.env.VITE_API_BASE;
+  }
+  if (import.meta.env.REACT_APP_API_URL) {
+    return import.meta.env.REACT_APP_API_URL;
+  }
+  
+  // Production vs development defaults
+  if (import.meta.env.MODE === 'development') {
+    return "http://localhost:8000";
+  }
+  
+  // Production default - BRH backend
+  return "https://bridge.sr-aibridge.com";
+};
+
+export const API_BASE = getApiBase();
 export const BRIDGE_API_URL = import.meta.env.BRIDGE_API_URL || API_BASE;
 export const CASCADE_MODE = import.meta.env.CASCADE_MODE || "active";
 export const VAULT_URL = import.meta.env.VAULT_URL || "https://vault.sr-aibridge.com";
@@ -13,7 +37,7 @@ const config = {
   WS_BASE_URL: import.meta.env.VITE_WS_BASE ||
     (import.meta.env.MODE === 'development'
       ? "ws://localhost:8000"
-      : "ws://localhost:8000")  // BRH WebSocket endpoint
+      : API_BASE.replace('https://', 'wss://').replace('http://', 'ws://'))
 };
 
 export default config;

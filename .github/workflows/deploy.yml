@@ -79,6 +79,9 @@ jobs:
         run: cd bridge-frontend && npm run build
         env:
           CI: false
+          VITE_API_BASE: >-
+            ${{ secrets.BACKEND_URL || secrets.BRIDGE_URL ||
+            'https://bridge.sr-aibridge.com' }}
           REACT_APP_API_URL: >-
             ${{ secrets.BACKEND_URL || secrets.BRIDGE_URL ||
             'https://bridge.sr-aibridge.com' }}
