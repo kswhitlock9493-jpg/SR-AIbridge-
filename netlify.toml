@@ -5,7 +5,7 @@
   base = "."
   command = "bash scripts/netlify_build.sh"
   publish = "bridge-frontend/dist"
-  environment = { FORGE_DOMINION_ROOT = "", REVIEW_ID = "" }
+  environment = { FORGE_DOMINION_ROOT = "", REVIEW_ID = "", SECRETS_SCAN_OMIT_KEYS = "FORGE_DOMINION_ROOT", SECRETS_SCAN_OMIT_PATHS = "brh/*,docs/*,codex/*,netlify/functions/forge-resolver.js,infra/*,netlify.toml" }
 
 [functions]
   directory = "netlify/functions"
@@ -26,12 +26,18 @@
 [context.production.environment]
   FORGE_DOMINION_ROOT = "dominion://sovereign.bridge"
   GITHUB_REF_NAME = "main"
+  SECRETS_SCAN_OMIT_KEYS = "FORGE_DOMINION_ROOT"
+  SECRETS_SCAN_OMIT_PATHS = "brh/*,docs/*,codex/*,netlify/functions/forge-resolver.js,infra/*,netlify.toml"
 
 [context.deploy-preview.environment]
   FORGE_DOMINION_ROOT = "dominion://sovereign.bridge?env=preview"
+  SECRETS_SCAN_OMIT_KEYS = "FORGE_DOMINION_ROOT"
+  SECRETS_SCAN_OMIT_PATHS = "brh/*,docs/*,codex/*,netlify/functions/forge-resolver.js,infra/*,netlify.toml"
 
 [context.branch-deploy.environment]
   FORGE_DOMINION_ROOT = "dominion://sovereign.bridge?env=branch"
+  SECRETS_SCAN_OMIT_KEYS = "FORGE_DOMINION_ROOT"
+  SECRETS_SCAN_OMIT_PATHS = "brh/*,docs/*,codex/*,netlify/functions/forge-resolver.js,infra/*,netlify.toml"
 
 # SPA fallback (safe for static + React/Vite/etc.)
 [[redirects]]
