@@ -18,7 +18,11 @@ from .secret_forge import (
     retrieve_environment,
     retrieve_forge_dominion_root,
     generate_ephemeral_token,
-    validate_ephemeral_token
+    validate_ephemeral_token,
+    get_token_metadata,
+    validate_metadata,
+    MetadataValidationError,
+    REQUIRED_METADATA_FIELDS
 )
 
 __version__ = "1.9.7s-SOVEREIGN"
@@ -37,5 +41,9 @@ __all__ = [
     "retrieve_environment",
     "retrieve_forge_dominion_root",
     "generate_ephemeral_token",
-    "validate_ephemeral_token"
+    "validate_ephemeral_token",
+    "get_token_metadata",
+    "validate_metadata",
+    "MetadataValidationError",
+    "REQUIRED_METADATA_FIELDS"
 ]

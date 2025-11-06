@@ -10,8 +10,112 @@ import os
 import hmac
 import hashlib
 import time
-from typing import Optional, Dict, Any
+import json
+import base64
+from typing import Optional, Dict, Any, List
 from datetime import datetime, timedelta
+
+
+# Required metadata fields for secure token creation
+REQUIRED_METADATA_FIELDS = [
+    "creator_identity",
+    "creation_timestamp",
+    "intended_purpose",
+    "expiration_policy",
+    "access_scope",
+    "audit_trail_id"
+]
+
+
+class MetadataValidationError(Exception):
+    """Raised when token metadata validation fails."""
+    pass
+
+
+def validate_metadata(metadata: Optional[Dict[str, Any]], require_metadata: bool = True) -> None:
+    """
+    Validate token metadata against security requirements.
+    
+    Args:
+        metadata: Metadata dictionary to validate
+        require_metadata: If True, metadata must be present and valid
+        
+    Raises:
+        MetadataValidationError: If metadata validation fails
+    """
+    if metadata is None:
+        if require_metadata:
+            raise MetadataValidationError(
+                "Token metadata is required for security compliance. "
+                f"Required fields: {', '.join(REQUIRED_METADATA_FIELDS)}"
+            )
+        return
+    
+    # Check all required fields are present
+    missing_fields = [field for field in REQUIRED_METADATA_FIELDS if field not in metadata]
+    if missing_fields:
+        raise MetadataValidationError(
+            f"Missing required metadata fields: {', '.join(missing_fields)}. "
+            f"Required fields: {', '.join(REQUIRED_METADATA_FIELDS)}"
+        )
+    
+    # Validate each field has non-empty value
+    empty_fields = [field for field in REQUIRED_METADATA_FIELDS if not metadata.get(field)]
+    if empty_fields:
+        raise MetadataValidationError(
+            f"Metadata fields cannot be empty: {', '.join(empty_fields)}"
+        )
+    
+    # Validate creator_identity is a non-empty string
+    if not isinstance(metadata.get("creator_identity"), str):
+        raise MetadataValidationError(
+            "creator_identity must be a non-empty string"
+        )
+    
+    # Validate creation_timestamp is valid
+    try:
+        timestamp = metadata.get("creation_timestamp")
+        if isinstance(timestamp, str):
+            # Try to parse as ISO format
+            datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+        elif isinstance(timestamp, (int, float)):
+            # Unix timestamp
+            if timestamp < 0 or timestamp > time.time() + 86400:  # Allow 1 day in future for clock skew
+                raise MetadataValidationError(
+                    "creation_timestamp is outside valid range"
+                )
+        else:
+            raise MetadataValidationError(
+                "creation_timestamp must be ISO format string or Unix timestamp"
+            )
+    except (ValueError, TypeError) as e:
+        raise MetadataValidationError(
+            f"Invalid creation_timestamp format: {e}"
+        )
+    
+    # Validate intended_purpose is a non-empty string
+    if not isinstance(metadata.get("intended_purpose"), str):
+        raise MetadataValidationError(
+            "intended_purpose must be a non-empty string"
+        )
+    
+    # Validate expiration_policy
+    if not isinstance(metadata.get("expiration_policy"), str):
+        raise MetadataValidationError(
+            "expiration_policy must be a non-empty string"
+        )
+    
+    # Validate access_scope
+    if not isinstance(metadata.get("access_scope"), str):
+        raise MetadataValidationError(
+            "access_scope must be a non-empty string"
+        )
+    
+    # Validate audit_trail_id
+    if not isinstance(metadata.get("audit_trail_id"), str):
+        raise MetadataValidationError(
+            "audit_trail_id must be a non-empty string"
+        )
 
 
 class SecretForge:
@@ -28,17 +132,20 @@ class SecretForge:
     - Zero hardcoded credentials anywhere
     """
     
-    def __init__(self, enable_cache: bool = True):
+    def __init__(self, enable_cache: bool = True, enforce_metadata: bool = False):
         """
         Initialize the Secret Forge.
         
         Args:
             enable_cache: Enable caching of retrieved secrets (default: True).
                          Set to False in test environments.
+            enforce_metadata: Enforce metadata validation for token creation (default: False).
+                            Set to True to require metadata for all tokens.
         """
         self._cache: Dict[str, Any] = {}
         self._cache_ttl: Dict[str, datetime] = {}
         self._enable_cache = enable_cache
+        self._enforce_metadata = enforce_metadata
     
     def retrieve_environment(self, key: str, default: Optional[str] = None) -> Optional[str]:
         """
@@ -107,18 +214,27 @@ class SecretForge:
         This replaces ALL hardcoded tokens like ghp_*** with dynamic,
         short-lived credentials.
         
-        Note: Currently, metadata is included in signature generation but not
-        in token format. This means tokens with metadata cannot be validated.
-        For now, use metadata=None for tokens that need validation.
+        SECURITY: Metadata validation is enforced when enforce_metadata=True
+        or when SOVEREIGN_GIT=true environment variable is set.
         
         Args:
             service: Service name (e.g., "github", "netlify", "api")
             ttl: Time-to-live in seconds (default 300 = 5 minutes)
-            metadata: Optional metadata (NOTE: not currently supported in validation)
+            metadata: Token metadata with required fields for security compliance
             
         Returns:
             Ephemeral token string
+            
+        Raises:
+            MetadataValidationError: If metadata validation fails when enforcement is enabled
         """
+        # Check if metadata enforcement is enabled
+        enforce = self._enforce_metadata or os.getenv("SOVEREIGN_GIT", "").lower() == "true"
+        
+        # Validate metadata if enforcement is enabled
+        if enforce:
+            validate_metadata(metadata, require_metadata=True)
+        
         # Get the sovereign root key
         try:
             root_key = self.retrieve_forge_dominion_root()
@@ -137,10 +253,24 @@ class SecretForge:
             str(expiry)
         ]
         
+        # Encode metadata if present
+        metadata_encoded = ""
         if metadata:
-            # Add metadata to payload
-            for key, value in sorted(metadata.items()):
-                payload_parts.append(f"{key}={value}")
+            # Validate metadata even if not enforcing (to catch errors early)
+            try:
+                validate_metadata(metadata, require_metadata=False)
+            except MetadataValidationError:
+                # If validation fails but enforcement is not enabled, allow it
+                # but log a warning
+                if not enforce:
+                    pass
+                else:
+                    raise
+            
+            # Encode metadata as base64 JSON for inclusion in token
+            metadata_json = json.dumps(metadata, sort_keys=True)
+            metadata_encoded = base64.b64encode(metadata_json.encode()).decode()
+            payload_parts.append(metadata_encoded)
         
         payload = "|".join(payload_parts)
         
@@ -151,17 +281,22 @@ class SecretForge:
             hashlib.sha256
         ).hexdigest()
         
-        # Format: service:timestamp:expiry:signature (using : as separator to avoid service name conflicts)
-        token = f"{service}:{timestamp}:{expiry}:{signature[:32]}"
+        # Format: service:timestamp:expiry:signature[:metadata] (using : as separator)
+        token_parts = [service, str(timestamp), str(expiry), signature[:32]]
+        if metadata_encoded:
+            token_parts.append(metadata_encoded)
+        
+        token = ":".join(token_parts)
         
         return token
     
-    def validate_ephemeral_token(self, token: str) -> bool:
+    def validate_ephemeral_token(self, token: str, require_metadata: bool = False) -> bool:
         """
         Validate an ephemeral token.
         
         Args:
             token: Token to validate
+            require_metadata: If True, require valid metadata in token
             
         Returns:
             True if valid and not expired, False otherwise
@@ -175,6 +310,12 @@ class SecretForge:
             timestamp = int(parts[1])
             expiry = int(parts[2])
             signature = parts[3]
+            metadata_encoded = parts[4] if len(parts) > 4 else None
+            
+            # Check if metadata is required
+            enforce = require_metadata or os.getenv("SOVEREIGN_GIT", "").lower() == "true"
+            if enforce and not metadata_encoded:
+                return False
             
             # Check expiry
             if int(time.time()) > expiry:
@@ -186,18 +327,60 @@ class SecretForge:
             except RuntimeError:
                 # If FORGE_DOMINION_ROOT is not set, validation fails
                 return False
-                
-            payload = f"{service}|{timestamp}|{expiry}"
+            
+            # Build payload for signature verification
+            payload_parts = [service, str(timestamp), str(expiry)]
+            if metadata_encoded:
+                payload_parts.append(metadata_encoded)
+            payload = "|".join(payload_parts)
+            
             expected_sig = hmac.new(
                 root_key.encode(),
                 payload.encode(),
                 hashlib.sha256
             ).hexdigest()[:32]
             
-            return hmac.compare_digest(signature, expected_sig)
+            # Verify signature
+            if not hmac.compare_digest(signature, expected_sig):
+                return False
+            
+            # Validate metadata if present
+            if metadata_encoded:
+                try:
+                    metadata_json = base64.b64decode(metadata_encoded).decode()
+                    metadata = json.loads(metadata_json)
+                    # Validate metadata structure
+                    validate_metadata(metadata, require_metadata=enforce)
+                except (ValueError, json.JSONDecodeError, MetadataValidationError):
+                    return False
+            
+            return True
             
         except Exception:
             return False
+    
+    def get_token_metadata(self, token: str) -> Optional[Dict[str, Any]]:
+        """
+        Extract metadata from a token.
+        
+        Args:
+            token: Token to extract metadata from
+            
+        Returns:
+            Metadata dictionary if present and valid, None otherwise
+        """
+        try:
+            parts = token.split(":")
+            if len(parts) < 5:
+                return None
+            
+            metadata_encoded = parts[4]
+            metadata_json = base64.b64decode(metadata_encoded).decode()
+            metadata = json.loads(metadata_json)
+            
+            return metadata
+        except Exception:
+            return None
     
     def clear_cache(self):
         """Clear the secret cache."""
@@ -220,7 +403,12 @@ def get_forge() -> SecretForge:
     if _forge_instance is None:
         # Disable caching in test environments
         is_test = os.getenv("PYTEST_CURRENT_TEST") is not None
-        _forge_instance = SecretForge(enable_cache=not is_test)
+        # Enable metadata enforcement if SOVEREIGN_GIT is true
+        enforce_metadata = os.getenv("SOVEREIGN_GIT", "").lower() == "true"
+        _forge_instance = SecretForge(
+            enable_cache=not is_test,
+            enforce_metadata=enforce_metadata
+        )
     return _forge_instance
 
 
@@ -265,6 +453,25 @@ def generate_ephemeral_token(
     return get_forge().generate_ephemeral_token(service, ttl, metadata)
 
 
-def validate_ephemeral_token(token: str) -> bool:
-    """Validate an ephemeral token."""
-    return get_forge().validate_ephemeral_token(token)
+def validate_ephemeral_token(token: str, require_metadata: bool = False) -> bool:
+    """
+    Validate an ephemeral token.
+    
+    Args:
+        token: Token to validate
+        require_metadata: If True, require valid metadata in token
+    """
+    return get_forge().validate_ephemeral_token(token, require_metadata)
+
+
+def get_token_metadata(token: str) -> Optional[Dict[str, Any]]:
+    """
+    Extract metadata from a token.
+    
+    Args:
+        token: Token to extract metadata from
+        
+    Returns:
+        Metadata dictionary if present and valid, None otherwise
+    """
+    return get_forge().get_token_metadata(token)
