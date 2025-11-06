@@ -14,6 +14,7 @@ from .validate_or_renew import TokenLifecycleManager, validate_or_renew
 from .secret_forge import (
     SecretForge,
     get_forge,
+    reset_forge,
     retrieve_environment,
     retrieve_forge_dominion_root,
     generate_ephemeral_token,
@@ -32,6 +33,7 @@ __all__ = [
     "generate_root_key",
     "SecretForge",
     "get_forge",
+    "reset_forge",
     "retrieve_environment",
     "retrieve_forge_dominion_root",
     "generate_ephemeral_token",

@@ -243,10 +243,12 @@ class TestQuantumScanner:
         # Create test file with secrets
         # Use fake patterns that look like secrets but are safe test data
         test_file = tmp_path / "test.py"
-        test_file.write_text("""
+        # Create a realistic-looking fake token for testing
+        fake_token = "ghp_" + "X" * 36
+        test_file.write_text(f"""
 # Test file with secrets
 API_KEY = "fake_test_XXXXXXXXXXXXXXXX"
-SECRET_TOKEN = "ghp_" + "X" * 36  # Fake GitHub token pattern for testing
+SECRET_TOKEN = "{fake_token}"  # Fake GitHub token pattern for testing
 password = "hardcoded_password_123"
 """)
         

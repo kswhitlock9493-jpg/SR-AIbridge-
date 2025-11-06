@@ -28,10 +28,17 @@ class SecretForge:
     - Zero hardcoded credentials anywhere
     """
     
-    def __init__(self):
-        """Initialize the Secret Forge."""
+    def __init__(self, enable_cache: bool = True):
+        """
+        Initialize the Secret Forge.
+        
+        Args:
+            enable_cache: Enable caching of retrieved secrets (default: True).
+                         Set to False in test environments.
+        """
         self._cache: Dict[str, Any] = {}
         self._cache_ttl: Dict[str, datetime] = {}
+        self._enable_cache = enable_cache
     
     def retrieve_environment(self, key: str, default: Optional[str] = None) -> Optional[str]:
         """
@@ -47,8 +54,8 @@ class SecretForge:
         Returns:
             Secret value from environment or default
         """
-        # Check cache first (with TTL)
-        if key in self._cache:
+        # Check cache first (with TTL) if caching is enabled
+        if self._enable_cache and key in self._cache:
             if key in self._cache_ttl and datetime.now() < self._cache_ttl[key]:
                 return self._cache[key]
             else:
@@ -59,8 +66,8 @@ class SecretForge:
         # Retrieve from environment
         value = os.getenv(key, default)
         
-        # Cache for 5 minutes
-        if value is not None:
+        # Cache for 5 minutes if caching is enabled
+        if self._enable_cache and value is not None:
             self._cache[key] = value
             self._cache_ttl[key] = datetime.now() + timedelta(minutes=5)
         
@@ -202,8 +209,19 @@ def get_forge() -> SecretForge:
     """
     global _forge_instance
     if _forge_instance is None:
-        _forge_instance = SecretForge()
+        # Disable caching in test environments
+        is_test = os.getenv("PYTEST_CURRENT_TEST") is not None
+        _forge_instance = SecretForge(enable_cache=not is_test)
     return _forge_instance
+
+
+def reset_forge():
+    """
+    Reset the global forge instance.
+    This is useful for testing to ensure clean state.
+    """
+    global _forge_instance
+    _forge_instance = None
 
 
 # Convenience functions for common operations
