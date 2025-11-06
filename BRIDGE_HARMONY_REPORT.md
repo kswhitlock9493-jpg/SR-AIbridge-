@@ -11,7 +11,7 @@
 - **Autonomy**
   - Path: `bridge_backend/engines/autonomy`
   - Status: discovered
-  - Dependencies: Umbra_Lattice, HXO_Nexus, Genesis_Bus, Truth
+  - Dependencies: Truth, Genesis_Bus, Umbra_Lattice, HXO_Nexus
   - Endpoints: 2
 
 - **Blueprint**
@@ -29,7 +29,7 @@
 - **HXO_Nexus**
   - Path: `bridge_backend/engines/hxo`
   - Status: discovered
-  - Dependencies: Umbra_Lattice, Genesis_Bus, Blueprint
+  - Dependencies: Genesis_Bus, Umbra_Lattice, Blueprint
   - Endpoints: 4
 
 - **Parser**
@@ -49,25 +49,25 @@
 - **AuroraForge**
   - Path: `bridge_backend/engines/aurora_forge`
   - Status: discovered
-  - Dependencies: HXO_Nexus, Genesis_Bus, Leviathan
+  - Dependencies: HXO_Nexus, Leviathan, Genesis_Bus
   - Endpoints: 2
 
 - **CalculusCore**
   - Path: `bridge_backend/engines/calculus_core`
   - Status: discovered
-  - Dependencies: HXO_Nexus, Genesis_Bus, Leviathan
+  - Dependencies: HXO_Nexus, Leviathan, Genesis_Bus
   - Endpoints: 2
 
 - **ChronicleLoom**
   - Path: `bridge_backend/engines/chronicle_loom`
   - Status: discovered
-  - Dependencies: HXO_Nexus, Genesis_Bus, Leviathan
+  - Dependencies: HXO_Nexus, Leviathan, Genesis_Bus
   - Endpoints: 2
 
 - **CommerceForge**
   - Path: `bridge_backend/engines/commerce_forge`
   - Status: discovered
-  - Dependencies: HXO_Nexus, Genesis_Bus, Leviathan
+  - Dependencies: HXO_Nexus, Leviathan, Genesis_Bus
   - Endpoints: 2
 
 - **Leviathan**
@@ -79,13 +79,13 @@
 - **QHelmSingularity**
   - Path: `bridge_backend/engines/qhelm`
   - Status: discovered
-  - Dependencies: HXO_Nexus, Genesis_Bus, Leviathan
+  - Dependencies: HXO_Nexus, Leviathan, Genesis_Bus
   - Endpoints: 2
 
 - **ScrollTongue**
   - Path: `bridge_backend/engines/scroll_tongue`
   - Status: discovered
-  - Dependencies: HXO_Nexus, Genesis_Bus, Leviathan
+  - Dependencies: HXO_Nexus, Leviathan, Genesis_Bus
   - Endpoints: 2
 
 #### Utility Engines (21)
@@ -93,7 +93,7 @@
 - **ARIE**
   - Path: `bridge_backend/engines/arie`
   - Status: discovered
-  - Dependencies: Umbra_Lattice, Autonomy, Genesis_Bus
+  - Dependencies: Autonomy, Genesis_Bus, Umbra_Lattice
   - Endpoints: 2
 
 - **Agents_Foundry**
@@ -117,7 +117,7 @@
 - **Chimera_Oracle**
   - Path: `bridge_backend/engines/chimera`
   - Status: discovered
-  - Dependencies: Umbra_Lattice, Autonomy, Genesis_Bus
+  - Dependencies: Autonomy, Genesis_Bus, Umbra_Lattice
   - Endpoints: 2
 
 - **Creativity_Bay**
@@ -207,13 +207,13 @@
 - **Triage_Federation**
   - Path: `bridge_backend/engines/triage`
   - Status: discovered
-  - Dependencies: Umbra_Lattice, Autonomy, Genesis_Bus
+  - Dependencies: Autonomy, Genesis_Bus, Umbra_Lattice
   - Endpoints: 2
 
 - **Umbra_Lattice**
   - Path: `bridge_backend/engines/umbra_lattice`
   - Status: discovered
-  - Dependencies: Genesis_Bus, Truth
+  - Dependencies: Truth, Genesis_Bus
   - Endpoints: 4
 
 ## Communication Pathways
@@ -235,7 +235,7 @@
 - HXO_Nexus → Blueprint
 - Cascade → HXO_Nexus
 - Cascade → Blueprint
-- Autonomy → Umbra_Lattice
+- Autonomy → Truth
 - ... and 21 more
 
 ### Umbra Lattice (32)
