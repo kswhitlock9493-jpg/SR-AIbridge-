@@ -28,7 +28,7 @@ export async function bootstrapEndpoints(baseUrl, onHealthUpdate) {
     }
   }
 
-  const failed = Object.entries(results).filter(([_, v]) => v.startsWith('Failed'));
+  const failed = Object.entries(results).filter(([, v]) => v.startsWith('Failed'));
   const status = failed.length ? 'DEGRADED' : 'HEALTHY';
 
   if (typeof onHealthUpdate === 'function')

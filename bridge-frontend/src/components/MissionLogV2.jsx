@@ -2,27 +2,24 @@
  * Mission Log v2 - Upgraded with Blueprint integration
  * Shows mission details with hierarchical task tree and agent deliberation
  */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../api';
 import Tree from './ui/Tree';
 import AgentDeliberationPanel from './AgentDeliberationPanel';
 
-export default function MissionLogV2({ missionId, captain }) {
-  const [mission, setMission] = useState(null);
+export default function MissionLogV2({ missionId, captain: _captain }) {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!missionId) return;
-    fetchMissionDetails();
-  }, [missionId]);
+    
+    async function fetchMissionDetails() {
+      setLoading(true);
+      setError(null);
 
-  async function fetchMissionDetails() {
-    setLoading(true);
-    setError(null);
-
-    try {
+      try {
       // Fetch mission jobs
       const response = await api.get(`/missions/${missionId}/jobs`);
       setJobs(response.data || []);
@@ -33,6 +30,9 @@ export default function MissionLogV2({ missionId, captain }) {
       setLoading(false);
     }
   }
+  
+    fetchMissionDetails();
+  }, [missionId]);
 
   // Convert flat jobs list into tree structure
   function buildTaskTree(jobs) {
