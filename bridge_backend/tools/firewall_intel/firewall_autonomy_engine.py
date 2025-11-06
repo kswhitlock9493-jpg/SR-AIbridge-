@@ -8,6 +8,7 @@ import os
 import sys
 import json
 import time
+import re
 from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional
 from pathlib import Path
@@ -18,11 +19,33 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../..'))
 # Import firewall intelligence modules
 from bridge_backend.tools.firewall_intel.fetch_firewall_incidents import main as fetch_incidents
 from bridge_backend.tools.firewall_intel.analyze_firewall_findings import main as analyze_findings
+from bridge_backend.tools.firewall_sovereignty.firewall_config_manager import FirewallConfigManager
 
 DIAGNOSTICS_DIR = "bridge_backend/diagnostics"
 AUTONOMY_VAULT = "vault/autonomy"
 FIREWALL_REPORT = os.path.join(DIAGNOSTICS_DIR, "firewall_report.json")
 AUTONOMY_LOG = os.path.join(DIAGNOSTICS_DIR, "firewall_autonomy_log.json")
+
+# Known browser download domains that may be blocked
+BROWSER_DOWNLOAD_DOMAINS = [
+    "googlechromelabs.github.io",
+    "storage.googleapis.com",
+    "edgedl.me.gvt1.com",
+    "playwright.azureedge.net",
+    "cdn.playwright.dev"
+]
+
+# Error patterns that indicate browser download blocking
+BROWSER_DOWNLOAD_ERROR_PATTERNS = [
+    r"chrome-for-testing-public",
+    r"install\.mjs",
+    r"playwright.*install",
+    r"puppeteer.*install",
+    r"chromium.*download",
+    r"browser.*download.*fail",
+    r"ENOTFOUND.*googleapis",
+    r"ENOTFOUND.*googlechromelabs"
+]
 
 
 class FirewallAutonomyEngine:
@@ -43,10 +66,13 @@ class FirewallAutonomyEngine:
         self.guardrails = {
             "max_severity_for_auto_apply": "medium",  # Only auto-apply low/medium severity
             "require_approval_for_high": True,
-            "safe_actions": ["analyze", "report", "recommend"],
+            "safe_actions": ["analyze", "report", "recommend", "add_domain_to_allowlist"],
             "restricted_actions": ["delete", "drop"],
             "max_concurrent_tasks": 3
         }
+        
+        # Initialize firewall config manager
+        self.firewall_manager = FirewallConfigManager()
         
         # Ensure directories exist
         Path(DIAGNOSTICS_DIR).mkdir(parents=True, exist_ok=True)
@@ -60,6 +86,10 @@ class FirewallAutonomyEngine:
     
     def run(self) -> Dict[str, Any]:
         """Execute the full autonomy cycle"""
+        
+        # Step 0: Check for browser download blocking (proactive check)
+        print("\n🔍 Step 0: Checking for Browser Download Issues...")
+        browser_check_result = self._check_browser_download_blocking()
         
         # Step 1: Gather Intelligence
         print("\n🔍 Step 1: Gathering Firewall Intelligence...")
@@ -75,9 +105,107 @@ class FirewallAutonomyEngine:
         
         # Step 4: Record and Report
         print("\n📝 Step 4: Recording Actions and Generating Report...")
-        final_result = self._record_and_report(execution_result)
+        final_result = self._record_and_report(execution_result, browser_check_result)
         
         return final_result
+    
+    def _check_browser_download_blocking(self) -> Dict[str, Any]:
+        """Proactively check for browser download blocking issues"""
+        result = {
+            "checked": True,
+            "blocked_domains": [],
+            "actions_taken": []
+        }
+        
+        try:
+            # Check if browser download domains are in allowlist
+            current_allowed = self.firewall_manager.get_all_allowed_domains()
+            
+            missing_domains = []
+            for domain in BROWSER_DOWNLOAD_DOMAINS:
+                if domain not in current_allowed:
+                    missing_domains.append(domain)
+            
+            if missing_domains:
+                print(f"  ⚠️  Found {len(missing_domains)} browser download domains not in allowlist")
+                result["blocked_domains"] = missing_domains
+                
+                # Autonomous action: Add domains to allowlist
+                print("  → Auto-adding browser download domains to allowlist...")
+                for domain in missing_domains:
+                    added = self.firewall_manager.add_domain_to_allowlist(domain, "browser_downloads")
+                    if added:
+                        print(f"    ✅ Added: {domain}")
+                        result["actions_taken"].append({
+                            "action": "add_domain",
+                            "domain": domain,
+                            "category": "browser_downloads",
+                            "timestamp": datetime.now(timezone.utc).isoformat()
+                        })
+                
+                # Record the autonomous action
+                self.actions_taken.append({
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "session_id": self.session_id,
+                    "action": "browser_download_firewall_repair",
+                    "domains_added": len(missing_domains),
+                    "auto_approved": True,
+                    "status": "completed"
+                })
+                
+                print(f"  ✅ Successfully added {len(missing_domains)} domains to browser_downloads allowlist")
+            else:
+                print("  ✅ All browser download domains already in allowlist")
+            
+            # Check GitHub workflow logs for install.mjs errors (if available)
+            log_check = self._check_for_install_mjs_errors()
+            if log_check.get("errors_found"):
+                result["install_mjs_errors"] = log_check
+                print(f"  ⚠️  Found {len(log_check.get('errors', []))} install.mjs related errors in logs")
+            
+        except Exception as e:
+            print(f"  ❌ Browser download check failed: {e}")
+            result["error"] = str(e)
+        
+        return result
+    
+    def _check_for_install_mjs_errors(self) -> Dict[str, Any]:
+        """Check for install.mjs errors in logs and GitHub workflows"""
+        result = {
+            "errors_found": False,
+            "errors": []
+        }
+        
+        try:
+            # Check local log files for browser download errors
+            log_dirs = ["logs", "bridge_backend/diagnostics", ".npm/_logs"]
+            
+            for log_dir in log_dirs:
+                if not os.path.exists(log_dir):
+                    continue
+                
+                for log_file in Path(log_dir).rglob("*.log"):
+                    try:
+                        with open(log_file, 'r', encoding='utf-8', errors='ignore') as f:
+                            content = f.read()
+                            
+                            # Check for browser download error patterns
+                            for pattern in BROWSER_DOWNLOAD_ERROR_PATTERNS:
+                                if re.search(pattern, content, re.IGNORECASE):
+                                    result["errors_found"] = True
+                                    result["errors"].append({
+                                        "file": str(log_file),
+                                        "pattern": pattern,
+                                        "timestamp": datetime.now(timezone.utc).isoformat()
+                                    })
+                                    break
+                    except Exception:
+                        continue  # Skip files we can't read
+            
+        except Exception as e:
+            result["check_error"] = str(e)
+        
+        return result
     
     def _gather_intelligence(self) -> Dict[str, Any]:
         """Gather firewall intelligence from external sources"""
@@ -257,12 +385,13 @@ class FirewallAutonomyEngine:
         except ValueError:
             return False
     
-    def _record_and_report(self, execution: Dict[str, Any]) -> Dict[str, Any]:
+    def _record_and_report(self, execution: Dict[str, Any], browser_check: Dict[str, Any]) -> Dict[str, Any]:
         """Record all actions and generate final report"""
         
         final_report = {
             "session_id": self.session_id,
             "timestamp": datetime.now(timezone.utc).isoformat(),
+            "browser_download_check": browser_check,
             "execution_summary": {
                 "actions_executed": len(execution.get("executed", [])),
                 "actions_skipped": len(execution.get("skipped", [])),
@@ -278,6 +407,8 @@ class FirewallAutonomyEngine:
             json.dump(final_report, f, indent=2)
         
         print(f"\n📊 Execution Summary:")
+        print(f"  → Browser domains checked: {len(browser_check.get('blocked_domains', [])) + len(browser_check.get('actions_taken', []))}")
+        print(f"  → Browser domains added: {len(browser_check.get('actions_taken', []))}")
         print(f"  → Actions executed: {final_report['execution_summary']['actions_executed']}")
         print(f"  → Actions skipped: {final_report['execution_summary']['actions_skipped']}")
         print(f"  → Actions failed: {final_report['execution_summary']['actions_failed']}")
