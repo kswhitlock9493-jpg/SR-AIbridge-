@@ -8,6 +8,7 @@ import os
 import sys
 from typing import Tuple
 from .quantum_authority import generate_root_key
+from .secret_forge import retrieve_environment
 
 
 def bootstrap_dominion_root() -> Tuple[bool, str]:
@@ -17,7 +18,8 @@ def bootstrap_dominion_root() -> Tuple[bool, str]:
     Returns:
         tuple: (is_valid, message)
     """
-    root_key = os.getenv("FORGE_DOMINION_ROOT")
+    # Use forge to retrieve environment variable
+    root_key = retrieve_environment("FORGE_DOMINION_ROOT")
     
     if root_key:
         # Validate existing root key
@@ -54,7 +56,8 @@ def validate_dominion_mode() -> Tuple[bool, str]:
     Returns:
         tuple: (is_valid, message)
     """
-    mode = os.getenv("FORGE_DOMINION_MODE", "sovereign")
+    # Use forge to retrieve environment variable
+    mode = retrieve_environment("FORGE_DOMINION_MODE", "sovereign")
     
     valid_modes = ["sovereign", "managed", "audit"]
     
@@ -74,7 +77,8 @@ def validate_dominion_version() -> Tuple[bool, str]:
     Returns:
         tuple: (is_valid, message)
     """
-    version = os.getenv("FORGE_DOMINION_VERSION", "1.9.7s")
+    # Use forge to retrieve environment variable
+    version = retrieve_environment("FORGE_DOMINION_VERSION", "1.9.7s")
     expected_version = "1.9.7s"
     
     if version == expected_version:
@@ -111,7 +115,8 @@ def bootstrap() -> int:
     
     if not root_valid:
         # Critical failure in CI, warning in local
-        is_ci = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
+        # Use forge to retrieve CI detection variables
+        is_ci = retrieve_environment("CI") == "true" or retrieve_environment("GITHUB_ACTIONS") == "true"
         
         if is_ci:
             print("[Dominion Bootstrap] ❌ CRITICAL: No FORGE_DOMINION_ROOT in CI")

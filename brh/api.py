@@ -8,6 +8,14 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from brh import role
 
+# Import forge for sovereign secret retrieval
+try:
+    from bridge_backend.bridge_core.token_forge_dominion.secret_forge import retrieve_environment
+except ImportError:
+    # Fallback if not available
+    def retrieve_environment(key: str, default=None):
+        return os.getenv(key, default)
+
 try:
     import docker
     DOCKER_AVAILABLE = True
@@ -20,7 +28,9 @@ app = FastAPI()
 EVENT_LOG = []
 
 # Configure CORS based on environment
-ALLOWED_ORIGINS = os.getenv("BRH_ALLOWED_ORIGINS", "").split(",") if os.getenv("BRH_ALLOWED_ORIGINS") else ["*"]
+# Use forge to retrieve environment variable
+ALLOWED_ORIGINS_STR = retrieve_environment("BRH_ALLOWED_ORIGINS", "")
+ALLOWED_ORIGINS = ALLOWED_ORIGINS_STR.split(",") if ALLOWED_ORIGINS_STR else ["*"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
@@ -77,7 +87,7 @@ def status():
     if not DOCKER_AVAILABLE:
         return {
             "error": "Docker SDK not available",
-            "forge_root": os.getenv("FORGE_DOMINION_ROOT", "unset"),
+            "forge_root": retrieve_environment("FORGE_DOMINION_ROOT", "unset"),
             "container_count": 0,
             "containers": [],
             "timestamp": time.time()
@@ -94,7 +104,7 @@ def status():
             "started": c.attrs.get("State", {}).get("StartedAt", "N/A"),
         })
     return {
-        "forge_root": os.getenv("FORGE_DOMINION_ROOT", "unset"),
+        "forge_root": retrieve_environment("FORGE_DOMINION_ROOT", "unset"),
         "container_count": len(info),
         "containers": info,
         "timestamp": time.time()

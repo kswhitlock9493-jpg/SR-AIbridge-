@@ -12,16 +12,26 @@ import threading
 import requests
 from brh import role, handover
 
-FORGE_ROOT = os.getenv("FORGE_DOMINION_ROOT", "dominion://sovereign.bridge")
-CONSENSUS_INTERVAL = int(os.getenv("BRH_CONSENSUS_INTERVAL", "180"))
-ENV = os.getenv("BRH_ENV", "dev")
+# Import forge for sovereign secret retrieval
+try:
+    from bridge_backend.bridge_core.token_forge_dominion.secret_forge import retrieve_environment
+except ImportError:
+    # Fallback if not available
+    def retrieve_environment(key: str, default=None):
+        return os.getenv(key, default)
+
+# Use forge to retrieve environment variables
+FORGE_ROOT = retrieve_environment("FORGE_DOMINION_ROOT", "dominion://sovereign.bridge")
+CONSENSUS_INTERVAL = int(retrieve_environment("BRH_CONSENSUS_INTERVAL", "180"))
+ENV = retrieve_environment("BRH_ENV", "dev")
 
 peers = {}  # node_id → {epoch, uptime, sig, status}
 
 
 def forge_sig(node_id, epoch):
     """Generate HMAC signature for consensus payload"""
-    seal = os.getenv("DOMINION_SEAL", "forge-ephemeral")
+    # Use forge to retrieve environment variable
+    seal = retrieve_environment("DOMINION_SEAL", "forge-ephemeral")
     msg = f"{node_id}|{epoch}".encode()
     return hmac.new(seal.encode(), msg, hashlib.sha256).hexdigest()[:32]
 

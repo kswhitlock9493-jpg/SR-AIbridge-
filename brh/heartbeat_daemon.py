@@ -11,9 +11,18 @@ import json
 import threading
 import requests
 
+# Import forge for sovereign secret retrieval
+try:
+    from bridge_backend.bridge_core.token_forge_dominion.secret_forge import retrieve_environment
+except ImportError:
+    # Fallback if not available
+    def retrieve_environment(key: str, default=None):
+        return os.getenv(key, default)
 
-FORGE_ROOT = os.getenv("FORGE_DOMINION_ROOT", "dominion://sovereign.bridge")
-HEARTBEAT_INTERVAL = int(os.getenv("BRH_HEARTBEAT_INTERVAL", "60"))
+
+# Use forge to retrieve environment variables
+FORGE_ROOT = retrieve_environment("FORGE_DOMINION_ROOT", "dominion://sovereign.bridge")
+HEARTBEAT_INTERVAL = int(retrieve_environment("BRH_HEARTBEAT_INTERVAL", "60"))
 
 
 def forge_sig(epoch: int) -> str:
@@ -26,7 +35,8 @@ def forge_sig(epoch: int) -> str:
     Returns:
         32-character hex signature
     """
-    seal = os.getenv("DOMINION_SEAL", "forge-ephemeral")
+    # Use forge to retrieve environment variable
+    seal = retrieve_environment("DOMINION_SEAL", "forge-ephemeral")
     msg = f"{FORGE_ROOT}|{epoch}".encode()
     return hmac.new(seal.encode(), msg, hashlib.sha256).hexdigest()[:32]
 

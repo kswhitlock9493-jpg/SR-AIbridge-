@@ -12,12 +12,20 @@ sys.path.insert(0, repo_root)
 
 from brh.forge_auth import parse_forge_root, verify_seal, mint_ephemeral_token
 
+# Try to use forge for secret retrieval
+try:
+    from bridge_backend.bridge_core.token_forge_dominion.secret_forge import retrieve_environment
+except ImportError:
+    # Fallback if not available
+    def retrieve_environment(key: str, default=None):
+        return os.getenv(key, default)
+
 
 def test_forge_auth():
     """Test the forge authentication flow"""
     
-    # Check if FORGE_DOMINION_ROOT is set
-    forge_root = os.getenv("FORGE_DOMINION_ROOT")
+    # Check if FORGE_DOMINION_ROOT is set using forge
+    forge_root = retrieve_environment("FORGE_DOMINION_ROOT")
     if not forge_root:
         print("❌ FORGE_DOMINION_ROOT not set")
         print("\nTo set it, run:")
@@ -39,8 +47,8 @@ def test_forge_auth():
         print(f"\n❌ Failed to parse FORGE_DOMINION_ROOT: {e}")
         return False
     
-    # Check if DOMINION_SEAL is set
-    seal = os.getenv("DOMINION_SEAL")
+    # Check if DOMINION_SEAL is set using forge
+    seal = retrieve_environment("DOMINION_SEAL")
     if not seal:
         print("\n⚠️  DOMINION_SEAL not set")
         print("  Verification will be skipped in allow_unsigned mode")

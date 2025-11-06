@@ -9,6 +9,14 @@ import os
 import logging
 from pathlib import Path
 
+# Import secret forge for sovereign secret retrieval
+try:
+    from bridge_backend.bridge_core.token_forge_dominion.secret_forge import retrieve_environment
+except ImportError:
+    # Fallback if module not available
+    def retrieve_environment(key: str, default=None):
+        return os.getenv(key, default)
+
 logger = logging.getLogger(__name__)
 
 
@@ -45,7 +53,8 @@ def validate_forge_dominion_root():
     try:
         from bridge_backend.bridge_core.token_forge_dominion import generate_root_key
         
-        root_key = os.getenv("FORGE_DOMINION_ROOT")
+        # Use forge to retrieve environment variable
+        root_key = retrieve_environment("FORGE_DOMINION_ROOT")
         
         if root_key:
             logger.info("[Forge Dominion] ✅ Root key found in environment")

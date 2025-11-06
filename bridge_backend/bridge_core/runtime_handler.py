@@ -15,6 +15,14 @@ import hashlib
 import hmac
 import base64
 
+# Import secret forge for sovereign secret retrieval
+try:
+    from bridge_backend.bridge_core.token_forge_dominion.secret_forge import retrieve_environment
+except ImportError:
+    # Fallback if module not available
+    def retrieve_environment(key: str, default=None):
+        return os.getenv(key, default)
+
 logger = logging.getLogger(__name__)
 
 
@@ -74,7 +82,8 @@ class ForgeRuntimeAuthority:
         
     def _get_root_key(self) -> bytes:
         """Get the Forge Dominion root key"""
-        root_key_str = os.getenv("FORGE_DOMINION_ROOT")
+        # Use forge to retrieve environment variable
+        root_key_str = retrieve_environment("FORGE_DOMINION_ROOT")
         if not root_key_str:
             raise ValueError("FORGE_DOMINION_ROOT environment variable not set")
         
