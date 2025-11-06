@@ -10,6 +10,14 @@ from typing import Dict, Optional, Any, Tuple
 from datetime import datetime, timedelta
 from pathlib import Path
 
+# Import forge for sovereign secret retrieval
+try:
+    from .secret_forge import retrieve_environment
+except ImportError:
+    # Fallback if secret_forge not yet available (circular import handling)
+    def retrieve_environment(key: str, default=None):
+        return os.getenv(key, default)
+
 
 class SovereignIntegration:
     """
@@ -57,7 +65,8 @@ class SovereignIntegration:
         }
         
         # Override from environment if specified
-        policy_override = os.getenv("FORGE_DOMINION_POLICIES")
+        # Use forge to retrieve environment variable
+        policy_override = retrieve_environment("FORGE_DOMINION_POLICIES")
         if policy_override:
             try:
                 overrides = json.loads(policy_override)

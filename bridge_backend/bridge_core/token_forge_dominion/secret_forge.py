@@ -147,8 +147,8 @@ class SecretForge:
             hashlib.sha256
         ).hexdigest()
         
-        # Format: service_timestamp_expiry_signature
-        token = f"{service}_{timestamp}_{expiry}_{signature[:32]}"
+        # Format: service:timestamp:expiry:signature (using : as separator to avoid service name conflicts)
+        token = f"{service}:{timestamp}:{expiry}:{signature[:32]}"
         
         return token
     
@@ -163,7 +163,7 @@ class SecretForge:
             True if valid and not expired, False otherwise
         """
         try:
-            parts = token.split("_")
+            parts = token.split(":")
             if len(parts) < 4:
                 return False
             
