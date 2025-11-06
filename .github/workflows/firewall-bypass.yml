@@ -25,13 +25,13 @@ jobs:
         run: |
           echo "🌐 Configuring browser dependencies for firewall-restricted environment..."
           
-          # Install Playwright system dependencies
+          # Install Playwright system dependencies only (skip browser downloads)
           echo "📦 Installing Playwright browser dependencies..."
           npx playwright install-deps || echo "⚠️ Playwright deps install failed, continuing..."
           
-          # Install Chromium via Playwright (bypasses firewall restrictions)
-          echo "🔧 Installing Chromium browser..."
-          npx playwright install chromium || echo "⚠️ Chromium install failed, continuing..."
+          # Note: Skipping browser download to avoid firewall blocks
+          # System browsers or pre-cached browsers will be used instead
+          echo "✅ Browser dependencies configured (using system browsers)"
           
           # Set browser executable path for tools that need it
           CHROMIUM_PATH=$(which chromium 2>/dev/null || which chromium-browser 2>/dev/null || echo "")
@@ -41,6 +41,10 @@ jobs:
           else
             echo "⚠️ Chromium not found in PATH, tools may use system default"
           fi
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
       
       - name: Set Puppeteer Environment Variables
         run: |

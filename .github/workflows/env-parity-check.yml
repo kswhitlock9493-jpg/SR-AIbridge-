@@ -29,9 +29,12 @@ jobs:
 
       - name: Install Chrome Dependencies
         run: |
-          # Install Playwright browser dependencies
+          # Install system dependencies for Playwright only (skip browser downloads)
           npx playwright install-deps
-          npx playwright install chromium
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
 
       - name: 📦 Install Dependencies
         run: |
@@ -59,6 +62,10 @@ jobs:
           cd bridge-frontend
           npm ci
           npm run build
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
 
       - name: 🔍 Verify Build Output Directory
         run: |
