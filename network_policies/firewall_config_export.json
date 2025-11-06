@@ -1,9 +1,9 @@
 {
   "version": "1.0.0",
-  "exported_at": "2025-11-06T12:48:19.104559+00:00",
+  "exported_at": "2025-11-06T12:52:00.734758+00:00",
   "allowlist": {
     "version": "1.0.0",
-    "last_updated": "2025-11-06T12:48:19.101395+00:00",
+    "last_updated": "2025-11-06T12:48:35.243572+00:00",
     "domains": {
       "critical": [
         "api.netlify.com",
@@ -23,7 +23,8 @@
         "googlechromelabs.github.io",
         "storage.googleapis.com",
         "edgedl.me.gvt1.com",
-        "playwright.azureedge.net"
+        "playwright.azureedge.net",
+        "cdn.playwright.dev"
       ]
     },
     "ip_ranges": {

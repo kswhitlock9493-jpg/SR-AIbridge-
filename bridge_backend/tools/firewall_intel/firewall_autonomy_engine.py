@@ -66,6 +66,11 @@ class FirewallAutonomyEngine:
         self.guardrails = {
             "max_severity_for_auto_apply": "medium",  # Only auto-apply low/medium severity
             "require_approval_for_high": True,
+            # add_domain_to_allowlist is safe because:
+            # 1. Only adds to allowlist (doesn't modify existing rules)
+            # 2. Limited to known browser download domains (BROWSER_DOWNLOAD_DOMAINS)
+            # 3. All actions are logged for audit
+            # 4. Firewall still enforces protocol and port restrictions
             "safe_actions": ["analyze", "report", "recommend", "add_domain_to_allowlist"],
             "restricted_actions": ["delete", "drop"],
             "max_concurrent_tasks": 3
@@ -176,6 +181,9 @@ class FirewallAutonomyEngine:
             "errors": []
         }
         
+        # Maximum file size to read (10MB to prevent memory issues)
+        MAX_FILE_SIZE = 10 * 1024 * 1024
+        
         try:
             # Check local log files for browser download errors
             log_dirs = ["logs", "bridge_backend/diagnostics", ".npm/_logs"]
@@ -186,6 +194,10 @@ class FirewallAutonomyEngine:
                 
                 for log_file in Path(log_dir).rglob("*.log"):
                     try:
+                        # Skip files larger than MAX_FILE_SIZE
+                        if log_file.stat().st_size > MAX_FILE_SIZE:
+                            continue
+                        
                         with open(log_file, 'r', encoding='utf-8', errors='ignore') as f:
                             content = f.read()
                             
