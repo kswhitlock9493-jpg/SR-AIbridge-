@@ -4,6 +4,8 @@
  * for API failures and component crashes
  */
 
+import { buildURL } from '../utils/endpoint-transformer';
+
 class HealingNetException extends Error {
   constructor(message, context = {}) {
     super(message);
@@ -122,12 +124,14 @@ class APIGuardian {
       body,
       timeout = 10000,
       retries = 2,
-      fallbackOnError = true
+      fallbackOnError = true,
+      baseURL
     } = options;
 
+    // Build the full URL using the transformer utility
     const url = typeof endpoint === 'string' && endpoint.startsWith('http') 
       ? endpoint 
-      : `${options.baseURL || ''}${endpoint}`;
+      : buildURL(endpoint, baseURL);
 
     for (let attempt = 0; attempt <= retries; attempt++) {
       try {

@@ -3,9 +3,7 @@
  * Handles all backend communication with error handling and retry logic
  */
 
-import config from '../config';
-
-const API_BASE = config.API_BASE_URL;
+import { buildURL } from '../utils/endpoint-transformer';
 
 /**
  * BRH Service - Main backend integration service
@@ -17,7 +15,7 @@ export const BRHService = {
    */
   async connect() {
     try {
-      const response = await fetch(`${API_BASE}/api/health/status`, {
+      const response = await fetch(buildURL('/api/health/status'), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +50,7 @@ export const BRHService = {
    */
   async getHealth() {
     try {
-      const response = await fetch(`${API_BASE}/api/health/health`, {
+      const response = await fetch(buildURL('/api/health/health'), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +77,7 @@ export const BRHService = {
    */
   async getFullHealth() {
     try {
-      const response = await fetch(`${API_BASE}/api/health/health/full`, {
+      const response = await fetch(buildURL('/api/health/health/full'), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +107,7 @@ export const BRHService = {
    */
   async sendCommand(command, payload = {}) {
     try {
-      const response = await fetch(`${API_BASE}/command`, {
+      const response = await fetch(buildURL('/command'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -137,7 +135,7 @@ export const BRHService = {
    */
   async getAgents() {
     try {
-      const response = await fetch(`${API_BASE}/agents`, {
+      const response = await fetch(buildURL('/agents'), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -176,7 +174,7 @@ export const BRHService = {
       const params = new URLSearchParams(filters);
       const query = params.toString() ? `?${params.toString()}` : '';
       
-      const response = await fetch(`${API_BASE}/api/missions/missions${query}`, {
+      const response = await fetch(buildURL(`/api/missions/missions${query}`), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -206,7 +204,7 @@ export const BRHService = {
       if (role) params.append('role', role);
       const query = params.toString() ? `?${params.toString()}` : '';
       
-      const response = await fetch(`${API_BASE}/armada/status${query}`, {
+      const response = await fetch(buildURL(`/armada/status${query}`), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -250,7 +248,7 @@ export const BRHService = {
       const params = new URLSearchParams(filters);
       const query = params.toString() ? `?${params.toString()}` : '';
       
-      const response = await fetch(`${API_BASE}/vault/logs${query}`, {
+      const response = await fetch(buildURL(`/vault/logs${query}`), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -275,7 +273,7 @@ export const BRHService = {
    */
   async triggerSelfHeal() {
     try {
-      const response = await fetch(`${API_BASE}/health/self-heal`, {
+      const response = await fetch(buildURL('/health/self-heal'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -304,7 +302,7 @@ export const BRHService = {
    */
   async establishSession() {
     try {
-      const response = await fetch(`${API_BASE}/auth/session`, {
+      const response = await fetch(buildURL('/auth/session'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

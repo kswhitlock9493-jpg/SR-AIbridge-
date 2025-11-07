@@ -1,5 +1,6 @@
 import config from './config';
 import { APIGuardian, CircuitBreaker } from './services/healing-net';
+import { transformEndpoint, isNetlifyFunctions } from './utils/endpoint-transformer';
 
 const API_BASE_URL = config.API_BASE_URL;
 
@@ -12,17 +13,6 @@ const circuitBreakers = {
   engines: new CircuitBreaker('engines', { failureThreshold: 5, resetTimeout: 60000 })
 };
 
-// Map endpoint paths to Netlify Function names (when using Netlify Functions)
-const NETLIFY_ENDPOINT_MAP = {
-  '/status': '/api-status',
-  '/agents': '/api-agents',
-  '/missions': '/api-missions',
-  '/vault/logs': '/api-vault-logs',
-  '/armada/status': '/api-armada-status',
-  '/health': '/api-system-health',
-  '/activity': '/api-activity'
-};
-
 // Enhanced API client with retry logic and robust error handling
 class APIClient {
   constructor(baseURL, options = {}) {
@@ -30,31 +20,13 @@ class APIClient {
     this.defaultTimeout = options.timeout || 10000;
     this.maxRetries = options.maxRetries || 3;
     this.baseRetryDelay = options.baseRetryDelay || 1000;
-    this.isNetlifyFunctions = baseURL.includes('/.netlify/functions');
+    this.isNetlifyFunctions = isNetlifyFunctions();
   }
 
   // Transform endpoint for Netlify Functions if needed
+  // Delegates to shared utility
   transformEndpoint(endpoint) {
-    if (!this.isNetlifyFunctions) {
-      return endpoint;
-    }
-    
-    // For Netlify Functions, map the endpoint to the function name
-    // First check exact matches
-    if (NETLIFY_ENDPOINT_MAP[endpoint]) {
-      return NETLIFY_ENDPOINT_MAP[endpoint];
-    }
-    
-    // Check for partial matches (e.g., /missions?captain=x -> /api-missions?captain=x)
-    for (const [key, value] of Object.entries(NETLIFY_ENDPOINT_MAP)) {
-      if (endpoint.startsWith(key)) {
-        return endpoint.replace(key, value);
-      }
-    }
-    
-    // Default: prepend "api" and replace slashes with dashes
-    // e.g., /users/profile -> /api-users-profile
-    return `/api${endpoint.replace(/\//g, '-')}`;
+    return transformEndpoint(endpoint);
   }
 
   async request(endpoint, options = {}) {
