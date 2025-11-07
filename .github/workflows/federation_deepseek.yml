@@ -18,6 +18,10 @@ jobs:
       - name: Run Deep-Seek + Auto-Repair
         run: |
           python3 .github/scripts/deep_seek_triage.py
+        env:
+          # Enable safe placeholder mode when no backend URL is configured in secrets
+          # This prevents workflow failures when external federation services aren't yet deployed
+          SAFE_PLACEHOLDER_MODE: ${{ secrets.BACKEND_URL != '' && 'false' || 'true' }}
       - name: Upload Federation Report
         uses: actions/upload-artifact@v4
         with:

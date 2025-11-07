@@ -27,6 +27,15 @@ def ping(path, timeout=6):
         return False, None, ms, str(e)
 
 def main():
+    # Check if running in safe placeholder mode
+    safe_mode = os.getenv("SAFE_PLACEHOLDER_MODE", "false").lower() == "true"
+    if safe_mode:
+        print("⚠️  Running in SAFE PLACEHOLDER MODE - skipping external backend checks")
+        with OUT.open("w") as f:
+            f.write(json.dumps({"mode":"safe_placeholder","message":"Safe placeholder mode active"}) + "\n")
+        print(f"Wrote {OUT} (safe mode)")
+        return 0
+    
     failures = 0; required_total = 0
     with OUT.open("w") as f:
         for path, required in ENDPOINTS:
