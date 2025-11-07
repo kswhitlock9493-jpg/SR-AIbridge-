@@ -270,7 +270,7 @@ class StableInboxService {
       // Check if comms system is operational
       const validation = await DeploymentValidator.validateTrueDeployment();
       
-      if (validation.validationDetails.brh_integration) {
+      if (validation.validationDetails.brh_connectivity) {
         return {
           initialized: true,
           mode: 'operational',
