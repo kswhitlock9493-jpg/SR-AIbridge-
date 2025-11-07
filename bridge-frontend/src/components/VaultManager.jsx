@@ -5,7 +5,6 @@
 
 import { useState } from 'react';
 import { useRealtimeData } from '../hooks/useBRHConnection';
-import BRHService from '../services/brh-api';
 
 const VaultManager = () => {
   const [logLevel, setLogLevel] = useState('all');

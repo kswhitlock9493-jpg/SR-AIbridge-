@@ -7,6 +7,7 @@ from sqlalchemy import select
 from typing import List, Annotated
 import json
 import uuid
+import os
 
 # Import dependencies with compatibility handling
 try:
@@ -40,6 +41,11 @@ class MissionIn(BaseModel):
     priority: str = "medium"
     captain: str = None  # Captain who owns this mission
     role: str = "captain"  # 'captain' or 'agent'
+
+class MissionUpdate(BaseModel):
+    status: str = None
+    progress: int = None
+    description: str = None
 
 def _read_missions() -> list[dict]:
     if not MISSIONS_FILE.exists():
@@ -88,6 +94,54 @@ def create_mission(m: MissionIn, request: Request):
     }
     _write_mission(entry)
     return {"status": "created", "mission": entry}
+
+
+@router.patch("/{mission_id}")
+def update_mission(mission_id: str, updates: MissionUpdate):
+    """Update mission status, progress, or other fields."""
+    import tempfile
+    import shutil
+    
+    missions = _read_missions()
+    updated_mission = None
+    
+    for i, mission in enumerate(missions):
+        if mission.get("id") == mission_id:
+            # Update allowed fields
+            if updates.status is not None:
+                mission["status"] = updates.status
+            if updates.progress is not None:
+                mission["progress"] = min(100, max(0, int(updates.progress)))
+            if updates.description is not None:
+                mission["description"] = updates.description
+            
+            mission["updated_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds") + "Z"
+            missions[i] = mission
+            updated_mission = mission
+            break
+    
+    if updated_mission is None:
+        raise HTTPException(status_code=404, detail="Mission not found")
+    
+    # Atomic write using temporary file
+    try:
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, dir=MISSIONS_DIR, suffix='.tmp') as tmp_file:
+            for mission in missions:
+                tmp_file.write(json.dumps(mission) + "\n")
+            tmp_path = tmp_file.name
+        
+        # Replace original file atomically
+        shutil.move(tmp_path, MISSIONS_FILE)
+    except Exception as e:
+        # Clean up temp file if it exists
+        if 'tmp_path' in locals():
+            try:
+                os.unlink(tmp_path)
+            except:
+                pass
+        raise HTTPException(status_code=500, detail=f"Failed to update mission: {str(e)}")
+    
+    return {"status": "updated", "mission": updated_mission}
 
 
 if DB_AVAILABLE:

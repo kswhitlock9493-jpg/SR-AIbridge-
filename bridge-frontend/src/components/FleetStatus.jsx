@@ -3,7 +3,7 @@
  * Displays real-time fleet/agent monitoring with status indicators
  */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRealtimeData } from '../hooks/useBRHConnection';
 
 const FleetStatus = () => {

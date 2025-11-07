@@ -6,6 +6,7 @@ import {
   runSelfRepair, 
   getSystemMetrics 
 } from '../api';
+import HealingNetDashboard from './HealingNetDashboard.jsx';
 
 const SystemSelfTest = () => {
   const [healthStatus, setHealthStatus] = useState(null);
@@ -429,6 +430,9 @@ const SystemSelfTest = () => {
           </div>
         </div>
       </div>
+
+      {/* Healing Net Dashboard Integration */}
+      <HealingNetDashboard />
     </div>
   );
 };

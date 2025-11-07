@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getMissions, createMission, updateMissionStatus } from '../api';
+import { getMissions, createMission, updateMissionProgress, updateMissionStatus } from '../api';
 
 const MissionLog = () => {
   const [missions, setMissions] = useState([]);
@@ -11,7 +11,8 @@ const MissionLog = () => {
     title: '',
     description: '',
     priority: 'medium',
-    type: 'standard'
+    type: 'standard',
+    progress: 0 // Add progress tracking
   });
   const [filters, setFilters] = useState({
     status: 'all',
@@ -46,9 +47,10 @@ const MissionLog = () => {
       await createMission({
         ...newMission,
         captain: currentCaptain,
-        role: 'captain'
+        role: 'captain',
+        progress: 0 // Initialize progress
       });
-      setNewMission({ title: '', description: '', priority: 'medium', type: 'standard' });
+      setNewMission({ title: '', description: '', priority: 'medium', type: 'standard', progress: 0 });
       setShowCreateForm(false);
       await fetchMissions(); // Refresh missions list
     } catch (err) {
@@ -56,6 +58,21 @@ const MissionLog = () => {
       setError('Failed to create mission: ' + err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Update mission progress
+  const handleProgressUpdate = async (missionId, newProgress) => {
+    try {
+      // Update mission progress using dedicated function
+      await updateMissionProgress(missionId, newProgress);
+      await fetchMissions(); // Refresh missions list
+    } catch (err) {
+      console.error('Failed to update mission progress:', err);
+      // Update locally as fallback
+      setMissions(missions.map(m => 
+        m.id === missionId ? { ...m, progress: newProgress } : m
+      ));
     }
   };
 
@@ -298,6 +315,85 @@ const MissionLog = () => {
                     </div>
                   )}
                 </div>
+
+                {/* Real-time Progress Tracking */}
+                {(mission.status === 'active' || mission.status === 'in_progress') && (
+                  <div className="mission-progress" style={{
+                    marginTop: '12px',
+                    marginBottom: '12px'
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                      <span style={{ fontSize: '14px', fontWeight: 'bold' }}>Progress</span>
+                      <span style={{ fontSize: '14px' }}>{mission.progress || 0}%</span>
+                    </div>
+                    <div style={{
+                      width: '100%',
+                      height: '20px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      borderRadius: '10px',
+                      overflow: 'hidden',
+                      border: '1px solid rgba(255, 255, 255, 0.2)'
+                    }}>
+                      <div style={{
+                        width: `${mission.progress || 0}%`,
+                        height: '100%',
+                        backgroundColor: '#28a745',
+                        transition: 'width 0.3s ease',
+                        borderRadius: '10px'
+                      }} />
+                    </div>
+                    {/* Progress controls */}
+                    <div style={{
+                      display: 'flex',
+                      gap: '4px',
+                      marginTop: '8px',
+                      justifyContent: 'center'
+                    }}>
+                      <button
+                        onClick={() => handleProgressUpdate(mission.id, Math.max(0, (mission.progress || 0) - 10))}
+                        style={{
+                          padding: '4px 8px',
+                          fontSize: '12px',
+                          backgroundColor: '#6c757d',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        -10%
+                      </button>
+                      <button
+                        onClick={() => handleProgressUpdate(mission.id, Math.min(100, (mission.progress || 0) + 10))}
+                        style={{
+                          padding: '4px 8px',
+                          fontSize: '12px',
+                          backgroundColor: '#28a745',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        +10%
+                      </button>
+                      <button
+                        onClick={() => handleProgressUpdate(mission.id, Math.min(100, (mission.progress || 0) + 25))}
+                        style={{
+                          padding: '4px 8px',
+                          fontSize: '12px',
+                          backgroundColor: '#007bff',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        +25%
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 <div className="mission-actions">
                   {mission.status === 'pending' && (
