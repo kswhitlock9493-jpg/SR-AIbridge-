@@ -107,7 +107,10 @@ class SystemValidator {
 
   /**
    * Validate Umbra Lattice (shadow operations)
-   * @returns {Promise<boolean>} True if umbra lattice is active
+   * NOTE: Returns true even if validation fails to prevent blocking deployment
+   * Umbra is an optional enhancement feature (fallback/shadow operations)
+   * Core Bridge functionality doesn't depend on it
+   * @returns {Promise<boolean>} True if umbra lattice is active, or true if unavailable (non-blocking)
    */
   static async validateUmbra() {
     try {
@@ -125,6 +128,7 @@ class SystemValidator {
     } catch (error) {
       console.warn('[DeploymentValidator] Umbra validation failed:', error.message);
       // Don't fail validation if this optional feature is missing
+      // Umbra provides fallback/shadow operations but isn't required for core functionality
       return true;
     }
   }
@@ -194,9 +198,12 @@ class DeploymentValidator {
       indoctrination_engine: indoctrination
     };
 
-    // UPDATED: Core systems required, optional systems nice-to-have
-    // True deployment requires CORE checks to pass
-    const coreSystemsOnline = brh && healingNet;
+    // CORE SYSTEMS DEFINITION:
+    // BRH connectivity - Required for backend communication
+    // Healing Net - Required for health monitoring and self-repair
+    // Optional systems (crypto, umbra, indoctrination) don't block deployment
+    const CORE_SYSTEMS = ['brh_connectivity', 'healing_net_operational'];
+    const coreSystemsOnline = CORE_SYSTEMS.every(system => validationChecks[system]);
     const trueDeployment = coreSystemsOnline;
 
     const result = {
@@ -207,7 +214,8 @@ class DeploymentValidator {
       timestamp: new Date().toISOString(),
       systemsOnline: Object.values(validationChecks).filter(v => v).length,
       totalSystems: Object.keys(validationChecks).length,
-      coreSystemsOnline
+      coreSystemsOnline,
+      coreSystems: CORE_SYSTEMS
     };
 
     // Cache results

@@ -152,9 +152,11 @@ export const BRHService = {
       const agents = Array.isArray(data) ? data : (data.agents || []);
       
       // Transform agents to include status mapping (state -> status)
-      return agents.map(agent => ({
+      // Ensure every agent has a valid unique identifier
+      return agents.map((agent, index) => ({
         ...agent,
-        id: agent.id || agent.name,
+        // Fallback: use name, or generate ID from index if neither id nor name exists
+        id: agent.id || agent.name || `agent-${index}`,
         status: agent.status || agent.state || 'offline',
         capabilities: agent.capabilities || (agent.details ? [agent.details.description] : [])
       }));
