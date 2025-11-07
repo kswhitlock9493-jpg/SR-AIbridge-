@@ -7,21 +7,13 @@ import pytest
 from pathlib import Path
 import sys
 
-# Add parent directory to path
-sys.path.insert(0, str(Path(__file__).parent.parent))
-
-from bridge_core.lattice.bridge_harmony import (
-    BridgeHarmonyOrchestrator,
-    EngineNode,
-    CommunicationPath
-)
-
 
 class TestBridgeHarmonyOrchestrator:
     """Test suite for Bridge Harmony Orchestration"""
     
     def test_orchestrator_init(self):
         """Test orchestrator initialization"""
+        from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
         orchestrator = BridgeHarmonyOrchestrator()
         assert orchestrator is not None
         assert orchestrator.engines == {}
@@ -29,6 +21,7 @@ class TestBridgeHarmonyOrchestrator:
         
     def test_discover_engines(self):
         """Test engine discovery"""
+        from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
         orchestrator = BridgeHarmonyOrchestrator()
         engines = orchestrator.discover_engines()
         
@@ -55,6 +48,7 @@ class TestBridgeHarmonyOrchestrator:
     
     def test_auto_wire_communications(self):
         """Test auto-wiring communication pathways"""
+        from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
         orchestrator = BridgeHarmonyOrchestrator()
         orchestrator.discover_engines()
         paths = orchestrator.auto_wire_communications()
@@ -80,6 +74,7 @@ class TestBridgeHarmonyOrchestrator:
     
     def test_verify_documentation_links(self):
         """Test documentation link verification"""
+        from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
         orchestrator = BridgeHarmonyOrchestrator()
         broken_count = orchestrator.verify_documentation_links()
         
@@ -88,6 +83,7 @@ class TestBridgeHarmonyOrchestrator:
     
     def test_establish_bridge_resonance(self):
         """Test bridge resonance establishment"""
+        from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
         orchestrator = BridgeHarmonyOrchestrator()
         orchestrator.discover_engines()
         orchestrator.auto_wire_communications()
@@ -110,6 +106,7 @@ class TestBridgeHarmonyOrchestrator:
     
     def test_full_orchestration(self):
         """Test complete harmony orchestration"""
+        from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
         orchestrator = BridgeHarmonyOrchestrator()
         result = orchestrator.orchestrate_full_harmony()
         
@@ -128,6 +125,7 @@ class TestBridgeHarmonyOrchestrator:
     
     def test_engine_dependencies(self):
         """Test engine dependency mapping"""
+        from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
         orchestrator = BridgeHarmonyOrchestrator()
         orchestrator.discover_engines()
         
@@ -151,6 +149,7 @@ class TestBridgeHarmonyOrchestrator:
     
     def test_communication_protocols(self):
         """Test different communication protocols are used correctly"""
+        from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
         orchestrator = BridgeHarmonyOrchestrator()
         orchestrator.discover_engines()
         orchestrator.auto_wire_communications()
@@ -176,6 +175,7 @@ class TestEngineNode:
     
     def test_engine_node_creation(self):
         """Test creating an EngineNode"""
+        from bridge_core.lattice.bridge_harmony import EngineNode
         node = EngineNode(
             name="TestEngine",
             path="bridge_backend/engines/test",
@@ -198,6 +198,7 @@ class TestCommunicationPath:
     
     def test_communication_path_creation(self):
         """Test creating a CommunicationPath"""
+        from bridge_core.lattice.bridge_harmony import CommunicationPath
         path = CommunicationPath(
             source="EngineA",
             target="EngineB",

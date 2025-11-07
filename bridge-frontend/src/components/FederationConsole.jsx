@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 
 export default function FederationConsole() {
@@ -12,7 +12,7 @@ export default function FederationConsole() {
   // Use environment variable for API base URL with fallback
   const apiBase = import.meta.env.VITE_BRH_API_BASE || "http://localhost:7878";
 
-  const fetchStatus = async () => {
+  const fetchStatus = useCallback(async () => {
     try {
       const res = await fetch(`${apiBase}/federation/state`);
       const data = await res.json();
@@ -25,9 +25,9 @@ export default function FederationConsole() {
     } catch {
       setState((prev) => ({ ...prev, forgeStatus: "Offline" }));
     }
-  };
+  }, [apiBase]);
 
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     try {
       const res = await fetch(`${apiBase}/events`);
       const data = await res.json();
@@ -38,7 +38,7 @@ export default function FederationConsole() {
     } catch {
       console.warn("No event feed yet");
     }
-  };
+  }, [apiBase]);
 
   useEffect(() => {
     fetchStatus();
@@ -48,7 +48,7 @@ export default function FederationConsole() {
       fetchEvents();
     }, 8000);
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchStatus, fetchEvents]);
 
   return (
     <div className="bg-gray-950 text-green-400 rounded-2xl shadow-lg p-6 font-mono border border-green-600">

@@ -1,6 +1,6 @@
 # 📘 The Book of the Repo
 
-_Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
+_Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 
 ---
 
@@ -28,6 +28,24 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   _source: ./bridge.runtime.yaml_
 - **services** → `{'api': {'context': './bridge_backend', 'dockerfile': 'Dockerfile', 'image': 'ghcr.io/kswhitlock9493-jpg/sr-aibridge-backend:latest', 'replicas': 1, 'ports': ['8000:8000'], 'env': ['ENVIRONMENT=production', 'LOG_LEVEL=INFO'], 'health': {'http': 'http://localhost:8000/health/live', 'interval': '10s', 'timeout': '2s', 'retries': 12}, 'volumes': []}, 'ws': {'image': 'ghcr.io/kswhitlock9493-jpg/ws-sidecar:latest', 'replicas': 1, 'depends_on': ['api'], 'env': ['BACKEND_URL=http://api:8000'], 'health': {'tcp': 'localhost:9001', 'interval': '10s', 'timeout': '2s', 'retries': 12}}}`  
   _source: ./bridge.runtime.yaml_
+- **version** → `1.0.0`  
+  _source: ./network_policies/egress_policies.yaml_
+- **last_updated** → `2025-11-06T12:48:19.103259+00:00`  
+  _source: ./network_policies/firewall_rules.yaml_
+- **rules** → `[{'id': 'allow_critical_domains', 'action': 'allow', 'priority': 100, 'source': 'any', 'destination': 'critical_domains', 'protocol': 'https', 'enabled': True}, {'id': 'allow_infrastructure', 'action': 'allow', 'priority': 90, 'source': 'any', 'destination': 'infrastructure_domains', 'protocol': 'https', 'enabled': True}, {'id': 'allow_browser_downloads', 'action': 'allow', 'priority': 85, 'source': 'any', 'destination': 'browser_download_domains', 'protocol': 'https', 'enabled': True, 'description': 'Allow browser downloads for Playwright/Puppeteer (Chrome, Chromium, etc.)'}, {'id': 'block_unknown', 'action': 'log_and_notify', 'priority': 10, 'source': 'any', 'destination': 'unknown', 'protocol': 'any', 'enabled': True}]`  
+  _source: ./network_policies/firewall_rules.yaml_
+- **last_updated** → `2025-11-06T12:48:35.243572+00:00`  
+  _source: ./network_policies/sovereign_allowlist.yaml_
+- **domains** → `{'critical': ['api.netlify.com', 'bridge.sr-aibridge.com', 'diagnostics.sr-aibridge.com'], 'infrastructure': ['github.com', 'api.github.com', 'registry.npmjs.org', 'pypi.org'], 'monitoring': ['sentry.io'], 'browser_downloads': ['googlechromelabs.github.io', 'storage.googleapis.com', 'edgedl.me.gvt1.com', 'playwright.azureedge.net', 'cdn.playwright.dev']}`  
+  _source: ./network_policies/sovereign_allowlist.yaml_
+- **ip_ranges** → `{'netlify': ['44.211.0.0/16', '52.2.0.0/15'], 'github': ['140.82.112.0/20', '143.55.64.0/20']}`  
+  _source: ./network_policies/sovereign_allowlist.yaml_
+- **last_updated** → `2025-11-06T12:48:19.102407+00:00`  
+  _source: ./network_policies/egress_policies.yaml_
+- **policies** → `{'default_action': 'deny', 'allowed_protocols': ['https', 'http'], 'allowed_ports': [80, 443, 8080, 3000], 'dns_resolution': {'primary': ['8.8.8.8', '8.8.4.4'], 'fallback': ['1.1.1.1', '1.0.0.1']}, 'retry_policy': {'max_retries': 3, 'backoff_multiplier': 2, 'initial_delay_ms': 1000}, 'timeout_policy': {'connection_timeout_s': 10, 'read_timeout_s': 30, 'total_timeout_s': 60}}`  
+  _source: ./network_policies/egress_policies.yaml_
+- **services** → `[{'type': 'web', 'name': 'sr-aibridge-backend', 'env': 'python', 'plan': 'starter', 'buildCommand': 'pip install -r requirements.txt', 'startCommand': 'bash bridge_backend/runtime/start.sh', 'envVars': [{'key': 'PYTHON_VERSION', 'value': '3.11.9'}, {'key': 'PORT', 'value': '10000'}, {'key': 'NODE_ENV', 'value': 'production'}, {'key': 'DATABASE_URL', 'sync': False}, {'key': 'BRIDGE_VERSION', 'value': '2.0.1'}], 'healthCheckPath': '/api/health', 'autoDeploy': True}]`  
+  _source: ./.archive/render_legacy/render.yaml_
 - **version** → `v1`  
   _source: ./DOCTRINE/indoctrination/policy.yaml_
 - **constraints** → `{'certification_required': True}`  
@@ -44,8 +62,6 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   _source: ./codex/manifest.yaml_
 - **outputs** → `['codex/output/repo_book.json', 'codex/output/repo_book.md']`  
   _source: ./codex/manifest.yaml_
-- **services** → `[{'type': 'web', 'name': 'sr-aibridge-backend', 'env': 'python', 'plan': 'starter', 'buildCommand': 'pip install -r requirements.txt', 'startCommand': 'bash bridge_backend/runtime/start.sh', 'envVars': [{'key': 'PYTHON_VERSION', 'value': '3.11.9'}, {'key': 'PORT', 'value': '10000'}, {'key': 'NODE_ENV', 'value': 'production'}, {'key': 'DATABASE_URL', 'sync': False}, {'key': 'BRIDGE_VERSION', 'value': '2.0.1'}], 'healthCheckPath': '/api/health', 'autoDeploy': True}]`  
-  _source: ./infra/render.yaml_
 - **runtime** → `{'name': 'sr-aibridge-runtime', 'type': 'sovereign', 'auth': {'provider': 'forge_dominion', 'token_mode': 'ephemeral', 'token_ttl': 3600, 'auto_renew': True}, 'containers': [{'name': 'backend-api', 'image': 'python:3.12-slim', 'command': ['uvicorn', 'main:app', '--host', '0.0.0.0', '--port', '8000'], 'environment': ['FORGE_DOMINION_MODE=sovereign', 'DATABASE_TYPE=sqlite'], 'ports': ['8000:8000'], 'health_check': {'path': '/health', 'interval': 30, 'timeout': 5, 'retries': 3}, 'resources': {'memory': '512Mi', 'cpu': '0.5'}}, {'name': 'frontend-static', 'image': 'nginx:alpine', 'command': ['nginx', '-g', 'daemon off;'], 'ports': ['3000:80'], 'health_check': {'path': '/', 'interval': 30, 'timeout': 5, 'retries': 3}, 'resources': {'memory': '256Mi', 'cpu': '0.25'}}], 'routes': [{'path': '/api/*', 'target': 'backend-api:8000', 'strip_prefix': '/api'}, {'path': '/*', 'target': 'frontend-static:80'}], 'lifecycle': {'startup_timeout': 120, 'shutdown_timeout': 30, 'restart_policy': 'on-failure', 'max_restarts': 3}, 'federation': {'enabled': True, 'lattice_mode': 'harmonic', 'heartbeat_interval': 10, 'sync_protocol': 'μ-state-replication'}, 'observability': {'logs': {'destination': 'forge://sovereign-ledger/runtime', 'level': 'info', 'format': 'json'}, 'metrics': {'enabled': True, 'destination': 'forge://metrics/runtime', 'interval': 60}}}`  
   _source: ./src/bridge.runtime.yaml_
 - **deploy** → `{'github': {'workflow': 'bridge_deploy.yml', 'trigger': 'push', 'branches': ['main', 'staging']}, 'targets': [{'name': 'production', 'provider': 'bridge_runtime_handler', 'region': 'auto', 'replicas': 2}, {'name': 'staging', 'provider': 'bridge_runtime_handler', 'region': 'auto', 'replicas': 1}]}`  
@@ -55,6 +71,33 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 
 ---
 ## 📄 Documentation Index
+
+### ./FIREWALL_FIX_SUMMARY.md
+
+- # Firewall Blocking Fix - Browser Downloads
+- ## Problem Statement
+- ## Root Cause
+- ## Solution Implemented
+- ### 1. Environment Variables Configuration
+- ### 2. NPM Configuration Files
+- # Skip browser downloads to avoid firewall blocks
+- # Skip browser downloads to avoid firewall blocks
+- ### 3. GitHub Actions Workflows
+- ### 4. Key Changes Summary
+- ## Files Modified
+- ### GitHub Workflows (12 files)
+- ### GitHub Actions (1 file)
+- ### Configuration Files (2 files)
+- ### Python Tools (1 file)
+- ## Browser Strategy
+- ## Testing & Validation
+- ## Future Maintenance
+- ## Related Scripts
+- ## Benefits
+- ## Monitoring
+- ## Rollback Plan
+- ## Additional Notes
+
 
 ### ./CHANGELOG.md
 
@@ -184,6 +227,486 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ## Previous Versions
 - ### v1.9.4a+ - Anchorhold Protocol
 - ### v1.9.3
+
+
+### ./REPO_MAP.md
+
+- # SR-AIbridge Repository Comprehensive Map
+- ## Executive Summary
+- ## File Type Distribution
+- ## Key Directories
+- ### bridge_backend
+- ### bridge-frontend
+- ### bridge_core
+- ### docs
+- ### codex
+- ### tools
+- ### scripts
+- ### tests
+- ### DOCTRINE
+- ## Root Level Files
+
+
+### ./BRIDGE_HARMONY_SUMMARY.md
+
+- # 🎻 Bridge Harmony Implementation Summary
+- ## Mission Statement
+- ## Problem Solved
+- ### Before
+- ### After
+- ## Implementation
+- ### Core Components
+- ## Architecture Integration
+- ### HXO Nexus (Harmonic Conductor)
+- ### Umbra Lattice (Neural Memory)
+- ### Genesis Federation Bus (Event Router)
+- ## Discovered Engines (34 Total)
+- ### Core Infrastructure (6)
+- ### Super Engines (7)
+- ### Utility & Support (21)
+- ## Communication Pathways (91 Total)
+- ## Metrics Achieved
+- ## Usage Examples
+- ### CLI Commands
+- # Complete harmony fix (recommended)
+- # Show current status
+- # Individual operations
+- ### Python API
+- # Full orchestration
+- # Check metrics
+- ## Files Changed
+- ### Modified
+- ### Created
+- ## Testing
+- ### Test Results
+- ### Test Coverage
+- ## Security
+- ## Code Quality
+- ### Code Review
+- ### Best Practices
+- ## Impact
+- ### Immediate Benefits
+- ### Long-term Benefits
+- ## Philosophy
+- ## Conclusion
+
+
+### ./SOVEREIGN_AUDIT_SUMMARY.md
+
+- # 🎉 Sovereign Audit & Repair - Implementation Summary
+- ## Mission Accomplished ✅
+- ## What Was Delivered
+- ### 1. Complete Audit System (3 Tools)
+- #### Sovereign Audit Orchestrator
+- #### Master Sovereign Audit
+- ### 2. Comprehensive Test Suite
+- ### 3. Complete Documentation
+- #### Full Guide
+- #### Quick Reference
+- ## Audit Results
+- ### Current Status
+- ### Detailed Breakdown
+- ## Security
+- ### Security Review ✅
+- ## Usage
+- ### Quick Start
+- # Run full sovereign audit
+- # Expected output:
+- # ✅ SOVEREIGN GIT = TRUE - Full sovereignty confirmed!
+- ### Individual Audits
+- # Run Git/Netlify/Repo audit only
+- # Run without auto-repair
+- ### Testing
+- # Run test suite
+- # Expected: 29 passed in 0.26s
+- ## Reports Generated
+- ## Features
+- ### ✅ Comprehensive Coverage
+- ### ✅ Auto-Repair
+- ### ✅ Detailed Reporting
+- ### ✅ CI/CD Ready
+- ### ✅ Production Ready
+- ## Integration Examples
+- ### GitHub Actions
+- ### Scheduled Audits
+- ## Recommendations
+- ## Files Modified
+- ### Created Files
+- ### Generated Files
+- ## Metrics
+- ### Code Quality
+- ### Audit Performance
+- ### Coverage
+- ## Success Criteria Met ✅
+- ## Final Verdict
+
+
+### ./FIREWALL_ENGINE_AUDIT_SUMMARY.md
+
+- # Firewall Engine Audit & Repair Summary
+- ## Executive Summary
+- ## Problem Statement
+- ## Solution Implemented
+- ### 1. Enhanced Firewall Allowlist
+- ### 2. New Firewall Rule for Browser Downloads
+- ### 3. Autonomous Browser Download Blocking Detection
+- #### a. Proactive Browser Download Check (Step 0)
+- #### b. Error Pattern Detection
+- #### c. Automatic Remediation
+- ### 4. Integration with Firewall Config Manager
+- ## Files Modified
+- ### Core Engine Files (3 files)
+- ### Configuration Files (4 files)
+- ## Testing & Validation
+- ### Test Results
+- ### Manual Testing
+- ### Configuration Validation
+- ## How It Works
+- ### Execution Flow
+- ### Autonomous Actions
+- ## Benefits
+- ### Immediate Benefits
+- ### Long-term Benefits
+- ## Guardrails & Safety
+- ### Safety Measures
+- ### Operational Limits
+- ## Monitoring & Verification
+- ### How to Verify the Fix is Working
+- ## Future Enhancements
+- ### Recommended Improvements
+- ### Potential Extensions
+- ## Rollback Plan
+- ## Related Documentation
+- ## Conclusion
+
+
+### ./DIAGNOSTIC_REPORT.md
+
+- # SR-AIbridge Repository Diagnostic & Incident Report
+- ## Executive Summary
+- ## 1. Engine Inventory & Status
+- ### Core Engines (bridge_core/engines)
+- ### Backend Engines (bridge_backend/engines)
+- ### Specialized Engines & Technologies
+- ## 2. Documentation Health Check
+- ### Documentation Categories:
+- ### Key Documentation Status:
+- ## 3. Repository Structure Analysis
+- ### Root Level Organization
+- ### Vault Infrastructure Status
+- ### Backend Health
+- ### Frontend Health
+- ## 4. Incidents & Findings
+- ### 🟢 Positive Findings
+- ### 🟡 Opportunities for Improvement
+- ### 🔴 Critical Issues
+- ## 5. Recommendations
+- ### High Priority
+- ### Medium Priority
+- ### Low Priority
+- ## 6. Proposed Action Plan
+- ### Phase 1: Create Vault Structure
+- ### Phase 2: Organize Root Level
+- ### Phase 3: Update Documentation
+- ## 7. Conclusion
+
+
+### ./DEPLOYMENT_IMPLEMENTATION_SUMMARY.md
+
+- # Deployment Validation & True Reveal Protocol - Implementation Summary
+- ## Executive Summary
+- ## What Was Built
+- ### 1. Core Services (4 new files)
+- #### `bridge-frontend/src/services/deployment-validator.js` (310 lines)
+- #### `bridge-frontend/src/services/true-data-revealer.js` (271 lines)
+- #### `bridge-frontend/src/services/silent-failure-capture.js` (418 lines)
+- #### `bridge-frontend/src/components/DeploymentGate.jsx` (336 lines)
+- ### 2. Modified Components (6 files)
+- #### `bridge-frontend/src/App.jsx`
+- #### `bridge-frontend/src/components/AgentFoundry.jsx`
+- #### `bridge-frontend/src/components/MissionLog.jsx`
+- #### `bridge-frontend/src/components/AdmiralKeysPanel.jsx`
+- #### `bridge-frontend/src/components/BrainConsole.jsx`
+- #### `bridge-frontend/src/components/VaultLogs.jsx`
+- ### 3. Documentation
+- #### `bridge-frontend/DEPLOYMENT_VALIDATION.md` (360 lines)
+- ## How It Works
+- ### Validation Flow
+- ### Data Flow
+- ### Health Monitoring
+- ## Deployment Modes
+- ### Production Mode (All Systems Online)
+- ### Degraded Mode (Partial Systems)
+- ### Development Mode (No Backend)
+- ## Security Benefits
+- ### Paranoid Security Gates
+- ### Validation Checks
+- ## Testing Results
+- ### Linting
+- ### Build
+- ### Security Scanning
+- ### Code Review
+- ## Usage Examples
+- ### Basic Component Wrapping
+- ### Data Fetching with Deployment Awareness
+- ### Health Monitoring
+- ## Files Changed
+- ## Statistics
+- ## Success Indicators (All Achieved ✅)
+- ## Next Steps for Users
+- ## Maintenance
+- ### Adding New Components
+- ### Updating System Validators
+- ### Customizing Placeholders
+- ## Conclusion
+
+
+### ./NAVIGATION_GUIDE.md
+
+- # SR-AIbridge Complete Navigation Guide
+- ## 🎯 Quick Start
+- ## 📊 Repository Overview
+- ### Key Stats
+- ### Repository Health
+- ## 🗂️ Repository Structure Map
+- ### Root Level (Essential Files Only)
+- ## 🏗️ Core Components
+- ### 1. Backend (`bridge_backend/`)
+- ### 2. Frontend (`bridge-frontend/`)
+- ### 3. Documentation (`docs/`)
+- ### 4. Vault (`vault/`)
+- ## 🔧 Engine Inventory
+- ### Core Engines (`bridge_backend/bridge_core/engines/`)
+- ### Backend Engines (`bridge_backend/engines/`)
+- ### Special Engines (Codex)
+- ## 👥 Role-Based Navigation
+- ### New Users / Learning
+- ### Developers
+- ### DevOps / Deployment
+- ### Contributors
+- ## 🔍 Finding What You Need
+- ### By Topic
+- ### By File Type
+- ## 📋 Common Tasks
+- ### Running the Application
+- ### Running Tests
+- ### Analyzing the Repository
+- ### Working with Database
+- # Initialize database
+- # Apply patches
+- # Maintenance
+- ### Accessing Vault UI
+- ## 🔗 Key Integrations
+- ### ARIE (AI Reasoning & Intelligence Engine)
+- ### ALIK (AI Logic Integration Kit)
+- ### Truth Engine
+- ### Parser Engine
+- ### HXO Nexus
+- ### Forge Dominion
+- ## 🛠️ Maintenance & Tools
+- ### Development Tools
+- ### Configuration Drift
+- ### Line Counting
+- ### Smoke Testing
+- ## 📦 Dependencies
+- ### Python (Backend)
+- ### JavaScript (Frontend)
+- ### System
+- ## 🚀 Deployment
+- ### Netlify (Frontend)
+- ### Runtime (Backend)
+- ### Docker
+- ## 📝 Documentation Standards
+- ### Adding New Documentation
+- ### Archiving Files
+- ## 🎓 Learning Paths
+- ### Path 1: Understanding SR-AIbridge (1 hour)
+- ### Path 2: Development Setup (30 min)
+- ### Path 3: Engine Mastery (2-4 hours)
+- ### Path 4: Contributing (Variable)
+- ## ❓ Troubleshooting
+- ### Can't find a specific engine?
+- ### Missing dependencies?
+- ### Configuration issues?
+- ### Tests failing?
+- ### Documentation unclear?
+- ## 🔐 Security Notes
+- ## 📊 Repository Statistics
+- ## 🎯 Next Steps
+- ## 📞 Support & Contact
+
+
+### ./IMPLEMENTATION_SUMMARY.md
+
+- # 🎉 GitHub Actions Workflow Optimization - Implementation Complete
+- ## Executive Summary
+- ## 📊 Results Overview
+- ### Before Optimization
+- ### After Optimization
+- ### Impact
+- ## 🔧 Optimizations Implemented
+- ### 1. Dependency Caching ⚡
+- ### 2. Workflow Consolidation 🔄
+- ### 3. Artifact Optimization 💾
+- ### 4. Native Bridge Runner Support 🏃
+- ### 5. Security Improvements 🔒
+- ## 🛠️ Tools & Scripts Created
+- ### 1. Workflow Efficiency Audit (`workflow_efficiency_audit.py`)
+- ### 2. Auto-Optimizer (`auto_optimize_workflows.py`)
+- # Preview changes
+- # Apply optimizations
+- ### 3. Cost Calculator (`cost_calculator.py`)
+- ### 4. Render Integration Script (`render_quantum_security.sh`)
+- ## 📁 Files Modified/Created
+- ### Modified Workflows (3 files)
+- ### New Workflows (2 files)
+- ### New Scripts (4 files)
+- ### New Documentation (2 files)
+- ### Generated Reports (1 file)
+- ## 🎯 Time Savings Breakdown
+- ### Per-Push Optimization
+- ### Monthly Impact (43 pushes)
+- ## 📚 Documentation
+- ### Primary Guides
+- ### Quick Reference
+- ## ✅ Validation Complete
+- ## 🚀 Next Steps
+- ### Immediate Actions
+- ### Optional Enhancements
+- ## 💡 What Makes This Work
+- ### Legitimate Optimizations ✅
+- ### Not Attempting ❌
+- ### Result 🏆
+- ## 📈 Monitoring & Maintenance
+- ### Monitor GitHub Actions Usage
+- ### Run Regular Audits
+- ### Verify Optimizations
+- ## 🎊 Conclusion
+- ## 📞 Support
+- ## 🏅 Achievement Unlocked
+
+
+### ./SECURITY_AUDIT_SUMMARY.md
+
+- # Security and Repository Audit Summary
+- ## Render.com Removal - Migration to BRH Sovereign Deployment
+- ## Executive Summary
+- ### Key Changes
+- ## Changes Implemented
+- ### 1. Files Archived (`.archive/render_legacy/`)
+- ### 2. Environment Configuration Updates
+- #### Updated Files:
+- #### Key Changes:
+- ### 3. GitHub Workflows Updated
+- #### Modified Workflows:
+- #### Key Changes:
+- ### 4. Python Code Modifications
+- #### Files Modified:
+- ### 5. Scripts Updated
+- #### Modified Scripts:
+- ### 6. Documentation Updates
+- #### Files Updated:
+- #### Key Documentation Changes:
+- ## Security Scan Results
+- ### CodeQL Analysis (2025-11-05)
+- #### Alert Fixed:
+- #### Python Security:
+- ## Migration Path
+- ### Old Architecture:
+- ### New Architecture (BRH):
+- ### Benefits:
+- ## Deployment Instructions
+- ## Testing & Validation
+- ### Code Compilation:
+- ### Import Validation:
+- ### Workflow Validation:
+- ## Breaking Changes
+- ### Environment Variables Removed:
+- ### Environment Variables Added:
+- ### API Changes:
+- ## Backward Compatibility
+- ### Archived Files:
+- ### Legacy Support:
+- ## Recommendations
+- ### Immediate Actions:
+- ### Future Enhancements:
+- ## Audit Checklist
+- ## Conclusion
+
+
+### ./HEALING_NET_IMPLEMENTATION.md
+
+- # Healing Net System Implementation
+- ## Overview
+- ## Architecture
+- ### Core Components
+- #### 1. API Guardian (`healing-net.js`)
+- #### 2. Umbra Lattice
+- #### 3. Circuit Breakers
+- #### 4. Triage Engine
+- ### Frontend Integration
+- #### Error Boundaries
+- #### Healing Net Dashboard
+- ## Backend Enhancements
+- ### Custody Routes (Admiral Keys)
+- #### New Endpoints
+- ### Mission Routes
+- #### New/Updated Endpoints
+- ## Agent Foundry
+- ### Features
+- ### Auto-Indoctrination
+- ## Mission Progress Tracking
+- ### Real-Time Progress
+- ## Deployment Checklist
+- ### Frontend
+- ### Backend
+- ## Testing
+- ### Frontend Testing
+- ### Manual Testing
+- ## Monitoring
+- ### Health Status
+- ### Failure Logs
+- ### Circuit Breaker States
+- ## Configuration
+- ### API Client
+- ### Circuit Breaker Tuning
+- ## Troubleshooting
+- ### "HTML response detected" errors
+- ### Circuit breaker keeps opening
+- ### Components keep crashing
+- ## Future Enhancements
+- ### Planned Features
+- ### Performance Optimizations
+- ## API Reference
+
+
+### ./KEYLESS_SECURITY_IMPLEMENTATION.md
+
+- # Keyless Security Implementation Summary
+- ## 🎯 Mission Accomplished
+- ## What Was Changed
+- ### Problem Statement
+- ### Solution Implemented
+- #### 1. Frontend Changes (JavaScript)
+- #### 2. Backend Changes (Python)
+- #### 3. Testing (Python)
+- #### 4. Documentation
+- ## Test Results
+- ## Validation Output
+- ### True Deployment Check
+- ### Auth System Status
+- ## Security Improvements
+- ### Attack Surface Eliminated
+- ### Benefits Achieved
+- ## Files Changed
+- ## Admiral's Insight Validated
+- ## Next Steps for Users
+- ### For Developers
+- # ❌ Old: Loading static keys
+- # ✅ New: Generating ephemeral session
+- ### For Security Auditors
+- ### For Operations
+- ## Status
 
 
 ### ./START_HERE.md
@@ -341,7 +864,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - # View logs
 - # Stop
 - ### Production Deployment
-- #### Render (Backend) + Netlify (Frontend)
+- #### BRH (Backend) + Netlify (Frontend)
 - #### Alternative: Heroku
 - # Install Heroku CLI
 - # Build and deploy
@@ -368,6 +891,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### GitHub Actions Workflows
 - #### 🚀 Deployment Pipeline
 - # Required GitHub Secrets (optional but recommended)
+- # BRH deployment managed independently - see docs/BRH_DEPLOYMENT_GUIDE.md
 - #### 🧪 Health Monitoring Workflow
 - ### Self-Test Script
 - # Quick production health check
@@ -385,7 +909,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - # Add prometheus_client
 - ### Continuous Deployment
 - # Via GitHub
-- # Via Render Dashboard
+- # Via BRH Dashboard
 - # Select previous deployment → "Deploy"
 - # Via Netlify Dashboard
 - # Deployments → Select previous → "Publish deploy"
@@ -393,8 +917,8 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - # 1. Go to Netlify Dashboard
 - # 2. Site settings → Build & deploy → Clear cache
 - # 3. Trigger deploy → Deploy site
-- # Trigger Render redeploy
-- # 1. Go to Render Dashboard
+- # Trigger BRH redeploy
+- # 1. Go to BRH Dashboard
 - # 2. Select your service
 - # 3. Manual Deploy → Deploy latest commit
 - # Test backend health endpoint
@@ -459,6 +983,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - # Enable animations
 - ### Configuration Files
 - ### Deployment Configuration
+- # BRH sovereign runtime configuration
 - ### Advanced Configuration
 - # db.py
 - ## 🔒 Security
@@ -529,7 +1054,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - # Disable minification temporarily
 - # In vite.config.js:
 - #### Deployment Issues
-- # Check build logs in Render dashboard
+- # Check build logs in BRH runtime management
 - # Common issues:
 - # 1. Wrong Python version
 - # 2. Dependencies not installing
@@ -598,7 +1123,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - # Test endpoints directly
 - # Backend logs
 - # Deployment logs
-- # Render: View in dashboard
+- # BRH: View in dashboard
 - # Netlify: View in dashboard
 - # Local logs
 - # Terminal output shows real-time logs
@@ -704,6 +1229,342 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - # 3. Deploy
 
 
+### ./WALKTHROUGH_SUMMARY.md
+
+- # 🎯 Repository Walkthrough Complete - Executive Summary
+- ## ✅ Mission Accomplished
+- ## 📊 What Was Done
+- ### 1. Complete Repository Mapping ✅
+- ### 2. Full Diagnostic & Incident Report ✅
+- ### 3. Complete Navigation Guide ✅
+- ### 4. Vault Organization ✅
+- ## 🔍 Key Findings
+- ### 🟢 Repository Health: EXCELLENT
+- ## 📚 Technology Stack Verified
+- ### Engines Catalogued (33+)
+- ## 🌉 Bridge UI Integration
+- ## 📁 Repository Organization Impact
+- ### Before Organization
+- ### After Organization
+- ## 🎯 Deliverables Summary
+- ## 🔐 Sovereign Git Mode
+- ## 📖 Using Your New Documentation
+- ### Quick Start Navigation
+- ## 🏆 Achievement Metrics
+- ### Documentation Coverage
+- ### Organization Impact
+- ### Quality Metrics
+- ## 🚀 Next Steps (Optional Future Work)
+- ### High Priority
+- ### Medium Priority
+- ### Low Priority
+- ## 📞 How to Use This Work
+- ### For Team Members
+- ### For New Contributors
+- ### For DevOps
+- ## ✨ Final Status
+- ## 🎓 Summary
+
+
+### ./SOVEREIGN_ENGINES_DEPLOYMENT.md
+
+- # SOVEREIGN-ENGINES Deployment Summary
+- ## Overview
+- ## Implementation Summary
+- ### ✅ PR #1: MicroScribe & Compliance Guard - COMPLETE
+- ### ✅ PR #2: MicroLogician Integration & Analytics - COMPLETE
+- ## Technical Specifications
+- ### Architecture
+- ### API Endpoints (9 Total)
+- ### Analysis Modes
+- ### Security Levels
+- ## Quality Assurance
+- ### Test Coverage
+- ### Verification
+- ### Code Review
+- ### Security Scan
+- ## Configuration
+- ### Environment Variables
+- # Enable/disable engines
+- # License key (production)
+- # Bridge resonance
+- # Minimum resonance threshold
+- # Policy directory (optional)
+- ### Sovereign Policy
+- ## Deployment Instructions
+- ### Prerequisites
+- ### Enable Engines
+- ### Start Server
+- ### Verify Deployment
+- # Run verification
+- # Run smoke tests (server must be running)
+- ## Usage Examples
+- ### 1. Analyze Git Diff
+- ### 2. Generate PR Template
+- ### 3. Analyze Logs
+- ### 4. Check Compliance
+- ### 5. Complete Workflow
+- ## Integration Points
+- ### Genesis Event Bus
+- ### Bridge Core
+- ### Main Application
+- ## Performance Characteristics
+- ### Resource Usage
+- ### Scalability
+- ### Latency
+- ## Monitoring & Observability
+- ### Health Checks
+- ### Status Monitoring
+- ### Audit Trail
+- ## Security Considerations
+- ### Quantum-Resistant
+- ### Data Protection
+- ### Compliance
+- ## Troubleshooting
+- ### Issue: Compliance violations
+- ### Issue: Routes not loading
+- ### Issue: Policy file not found
+- ## Support & Maintenance
+- ### Documentation
+- ### Testing
+- ## Changelog
+- ### Version 1.0.0 (2025-11-05)
+- ## Conclusion
+
+
+### ./BRIDGE_HARMONY_REPORT.md
+
+- # 🎻 Bridge Harmony & Communication Report
+- ## System Overview
+- ### Engines by Category
+- #### Core Engines (6)
+- #### Super Engines (7)
+- #### Utility Engines (21)
+- ## Communication Pathways
+- ### Genesis Bus (33)
+- ### Direct (26)
+- ### Umbra Lattice (32)
+
+
+### ./DEPLOYMENT_VISUAL_GUIDE.md
+
+- # Deployment Validation Protocol - Visual Guide
+- ## Before & After Comparison
+- ### Before Implementation
+- ### After Implementation
+- ## UI Components
+- ### 1. Deployment Status Badge (Header)
+- ### 2. Placeholder Component
+- ### 3. Real Component (Deployed)
+- ## Component Flow Diagrams
+- ### Agent Foundry Flow
+- ### Data Service Flow
+- ## Health Monitoring Flow
+- ## Console Output Examples
+- ### Development Mode (No Backend)
+- ### Production Mode (All Systems Online)
+- ### Health Check Recording
+- ### Crash Forensics Example
+- ## File Structure
+- ## Testing Scenarios
+- ### Scenario 1: Pure Frontend Development
+- # Expected:
+- # - All components show placeholders
+- # - Status badge shows "DEVELOPMENT"
+- # - No crashes or errors
+- # - Console shows validation failures (expected)
+- ### Scenario 2: Backend Available
+- # Terminal 1
+- # Terminal 2  
+- # Expected:
+- # - Components show real data
+- # - Status badge shows "PRODUCTION"
+- # - Console shows validation success
+- # - Health monitoring active
+- ### Scenario 3: Partial Backend
+- # Start only some backend services
+- # Expected:
+- # - Status badge shows "DEGRADED"
+- # - Some components show real data
+- # - Others show placeholders
+- # - Clear indication which systems are down
+- ## Key Features Demonstrated
+- ### 1. Paranoid Security ✅
+- ### 2. Health Monitoring ✅
+- ### 3. Deployment Awareness ✅
+- ### 4. Developer Experience ✅
+- ### 5. User Experience ✅
+- ## Conclusion
+
+
+### ./SOVEREIGN_DEPLOYMENT.md
+
+- # Sovereign Deployment Mode
+- ## Overview
+- ## What Changed
+- ### 1. Environment Variable Strategy
+- ### 2. Files Modified (33 total)
+- #### Network Policies (2 files)
+- #### GitHub Workflows (18 files)
+- #### Python Scripts (10 files)
+- #### Firewall & Network Tools (3 files)
+- ## How to Deploy
+- ### Option 1: Sovereign Mode (Recommended)
+- # Set your backend URL
+- # Or use GitHub Secrets for workflows
+- # Deploy
+- ### Option 2: With Legacy Render Support
+- # Set backend URL
+- # Optional: Set Render API credentials for advanced features
+- # Deploy
+- ### Option 3: Custom Backend Provider
+- # GitHub Secrets
+- # Optional: Custom API credentials
+- ## Migration Guide
+- ### From Render.com to Sovereign
+- ### From Legacy Setup to Environment Variables
+- ## Backward Compatibility
+- ## Verification
+- ### Check Your Configuration
+- # List current secrets
+- # Expected for sovereign mode:
+- # - BACKEND_URL (or uses default)
+- # - NETLIFY_AUTH_TOKEN
+- # - FORGE_DOMINION_ROOT
+- # Not required:
+- # - RENDER_API_KEY ✗
+- # - RENDER_SERVICE_ID ✗
+- ### Test Deployment
+- # Trigger deploy workflow
+- # Monitor logs
+- # Look for:
+- # ✅ Backend URL: https://bridge.sr-aibridge.com (or your custom URL)
+- # ✅ Health checks passing
+- # ✅ No Render API errors
+- ### Verify Health Checks
+- # Test backend health
+- # Test frontend
+- # Check sync status
+- ## Benefits
+- ### 🎯 Vendor Independence
+- ### 🔒 Security
+- ### 💰 Cost Optimization
+- ### 🚀 Flexibility
+- ## Troubleshooting
+- ### Health Checks Failing
+- # Check your BACKEND_URL is set correctly
+- # Update if needed
+- # Verify endpoint is accessible
+- ### Environment Variables Not Working
+- # Clear browser/workflow cache
+- # Force new run
+- ### Render Features Not Working
+- # Ensure Render credentials are set
+- # Set backend URL to Render
+- ## Architecture
+- ## References
+- ## Support
+
+
+### ./HEALING_NET_SUMMARY.md
+
+- # SR-AIbridge: Healing Net Implementation - Complete Summary
+- ## Mission Accomplished ✅
+- ## The Problem (From Oracle's Diagnosis)
+- ## The Solution (What We Built)
+- ### 1. HEALING NET ACTIVATION 🩹
+- ### 2. ERROR BOUNDARIES - Component Isolation 🛡️
+- ### 3. AGENT FOUNDRY 🛠️ - Invisible Indoctrination Engine
+- ### 4. MISSION PROGRESS TRACKING 🎯
+- ### 5. BACKEND API FIXES 🔧
+- # New endpoints - All return JSON
+- # Enhanced endpoint
+- ### 6. HEALTH MONITORING DASHBOARD 🩺
+- ## File Structure
+- ### New Files Created
+- ### Modified Files
+- ## Testing Results
+- ### Frontend Build
+- ### Code Quality
+- ## Deployment Guide
+- ### 1. Frontend Deployment
+- # Deploy dist/ folder
+- ### 2. Backend Deployment
+- ### 3. Environment Variables
+- ## Usage Examples
+- ### 1. View System Health
+- ### 2. Create Agent with Auto-Indoctrination
+- ### 3. Track Mission Progress
+- ### 4. Monitor API Failures
+- ## Architecture Diagram
+- ## Metrics & Impact
+- ### Before Implementation
+- ### After Implementation
+- ### Performance
+- ## Future Enhancements
+- ### Planned (Not in Scope)
+- ### Performance Optimizations
+- ## Troubleshooting
+- ### "HTML response detected" error
+- ### Component crash
+- ### Circuit breaker keeps opening
+- ### Progress not updating
+- ## Support & Documentation
+- ## Credits
+- ## Status: PRODUCTION READY ✅
+
+
+### ./FRONTEND_INTEGRATION_COMPLETE.md
+
+- # Frontend Integration Complete - BRH + Netlify Deployment
+- ## Executive Summary
+- ## What Was Implemented
+- ### 1. Production-First Frontend Configuration
+- ### 2. Environment Configuration
+- ### 3. Deployment Workflow Updates
+- ### 4. Code Quality Improvements
+- ### 5. Deployment Verification
+- ## Architecture Overview
+- ## Environment Configuration
+- ### Production (Netlify Deployment)
+- ### Development (Local)
+- ### Override (Via GitHub Secrets)
+- ## Build Output
+- ## UI Features Verified
+- ## Deployment Checklist
+- ## How to Deploy
+- ## Manual Deployment
+- # 1. Build the frontend
+- # 2. Verify the deployment
+- # 3. Deploy to Netlify (requires Netlify CLI)
+- ## Troubleshooting
+- ### UI Not Loading
+- ### API Connection Failures
+- ### Build Failures
+- ## Next Steps
+- ## Technical Details
+- ## Security Considerations
+- ## Performance Metrics
+- # Phase 2: Vite + React Integration - COMPLETE ✅
+- ## 🎯 Mission Update (November 2025)
+- ## 🆕 What's New in Phase 2
+- ### Services & Infrastructure
+- ### New Components
+- ### Enhanced Styling
+- ### Vite Configuration Enhancements
+- ## 📊 Updated Build Metrics
+- ## ✅ Quality Assurance Results
+- ### Code Review
+- ### Security Scan (CodeQL)
+- ## 🎨 Component Integration
+- ## 🔌 Enhanced API Integration
+- ## 📱 Responsive Design Verified
+- ## 🚀 Deployment Ready
+- # Build with all Phase 2 enhancements
+- # Deploy to Netlify (auto-configured)
+- ## �� Phase 2 Success Metrics
+
+
 ### ./SECURITY.md
 
 - # SR-AIbridge — Security & Responsible Disclosure
@@ -718,6 +1579,59 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ## CI/CD & Dependency Management
 - ## Contributors & Pre-commit
 - ## Contact & Escalation
+
+
+### ./SOVEREIGNTY_IMPLEMENTATION_SUMMARY.md
+
+- # 👑 SOVEREIGN ARCHITECTURE - IMPLEMENTATION SUMMARY
+- ## Mission Accomplished ✅
+- ## What Was Built
+- ### 🏗️ Core Architecture (5 Components)
+- ## Testing & Quality ✅
+- ### Test Coverage
+- ### Test Results
+- ### Security Analysis
+- ## Operational Metrics 📊
+- ### Firewall Status
+- ### Network Health
+- ### Validation Status
+- ### Script Execution
+- ## Generated Artifacts 📁
+- ### Configuration Files
+- ### Diagnostic Reports
+- ### Code Assets
+- ### Tests
+- ### Documentation
+- ### GitHub Actions
+- ## Integration 🔄
+- ### GitHub Actions Workflow
+- ### Command-Line Interface
+- # Execute complete sovereignty protocol
+- # Expected output: SOVEREIGN AUTHORITY ESTABLISHED
+- ## Key Features 🎯
+- ### Security First
+- ### Observability
+- ### Resilience
+- ### Maintainability
+- ## Design Principles Applied ⚡
+- ### Sovereign Mindset
+- ### Architectural Excellence
+- ## Code Review Results ✅
+- ## Performance Benchmarks 🚀
+- ### Execution Time
+- ### Resource Usage
+- ## Documentation Quality 📚
+- ### Coverage
+- ### Accessibility
+- ## Future Extensibility 🔮
+- ## Success Criteria Met ✅
+- ## Bottom Line 💎
+- ## Quick Start Commands
+- ### Execute Sovereignty Protocol
+- ### Run Tests
+- ### View Latest Report
+- ### Check Status
+- ## References
 
 
 ### ./scripts/README.md
@@ -1396,6 +2310,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - # === ENVSYNC CORE ===
 - # === TOKEN DISCOVERY ===
 - # === RENDER SELECTORS ===
+- # Legacy RENDER_SERVICE_ID removed=srv-xxxxx
 - # === NETLIFY SELECTORS ===
 - # === SYNC SHAPING ===
 - ## Token Discovery
@@ -2107,6 +3022,101 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ## Version History
 
 
+### ./docs/SECURITY_PATCH_SUMMARY.md
+
+- # Security Patch Summary: Token Metadata Validation
+- ## 🎯 Mission Accomplished
+- ## 📊 Implementation Statistics
+- ### Code Changes
+- ### Test Coverage
+- ### Security Scans
+- ## 🛡️ Security Improvements
+- ### Before Patch
+- ### After Patch
+- ## 🔑 Key Features Implemented
+- ### 1. Required Metadata Fields
+- ### 2. Validation Rules
+- ### 3. Enforcement Modes
+- ### 4. Security Hardening
+- ## 📈 Migration Path
+- ### Phase 1: Development ✅ COMPLETE
+- ### Phase 2: Integration (Next Steps)
+- ### Phase 3: Production Rollout (Future)
+- ## 🧪 Testing & Validation
+- ### Unit Tests
+- # Result: 33/33 PASSED
+- ### Integration Tests
+- # Result: 26/26 PASSED
+- ### Demonstration
+- # Shows all 4 scenarios working correctly
+- ### Security Scan
+- # Result: 0 alerts - Clean
+- ## 📚 Documentation
+- ### User Documentation
+- ### Developer Documentation
+- ### API Reference
+- ## 🔍 Code Quality
+- ### Code Review Feedback
+- ### Best Practices Followed
+- ## 🚀 Deployment Instructions
+- ### For Development
+- # Metadata is optional (backward compatible)
+- ### For Production (Recommended)
+- # Enable strict validation
+- # Metadata is required
+- ## 📞 Support & Troubleshooting
+- ### Common Issues
+- ### Getting Help
+- ## ✅ Success Criteria - All Met
+- ## 🎖️ Impact
+- ### Security Posture
+- ### Compliance
+- ### Auditability
+- ### Developer Experience
+- ## 🏆 Conclusion
+
+
+### ./docs/WORKFLOW_OPTIMIZATION.md
+
+- # GitHub Actions Workflow Optimization Guide
+- ## Overview
+- ## Problem Statement
+- ## Optimization Strategies Implemented
+- ### 1. Dependency Caching ✅
+- ### 2. Artifact Retention Reduction ✅
+- ### 3. Workflow Consolidation ✅
+- ### 4. Native Bridge Runner Support ✅
+- ### 5. Render.com Integration ✅
+- ### 6. Workflow Efficiency Analysis Tools ✅
+- # Audit workflows
+- # Auto-optimize (dry run)
+- # Auto-optimize (apply changes)
+- ## Implementation Checklist
+- ## Monitoring and Maintenance
+- ### Monitor GitHub Actions Usage
+- ### Run Regular Audits
+- ### Verify Render.com Services
+- ## Expected Results
+- ### Workflow Runtime Comparison
+- ### Cost Projection
+- ### Cost Savings
+- ## Next Steps
+- ### Immediate Actions
+- ### Optional Advanced Optimizations
+- ### Future Improvements
+- ## Troubleshooting
+- ### Cache Not Working
+- # Verify cache keys are unique per dependency hash
+- # Check cache hit in workflow logs
+- ### Render Services Not Triggering
+- ### Self-Hosted Runner Issues
+- ## Technical Details
+- ### What We CANNOT Do (GitHub Limits)
+- ### What We CAN Do (Legitimate Optimizations)
+- ## Conclusion
+- ## Support
+
+
 ### ./docs/GENESIS_V2_0_1_QUICK_REF.md
 
 - # Genesis v2.0.1 Quick Reference
@@ -2509,6 +3519,24 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### Both Platforms Failed
 - ## Monitoring
 - ## Success Criteria
+
+
+### ./docs/NETLIFY_SECRETS_SCANNING_FIX.md
+
+- # Netlify Secrets Scanning Configuration Fix
+- ## Problem
+- ### Error Details
+- ## Solution
+- ### 1. Configure Secrets Scanning Exclusions
+- #### Configuration Added
+- ### 2. Updated Engine Exports
+- ## Why This Works
+- ## Security Considerations
+- ### Why FORGE_DOMINION_ROOT is Safe to Exclude
+- ### What Should NOT Be Excluded
+- ## Testing
+- ## References
+- ## Maintenance
 
 
 ### ./docs/AUTONOMY_DEPLOYMENT_README.md
@@ -4497,6 +5525,51 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ## Version
 
 
+### ./docs/KEYLESS_SECURITY.md
+
+- # Keyless Security Architecture
+- ## Overview
+- ## Security Paradigm Shift
+- ### Traditional Approach
+- ### Bridge Approach
+- ## How It Works
+- ### 1. Ephemeral Session Establishment
+- # Backend: Generate keys dynamically
+- # Creates unique Ed25519 keypair that exists only for session lifetime
+- ### 2. Dynamic Key Generation
+- # Each session has different keys
+- ### 3. No Static Storage
+- ## Implementation Details
+- ### Frontend (JavaScript)
+- ### Backend (Python)
+- ## Deployment Validation Changes
+- ### Old Approach
+- ### New Approach
+- ## Security Advantages
+- ### 1. Eliminated Key Theft Risk
+- ### 2. No Key Rotation
+- ### 3. Perfect Forward Secrecy
+- ### 4. Quantum Resistance
+- ### 5. Zero Maintenance
+- ## Validation Results
+- ### True Deployment Check
+- ### Security Status
+- ## Testing
+- ### Run Integration Tests
+- # Test the keyless authentication system
+- ### Expected Output
+- ## Migration Guide
+- ### For Developers
+- # ❌ Loading static keys from disk
+- # ✅ Generating ephemeral session
+- ### For Security Auditors
+- ## Architectural Benefits
+- ### Eliminates Entire Attack Classes
+- ### Simplifies Operations
+- ## Admiral's Insight
+- ## Summary
+
+
 ### ./docs/ENV_SYNC_AUTONOMOUS_PIPELINE.md
 
 - # Autonomous Environment Synchronization Pipeline
@@ -4746,6 +5819,63 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### Chimera
 
 
+### ./docs/BRIDGE_HARMONY_GUIDE.md
+
+- # 🎻 Bridge Harmony & Communication Unification
+- ## Overview
+- ## The Problem
+- ## The Solution
+- ### ✅ Auto-Discovery & Registration
+- ### ✅ Auto-Wiring Communication
+- ### ✅ Harmonic Resonance Monitoring
+- ### ✅ Documentation Link Repair
+- ## Architecture
+- ## Usage
+- ### Command-Line Interface
+- # Show current bridge harmony status
+- # Fix all communication issues (recommended)
+- # Individual commands
+- ### Python API
+- # Create orchestrator
+- # Execute full harmony orchestration
+- # Or use individual phases
+- # Check specific metrics
+- ## Discovered Engines
+- ### Core Infrastructure (6 Engines)
+- ### Super Engines (7 Engines)
+- ### Utility & Support (21+ Engines)
+- ## Communication Protocols
+- ### Genesis Bus Protocol
+- ### Umbra Lattice Protocol
+- ### Direct Protocol
+- ## Metrics & Monitoring
+- ### Resonance Percentage
+- ### Communication Health
+- ### Harmony Status
+- ## Integration with Bridge Systems
+- ### HXO Nexus Integration
+- ### Umbra Lattice Integration
+- ### Genesis Federation Bus Integration
+- ## Reports
+- ### BRIDGE_HARMONY_REPORT.md
+- # 🎻 Bridge Harmony & Communication Report
+- ## System Overview
+- ### Engines by Category
+- #### Core Engines (6)
+- ## Communication Pathways
+- ### Genesis Bus (33)
+- ## Troubleshooting
+- ### Issue: Broken Links Detected
+- ### Issue: Low Resonance (<90%)
+- ### Issue: Communication Health <100%
+- ## Development
+- ### Adding New Engines
+- ### Testing
+- ## Best Practices
+- ## References
+- ## Version History
+
+
 ### ./docs/ARIE_TOPICS.md
 
 - # ARIE Genesis Topics Reference
@@ -4877,6 +6007,45 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - # Quick check
 - ## Notes
 - ## Last Updated
+
+
+### ./docs/BRIDGE_HARMONY_QUICK_REF.md
+
+- # 🎻 Bridge Harmony - Quick Reference
+- ## What is Bridge Harmony?
+- ## Quick Commands
+- # Show current status (⚡ fastest check)
+- # Fix everything (🔧 recommended)
+- # Individual operations
+- ## System Status
+- ### Perfect Harmony ✅
+- ### Good Harmony ✓
+- ### Needs Tuning ⚠️
+- ## Engine Categories
+- ### Core (6 Engines)
+- ### Super (7 Engines)
+- ### Utility (21 Engines)
+- ## Communication Protocols
+- ## Python Quick Start
+- # One-liner: Full harmony
+- # Check status
+- ## Common Issues
+- ### Broken Documentation Links
+- ### Low Engine Resonance
+- ### Communication Failures
+- ### Complete System Fix
+- ## Key Metrics
+- ## Reports
+- ## Integration Points
+- ### HXO Nexus
+- ### Umbra Lattice
+- ### Genesis Federation Bus
+- ## Testing
+- # Run harmony tests
+- # Run core tests
+- ## Philosophy
+- ## Next Steps
+- ## Documentation
 
 
 ### ./docs/endpoint_test_examples.md
@@ -5491,6 +6660,68 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ## Future Enhancements
 
 
+### ./docs/TOKEN_METADATA_VALIDATION.md
+
+- # Token Metadata Validation Security Patch
+- ## 🚨 Security Gap Fixed
+- ### Issue Identified
+- ### Solution Implemented
+- ## 📋 Required Metadata Fields
+- ## 🔧 Usage
+- ### Basic Token Creation (Backward Compatible)
+- # Works without metadata (backward compatible)
+- ### Secure Token Creation (With Metadata)
+- # Create token with complete metadata
+- # Validate token
+- # Extract metadata from token
+- ### Enforced Mode (SOVEREIGN_GIT=true)
+- # Enable enforcement
+- # This will raise MetadataValidationError
+- # This will succeed
+- ### Programmatic Enforcement
+- # Create forge instance with enforcement enabled
+- # Metadata is required for this instance
+- ## 🛡️ Security Features
+- ### 1. Metadata Validation
+- ### 2. Audit Trail
+- ### 3. Backward Compatibility
+- ### 4. Token Inspection
+- # Extract and inspect metadata
+- ## 🔍 Validation Rules
+- ### Creator Identity
+- ### Creation Timestamp
+- ### Intended Purpose
+- ### Expiration Policy
+- ### Access Scope
+- ### Audit Trail ID
+- ## 📊 Error Handling
+- ## 🚀 Activation Guide
+- ### Phase 1: Development (Current)
+- # Metadata validation available but not enforced
+- # Tokens can be created with or without metadata
+- # Perfect for testing and gradual adoption
+- ### Phase 2: Testing
+- # Enable enforcement in test environments
+- # Test all token creation paths
+- # Verify metadata is properly included
+- ### Phase 3: Production Rollout
+- # Enable enforcement in production
+- # All new tokens must have valid metadata
+- # Existing tokens continue to work
+- ## 📈 Migration Path
+- ## 🧪 Testing
+- # Run all metadata validation tests
+- # Run demonstration script
+- ## 📝 API Reference
+- ### `validate_metadata(metadata, require_metadata=True)`
+- ### `generate_ephemeral_token(service, ttl=300, metadata=None)`
+- ### `validate_ephemeral_token(token, require_metadata=False)`
+- ### `get_token_metadata(token)`
+- ## 🔒 Security Best Practices
+- ## 📞 Support
+- ## ✅ Success Metrics
+
+
 ### ./docs/AUTONOMY_OPERATIONS.md
 
 - # Autonomy Operations Guide
@@ -5720,6 +6951,43 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### No PRs Generated
 - ### PRs Queued Offline
 - ### Signature Validation Fails
+
+
+### ./docs/SOVEREIGN_AUDIT_QUICK_REF.md
+
+- # 🎯 Sovereign Audit & Repair - Quick Reference
+- ## What Was Built
+- ### 1. Sovereign Audit Orchestrator
+- ### 2. Master Sovereign Audit
+- ### 3. Test Suite
+- ## Quick Start
+- ### Run Full Sovereign Audit
+- # Run complete audit with auto-repair
+- # Expected output:
+- # ✅ SOVEREIGN GIT = TRUE - Full sovereignty confirmed!
+- ### Check Audit Status
+- # View latest report
+- # View detailed audit
+- ### Run Tests
+- ## Audit Results
+- ### Current Status
+- ## Reports Generated
+- ## Exit Codes
+- ## Integration
+- ### GitHub Actions Example
+- ## Documentation
+- ## What the Audit Verifies
+- ### ✅ Git Sovereign
+- ### ✅ Netlify Sovereign
+- ### ✅ Repository Sovereign
+- ### ✅ Firewall Sovereignty
+- ## Auto-Repair Capability
+- ## Commands Summary
+- # Run full audit
+- # Run without auto-repair
+- # Run Git/Netlify/Repo audit only
+- # Run tests
+- # View reports
 
 
 ### ./docs/BUILD_TRIAGE_ENGINE.md
@@ -6550,6 +7818,53 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ## 📝 Best Practices
 
 
+### ./docs/SOVEREIGN_AUDIT_GUIDE.md
+
+- # 🔍 Sovereign Audit & Repair System
+- ## Overview
+- ## Features
+- ### 🔐 Git Sovereign Audit
+- ### 🌐 Netlify Sovereign Audit
+- ### 📦 Repository Sovereign Audit
+- ### 🔧 Auto-Repair Capabilities
+- ## Installation
+- # Make sure you're in the repository root
+- # The tool is located at:
+- ## Usage
+- ### Basic Usage
+- ### Advanced Usage
+- ### Command-Line Options
+- ## Output
+- ### Console Output
+- ### JSON Reports
+- ### Report Structure
+- ## Exit Codes
+- ## Audit Categories
+- ### Git Categories
+- ### Netlify Categories
+- ### Repository Categories
+- ## Severity Levels
+- ## Status Values
+- ## Integration with CI/CD
+- ### GitHub Actions
+- ## Testing
+- ## Development
+- ### Adding New Checks
+- ### Adding Auto-Repair
+- ## Architecture
+- ### Class Hierarchy
+- ### Data Models
+- ## Best Practices
+- ## Troubleshooting
+- ### Common Issues
+- # Solution: Make sure you're in the repository root
+- # Solution: Make sure Git is installed and repository is initialized
+- # Solution: Review netlify.toml and environment files
+- ## Support
+- ## Future Enhancements
+- ## License
+
+
 ### ./docs/DEPLOY_DIAGNOSE_GUIDE.md
 
 - # Deploy & Diagnose Companion
@@ -6744,6 +8059,13 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### Health check failing
 - ### Signature verification failed
 - ### Docker network errors
+- ## Frontend Configuration
+- ### Default Configuration
+- ### Environment Variables
+- ### Build with Custom Backend URL
+- ### Netlify Deployment
+- ### Verification
+- ### Local Development
 - ## Migration from Render
 - ## Next Steps (Phase 2)
 - ## Support
@@ -6843,6 +8165,36 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ## ✅ Files Modified
 - ## 🧪 Tests Added
 - ## 📖 Docs Added
+
+
+### ./docs/RENDER_INTEGRATION.md
+
+- # Render.com Service Configuration for SR-AIbridge Heavy Compute
+- # This configuration allows running heavy GitHub Actions workloads on Render's free tier
+- # to reduce GitHub Actions minutes consumption
+- ## Services to Deploy on Render.com
+- ### 1. Quantum Security Service (Web Service - Free Tier)
+- # Install git for cloning
+- # Copy requirements
+- # Install Python dependencies
+- # Copy runtime scripts
+- # Copy application code
+- # Health check endpoint
+- ### 2. Token Rotation Service (Cron Job - Free Tier)
+- ### 3. Self-Hosted Runner (Web Service - Free Tier)
+- # Install dependencies
+- # Create runner user
+- # Download and setup GitHub Actions runner
+- # Configure and run (use environment variables for registration)
+- ## GitHub Workflow Integration
+- ### Trigger Render Services from GitHub Actions
+- ## Setup Instructions
+- ### 1. Create Render Account
+- ### 2. Deploy Services
+- ### 3. Configure Webhooks
+- ### 4. Update GitHub Workflows
+- ## Expected Cost Savings
+- ## Monitoring
 
 
 ### ./docs/ENGINE_CATALOG.md
@@ -7970,6 +9322,8 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ## Inspector Panel
 - ## Environment Variables
 - # Required
+- # Legacy RENDER_API_KEY removed=your_key
+- # Legacy RENDER_SERVICE_ID removed=your_id
 - # Optional
 - ## Report Location
 - ## Key Features
@@ -8083,6 +9437,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ## 🚀 Quick Start
 - ### 1. Enable EnvSync (in platform dashboards)
 - ### 2. Set Platform Credentials
+- # Legacy RENDER_SERVICE_ID removed=<your-service-id>
 - ### 3. Deploy and Verify
 - # Check EnvSync status
 - # Trigger manual sync
@@ -12564,6 +13919,126 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ## Sign-off
 
 
+### ./docs/sovereignty/README.md
+
+- # Firewall & Network Sovereignty Architecture
+- ## 🎯 Mission Statement
+- ## 🚀 Quick Start
+- ## 📚 Documentation
+- ## 🏗️ Architecture Components
+- ### 1. Firewall Configuration Manager
+- ### 2. Network Resilience Layer
+- ### 3. Validation Sovereignty
+- ### 4. Script Execution Sovereignty
+- ### 5. Sovereign Orchestrator
+- ## ✅ Test Results
+- ## 📊 Key Metrics
+- ## 🔄 GitHub Actions Integration
+- ## 📁 Generated Files
+- ### Configuration Files
+- ### Diagnostic Reports
+- ## 🛠️ Common Commands
+- ### Execute Individual Systems
+- # Firewall configuration
+- # Network health check
+- # Validation check
+- # Script execution check
+- ### View Reports
+- # Latest sovereignty report
+- # Network health
+- ### Quick Status Check
+- ## 🔐 Security Features
+- ## 📈 Monitoring & Observability
+- ## 🎓 Design Principles
+- ### Sovereign Mindset
+- ### Architectural Goals
+- ## 🚨 Troubleshooting
+- ### Common Issues
+- # Check configuration
+- # Review health report
+- # Check dependency status
+- ## 🔄 Extending the Architecture
+- ## 📦 Dependencies
+- ## 🎯 Success Criteria
+- ## 🏆 Results
+
+
+### ./docs/sovereignty/SOVEREIGNTY_QUICK_REFERENCE.md
+
+- # Sovereignty Quick Reference
+- ## One-Line Commands
+- ### Execute Complete Sovereignty Protocol
+- ### Individual Systems
+- #### Firewall Configuration
+- #### Network Health Check
+- #### Validation Check
+- #### Script Execution Check
+- ### Run All Tests
+- ## View Reports
+- ### Latest Sovereignty Report
+- ### Network Health
+- ### Validation Results
+- ## Key Metrics Quick Check
+- ## Configuration Files
+- ### Allowlist
+- ### Egress Policies
+- ### Firewall Rules
+- ## GitHub Actions
+- ### Trigger Sovereignty Check
+- ### View Latest Run
+- ## Common Tasks
+- ### Add Domain to Allowlist
+- ### Check if Domain is Allowed
+- ### Test Single Endpoint
+- ## Troubleshooting
+- ### Check System Status
+- ### View Error Details
+- ### Reset and Regenerate All Configs
+- ## Architecture Summary
+- ## Success Criteria
+
+
+### ./docs/sovereignty/FIREWALL_SOVEREIGNTY.md
+
+- # Firewall & Network Sovereignty Architecture
+- ## Overview
+- ## Philosophy
+- ## Architecture Components
+- ### 1. Firewall Configuration Manager
+- ### 2. Network Resilience Layer
+- ### 3. Validation Sovereignty
+- ### 4. Script Execution Sovereignty
+- ### 5. Sovereign Orchestrator
+- ## GitHub Actions Integration
+- ## Configuration Files
+- ### Network Policies
+- ### Diagnostics
+- ## Testing
+- ## Operational Guide
+- ### Running the Sovereign Orchestrator
+- ### Viewing Reports
+- ### Adding Domains to Allowlist
+- ### Checking Network Health
+- ### Validating Configurations
+- ## Metrics and Monitoring
+- ### Firewall Metrics
+- ### Network Metrics
+- ### Validation Metrics
+- ### Script Execution Metrics
+- ## Security Considerations
+- ## Extending the Architecture
+- ### Adding New Sovereignty Systems
+- ### Adding New Validation Rules
+- ### Adding Network Policies
+- ## Troubleshooting
+- ### Issue: Firewall validation fails
+- ### Issue: Network health check failures
+- ### Issue: Script execution fails
+- ### Issue: Validation errors
+- ## Sovereignty Manifesto
+- ## Summary
+
+
 ### ./docs/versions/V197I_IMPLEMENTATION_SUMMARY.md
 
 - # v1.9.7i Implementation Summary
@@ -13908,6 +15383,98 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ## Testing
 
 
+### ./bridge_backend/bridge_engines/README.md
+
+- # Sovereign Engines
+- ## Overview
+- ### Components
+- ## Features
+- ### 🔐 Sovereign Compliance Guard
+- ### 📝 Sovereign MicroScribe Engine
+- ### 🔍 Sovereign MicroLogician Engine
+- ## Installation
+- ### Dependencies
+- ## Quick Start
+- ### Using the Engines Programmatically
+- # Compliance Guard
+- # MicroScribe - Diff Analysis
+- # PR Generation
+- # MicroLogician - Log Analysis
+- ### Using the API
+- # Check engine status
+- # Analyze a diff
+- # Analyze logs
+- # Check compliance
+- ## API Endpoints
+- ### Health & Status
+- ### Compliance Guard
+- ### MicroScribe
+- ### MicroLogician
+- ## Configuration
+- ### Environment Variables
+- # Enable/disable Sovereign Engines
+- # License key (for production)
+- # Bridge resonance level (0.0-1.0)
+- # Minimum resonance threshold
+- ### Sovereign Policy
+- ## Analysis Modes
+- ## Security Levels
+- ### MicroScribe Security Levels
+- ### MicroLogician Threat Levels
+- ## Testing
+- ### Run Unit Tests
+- # All tests
+- # Specific engine
+- ### Run Verification Script
+- ### Run API Smoke Tests
+- # Start server first
+- # In another terminal
+- ## Examples
+- ### Analyzing Git Diffs
+- # Get diff from git
+- # Analyze
+- # Generate PR
+- ### Analyzing Application Logs
+- # Read logs
+- # Analyze
+- # Report findings
+- ## License
+- ## Support
+- ## Changelog
+- ### Version 1.0.0 (2025-11-05)
+
+
+### ./bridge_backend/bridge_engines/SOVEREIGN_LICENSE.md
+
+- # SOVEREIGN LICENSE
+- ## Bridge-Integrated Perpetual License
+- ## Grant of License
+- ### Components Covered
+- ## Terms and Conditions
+- ### 1. Bridge Resonance Requirements
+- ### 2. Permitted Uses
+- ### 3. Security Requirements
+- ### 4. Compliance
+- ### 5. Enterprise Deployment
+- ## License Key Configuration
+- ## Warranty Disclaimer
+- ## Limitation of Liability
+- ## Attribution
+- ## Support and Updates
+- ## License Enforcement
+- ## Termination
+- ## Governing Law
+- ## Contact
+
+
+### ./.archive/render_legacy/README.md
+
+- # Render Legacy Files Archive
+- ## What was Render?
+- ## Files Archived
+- ## Migration Path
+
+
 ### ./DOCTRINE/teaching-doctrine-the-test-of-chains.md
 
 - # Teaching Doctrine: The Test of Chains
@@ -13955,147 +15522,12 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - # 📘 The Book of the Repo
 - ## 🧠 Truth Engine Summary
 - ## 📄 Documentation Index
-- ### ./ETHICS_IMPACT_TEMPLATE.md
-- ### ./PHASE_6_VERIFICATION.md
-- ### ./LOC_REPORT.md
-- ### ./CHIMERA_IMPLEMENTATION_COMPLETE.md
-- ### ./TDE_X_QUICK_REF.md
-- ### ./V197I_IMPLEMENTATION_SUMMARY.md
-- ### ./HXO_V196P_IMPLEMENTATION.md
-- ### ./FORGE_DOMINION_DEPLOYMENT_GUIDE.md
 - ### ./CHANGELOG.md
-- ### ./FORGE_DOMINION_IMPLEMENTATION_SUMMARY.md
-- ### ./DEPLOYMENT_READY_v1.9.4.md
-- ### ./V197F_QUICK_REF.md
-- ### ./BRH_GUIDE.md
-- ### ./V197L_QUICK_REF.md
-- ### ./HXO_IMPLEMENTATION_SUMMARY.md
-- ### ./NETLIFY_UMBRA_QUICK_REF.md
-- ### ./EAN_EXECUTION_RESULTS.md
-- ### ./BLUEPRINT_ENGINE_GUIDE.md
-- ### ./V196L_STEWARD_SUMMARY.md
-- ### ./ARIE_V196O_IMPLEMENTATION.md
-- ### ./BRH_CONSENSUS_ARCHITECTURE.md
-- ### ./POST_MERGE_SETUP.md
-- ### ./COMPLIANCE_INTEGRATION_GUIDE.md
-- ### ./HXO_NEXUS_QUICK_REF.md
-- ### ./GENESIS_V2_GUIDE.md
-- ### ./BRH_IMPLEMENTATION_COMPLETE.md
-- ### ./DATA_RELAY_QUICK_REF.md
-- ### ./AUTONOMY_DEPLOYMENT_README.md
-- ### ./V196R_QUICK_REF.md
-- ### ./FORGE_MANIFEST_RESOLVER_GUIDE.md
-- ### ./GENESIS_ARCHITECTURE.md
-- ### ./STEWARD_JSON_REPORT_QUICK_START.md
-- ### ./ENVIRONMENT_CLEANUP_SUMMARY.md
-- ### ./STEWARD_DEPLOYMENT_GUIDE.md
-- ### ./ROLE_SEPARATION_QUICK_REF.md
-- ### ./AUTONOMY_V196S_IMPLEMENTATION.md
-- ### ./UMBRA_QUICK_REF.md
-- ### ./UPGRADE_GUIDE.md
-- ### ./ENVRECON_AUTONOMY_SUMMARY.md
-- ### ./ENVRECON_QUICK_REF.md
-- ### ./PR_READY.md
-- ### ./IMPLEMENTATION_SUMMARY.md
-- ### ./UMBRA_README.md
-- ### ./BRH_CONSENSUS_GUIDE.md
-- ### ./AUTONOMY_V196T_IMPLEMENTATION.md
-- ### ./FIREWALL_LIST.md
-- ### ./CHIMERA_README.md
-- ### ./V197G_IMPLEMENTATION_SUMMARY.md
-- ### ./PARITY_ENGINE_QUICK_GUIDE.md
-- ### ./WHAT_I_COULDNT_CHANGE.md
-- ### ./PHASE_4_5_IMPLEMENTATION_SUMMARY.md
-- ### ./BRH_QUICK_REF.md
-- ### ./ROLES_INTERFACE_AUDIT.md
-- ### ./PHASE_6_IMPLEMENTATION.md
-- ### ./V197C_UNIFIED_GENESIS.md
-- ### ./V197F_CASCADE_SYNCHRONY.md
-- ### ./README_SECURITY.md
-- ### ./DEPLOYMENT.md
-- ### ./UMBRA_QUICK_START.md
-- ### ./SCAN_SUMMARY.md
-- ### ./V197M_IMPLEMENTATION.md
-- ### ./ENVSYNC_QUICK_REF.md
-- ### ./GITHUB_ENVHOOK_IMPLEMENTATION.md
-- ### ./V196R_IMPLEMENTATION_COMPLETE.md
-- ### ./COPILOT_IMPROVEMENTS.md
-- ### ./WORKFLOW_FAILURE_QUICK_REF.md
-- ### ./FORGE_DOMINION_QUICK_REF.md
-- ### ./FRONTEND_POSTGRES_READINESS.md
+- ### ./START_HERE.md
 - ### ./README.md
-- ### ./V197F_IMPLEMENTATION_SUMMARY.md
-- ### ./HXO_DEPLOYMENT_CHECKLIST.md
-- ### ./STEWARD_ENVRECON_INTEGRATION.md
-- ### ./V196E_CONFIG_GUIDE.md
-- ### ./CAPTAIN_AGENT_SEPARATION.md
-- ### ./COMPLIANCE_QUICK_REF.md
-- ### ./V196I_QUICK_REF.md
-- ### ./V196G_QUICK_REF.md
-- ### ./V197O_IMPLEMENTATION_SUMMARY.md
-- ### ./BRIDGE_FEDERATION_SECRETS.md
-- ### ./FIREWALL_AUTONOMY_IMPLEMENTATION.md
-- ### ./DOMINION_IMPLEMENTATION_SUMMARY.md
-- ### ./ENDPOINT_TEST_SOLUTION.md
-- ### ./WORKFLOW_FIXES_SUMMARY.md
-- ### ./ETHICS_GUIDE.md
-- ### ./PHASE_6_SUMMARY.md
-- ### ./LOC_COUNTER_README.md
-- ### ./V197N_IMPLEMENTATION_SUMMARY.md
-- ### ./UMBRA_IMPLEMENTATION_COMPLETE.md
-- ### ./PARITY_STUBS_VERIFICATION.md
-- ### ./ENGINES_ENABLE_TRUE_v196w.md
-- ### ./STUB_CLEANUP_COMPLETE.md
-- ### ./DEPLOYMENT_VERIFICATION.md
-- ### ./V196T_IMPLEMENTATION_SUMMARY.md
-- ### ./FIREWALL_AUTONOMY_QUICK_REF.md
-- ### ./HXO_QUICK_REF.md
-- ### ./CHROME_PLAYWRIGHT_INSTALLATION_SUMMARY.md
-- ### ./HXO_NEXUS_IMPLEMENTATION_SUMMARY.md
-- ### ./LOC_QUICK_ANSWER.md
-- ### ./PARITY_EXECUTION_REPORT.md
-- ### ./V197Q_IMPLEMENTATION.md
-- ### ./V196Y_QUICK_REF.md
-- ### ./ENVSCRIBE_IMPLEMENTATION_COMPLETE.md
-- ### ./DEPLOYMENT_SUMMARY_V197Q.md
-- ### ./WORKFLOW_FAILURE_RESOLUTION.md
-- ### ./ENVRECON_USER_CHECKLIST.md
-- ### ./GENESIS_LINKAGE_GUIDE.md
-- ### ./ENVRECON_AUTONOMY_INTEGRATION.md
-- ### ./V197E_IMPLEMENTATION.md
-- ### ./PR_SUMMARY_V197M.md
-- ### ./GENESIS_V2_0_2_ENVRECON_GUIDE.md
-- ### ./V197L_IMPLEMENTATION_SUMMARY.md
-- ### ./TOTAL_STACK_TRIAGE_VERIFICATION.md
-- ### ./ENGINES_ENABLE_TRUE_QUICK_REF.md
-- ### ./COMPREHENSIVE_SCAN_REPORT.md
-- ### ./GENESIS_V2_QUICK_REF.md
-- ### ./HXO_NEXUS_CONNECTIVITY.md
-- ### ./FORGE_DOMINION_ENVIRONMENT_INTEGRATION.md
-- ### ./DEPLOYMENT_READY_v196g.md
-- ### ./POSTGRES_MIGRATION.md
-- ### ./ENVRECON_UNFIXABLE_VARS.md
-- ### ./V197J_IMPLEMENTATION_SUMMARY.md
-- ### ./BRH_IMPLEMENTATION_SUMMARY.md
-- ### ./FINAL_VERIFICATION_REPORT.md
-- ### ./STEWARD_QUICK_REF.md
-- ### ./RENDER_REMOVAL_COMPLETE.md
-- ### ./doctrine-vault.md
-- ### ./BRH_DEPLOYMENT_GUIDE.md
-- ### ./TDE_X_DEPLOYMENT_GUIDE.md
-- ### ./DEPLOYMENT_READY_v196f.md
-- ### ./V196F_QUICK_REF.md
-- ### ./FULL_SCAN_REPORT_2025.md
-- ### ./V196Y_IMPLEMENTATION.md
-- ### ./BLUEPRINT_QUICK_REF.md
-- ### ./STEWARD_JSON_FEATURE_COMPLETE.md
-- ### ./V197J_QUICK_REF.md
-- ### ./README_RELEASES.md
-- ### ./BRH_CONSENSUS_QUICK_REF.md
-- ### ./GENESIS_LINKAGE_QUICK_REF.md
 - ### ./SECURITY.md
-- ### ./SCAN_REPORT_RENDER_REMOVAL.md
 - ### ./scripts/README.md
+- ### ./docs/ETHICS_IMPACT_TEMPLATE.md
 - ### ./docs/HXO_ENGINE_MATRIX.md
 - ### ./docs/GITHUB_FORGE.md
 - ### ./docs/DOMINION_DEPLOY_GUIDE.md
@@ -14107,34 +15539,47 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### ./docs/API_TRIAGE.md
 - ### ./docs/TRIAGE_MESH_MIGRATION.md
 - ### ./docs/ARIE_V196O_QUICK_REF.md
+- ### ./docs/FORGE_DOMINION_DEPLOYMENT_GUIDE.md
 - ### ./docs/GITHUB_ENVHOOK.md
 - ### ./docs/AUTONOMY_INTEGRATION.md
 - ### ./docs/ENVSYNC_ENGINE.md
+- ### ./docs/BUILD_DOSSIER.md
 - ### ./docs/UMBRA_LATTICE_QUICK_START.md
 - ### ./docs/DEPLOYMENT_AUTOMATION.md
 - ### ./docs/ELYSIUM_GUARDIAN.md
+- ### ./docs/BRH_GUIDE.md
 - ### ./docs/GITHUB_ENVHOOK_INTEGRATION.md
 - ### ./docs/ANCHORHOLD_PROTOCOL.md
 - ### ./docs/AUTONOMY_DEPLOYMENT_INTEGRATION.md
 - ### ./docs/RUNTIME_TROUBLESHOOTING.md
 - ### ./docs/TROUBLESHOOTING_LINKS.md
+- ### ./docs/BLUEPRINT_ENGINE_GUIDE.md
+- ### ./docs/PHOENIX_COMPARISON.md
 - ### ./docs/GITHUB_ENVHOOK_QUICK_REF.md
 - ### ./docs/HYDRA_GUARD_V2.md
 - ### ./docs/V197M_QUICK_REF.md
+- ### ./docs/BRH_CONSENSUS_ARCHITECTURE.md
 - ### ./docs/HOOKS_TRIAGE.md
 - ### ./docs/TOTAL_STACK_TRIAGE.md
 - ### ./docs/GENESIS_V2_0_1_QUICK_REF.md
+- ### ./docs/COMPLIANCE_INTEGRATION_GUIDE.md
 - ### ./docs/PR_HEALTH_SUMMARY.md
 - ### ./docs/ENV_OVERVIEW.md
 - ### ./docs/ARIE_SANCTUM_LOOP.md
 - ### ./docs/BADGES.md
+- ### ./docs/GENESIS_V2_GUIDE.md
 - ### ./docs/DEPLOYMENT_SECURITY_FIX.md
 - ### ./docs/GITHUB_ENV_SYNC_GUIDE.md
 - ### ./docs/BRIDGE_NOTIFICATIONS_ROLLBACK.md
 - ### ./docs/PREDICTIVE_DEPLOY_PIPELINE.md
+- ### ./docs/AUTONOMY_DEPLOYMENT_README.md
+- ### ./docs/FORGE_MANIFEST_RESOLVER_GUIDE.md
+- ### ./docs/GENESIS_ARCHITECTURE.md
 - ### ./docs/UMBRA_OVERVIEW.md
 - ### ./docs/FIREWALL_HARMONY.md
+- ### ./docs/PHOENIX_PROTOCOL.md
 - ### ./docs/AUTONOMY_V196T_QUICK_REF.md
+- ### ./docs/STEWARD_DEPLOYMENT_GUIDE.md
 - ### ./docs/NOTIFICATION_EXAMPLES.md
 - ### ./docs/INCIDENT_CATALOG.md
 - ### ./docs/HEALER_NET.md
@@ -14142,20 +15587,34 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### ./docs/CHIMERA_API_REFERENCE.md
 - ### ./docs/HXO_BLUEPRINT_CONTRACT.md
 - ### ./docs/ENDPOINT_TRIAGE.md
+- ### ./docs/UPGRADE_GUIDE.md
 - ### ./docs/UPGRADE_v1.9.6q.md
 - ### ./docs/GENESIS_REGISTRATION_OVERVIEW.md
 - ### ./docs/POSTGRES_RENDER_SETUP.md
+- ### ./docs/COMPONENT_INDEX.md
 - ### ./docs/ENDPOINT_TRIAGE_QUICK_REF.md
 - ### ./docs/INTEGRITY_DEFERRED_GUIDE.md
 - ### ./docs/ENVIRONMENT_SETUP.md
 - ### ./docs/IMPLEMENTATION_SUMMARY.md
+- ### ./docs/UMBRA_README.md
+- ### ./docs/BRH_CONSENSUS_GUIDE.md
+- ### ./docs/DOCUMENTATION_USAGE_GUIDE.md
 - ### ./docs/EMBEDDED_AUTONOMY_NODE.md
+- ### ./docs/CHIMERA_README.md
+- ### ./docs/PARITY_ENGINE_QUICK_GUIDE.md
+- ### ./docs/ROLES_INTERFACE_AUDIT.md
+- ### ./docs/README_SECURITY.md
 - ### ./docs/HXO_OPERATIONS.md
 - ### ./docs/BADGE_DEPLOY_STATUS.md
+- ### ./docs/DEPLOYMENT.md
 - ### ./docs/engine_smoke_test.md
+- ### ./docs/REPO_STUDY_README.md
+- ### ./docs/GIT_SOVEREIGN_AGENT_GUIDE.md
 - ### ./docs/CHIMERA_FAILSAFE_PROTOCOL.md
 - ### ./docs/ENVSYNC_SEED_MANIFEST.md
 - ### ./docs/BRIDGE_AUTOFIX_ENGINE.md
+- ### ./docs/BRIDGE_DEPLOY_GUIDE.md
+- ### ./docs/FRONTEND_POSTGRES_READINESS.md
 - ### ./docs/ARIE_README.md
 - ### ./docs/AUTONOMY_QUICK_REF.md
 - ### ./docs/HERITAGE_TEST_PRESETS.md
@@ -14164,6 +15623,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### ./docs/CHIMERA_QUICK_START.md
 - ### ./docs/ENV_SYNC_AUTONOMOUS_PIPELINE.md
 - ### ./docs/HXO_OVERVIEW.md
+- ### ./docs/CAPTAIN_AGENT_SEPARATION.md
 - ### ./docs/HERITAGE_BRIDGE.md
 - ### ./docs/API_TRIAGE_QUICK_REF.md
 - ### ./docs/BRIDGE_PARITY_ENGINE.md
@@ -14172,12 +15632,16 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### ./docs/ARIE_TOPICS.md
 - ### ./docs/SELFTEST_HEALING_AUTOTRIGGER.md
 - ### ./docs/BUILD_SECURITY_FIX.md
+- ### ./docs/ETHICS_GUIDE.md
+- ### ./docs/LOC_COUNTER_README.md
 - ### ./docs/endpoint_test_examples.md
 - ### ./docs/GITHUB_MINI_BRIDGE_OVERVIEW.md
 - ### ./docs/TRIAGE_SYSTEMS.md
 - ### ./docs/AUTONOMY_DECISION_LAYER.md
 - ### ./docs/SANCTUM_CASCADE_PROTOCOL.md
 - ### ./docs/TELEMETRY.md
+- ### ./docs/MASTER_ROADMAP.md
+- ### ./docs/DOCUMENTATION_INDEX.md
 - ### ./docs/ENVSYNC_PIPELINE_QUICK_REF.md
 - ### ./docs/AUTONOMY_DEPLOYMENT_QUICK_REF.md
 - ### ./docs/FRONTEND-INTEGRATION.md
@@ -14188,8 +15652,10 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### ./docs/SCAN_ENGINE_README.md
 - ### ./docs/NETLIFY_RENDER_ENV_SETUP.md
 - ### ./docs/HXO_GENESIS_TOPICS.md
+- ### ./docs/GENESIS_LINKAGE_GUIDE.md
 - ### ./docs/AUTONOMY_OPERATIONS.md
 - ### ./docs/FIREWALL_HARDENING.md
+- ### ./docs/GENESIS_V2_0_2_ENVRECON_GUIDE.md
 - ### ./docs/endpoint_test_full.md
 - ### ./docs/AUTONOMY_DEPLOYMENT_ARCHITECTURE.md
 - ### ./docs/REFLEX_LOOP_PROTOCOL.md
@@ -14206,6 +15672,9 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### ./docs/CHIMERA_ORACLE.md
 - ### ./docs/UNIFIED_HEALTH_TIMELINE.md
 - ### ./docs/ARIE_OVERVIEW.md
+- ### ./docs/REPO_STUDY_GUIDE.md
+- ### ./docs/NAVIGATION_INDEX.md
+- ### ./docs/POSTGRES_MIGRATION.md
 - ### ./docs/NETLIFY_GUARD_OVERVIEW.md
 - ### ./docs/ANCHORHOLD_QUICK_REF.md
 - ### ./docs/HXO_DEPLOY_GUIDE.md
@@ -14215,11 +15684,15 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### ./docs/AUTONOMY_ORIGINALITY_INTEGRATION.md
 - ### ./docs/ENVSCRIBE_QUICK_REF.md
 - ### ./docs/SELFTEST_OVERVIEW.md
+- ### ./docs/doctrine-vault.md
 - ### ./docs/TRIAGE_PRESEED.md
 - ### ./docs/RENDER_FALLBACK.md
+- ### ./docs/BRH_DEPLOYMENT_GUIDE.md
 - ### ./docs/FEDERATION_TRIAGE_ENGINE.md
 - ### ./docs/NODE_FAILSAFE_GUIDE.md
 - ### ./docs/AUTONOMY_INTEGRATION_QUICK_REF.md
+- ### ./docs/ENGINE_CATALOG.md
+- ### ./docs/TDE_X_DEPLOYMENT_GUIDE.md
 - ### ./docs/ARIE_QUICK_REF.md
 - ### ./docs/V196L_IMPLEMENTATION_SUMMARY.md
 - ### ./docs/AUTONOMY_INTEGRATION_ARCHITECTURE.md
@@ -14228,51 +15701,175 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### ./docs/GENESIS_V2_0_1_GUIDE.md
 - ### ./docs/BRIDGE_HEALERS_CODE.md
 - ### ./docs/COMMAND_DECK_GUIDE.md
+- ### ./docs/README_RELEASES.md
 - ### ./docs/GENESIS_EVENT_FLOW.md
 - ### ./docs/TRIAGE_FEDERATION.md
 - ### ./docs/FORGE_AUTOREPAIR_GUIDE.md
 - ### ./docs/HXO_README.md
 - ### ./docs/LOG_SIGNATURES.md
+- ### ./docs/SYSTEM_BLUEPRINT.md
 - ### ./docs/HXO_TROUBLESHOOTING.md
+- ### ./docs/quickrefs/TDE_X_QUICK_REF.md
+- ### ./docs/quickrefs/NETLIFY_UMBRA_QUICK_REF.md
+- ### ./docs/quickrefs/QUICK_START_30MIN.md
+- ### ./docs/quickrefs/HXO_NEXUS_QUICK_REF.md
+- ### ./docs/quickrefs/DATA_RELAY_QUICK_REF.md
+- ### ./docs/quickrefs/ROLE_SEPARATION_QUICK_REF.md
+- ### ./docs/quickrefs/UMBRA_QUICK_REF.md
+- ### ./docs/quickrefs/ENVRECON_QUICK_REF.md
+- ### ./docs/quickrefs/BRH_QUICK_REF.md
+- ### ./docs/quickrefs/UMBRA_QUICK_START.md
+- ### ./docs/quickrefs/ENVSYNC_QUICK_REF.md
+- ### ./docs/quickrefs/WORKFLOW_FAILURE_QUICK_REF.md
+- ### ./docs/quickrefs/FORGE_DOMINION_QUICK_REF.md
+- ### ./docs/quickrefs/GIT_SOVEREIGN_AGENT_QUICK_REF.md
+- ### ./docs/quickrefs/COMPLIANCE_QUICK_REF.md
+- ### ./docs/quickrefs/FIREWALL_AUTONOMY_QUICK_REF.md
+- ### ./docs/quickrefs/HXO_QUICK_REF.md
+- ### ./docs/quickrefs/ENGINES_ENABLE_TRUE_QUICK_REF.md
+- ### ./docs/quickrefs/GENESIS_V2_QUICK_REF.md
+- ### ./docs/quickrefs/STEWARD_QUICK_REF.md
+- ### ./docs/quickrefs/BLUEPRINT_QUICK_REF.md
+- ### ./docs/quickrefs/BRH_CONSENSUS_QUICK_REF.md
+- ### ./docs/quickrefs/GENESIS_LINKAGE_QUICK_REF.md
+- ### ./docs/archive/PHASE_6_VERIFICATION.md
+- ### ./docs/archive/LOC_REPORT.md
+- ### ./docs/archive/CHIMERA_IMPLEMENTATION_COMPLETE.md
 - ### ./docs/archive/INTEGRATION_COMPLETE.md
+- ### ./docs/archive/FORGE_DOMINION_IMPLEMENTATION_SUMMARY.md
 - ### ./docs/archive/DOCKDAY_SUMMARY.md
 - ### ./docs/archive/PR_SUMMARY.md
+- ### ./docs/archive/HXO_IMPLEMENTATION_SUMMARY.md
 - ### ./docs/archive/V196I_SUMMARY.md
 - ### ./docs/archive/TASK_COMPLETE_SUMMARY.md
 - ### ./docs/archive/DEPLOYMENT_CHECKLIST_v196b.md
+- ### ./docs/archive/EAN_EXECUTION_RESULTS.md
+- ### ./docs/archive/BRIDGE_REPAIR_SUMMARY.md
 - ### ./docs/archive/OPERATION_GENESIS_SUMMARY.md
+- ### ./docs/archive/V196L_STEWARD_SUMMARY.md
+- ### ./docs/archive/IMPLEMENTATION_BRIDGE_DEPLOY.md
+- ### ./docs/archive/POST_MERGE_SETUP.md
 - ### ./docs/archive/V196I_IMPLEMENTATION_COMPLETE.md
 - ### ./docs/archive/V197C_IMPLEMENTATION_COMPLETE.md
 - ### ./docs/archive/V196B_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/archive/NETLIFY_DEPLOYMENT_FIX_SUMMARY.md
+- ### ./docs/archive/BRH_IMPLEMENTATION_COMPLETE.md
+- ### ./docs/archive/STEWARD_JSON_REPORT_QUICK_START.md
 - ### ./docs/archive/CHECKLIST_COMPLETION_SUMMARY.md
+- ### ./docs/archive/ENVIRONMENT_CLEANUP_SUMMARY.md
 - ### ./docs/archive/V195_IMPLEMENTATION_COMPLETE.md
 - ### ./docs/archive/GENESIS_V2_0_2_IMPLEMENTATION_SUMMARY.md
 - ### ./docs/archive/QUICK_VERIFICATION_SUMMARY.md
+- ### ./docs/archive/ENVRECON_AUTONOMY_SUMMARY.md
 - ### ./docs/archive/V196_FINAL_IMPLEMENTATION.md
 - ### ./docs/archive/V196D_IMPLEMENTATION_COMPLETE.md
+- ### ./docs/archive/DOCUMENTATION_IMPROVEMENT_SUMMARY.md
+- ### ./docs/archive/PR_READY.md
 - ### ./docs/archive/IMPLEMENTATION_SUMMARY.md
+- ### ./docs/archive/GIT_SOVEREIGN_COMMISSIONING.md
+- ### ./docs/archive/FIREWALL_LIST.md
+- ### ./docs/archive/WHAT_I_COULDNT_CHANGE.md
+- ### ./docs/archive/PHASE_4_5_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/archive/PHASE_6_IMPLEMENTATION.md
 - ### ./docs/archive/V2_IMPLEMENTATION_COMPLETE.md
 - ### ./docs/archive/DEPLOYMENT_CHECKLIST_v196i.md
+- ### ./docs/archive/SCAN_SUMMARY.md
 - ### ./docs/archive/V196E_IMPLEMENTATION.md
+- ### ./docs/archive/FEATURE_INVENTORY.md
+- ### ./docs/archive/GITHUB_ENVHOOK_IMPLEMENTATION.md
 - ### ./docs/archive/ANCHORHOLD_PR_SUMMARY.md
+- ### ./docs/archive/COPILOT_IMPROVEMENTS.md
 - ### ./docs/archive/README.md
+- ### ./docs/archive/HXO_DEPLOYMENT_CHECKLIST.md
+- ### ./docs/archive/STEWARD_ENVRECON_INTEGRATION.md
+- ### ./docs/archive/GIT_SOVEREIGN_VISUALIZATION.md
 - ### ./docs/archive/V196F_IMPLEMENTATION.md
+- ### ./docs/archive/BRIDGE_FEDERATION_SECRETS.md
+- ### ./docs/archive/FIREWALL_AUTONOMY_IMPLEMENTATION.md
+- ### ./docs/archive/DOMINION_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/archive/GIT_SOVEREIGN_VALIDATION.md
 - ### ./docs/archive/GENESIS_V2_0_1A_IMPLEMENTATION.md
+- ### ./docs/archive/ENDPOINT_TEST_SOLUTION.md
+- ### ./docs/archive/WORKFLOW_FIXES_SUMMARY.md
+- ### ./docs/archive/PHASE_6_SUMMARY.md
+- ### ./docs/archive/UMBRA_IMPLEMENTATION_COMPLETE.md
+- ### ./docs/archive/PARITY_STUBS_VERIFICATION.md
+- ### ./docs/archive/STUB_CLEANUP_COMPLETE.md
+- ### ./docs/archive/DEPLOYMENT_VERIFICATION.md
 - ### ./docs/archive/PROJECT_LOC_SUMMARY.md
+- ### ./docs/archive/REPO_STUDY_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/archive/CHROME_PLAYWRIGHT_INSTALLATION_SUMMARY.md
+- ### ./docs/archive/HXO_NEXUS_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/archive/LOC_QUICK_ANSWER.md
+- ### ./docs/archive/PARITY_EXECUTION_REPORT.md
+- ### ./docs/archive/GIT_SOVEREIGN_FAMILIARIZATION_SUMMARY.md
+- ### ./docs/archive/ENVSCRIBE_IMPLEMENTATION_COMPLETE.md
+- ### ./docs/archive/WORKFLOW_FAILURE_RESOLUTION.md
+- ### ./docs/archive/ENVRECON_USER_CHECKLIST.md
 - ### ./docs/archive/V196C_IMPLEMENTATION_COMPLETE.md
+- ### ./docs/archive/ENVRECON_AUTONOMY_INTEGRATION.md
+- ### ./docs/archive/PR_SUMMARY_V197M.md
 - ### ./docs/archive/PARITY_ENGINE_RUN_SUMMARY.md
 - ### ./docs/archive/V196G_IMPLEMENTATION.md
+- ### ./docs/archive/TOTAL_STACK_TRIAGE_VERIFICATION.md
+- ### ./docs/archive/BRIDGE_DIAGNOSTIC_REPORT.md
 - ### ./docs/archive/AUTONOMY_BACKEND_INTEGRATION_SUMMARY.md
+- ### ./docs/archive/COMPREHENSIVE_SCAN_REPORT.md
+- ### ./docs/archive/HXO_NEXUS_CONNECTIVITY.md
+- ### ./docs/archive/FORGE_DOMINION_ENVIRONMENT_INTEGRATION.md
 - ### ./docs/archive/AUTONOMY_DEPLOYMENT_COMPLETE.md
 - ### ./docs/archive/GENESIS_V2_0_1_IMPLEMENTATION_COMPLETE.md
+- ### ./docs/archive/BRIDGE_WALKTHROUGH_COMPLETE.md
 - ### ./docs/archive/AUTONOMY_INTEGRATION_COMPLETE.md
+- ### ./docs/archive/ENVRECON_UNFIXABLE_VARS.md
+- ### ./docs/archive/BRH_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/archive/FINAL_VERIFICATION_REPORT.md
 - ### ./docs/archive/COMPLIANCE_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/archive/RENDER_REMOVAL_COMPLETE.md
 - ### ./docs/archive/ENGINE_INTEGRATION_SUMMARY.md
 - ### ./docs/archive/V196B_IMPLEMENTATION_COMPLETE.md
 - ### ./docs/archive/UNIFICATION_COMPLETE.md
+- ### ./docs/archive/FULL_SCAN_REPORT_2025.md
+- ### ./docs/archive/PHOENIX_SUMMARY.md
 - ### ./docs/archive/V196H_IMPLEMENTATION_COMPLETE.md
+- ### ./docs/archive/STEWARD_JSON_FEATURE_COMPLETE.md
+- ### ./docs/archive/DOCUMENTATION_ENHANCEMENT_PLAN.md
+- ### ./docs/archive/SCAN_REPORT_RENDER_REMOVAL.md
 - ### ./docs/archive/V198_ENVSYNC_IMPLEMENTATION.md
 - ### ./docs/archive/TDE_X_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/versions/V197I_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/versions/HXO_V196P_IMPLEMENTATION.md
+- ### ./docs/versions/DEPLOYMENT_READY_v1.9.4.md
+- ### ./docs/versions/V197F_QUICK_REF.md
+- ### ./docs/versions/V197L_QUICK_REF.md
+- ### ./docs/versions/ARIE_V196O_IMPLEMENTATION.md
+- ### ./docs/versions/V196R_QUICK_REF.md
+- ### ./docs/versions/AUTONOMY_V196S_IMPLEMENTATION.md
+- ### ./docs/versions/AUTONOMY_V196T_IMPLEMENTATION.md
+- ### ./docs/versions/V197G_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/versions/V197C_UNIFIED_GENESIS.md
+- ### ./docs/versions/V197F_CASCADE_SYNCHRONY.md
+- ### ./docs/versions/V197M_IMPLEMENTATION.md
+- ### ./docs/versions/V196R_IMPLEMENTATION_COMPLETE.md
+- ### ./docs/versions/V197F_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/versions/V196E_CONFIG_GUIDE.md
+- ### ./docs/versions/V196I_QUICK_REF.md
+- ### ./docs/versions/V196G_QUICK_REF.md
+- ### ./docs/versions/V197O_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/versions/V197N_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/versions/ENGINES_ENABLE_TRUE_v196w.md
+- ### ./docs/versions/V196T_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/versions/V197Q_IMPLEMENTATION.md
+- ### ./docs/versions/V196Y_QUICK_REF.md
+- ### ./docs/versions/DEPLOYMENT_SUMMARY_V197Q.md
+- ### ./docs/versions/V197E_IMPLEMENTATION.md
+- ### ./docs/versions/V197L_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/versions/DEPLOYMENT_READY_v196g.md
+- ### ./docs/versions/V197J_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/versions/DEPLOYMENT_READY_v196f.md
+- ### ./docs/versions/V196F_QUICK_REF.md
+- ### ./docs/versions/V196Y_IMPLEMENTATION.md
+- ### ./docs/versions/V197J_QUICK_REF.md
 - ### ./docs/badges/README.md
 - ### ./docs/badges/bridge_health.md
 - ### ./.pytest_cache/README.md
@@ -14290,12 +15887,16 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### ./bridge-frontend/src/api/auto_generated/README.md
 - ### ./brh/README.md
 - ### ./brh/examples/README.md
+- ### ./phoenix/README.md
+- ### ./phoenix/backend/README.md
 - ## 🧬 Blueprint Overview
 - ### ./get_env_drift.py
 - ### ./verify_hxo_nexus.py
 - ### ./validate_genesis_unified.py
 - ### ./count_loc.py
+- ### ./smoke_test_engines.py
 - ### ./activate_autonomy.py
+- ### ./study_repo_with_engines.py
 - ### ./test_endpoints_full.py
 - ### ./__init__.py
 - ### ./bridge_core/update_forge_banner_from_events.js
@@ -14543,6 +16144,12 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### ./bridge_backend/bridge_core/core/__init__.py
 - ### ./bridge_backend/bridge_core/agents/__init__.py
 - ### ./bridge_backend/bridge_core/agents/routes.py
+- ### ./bridge_backend/bridge_core/agents/git_sovereign/manifest.py
+- ### ./bridge_backend/bridge_core/agents/git_sovereign/brh_integration.py
+- ### ./bridge_backend/bridge_core/agents/git_sovereign/autonomy.py
+- ### ./bridge_backend/bridge_core/agents/git_sovereign/hxo_integration.py
+- ### ./bridge_backend/bridge_core/agents/git_sovereign/sdtf_integration.py
+- ### ./bridge_backend/bridge_core/agents/git_sovereign/__init__.py
 - ### ./bridge_backend/bridge_core/heritage/event_bus.py
 - ### ./bridge_backend/bridge_core/heritage/__init__.py
 - ### ./bridge_backend/bridge_core/heritage/routes.py
@@ -14671,6 +16278,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### ./bridge_backend/engines/autonomy/models.py
 - ### ./bridge_backend/engines/autonomy/governor.py
 - ### ./bridge_backend/engines/autonomy/routes.py
+- ### ./bridge_backend/forge/export_runtime.py
 - ### ./bridge_backend/forge/__init__.py
 - ### ./bridge_backend/forge/synchrony.py
 - ### ./bridge_backend/forge/forge_core.py
@@ -14930,6 +16538,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### ./tests/test_v200_genesis.py
 - ### ./tests/test_runtime_handler.py
 - ### ./tests/test_autonomy_node.py
+- ### ./tests/test_git_sovereign_agent.py
 - ### ./tests/test_v196h_features.py
 - ### ./tests/test_quantum_dominion.py
 - ### ./codex/html_compiler.py
@@ -15053,6 +16662,48 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ### ./brh/__init__.py
 - ### ./brh/run.py
 - ### ./brh/examples/test_forge_auth.py
+- ### ./phoenix/backend/main.py
+- ### ./phoenix/backend/schemas.py
+- ### ./phoenix/backend/db.py
+- ### ./phoenix/backend/models.py
+- ### ./phoenix/backend/core/__init__.py
+- ### ./phoenix/backend/core/engines/calculus_core.py
+- ### ./phoenix/backend/core/engines/__init__.py
+- ### ./phoenix/backend/core/agents/__init__.py
+- ### ./phoenix/backend/core/agents/routes.py
+- ### ./phoenix/backend/core/missions/__init__.py
+- ### ./phoenix/backend/core/missions/routes.py
+
+
+### ./vault/README.md
+
+- # SR-AIbridge Vault
+- ## Purpose
+- ## Structure
+- ## What Goes in the Vault?
+- ### ✅ Include
+- ### ❌ Exclude (Keep at Root)
+- ## Vault vs Backend Vault
+- ## Usage Guidelines
+- ### Adding to Vault
+- ### Retrieving from Vault
+- ## Integration with Bridge UI
+- ## Sovereign Git Mode
+- ## Current Vault Contents
+- ### Archived Scripts (`archived_scripts/`)
+- ### Reference SQL (`reference_sql/`)
+- ### Old Configurations (`old_configs/`)
+- ### Documentation (`documentation/`)
+
+
+### ./vault/archived_scripts/LOC_REPORT.md
+
+- # SR-AIbridge - Lines of Code Report
+- ## Summary
+- ## Breakdown by File Type
+- ## Detailed File List by Category
+- ### Python (7 files, 1,660 lines)
+- ### Shell (2 files, 352 lines)
 
 
 ### ./bridge-frontend/README.md
@@ -15063,6 +16714,44 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 - ## 🪶 Expansion
 - ## 📜 Doctrine
 - ## ⚔️ Rituals
+
+
+### ./bridge-frontend/DEPLOYMENT_VALIDATION.md
+
+- # Deployment Validation & True Reveal Protocol
+- ## Overview
+- ## Architecture
+- ### Core Components
+- #### 1. DeploymentValidator (`services/deployment-validator.js`)
+- #### 2. DeploymentGate (`components/DeploymentGate.jsx`)
+- #### 3. TrueDataRevealer (`services/true-data-revealer.js`)
+- #### 4. SilentFailureCapture (`services/silent-failure-capture.js`)
+- ## Implementation Guide
+- ### Wrapping Components
+- ### Adding to App
+- ## Components Using Deployment Gates
+- ## Deployment Modes
+- ### Production Mode
+- ### Degraded Mode
+- ### Development Mode
+- ## Security Features
+- ### Paranoid Security Gates
+- ### Validation Checks
+- ## Testing
+- ### Manual Testing
+- # Terminal 1: Start backend
+- # Terminal 2: Start frontend
+- ### Validation Status
+- ## Monitoring
+- ### Health Dashboard
+- ### Crash Forensics
+- ## Troubleshooting
+- ### Components Stuck in Placeholder Mode
+- ### Linting Errors
+- ## Best Practices
+- ## Future Enhancements
+- ## Contributing
+- ## License
 
 
 ### ./bridge-frontend/src/api/auto_generated/README.md
@@ -15185,53 +16874,6 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 ---
 ## 🧬 Blueprint Overview
 
-### ./get_env_drift.py
-  - Quick script to get environment drift report from Steward
-  - import asyncio
-  - import json
-  - import sys
-  - import os
-  - from pathlib import Path
-  - from bridge_backend.engines.steward.core import steward
-
-
-### ./verify_hxo_nexus.py
-  - import sys
-  - import os
-  - import asyncio
-  - from pathlib import Path
-  - from bridge_backend.bridge_core.engines.hxo import (
-  - # Verify specific connections from spec
-  - from bridge_backend.bridge_core.engines.hxo.routes import router
-  - import traceback
-
-
-### ./validate_genesis_unified.py
-  - import sys
-  - import importlib.util
-  - """Load a module from a file path"""
-  - import py_compile
-  - import os
-
-
-### ./count_loc.py
-  - import os
-  - import sys
-  - from pathlib import Path
-  - from collections import defaultdict
-  - from datetime import datetime
-
-
-### ./smoke_test_engines.py
-  - import sys
-  - from pathlib import Path
-  - from bridge_core.engines.parser.service import ParserEngine
-  - from bridge_core.engines.blueprint.blueprint_engine import BlueprintEngine
-  - from bridge_core.engines.truth.binder import bind_candidates
-  - from bridge_core.engines.truth.utils import TRUTH_DIR
-  - import traceback
-
-
 ### ./activate_autonomy.py
   - import sys
   - import asyncio
@@ -15244,36 +16886,6 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import traceback
 
 
-### ./study_repo_with_engines.py
-  - import sys
-  - import os
-  - from pathlib import Path
-  - from typing import Dict, Any, List
-  - import json
-  - from datetime import datetime, timezone
-  - # Add the backend to the path to import engines
-  - from bridge_core.engines.parser.service import ParserEngine
-  - from bridge_core.engines.blueprint.blueprint_engine import BlueprintEngine
-  - from bridge_core.engines.truth.binder import bind_candidates, list_truths
-  - from bridge_core.engines.truth.finder import find_candidates
-  - from bridge_core.engines.truth.utils import TRUTH_DIR
-  - print("📋 Creating analysis blueprint from brief:")
-  - Generate a comprehensive report combining insights from all three engines
-  - "Blueprint Engine generated structured analysis plans from natural language briefs",
-  - import traceback
-
-
-### ./test_endpoints_full.py
-  - import sys
-  - import requests
-  - import json
-  - import time
-  - from datetime import datetime, timezone
-  - from typing import Dict, List, Tuple, Optional
-  - # Engine Endpoints (from smoke_test_engines.sh)
-  - import argparse
-
-
 ### ./__init__.py
 
 
@@ -15284,6 +16896,15 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 
 
 ### ./bridge_core/__init__.py
+
+
+### ./bridge_core/lattice/bridge_harmony.py
+  - import sys
+  - from pathlib import Path
+  - from typing import Dict, List, Optional, Any
+  - from dataclasses import dataclass
+  - import traceback
+  - import argparse
 
 
 ### ./bridge_core/lattice/heartbeat.py
@@ -15420,6 +17041,19 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import toml
 
 
+### ./scripts/verify_frontend_deployment.py
+  - import os
+  - import sys
+  - import json
+  - from pathlib import Path
+
+
+### ./scripts/smoke_test_sovereign_engines.py
+  - import asyncio
+  - import httpx
+  - import io
+
+
 ### ./scripts/firewall_watchdog.py
   - import os
   - import socket
@@ -15437,6 +17071,18 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import sys
   - from pathlib import Path
   - print("✗ CLI has import errors")
+
+
+### ./scripts/verify_sovereign_engines.py
+  - import sys
+  - import os
+  - import asyncio
+  - import httpx
+  - from pathlib import Path
+  - from bridge_backend.bridge_engines.sovereign_guard import SovereignComplianceGuard
+  - from bridge_backend.bridge_engines.micro_scribe import SovereignMicroScribe
+  - from bridge_backend.bridge_engines.micro_logician import SovereignMicroLogician
+  - import json
 
 
 ### ./scripts/prune_diagnostics.py
@@ -15503,6 +17149,20 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import json
 
 
+### ./scripts/master_sovereign_audit.py
+  - import os
+  - import sys
+  - import json
+  - import subprocess
+  - from pathlib import Path
+  - from typing import Dict, List, Any
+  - from datetime import datetime, timezone
+  - import traceback
+  - from sovereign_audit_orchestrator import SovereignAuditOrchestrator
+  - from bridge_backend.tools.firewall_sovereignty.sovereign_orchestrator import SovereignOrchestrator
+  - import argparse
+
+
 ### ./scripts/check_env_parity.py
   - import os
   - import requests
@@ -15523,6 +17183,28 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import os
   - import sys
   - from bridge_backend.bridge_core.integrity.deferred import delayed_integrity_check
+
+
+### ./scripts/sovereign_audit_orchestrator.py
+  - import os
+  - import sys
+  - import json
+  - import subprocess
+  - from pathlib import Path
+  - from typing import Dict, List, Any, Optional, Tuple
+  - from datetime import datetime, timezone
+  - from dataclasses import dataclass, field, asdict
+  - import re
+  - import argparse
+
+
+### ./scripts/demonstrate_metadata_validation.py
+  - import os
+  - import sys
+  - import time
+  - from datetime import datetime, timezone
+  - from bridge_backend.bridge_core.token_forge_dominion import (
+  - import traceback
 
 
 ### ./scripts/seed_bootstrap.py
@@ -15730,6 +17412,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import os
   - import logging
   - from pathlib import Path
+  - from bridge_backend.bridge_core.token_forge_dominion.secret_forge import retrieve_environment
   - from bridge_backend.utils.db import engine
   - from bridge_backend.models import Base as ModelsBase
   - from bridge_backend.bridge_core.token_forge_dominion import generate_root_key
@@ -15846,6 +17529,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import hashlib
   - import hmac
   - import base64
+  - from bridge_backend.bridge_core.token_forge_dominion.secret_forge import retrieve_environment
   - import socket
 
 
@@ -16140,8 +17824,22 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from .chronicleloom import ChronicleLoom
   - from .calculuscore import CalculusCore
   - from .qhelmsingularity import QHelmSingularity
+  - from .leviathan import LeviathanEngine
+  - from .blueprint.blueprint_engine import BlueprintEngine
+  - from .cascade.service import CascadeEngine
   - from .autonomy import AutonomyEngine
   - from .parser import ParserEngine
+  - from .hxo import HXONexus
+  - from .chimera.engine import ChimeraDeploymentEngine
+  - from .envsync import EnvSyncEngine
+  - from .filing import FilingEngine
+  - from .screen.service import ScreenEngine
+  - from .speech.tts import TTSEngine
+  - from .speech.stt import STTEngine
+  - from .recovery import RecoveryOrchestrator
+  - from .creativity import CreativityBay
+  - from .indoctrination.service import IndoctrinationEngine
+  - from .umbra import UmbraLattice
 
 
 ### ./bridge_backend/bridge_core/engines/calculuscore.py
@@ -16738,7 +18436,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 
 ### ./bridge_backend/bridge_core/engines/umbra/models.py
   - from pydantic import BaseModel, Field
-  - from typing import Dict, List, Literal, Optional
+  - from typing import Dict, List, Literal, Optional, Any, Union
   - from datetime import datetime, timezone
 
 
@@ -16824,7 +18522,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from typing import Dict, List
   - from .config import CONFIG
   - from .types import SyncResult, Mode
-  - from .providers.render import RenderProvider
+  - # from .providers.render import RenderProvider
   - from .providers.netlify import NetlifyProvider
   - from .providers.base import ProviderBase
   - from .diffs import compute_diff
@@ -16862,13 +18560,6 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 
 
 ### ./bridge_backend/bridge_core/engines/envsync/discovery/__init__.py
-
-
-### ./bridge_backend/bridge_core/engines/envsync/providers/render.py
-  - import os, httpx
-  - from typing import Dict, List
-  - from .base import ProviderBase
-  - from ..discovery.chain import discover_token
 
 
 ### ./bridge_backend/bridge_core/engines/envsync/providers/__init__.py
@@ -17189,9 +18880,11 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 
 ### ./bridge_backend/bridge_core/engines/indoctrination/service.py
   - from pathlib import Path
-  - import json, uuid
+  - import json, uuid, logging
   - from datetime import datetime, timezone
   - from typing import Dict, Any, List
+  - """Load all agents from vault directory into registry on startup."""
+  - logger.info(f"Loaded {len(self.registry)} agents from vault")
 
 
 ### ./bridge_backend/bridge_core/engines/indoctrination/__init__.py
@@ -17213,6 +18906,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from pydantic import BaseModel
   - from nacl.signing import SigningKey, VerifyKey
   - import base64
+  - from datetime import datetime, timezone
 
 
 ### ./bridge_backend/bridge_core/payments/stripe_webhooks.py
@@ -17311,6 +19005,17 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from bridge_core.engines.cascade.service import CascadeEngine
   - from bridge_backend.bridge_core.engines.cascade.service import CascadeEngine
   - """Mock user authentication - returns user ID from query param"""
+
+
+### ./bridge_backend/bridge_core/auth/__init__.py
+  - from .routes import auth_bp, init_auth_routes
+
+
+### ./bridge_backend/bridge_core/auth/routes.py
+  - from flask import Blueprint, request, jsonify
+  - from ...src.keyless_auth import get_keyless_handler
+  - # Fallback if relative import fails (e.g., when running standalone)
+  - from bridge_backend.src.keyless_auth import get_keyless_handler
 
 
 ### ./bridge_backend/bridge_core/guards/netlify_guard.py
@@ -17557,6 +19262,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from typing import List, Annotated
   - import json
   - import uuid
+  - import os
   - from bridge_backend.bridge_core.db.db_manager import get_db_session
   - from bridge_backend.models import AgentJob, Mission
   - from bridge_backend.schemas import AgentJobOut
@@ -17564,6 +19270,8 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from ....models import AgentJob, Mission
   - from ....schemas import AgentJobOut
   - # Get captain from request or use provided captain
+  - import tempfile
+  - import shutil
 
 
 ### ./bridge_backend/bridge_core/permissions/store.py
@@ -17626,7 +19334,24 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import sys
   - from typing import Tuple
   - from .quantum_authority import generate_root_key
+  - from .secret_forge import retrieve_environment
   - print('  gh secret set FORGE_DOMINION_ROOT --body "$(python - <<\'PY\'\nimport base64, os; print(base64.urlsafe_b64encode(os.urandom(32)).decode().rstrip("="))\nPY\n)"')
+
+
+### ./bridge_backend/bridge_core/token_forge_dominion/secret_forge.py
+  - import os
+  - import hmac
+  - import hashlib
+  - import time
+  - import json
+  - import base64
+  - import logging
+  - from typing import Optional, Dict, Any, List
+  - from datetime import datetime, timedelta
+  - Secret value from environment or default
+  - # Retrieve from environment
+  - Extract metadata from a token.
+  - Extract metadata from a token.
 
 
 ### ./bridge_backend/bridge_core/token_forge_dominion/sovereign_integration.py
@@ -17635,6 +19360,8 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from typing import Dict, Optional, Any, Tuple
   - from datetime import datetime, timedelta
   - from pathlib import Path
+  - from .secret_forge import retrieve_environment
+  - # Fallback if secret_forge not yet available (circular import handling)
   - """Load sovereign policies from configuration."""
   - # Override from environment if specified
   - # Try to get resonance from bridge state
@@ -17686,6 +19413,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from cryptography.hazmat.primitives import hashes
   - from cryptography.hazmat.primitives.kdf.hkdf import HKDF
   - from cryptography.hazmat.backends import default_backend
+  - from .secret_forge import retrieve_environment
   - root_key: Base64-encoded root key. If None, generates from environment.
   - Get root key from parameter, environment, or generate new one.
 
@@ -17719,6 +19447,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from .quantum_scanner import QuantumScanner
   - from .enterprise_orchestrator import EnterpriseOrchestrator
   - from .validate_or_renew import TokenLifecycleManager, validate_or_renew
+  - from .secret_forge import (
 
 
 ### ./bridge_backend/bridge_core/vault/__init__.py
@@ -17927,7 +19656,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from .adapters.env_adapter import EnvSuite
   - from .adapters.github_forge_adapter import GitHubForge
   - from .adapters.netlify_guard_adapter import NetlifyGuard
-  - from .adapters.render_fallback_adapter import RenderFallback
+  - # from .adapters.render_fallback_adapter import RenderFallback
   - from ...genesis.bus import genesis_bus
   - from ...genesis.bus import genesis_bus
   - from ...genesis.bus import genesis_bus
@@ -17982,11 +19711,6 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 
 ### ./bridge_backend/engines/chimera/adapters/env_adapter.py
   - from typing import Dict, Any
-
-
-### ./bridge_backend/engines/chimera/adapters/render_fallback_adapter.py
-  - from typing import Dict, Any
-  - from ...render_fallback.core import RenderFallback as RenderFallbackCore
 
 
 ### ./bridge_backend/engines/chimera/adapters/arie_adapter.py
@@ -18448,13 +20172,8 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import logging
 
 
-### ./bridge_backend/engines/steward/adapters/render_adapter.py
-  - import os
-  - import logging
-
-
 ### ./bridge_backend/engines/steward/adapters/__init__.py
-  - from .render_adapter import RenderAdapter
+  - # from .render_adapter import RenderAdapter
   - from .netlify_adapter import NetlifyAdapter
   - from .github_adapter import GithubAdapter
 
@@ -18573,7 +20292,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 
 ### ./bridge_backend/scripts/deploy_diagnose.py
   - import os, requests, time
-  - print("🔍 Fetching logs from Render and Netlify...")
+  - print("🔍 Fetching logs from backend and Netlify...")
 
 
 ### ./bridge_backend/scripts/triage_preseed.py
@@ -19023,11 +20742,13 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import sys
   - import json
   - import time
+  - import re
   - from datetime import datetime, timezone
   - from typing import Dict, List, Any, Optional
   - from pathlib import Path
   - from bridge_backend.tools.firewall_intel.fetch_firewall_incidents import main as fetch_incidents
   - from bridge_backend.tools.firewall_intel.analyze_firewall_findings import main as analyze_findings
+  - from bridge_backend.tools.firewall_sovereignty.firewall_config_manager import FirewallConfigManager
   - """Gather firewall intelligence from external sources"""
   - print("  → Fetching incidents from external sources...")
   - import traceback
@@ -19132,6 +20853,65 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 ### ./bridge_backend/tools/autonomy/__init__.py
   - from .failure_analyzer import FailurePatternAnalyzer
   - from .pr_generator import PRGenerator
+
+
+### ./bridge_backend/tools/firewall_sovereignty/network_resilience.py
+  - import socket
+  - import time
+  - import requests
+  - from typing import Dict, List, Any, Optional, Tuple
+  - from datetime import datetime, timezone
+  - from pathlib import Path
+  - import json
+  - import time
+
+
+### ./bridge_backend/tools/firewall_sovereignty/sovereign_orchestrator.py
+  - import os
+  - import sys
+  - import json
+  - from typing import Dict, Any
+  - from datetime import datetime, timezone
+  - from pathlib import Path
+  - from bridge_backend.tools.firewall_sovereignty.firewall_config_manager import FirewallConfigManager
+  - from bridge_backend.tools.firewall_sovereignty.network_resilience import NetworkResilienceLayer
+  - from bridge_backend.tools.firewall_sovereignty.validation_sovereignty import ValidationSovereignty
+  - from bridge_backend.tools.firewall_sovereignty.script_execution import ScriptExecutionSovereignty
+
+
+### ./bridge_backend/tools/firewall_sovereignty/validation_sovereignty.py
+  - import os
+  - import re
+  - import yaml
+  - import json
+  - from typing import Dict, List, Any, Optional, Tuple
+  - from datetime import datetime, timezone
+  - from pathlib import Path
+  - validation_results: Results from validation
+
+
+### ./bridge_backend/tools/firewall_sovereignty/script_execution.py
+  - import os
+  - import sys
+  - import subprocess
+  - import json
+  - from typing import Dict, List, Any, Optional
+  - from datetime import datetime, timezone
+  - from pathlib import Path
+  - import importlib.util
+
+
+### ./bridge_backend/tools/firewall_sovereignty/firewall_config_manager.py
+  - import os
+  - import json
+  - import yaml
+  - from datetime import datetime, timezone
+  - from typing import Dict, List, Any, Optional
+  - from pathlib import Path
+  - """Remove a domain from the allowlist"""
+
+
+### ./bridge_backend/tools/firewall_sovereignty/__init__.py
 
 
 ### ./bridge_backend/runtime/retry.py
@@ -19442,6 +21222,18 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 ### ./bridge_backend/runtime/tde_x/stages/__init__.py
 
 
+### ./bridge_backend/routes/sovereign_engines.py
+  - from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+  - from typing import Optional
+  - import logging
+  - from bridge_backend.bridge_engines.sovereign_guard import SovereignComplianceGuard, ComplianceResult
+  - from bridge_backend.bridge_engines.micro_scribe import SovereignMicroScribe, DiffAnalysis, PRTemplate
+  - from bridge_backend.bridge_engines.micro_logician import SovereignMicroLogician, LogAnalysis
+  - Generate PR template from diff analysis
+  - Get security intelligence from logs
+  - Get performance metrics from logs
+
+
 ### ./bridge_backend/routes/health.py
   - from fastapi import APIRouter
   - import os
@@ -19520,6 +21312,12 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from bridge_backend.engines.autonomy.governor import AutonomyGovernor
   - from bridge_backend.engines.autonomy.models import Incident, Decision
   - """Test that old actions are removed from rate limit window"""
+
+
+### ./bridge_backend/tests/test_micro_logician.py
+  - import pytest
+  - from bridge_backend.bridge_engines.micro_logician import (
+  - """Test pattern extraction from logs"""
 
 
 ### ./bridge_backend/tests/test_agents_registry.py
@@ -19794,6 +21592,11 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from bridge_backend.bridge_core.db import db_manager
 
 
+### ./bridge_backend/tests/test_micro_scribe.py
+  - import pytest
+  - from bridge_backend.bridge_engines.micro_scribe import (
+
+
 ### ./bridge_backend/tests/test_hxo_v196p.py
   - import unittest
   - from unittest.mock import AsyncMock, MagicMock, patch
@@ -19906,6 +21709,12 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import shutil
 
 
+### ./bridge_backend/tests/test_sovereign_guard.py
+  - import pytest
+  - from datetime import datetime, UTC
+  - from bridge_backend.bridge_engines.sovereign_guard import (
+
+
 ### ./bridge_backend/tests/test_fault_injection.py
   - import pytest
   - from bridge_core.heritage.mas.fault_injector import FaultInjector
@@ -19941,12 +21750,6 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from datetime import datetime
   - from bridge_backend.src.keys import SovereignKeys
   - from bridge_backend.src.signer import AtomicSigner, BatchSigner, create_signer
-
-
-### ./bridge_backend/tests/test_render_fallback.py
-  - import pytest
-  - import asyncio
-  - from bridge_backend.engines.render_fallback.core import RenderFallback
 
 
 ### ./bridge_backend/tests/test_autonomy_routes.py
@@ -20125,6 +21928,20 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from bridge_backend.main import app
   - from pathlib import Path
   - import json, hashlib
+
+
+### ./bridge_backend/tests/test_firewall_sovereignty.py
+  - import os
+  - import sys
+  - import pytest
+  - import json
+  - import yaml
+  - from pathlib import Path
+  - from bridge_backend.tools.firewall_sovereignty.firewall_config_manager import FirewallConfigManager
+  - from bridge_backend.tools.firewall_sovereignty.network_resilience import NetworkResilienceLayer
+  - from bridge_backend.tools.firewall_sovereignty.validation_sovereignty import ValidationSovereignty
+  - from bridge_backend.tools.firewall_sovereignty.script_execution import ScriptExecutionSovereignty
+  - """Test removing domain from allowlist"""
 
 
 ### ./bridge_backend/tests/test_pr_summary.py
@@ -20523,20 +22340,6 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from main import app
 
 
-### ./bridge_backend/webhooks/render.py
-  - from fastapi import APIRouter, Request, HTTPException, Header
-  - from typing import Optional
-  - import logging
-  - import os
-  - import hmac
-  - import hashlib
-  - signature: Signature from header
-  - Processes deploy and build signals from Render and emits to Umbra Triage Mesh
-  - import json
-  - from bridge_backend.genesis.bus import genesis_bus
-  - from bridge_backend.engines.umbra.core import UmbraTriageCore
-
-
 ### ./bridge_backend/webhooks/deployment_webhooks.py
   - from fastapi import APIRouter, Request, HTTPException, Header
   - from typing import Optional, Dict, Any
@@ -20576,6 +22379,61 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from bridge_backend.engines.umbra.core import UmbraTriageCore
 
 
+### ./bridge_backend/bridge_engines/sovereign_guard.py
+  - import hmac
+  - import hashlib
+  - import logging
+  - import os
+  - from datetime import datetime, UTC
+  - from typing import Dict, Any, Optional, List
+  - from pydantic import BaseModel
+  - # Try to get resonance from Genesis bus or bridge core
+  - import json
+  - from pathlib import Path
+  - import os
+
+
+### ./bridge_backend/bridge_engines/micro_logician.py
+  - import logging
+  - import os
+  - import re
+  - from datetime import datetime, UTC
+  - from typing import Dict, Any, List, Optional, Set
+  - from pydantic import BaseModel
+  - from collections import defaultdict, Counter
+  - from enum import Enum
+  - from .sovereign_guard import SovereignComplianceGuard
+  - ThreatLevel.CRITICAL: "⚠️ IMMEDIATE ACTION REQUIRED: Remove sensitive data from logs, rotate credentials",
+  - """Analyze performance metrics from logs"""
+  - """Detect peak activity period from timestamps"""
+  - """Extract common patterns from logs"""
+  - # Base confidence from resonance
+
+
+### ./bridge_backend/bridge_engines/EXAMPLE.py
+  - import sys
+  - from pathlib import Path
+  - from bridge_backend.bridge_engines.sovereign_guard import SovereignComplianceGuard
+  - from bridge_backend.bridge_engines.micro_scribe import SovereignMicroScribe
+  - from bridge_backend.bridge_engines.micro_logician import SovereignMicroLogician
+  - import traceback
+
+
+### ./bridge_backend/bridge_engines/micro_scribe.py
+  - import logging
+  - import os
+  - import re
+  - from datetime import datetime, UTC
+  - from typing import Dict, Any, List, Optional, Tuple
+  - from pydantic import BaseModel
+  - from enum import Enum
+  - from .sovereign_guard import SovereignComplianceGuard
+  - diff_analysis: Analysis result from analyze_diff
+
+
+### ./bridge_backend/bridge_engines/__init__.py
+
+
 ### ./bridge_backend/src/keys.py
   - import os
   - import base64
@@ -20588,6 +22446,17 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - """Load signing key from disk"""
   - """Load verify key from disk"""
   - import sys
+
+
+### ./bridge_backend/src/keyless_auth.py
+  - import os
+  - import secrets
+  - import hashlib
+  - from datetime import datetime, timezone, timedelta
+  - from typing import Optional, Dict, Any
+  - from nacl.signing import SigningKey, VerifyKey
+  - from nacl.encoding import Base64Encoder
+  - """Remove expired sessions from memory"""
 
 
 ### ./bridge_backend/src/brain.py
@@ -20652,11 +22521,62 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import sys
 
 
+### ./.archive/render_legacy/render_webhook.py
+  - from fastapi import APIRouter, Request, HTTPException, Header
+  - from typing import Optional
+  - import logging
+  - import os
+  - import hmac
+  - import hashlib
+  - signature: Signature from header
+  - Processes deploy and build signals from Render and emits to Umbra Triage Mesh
+  - import json
+  - from bridge_backend.genesis.bus import genesis_bus
+  - from bridge_backend.engines.umbra.core import UmbraTriageCore
+
+
+### ./.archive/render_legacy/render_envsync_provider.py
+  - import os, httpx
+  - from typing import Dict, List
+  - from .base import ProviderBase
+  - from ..discovery.chain import discover_token
+
+
+### ./.archive/render_legacy/test_render_fallback.py
+  - import pytest
+  - import asyncio
+  - from bridge_backend.engines.render_fallback.core import RenderFallback
+
+
+### ./.archive/render_legacy/render_fallback_adapter.py
+  - from typing import Dict, Any
+  - from ...render_fallback.core import RenderFallback as RenderFallbackCore
+
+
+### ./.archive/render_legacy/render_adapter.py
+  - import os
+  - import logging
+
+
 ### ./tests/test_captain_agent_separation.py
   - import pytest
   - import json
   - from pathlib import Path
   - from bridge_backend.bridge_core.middleware.permissions import ROLE_MATRIX
+
+
+### ./tests/test_secret_forge.py
+  - import os
+  - import time
+  - import pytest
+  - from bridge_backend.bridge_core.token_forge_dominion import (
+  - from bridge_backend.bridge_core.token_forge_dominion import retrieve_forge_dominion_root
+  - from bridge_backend.bridge_core.token_forge_dominion import retrieve_forge_dominion_root
+  - from bridge_backend.bridge_core.token_forge_dominion.bootstrap import bootstrap_dominion_root
+  - from bridge_backend.bridge_core.token_forge_dominion import QuantumAuthority, generate_root_key
+  - """Test extracting metadata from token."""
+  - """Test extracting metadata from token without metadata."""
+  - from datetime import datetime, timezone
 
 
 ### ./tests/integration_test_genesis_linkage.py
@@ -20682,6 +22602,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from bridge_backend.bridge_core.token_forge_dominion import (
   - from bridge_backend.bridge_core.token_forge_dominion.bootstrap import (
   - from bridge_backend.bridge_core.token_forge_dominion.scan_envs import (
+  - from bridge_backend.bridge_core.token_forge_dominion import generate_ephemeral_token
   - import time
 
 
@@ -20744,6 +22665,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import pytest
   - from pathlib import Path
   - from bridge_backend.bridge_core.token_forge_dominion import (
+  - from bridge_backend.bridge_core.token_forge_dominion import generate_ephemeral_token
   - import os
   - (tmp_path / "app.py").write_text("import os\napi_key = os.getenv('API_KEY')")
 
@@ -20865,6 +22787,14 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from bridge_backend.runtime.tde_x.orchestrator_v2 import tde_orchestrator
   - from bridge_backend.runtime.tde_x.orchestrator_v2 import tde_orchestrator
   - import time
+
+
+### ./tests/test_keyless_security.py
+  - from bridge_backend.src.keyless_auth import KeylessAuthHandler, establish_session, verify_capability
+  - # Try alternative import paths
+  - import sys
+  - import os
+  - from bridge_backend.src.keyless_auth import KeylessAuthHandler, establish_session, verify_capability
 
 
 ### ./tests/test_forge_cascade_synchrony.py
@@ -21088,6 +23018,21 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import traceback
 
 
+### ./tests/test_sovereign_audit.py
+  - import os
+  - import sys
+  - import json
+  - import pytest
+  - import tempfile
+  - import shutil
+  - import subprocess
+  - from pathlib import Path
+  - from unittest.mock import Mock, patch, MagicMock
+  - from sovereign_audit_orchestrator import (
+  - from dataclasses import asdict
+  - from dataclasses import asdict
+
+
 ### ./tests/test_v200_genesis.py
   - import pytest
   - import asyncio
@@ -21150,10 +23095,32 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from bridge_backend.genesis.registration import register_embedded_nodes
 
 
+### ./tests/test_bridge_harmony.py
+  - import pytest
+  - from pathlib import Path
+  - import sys
+  - from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
+  - from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
+  - from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
+  - from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
+  - from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
+  - from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
+  - from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
+  - from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
+  - from bridge_core.lattice.bridge_harmony import EngineNode
+  - from bridge_core.lattice.bridge_harmony import CommunicationPath
+
+
 ### ./tests/test_git_sovereign_agent.py
   - import pytest
   - from datetime import datetime
   - from bridge_backend.bridge_core.agents.git_sovereign import (
+
+
+### ./tests/conftest.py
+  - import sys
+  - from pathlib import Path
+  - # This comes after repo_root to ensure bridge_core is found from repo root first
 
 
 ### ./tests/test_v196h_features.py
@@ -21244,6 +23211,83 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - """Validate and deduplicate facts from metadata."""
 
 
+### ./vault/archived_scripts/get_env_drift.py
+  - Quick script to get environment drift report from Steward
+  - import asyncio
+  - import json
+  - import sys
+  - import os
+  - from pathlib import Path
+  - from bridge_backend.engines.steward.core import steward
+
+
+### ./vault/archived_scripts/verify_hxo_nexus.py
+  - import sys
+  - import os
+  - import asyncio
+  - from pathlib import Path
+  - from bridge_backend.bridge_core.engines.hxo import (
+  - # Verify specific connections from spec
+  - from bridge_backend.bridge_core.engines.hxo.routes import router
+  - import traceback
+
+
+### ./vault/archived_scripts/validate_genesis_unified.py
+  - import sys
+  - import importlib.util
+  - """Load a module from a file path"""
+  - import py_compile
+  - import os
+
+
+### ./vault/archived_scripts/count_loc.py
+  - import os
+  - import sys
+  - from pathlib import Path
+  - from collections import defaultdict
+  - from datetime import datetime
+
+
+### ./vault/archived_scripts/smoke_test_engines.py
+  - import sys
+  - from pathlib import Path
+  - from bridge_core.engines.parser.service import ParserEngine
+  - from bridge_core.engines.blueprint.blueprint_engine import BlueprintEngine
+  - from bridge_core.engines.truth.binder import bind_candidates
+  - from bridge_core.engines.truth.utils import TRUTH_DIR
+  - import traceback
+
+
+### ./vault/archived_scripts/study_repo_with_engines.py
+  - import sys
+  - import os
+  - from pathlib import Path
+  - from typing import Dict, Any, List
+  - import json
+  - from datetime import datetime, timezone
+  - # Add the backend to the path to import engines
+  - from bridge_core.engines.parser.service import ParserEngine
+  - from bridge_core.engines.blueprint.blueprint_engine import BlueprintEngine
+  - from bridge_core.engines.truth.binder import bind_candidates, list_truths
+  - from bridge_core.engines.truth.finder import find_candidates
+  - from bridge_core.engines.truth.utils import TRUTH_DIR
+  - print("📋 Creating analysis blueprint from brief:")
+  - Generate a comprehensive report combining insights from all three engines
+  - "Blueprint Engine generated structured analysis plans from natural language briefs",
+  - import traceback
+
+
+### ./vault/archived_scripts/test_endpoints_full.py
+  - import sys
+  - import requests
+  - import json
+  - import time
+  - from datetime import datetime, timezone
+  - from typing import Dict, List, Tuple, Optional
+  - # Engine Endpoints (from smoke_test_engines.sh)
+  - import argparse
+
+
 ### ./bridge-frontend/vite.config.js
   - import { defineConfig } from 'vite'
   - import react from '@vitejs/plugin-react'
@@ -21259,11 +23303,33 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import json, os, re, subprocess, sys, pathlib, shutil
 
 
+### ./bridge-frontend/netlify/functions/api-armada-status.js
+
+
+### ./bridge-frontend/netlify/functions/api-agents.js
+
+
+### ./bridge-frontend/netlify/functions/api-activity.js
+
+
+### ./bridge-frontend/netlify/functions/api-vault-logs.js
+
+
+### ./bridge-frontend/netlify/functions/api-status.js
+
+
+### ./bridge-frontend/netlify/functions/api-missions.js
+
+
 ### ./bridge-frontend/netlify/functions/diagnostic.js
+
+
+### ./bridge-frontend/netlify/functions/api-system-health.js
 
 
 ### ./bridge-frontend/src/api.js
   - import config from './config';
+  - import { APIGuardian, CircuitBreaker } from './services/healing-net';
   - * Centralized function for fetching data from backend endpoints
 
 
@@ -21718,6 +23784,44 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
 ### ./bridge-frontend/src/utils/endpointBootstrap.js
 
 
+### ./bridge-frontend/src/services/brh-api.js
+  - import config from '../config';
+  - // Fallback: use name, or generate ID from index if neither id nor name exists
+
+
+### ./bridge-frontend/src/services/websocket-service.js
+  - import config from '../config';
+
+
+### ./bridge-frontend/src/services/healing-net.js
+
+
+### ./bridge-frontend/src/services/deployment-validator.js
+  - import config from '../config';
+  - import { APIGuardian } from './healing-net';
+  - // Dynamic import to avoid circular dependency
+  - // Dynamic import to avoid circular dependency
+
+
+### ./bridge-frontend/src/services/silent-failure-capture.js
+  - import { DeploymentValidator } from './deployment-validator';
+  - import { TriageEngine } from './healing-net';
+  - * Helps components recover from crashes
+
+
+### ./bridge-frontend/src/services/true-data-revealer.js
+  - import { DeploymentValidator } from './deployment-validator';
+  - import { BRHService } from './brh-api';
+  - import { UmbraLattice } from './healing-net';
+  - import config from '../config';
+
+
+### ./bridge-frontend/src/hooks/useBRHConnection.js
+  - import { useState, useEffect, useCallback, useRef } from 'react';
+  - import BRHService from '../services/brh-api';
+  - * Manages real-time data updates from BRH backend
+
+
 ### ./bridge-frontend/src/hooks/useBridgeStream.js
   - import { useEffect, useRef, useState } from "react";
 
@@ -21730,6 +23834,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import json
   - import threading
   - import requests
+  - from bridge_backend.bridge_core.token_forge_dominion.secret_forge import retrieve_environment
 
 
 ### ./brh/role.py
@@ -21747,6 +23852,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import threading
   - import requests
   - from brh import role, handover
+  - from bridge_backend.bridge_core.token_forge_dominion.secret_forge import retrieve_environment
   - Register heartbeat from peer node.
   - from brh.api import log_event
   - log_event(f"HEARTBEAT: received from {node} at epoch {pulse['epoch']}")
@@ -21771,6 +23877,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import time
   - import urllib.parse as up
   - from dataclasses import dataclass
+  - from bridge_backend.bridge_core.token_forge_dominion.secret_forge import retrieve_environment
 
 
 ### ./brh/test_consensus_role.py
@@ -21829,6 +23936,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - from fastapi import FastAPI, Request, HTTPException
   - from fastapi.middleware.cors import CORSMiddleware
   - from brh import role
+  - from bridge_backend.bridge_core.token_forge_dominion.secret_forge import retrieve_environment
   - import docker
   - from brh import consensus
   - Get recent events from the event log.
@@ -21878,6 +23986,7 @@ _Generated automatically on 2025-11-05T04:40:02.638340+00:00 UTC_
   - import sys
   - import time
   - from brh.forge_auth import parse_forge_root, verify_seal, mint_ephemeral_token
+  - from bridge_backend.bridge_core.token_forge_dominion.secret_forge import retrieve_environment
 
 
 ### ./phoenix/backend/main.py
