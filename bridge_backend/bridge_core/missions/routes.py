@@ -90,6 +90,38 @@ def create_mission(m: MissionIn, request: Request):
     return {"status": "created", "mission": entry}
 
 
+@router.patch("/{mission_id}")
+def update_mission(mission_id: str, updates: dict):
+    """Update mission status, progress, or other fields."""
+    missions = _read_missions()
+    updated = False
+    
+    for i, mission in enumerate(missions):
+        if mission.get("id") == mission_id:
+            # Update allowed fields
+            if "status" in updates:
+                mission["status"] = updates["status"]
+            if "progress" in updates:
+                mission["progress"] = min(100, max(0, int(updates["progress"])))
+            if "description" in updates:
+                mission["description"] = updates["description"]
+            
+            mission["updated_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds") + "Z"
+            missions[i] = mission
+            updated = True
+            break
+    
+    if not updated:
+        raise HTTPException(status_code=404, detail="Mission not found")
+    
+    # Rewrite entire file
+    MISSIONS_FILE.write_text("")
+    for mission in missions:
+        _write_mission(mission)
+    
+    return {"status": "updated", "mission": missions[i]}
+
+
 if DB_AVAILABLE:
     @router.get("/{mission_id}/jobs", response_model=List[AgentJobOut])
     async def get_mission_jobs(

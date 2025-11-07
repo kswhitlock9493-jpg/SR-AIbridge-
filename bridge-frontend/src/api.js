@@ -160,8 +160,12 @@ export async function assignAgentToMission(missionId, agentId) {
   return apiClient.post(`/missions/${missionId}/assign`, { agent_id: agentId });
 }
 
-export async function updateMissionStatus(missionId, status) {
-  return apiClient.patch(`/missions/${missionId}`, { status });
+export async function updateMissionStatus(missionId, status, extraData = {}) {
+  const updates = { ...extraData };
+  if (status !== null && status !== undefined) {
+    updates.status = status;
+  }
+  return apiClient.patch(`/missions/${missionId}`, updates);
 }
 
 // === Vault Logs / Doctrine ===
