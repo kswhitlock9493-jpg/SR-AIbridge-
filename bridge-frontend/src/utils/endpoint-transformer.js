@@ -17,8 +17,7 @@ const NETLIFY_ENDPOINT_MAP = {
   '/api/health/health': '/api-health',
   '/api/health/health/full': '/api-health-full',
   '/api/health/status': '/api-health-status',
-  '/api/system/metrics': '/api-system-metrics',
-  '/api/missions/missions': '/api-missions'
+  '/api/system/metrics': '/api-system-metrics'
 };
 
 /**
@@ -101,13 +100,7 @@ export function buildURL(endpoint, baseURL = null) {
     return transformed;
   }
   
-  // If using Netlify Functions, base is already the /.netlify/functions path
-  // Just append the transformed endpoint
-  if (isNetlifyFunctions()) {
-    return `${base}${transformed}`;
-  }
-  
-  // Otherwise, append endpoint to base
+  // Append transformed endpoint to base URL
   return `${base}${transformed}`;
 }
 
