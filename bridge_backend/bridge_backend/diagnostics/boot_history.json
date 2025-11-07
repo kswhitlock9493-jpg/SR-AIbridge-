@@ -1,23 +1,5 @@
 [
   {
-    "startup_latency": 30.01515293121338,
-    "port": 8000,
-    "port_resolution_time": 30.015077590942383,
-    "timestamp": "2025-11-07T18:49:01.985298+00:00"
-  },
-  {
-    "startup_latency": 29.990886688232422,
-    "port": 8000,
-    "port_resolution_time": 29.990717887878418,
-    "timestamp": "2025-11-07T18:49:58.877169+00:00"
-  },
-  {
-    "startup_latency": 30.002714157104492,
-    "port": 8000,
-    "port_resolution_time": 30.002639770507812,
-    "timestamp": "2025-11-07T18:51:33.278777+00:00"
-  },
-  {
     "startup_latency": 0.0706627368927002,
     "port": 8000,
     "port_resolution_time": 0.07059717178344727,
@@ -58,5 +40,23 @@
     "port": 8000,
     "port_resolution_time": 0.09001755714416504,
     "timestamp": "2025-11-07T22:58:28.203998+00:00"
+  },
+  {
+    "startup_latency": 30.08038902282715,
+    "port": 8000,
+    "port_resolution_time": 30.080327033996582,
+    "timestamp": "2025-11-07T22:59:45.990330+00:00"
+  },
+  {
+    "startup_latency": 31.109659433364868,
+    "port": 8000,
+    "port_resolution_time": 31.109536170959473,
+    "timestamp": "2025-11-07T23:00:26.004368+00:00"
+  },
+  {
+    "startup_latency": 30.06793189048767,
+    "port": 8000,
+    "port_resolution_time": 30.06787109375,
+    "timestamp": "2025-11-07T23:01:13.184875+00:00"
   }
 ]
