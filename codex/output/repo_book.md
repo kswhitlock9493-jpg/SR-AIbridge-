@@ -1,6 +1,6 @@
 # 📘 The Book of the Repo
 
-_Generated automatically on 2025-11-07T05:39:27.377112+00:00 UTC_
+_Generated automatically on 2025-11-07T11:52:47.216249+00:00 UTC_
 
 ---
 
@@ -26,7 +26,7 @@ _Generated automatically on 2025-11-07T05:39:27.377112+00:00 UTC_
   _source: ./bridge.runtime.yaml_
 - **provider** → `{'kind': 'docker', 'network': 'brh_net', 'autostart': True}`  
   _source: ./bridge.runtime.yaml_
-- **services** → `{'api': {'context': './bridge_backend', 'dockerfile': 'Dockerfile', 'image': 'ghcr.io/kswhitlock9493-jpg/sr-aibridge-backend:latest', 'replicas': 1, 'ports': ['8000:8000'], 'env': ['ENVIRONMENT=production', 'LOG_LEVEL=INFO'], 'health': {'http': 'http://localhost:8000/health/live', 'interval': '10s', 'timeout': '2s', 'retries': 12}, 'volumes': []}, 'ws': {'image': 'ghcr.io/kswhitlock9493-jpg/ws-sidecar:latest', 'replicas': 1, 'depends_on': ['api'], 'env': ['BACKEND_URL=http://api:8000'], 'health': {'tcp': 'localhost:9001', 'interval': '10s', 'timeout': '2s', 'retries': 12}}}`  
+- **services** → `{'api': {'context': './bridge_backend', 'dockerfile': 'Dockerfile', 'image': 'ghcr.io/kswhitlock9493-jpg/sr-aibridge-backend:latest', 'replicas': 1, 'ports': ['8000:8000'], 'env': ['ENVIRONMENT=production', 'LOG_LEVEL=INFO', 'ENGINES_ENABLE_TRUE=true', 'GENESIS_MODE=enabled', 'LINK_ENGINES=true', 'BLUEPRINTS_ENABLED=true'], 'health': {'http': 'http://localhost:8000/health/live', 'interval': '10s', 'timeout': '2s', 'retries': 12}, 'volumes': []}, 'ws': {'image': 'ghcr.io/kswhitlock9493-jpg/ws-sidecar:latest', 'replicas': 1, 'depends_on': ['api'], 'env': ['BACKEND_URL=http://api:8000'], 'health': {'tcp': 'localhost:9001', 'interval': '10s', 'timeout': '2s', 'retries': 12}}}`  
   _source: ./bridge.runtime.yaml_
 - **version** → `1.0.0`  
   _source: ./network_policies/egress_policies.yaml_
@@ -411,6 +411,43 @@ _Generated automatically on 2025-11-07T05:39:27.377112+00:00 UTC_
 - ## 7. Conclusion
 
 
+### ./PRODUCTION_MODE_ACTIVATION.md
+
+- # Production Mode Activation Summary
+- ## Problem Statement
+- ## Root Cause Analysis
+- ## Changes Implemented
+- ### 1. Backend Code Changes
+- #### `bridge_backend/main.py` (line 279-293)
+- #### `bridge_backend/bridge_core/engines/parser/routes.py` (line 74-82)
+- #### `bridge_backend/bridge_core/engines/cascade/routes.py` (line 13-21)
+- ### 2. Configuration Updates
+- #### `.env.production`
+- #### `bridge.runtime.yaml` (line 80-86)
+- ## Verification
+- ### Backend Endpoints Verified ✅
+- ### Deployment Validation Logic
+- ## Impact
+- ### Before Changes
+- ### After Changes
+- ## Deployment Instructions
+- ### For New Deployments
+- ### For Existing Deployments
+- ## Testing
+- ### Local Testing
+- # Start backend
+- # In another terminal, test endpoints
+- ### Frontend Testing
+- ## Files Changed
+- ## Related Documentation
+- ## Troubleshooting
+- ### Issue: Backend shows "Blueprint engine not available"
+- ### Issue: Parser or Cascade return 404
+- ### Issue: Frontend still shows placeholder mode
+- ## Security Notes
+- ## Next Steps
+
+
 ### ./DEPLOYMENT_IMPLEMENTATION_SUMMARY.md
 
 - # Deployment Validation & True Reveal Protocol - Implementation Summary
@@ -632,6 +669,132 @@ _Generated automatically on 2025-11-07T05:39:27.377112+00:00 UTC_
 - ### Future Enhancements:
 - ## Audit Checklist
 - ## Conclusion
+
+
+### ./DEEP_DIVE_COMPREHENSIVE_ANALYSIS.md
+
+- # SR-AIbridge Comprehensive Deep Dive Analysis
+- ## Executive Summary
+- ### Key Discoveries
+- ## 📊 Repository Statistics
+- ### File Distribution
+- ### Directory Structure
+- ## 🧠 The 21 Engines - Complete Catalog
+- ### Category 1: Core Infrastructure Engines (6)
+- #### 1. **Blueprint Engine** 
+- #### 2. **Cascade Engine**
+- #### 3. **TDE-X (Tri-Domain Execution)**
+- #### 4. **Autonomy Engine** 
+- #### 5. **Genesis Framework**
+- #### 6. **Umbra Lattice**
+- ### Category 2: Super Engines (6 Specialized AI)
+- #### 7. **CalculusCore** (Mathematics Engine)
+- #### 8. **QuantumForge** (Quantum Computing Engine)
+- #### 9. **ScienceEngine**
+- #### 10. **ChronicleLoom** (History Engine)
+- #### 11. **LinguaCore** (Language Engine)
+- #### 12. **CommerceForge** (Business Engine)
+- ### Category 3: Utility Engines (7)
+- #### 13. **Truth Engine**
+- #### 14. **Parser Engine**
+- #### 15. **Recovery Engine**
+- #### 16. **Indoctrination Engine**
+- #### 17. **Creativity Engine**
+- #### 18. **Screen Engine**
+- #### 19. **Speech Engine**
+- ### Category 4: Orchestration (1)
+- #### 20. **HXO Nexus (HypShard-X Orchestrator)**
+- ### Category 5: Sovereign Authority (1)
+- #### 21. **Git Sovereign Agent v1.0.0 "Cosmic"**
+- ## 🏗️ Architecture Deep Dive
+- ### Backend Architecture (FastAPI)
+- # Boot Sequence (Sanctum Cascade Protocol v1.9.7q)
+- ### Frontend Architecture (React 18 + Vite)
+- ## 🔒 Security Architecture
+- ### Keyless Ephemeral Sessions
+- ### Zero-Trust Validation
+- ### Security Guards
+- ## 🔄 Genesis Event Bus - Communication Backbone
+- ### Event Topics (33 total)
+- ### Event Bus Features
+- ## 🛡️ Self-Healing Architecture
+- ### Autonomy Engine Capabilities
+- ### Umbra Auto-Heal
+- ### Chimera Engine
+- ## 🌐 Deployment Architecture
+- ### Multi-Platform Support
+- ### Environment Detection
+- ### Deployment Workflows
+- ## 📊 Testing Infrastructure
+- ### Test Statistics
+- ### Test Categories
+- ### Test Frameworks
+- ## 🔧 Specialized Systems
+- ### 1. Forge Dominion v1.9.7s "Sovereign"
+- ### 2. Heritage System
+- ### 3. Permissions System (RBAC)
+- ### 4. Federation Architecture
+- ### 5. Anchorhold Protocol v1.9.4+
+- ### 6. Bridge Parity Engine
+- ## 📖 Documentation System
+- ### Documentation Statistics
+- ### Key Documentation
+- ### Documentation Coverage
+- ## 🚀 Advanced Features
+- ### 1. HypShard v3 (Infinite Scaling)
+- ### 2. Quantum-Inspired Algorithms
+- ### 3. Cognitive Stack (Umbra Lattice)
+- ### 4. Real-Time Monitoring
+- ### 5. Agent Coordination
+- ## 🔬 Technical Stack
+- ### Backend
+- ### Frontend
+- ### DevOps
+- ## 🎯 Current System Status
+- ### From DEEP_DIVE_AUDIT_REPORT.md
+- ## 🔍 Deep Dive Findings
+- ### Discovery 1: True Scale
+- ### Discovery 2: Sophisticated Architecture
+- ### Discovery 3: Quantum-Inspired Design
+- ### Discovery 4: Complete Sovereignty
+- ### Discovery 5: Comprehensive Testing
+- ### Discovery 6: Documentation Excellence
+- ## 🎨 Unique Innovations
+- ### 1. "1+1=∞" Paradigm (HXO Nexus)
+- ### 2. Self-Authoring System
+- ### 3. Reflex Protocol
+- ### 4. Ephemeral Everything
+- ### 5. Cosmic Authority
+- ## 📈 Metrics & Performance
+- ### Code Quality
+- ### API Surface
+- ### Build Performance
+- ### System Health
+- ## 🛣️ Roadmap & Future
+- ### Documented Plans
+- ### Current Version
+- ## 🎓 Learning Paths
+- ### For Developers
+- ### For Users
+- ### For DevOps
+- ## 🏆 Achievements
+- ### Technical Excellence
+- ### Innovation
+- ### Production Ready
+- ## 📝 Conclusion
+- ### What Makes It Special
+- ### The Vision
+- ### Ready For
+- ## 🙏 Acknowledgments
+
+
+### ./SYSTEM_ARCHITECTURE_MAP.md
+
+- # SR-AIbridge System Architecture Map
+- ## Navigation Guide
+- ### Find Components by Function
+- ### Key Entry Points
+- ### Documentation Paths
 
 
 ### ./HEALING_NET_IMPLEMENTATION.md
@@ -1496,6 +1659,47 @@ _Generated automatically on 2025-11-07T05:39:27.377112+00:00 UTC_
 - ## Support
 
 
+### ./DEEP_DIVE_SUMMARY.md
+
+- # SR-AIbridge Deep Dive Summary
+- ## What We Discovered
+- ## The Numbers
+- ## The 21 Engines (Complete Catalog)
+- ### Core Infrastructure (6)
+- ### Super Engines (6) - Specialized AI
+- ### Utility Engines (7)
+- ### Orchestration (1)
+- ### Sovereign Authority (1)
+- ## Architecture Highlights
+- ### Backend (Python 3.12+ / FastAPI)
+- ### Frontend (React 18 / Vite 5.2)
+- ### Communication
+- ## Security Model
+- ## Unique Innovations
+- ## Production Readiness
+- ### Current Status: ✅ OPERATIONAL
+- ## Documentation Created
+- ### 1. DEEP_DIVE_COMPREHENSIVE_ANALYSIS.md (28,639 chars)
+- ### 2. SYSTEM_ARCHITECTURE_MAP.md (25,929 chars)
+- ### 3. DEEP_DIVE_QUICK_REF.md (10,303 chars)
+- ## Key Findings
+- ### 1. Scale Discovery
+- ### 2. Production-Grade Architecture
+- ### 3. Quantum-Inspired Design
+- ### 4. True Sovereignty
+- ### 5. Exceptional Quality
+- ## Technical Stack Summary
+- ## What Makes It Special
+- ## Next Steps for Users
+- ### Explore the System
+- ### Run Locally
+- # Backend
+- # Frontend
+- ### Deploy
+- ## Conclusion
+- ## Thank You
+
+
 ### ./SYSTEM_AUDIT_REPORT.md
 
 - # SR-AIbridge System Audit Report
@@ -1516,6 +1720,113 @@ _Generated automatically on 2025-11-07T05:39:27.377112+00:00 UTC_
 - ### Immediate (Optional)
 - ### Long-term  
 - ## Conclusion
+
+
+### ./DEEP_DIVE_QUICK_REF.md
+
+- # SR-AIbridge Deep Dive Quick Reference
+- ## 🎯 Start Here
+- ## 📚 Essential Reading (Priority Order)
+- ### 1. First 5 Minutes
+- ### 2. Next 15 Minutes
+- ### 3. Next 30 Minutes
+- ### 4. Deep Exploration (1-2 hours)
+- ## 🧠 The 21 Engines - Quick Lookup
+- ### Want to plan missions?
+- ### Need self-healing?
+- ### Communication between systems?
+- ### Intelligent predictions?
+- ### Infinite scaling?
+- ### Math computations?
+- ### Language processing?
+- ### Validation/fact-checking?
+- ### Code analysis?
+- ### Agent training?
+- ## 🔍 Find Things Fast
+- ### Looking for API endpoints?
+- # Count all endpoints
+- # Result: 298+
+- # See specific engine routes
+- ### Want to see tests?
+- # Run all tests
+- # Run specific test
+- # Count tests
+- # Result: 558 tests
+- ### Need documentation?
+- # List all markdown files
+- # Result: 395 files, 134,711 lines
+- # Master index
+- # Feature inventory
+- ### Check system status?
+- # Import test
+- # Or run server
+- # Server starts on http://localhost:8000
+- ## 🏗️ Architecture Quick Map
+- ## 🚀 Run the System
+- ### Backend
+- # Install dependencies
+- # Run server
+- # or
+- # Access at: http://localhost:8000
+- # API docs: http://localhost:8000/docs
+- ### Frontend
+- # Install dependencies
+- # Run dev server
+- # Access at: http://localhost:5173
+- ### Tests
+- # Backend tests
+- # Frontend tests
+- # Specific test file
+- ## 🔒 Security Quick Check
+- ### Keyless Security
+- ### Forge Dominion
+- ### Zero-Trust
+- ## 📊 Key Metrics Dashboard
+- ## 🎓 Common Tasks
+- ### Add a New Engine
+- ### Add an API Endpoint
+- ### Debug a Failure
+- ### Add Documentation
+- ## 🔗 Important Links
+- ### API Documentation
+- ### GitHub
+- ### Deployment
+- ## 🆘 Troubleshooting
+- ### Backend won't start?
+- # Check imports
+- # Check dependencies
+- # Check environment
+- ### Frontend won't build?
+- # Clear cache
+- # Check Node version (needs 20-22)
+- # Run with verbose
+- ### Tests failing?
+- # Run one test at a time
+- # Check test environment
+- # See full output
+- ### Can't find something?
+- # Use master index
+- # Search all code
+- # Search all docs
+- ## 💡 Pro Tips
+- ## 🎯 Quick Wins
+- ### Want to see the system in action?
+- # 1. Start backend
+- # 2. In another terminal, start frontend
+- # 3. Open browser to http://localhost:5173
+- # 4. Explore Command Deck, Mission Logs, System Monitor
+- ### Want to understand an engine?
+- # 1. Read its catalog entry
+- # 2. Check its routes
+- # 3. Run its tests
+- # 4. See it in action
+- ### Want to add a feature?
+- ## 📖 Documentation Structure
+- ## 🚀 Next Steps
+- ### New to SR-AIbridge?
+- ### Want to contribute?
+- ### Want to deploy?
+- ## 🎉 You're Ready!
 
 
 ### ./HEALING_NET_SUMMARY.md
@@ -1684,6 +1995,61 @@ _Generated automatically on 2025-11-07T05:39:27.377112+00:00 UTC_
 - ### View Latest Report
 - ### Check Status
 - ## References
+
+
+### ./DEEP_DIVE_INDEX.md
+
+- # SR-AIbridge Deep Dive Documentation Index
+- ## 📖 Start Here
+- ### 1. Quick Overview (5-10 minutes)
+- ### 2. Quick Reference (10-15 minutes)
+- ### 3. Visual Architecture (15-20 minutes)
+- ### 4. Complete Analysis (30-60 minutes)
+- ### 5. Original Audit (10-15 minutes)
+- ## 📊 Document Overview
+- ### DEEP_DIVE_SUMMARY.md
+- ### DEEP_DIVE_QUICK_REF.md
+- ### SYSTEM_ARCHITECTURE_MAP.md
+- ### DEEP_DIVE_COMPREHENSIVE_ANALYSIS.md
+- ### DEEP_DIVE_AUDIT_REPORT.md
+- ## 🎯 Use Case Guide
+- ### I want to understand what SR-AIbridge is
+- ### I want to start developing
+- ### I want to understand the architecture
+- ### I want to deploy to production
+- ### I want to understand a specific engine
+- ### I want to troubleshoot an issue
+- ### I'm presenting to stakeholders
+- ## 🧠 The 21 Engines - Where to Learn More
+- ### Core Infrastructure Engines
+- ### Super Engines (Specialized AI)
+- ### Utility Engines
+- ### Orchestration
+- ### Sovereign Authority
+- ## 📈 Key Metrics Dashboard
+- ## 🚀 Quick Actions
+- ### Run the System
+- # Backend
+- # Frontend
+- ### Run Tests
+- ### Check System Health
+- # When running locally
+- ### View API Documentation
+- ## 🔍 Finding Specific Information
+- ### Want to know about...
+- ## 📚 Complete Reading Plan
+- ### Fast Track (1 hour total)
+- ### Comprehensive (3-4 hours)
+- ### Expert Level (1 week)
+- ## 🎓 Learning Paths by Role
+- ### Stakeholder / Manager
+- ### Developer (New)
+- ### Architect
+- ### DevOps / SRE
+- ### Security Engineer
+- ## ✅ Verification Checklist
+- ## 🎯 Summary
+- ## 🙏 Thank You
 
 
 ### ./scripts/README.md
@@ -15331,11 +15697,6 @@ _Generated automatically on 2025-11-07T05:39:27.377112+00:00 UTC_
 - ## Integration
 
 
-### ./.pytest_cache/README.md
-
-- # pytest cache directory #
-
-
 ### ./bridge_backend/dock_day_exports/test_export/README.md
 
 - # SR-AIbridge Dock-Day Drop: test_export
@@ -15959,6 +16320,7 @@ _Generated automatically on 2025-11-07T05:39:27.377112+00:00 UTC_
 - ### ./docs/versions/V197J_QUICK_REF.md
 - ### ./docs/badges/README.md
 - ### ./docs/badges/bridge_health.md
+- ### ./.pytest_cache/README.md
 - ### ./bridge_backend/dock_day_exports/test_export/README.md
 - ### ./bridge_backend/dock_day_exports/final_demo/README.md
 - ### ./bridge_backend/examples/README.md
@@ -18395,6 +18757,7 @@ _Generated automatically on 2025-11-07T05:39:27.377112+00:00 UTC_
 ### ./bridge_backend/bridge_core/engines/cascade/routes.py
   - from fastapi import APIRouter, Body
   - from .service import CascadeEngine
+  - from .service import VAULT_CASCADE
 
 
 ### ./bridge_backend/bridge_core/engines/truth/finder.py
@@ -18460,6 +18823,7 @@ _Generated automatically on 2025-11-07T05:39:27.377112+00:00 UTC_
   - from pydantic import BaseModel
   - from typing import List, Optional
   - from .service import ParserEngine
+  - from .service import PARSER_ROOT
 
 
 ### ./bridge_backend/bridge_core/engines/agents_foundry/service.py
