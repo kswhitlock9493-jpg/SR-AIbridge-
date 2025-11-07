@@ -131,7 +131,10 @@ class BridgeSovereigntyGuard:
         
         # Import the bridge harmony orchestrator for engine discovery
         try:
-            from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
+            try:
+                from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
+            except ImportError:
+                from bridge_backend.bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
             
             orchestrator = BridgeHarmonyOrchestrator()
             engines = orchestrator.discover_engines()

@@ -7,7 +7,7 @@ import pytest
 import asyncio
 from datetime import datetime, timezone
 
-from bridge_core.sovereignty.readiness_gate import (
+from bridge_backend.bridge_core.sovereignty.readiness_gate import (
     BridgeSovereigntyGuard,
     SovereigntyState,
     EngineHealth,

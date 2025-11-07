@@ -35,7 +35,7 @@ async def health_check(request: Request):
     # Add sovereignty status if enabled
     if os.getenv("SOVEREIGNTY_ENABLED", "true").lower() == "true":
         try:
-            from bridge_core.sovereignty.readiness_gate import get_sovereignty_guard
+            from bridge_backend.bridge_core.sovereignty.readiness_gate import get_sovereignty_guard
             guard = await get_sovereignty_guard()
             sovereignty_report = await guard.get_sovereignty_report()
             

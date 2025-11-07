@@ -17,7 +17,7 @@ async def get_sovereignty_status():
     and resonance before allowing full access to the system.
     """
     try:
-        from bridge_core.sovereignty.readiness_gate import get_sovereignty_guard
+        from bridge_backend.bridge_core.sovereignty.readiness_gate import get_sovereignty_guard
         
         guard = await get_sovereignty_guard()
         health_report = await guard.health_check()
@@ -40,7 +40,7 @@ async def get_sovereignty_report():
     Get a detailed sovereignty report including all engine health status.
     """
     try:
-        from bridge_core.sovereignty.readiness_gate import get_sovereignty_guard
+        from bridge_backend.bridge_core.sovereignty.readiness_gate import get_sovereignty_guard
         
         guard = await get_sovereignty_guard()
         report = await guard.get_sovereignty_report()
@@ -75,7 +75,7 @@ async def get_engine_health():
     Get health status of all individual engines.
     """
     try:
-        from bridge_core.sovereignty.readiness_gate import get_sovereignty_guard
+        from bridge_backend.bridge_core.sovereignty.readiness_gate import get_sovereignty_guard
         
         guard = await get_sovereignty_guard()
         
@@ -107,7 +107,7 @@ async def refresh_sovereignty():
     This will re-check all engines and recalculate sovereignty scores.
     """
     try:
-        from bridge_core.sovereignty.readiness_gate import get_sovereignty_guard
+        from bridge_backend.bridge_core.sovereignty.readiness_gate import get_sovereignty_guard
         
         guard = await get_sovereignty_guard()
         

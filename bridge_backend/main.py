@@ -278,7 +278,7 @@ else:
 
 # Bridge Sovereignty: readiness gate system for perfection, harmony, resonance
 if os.getenv("SOVEREIGNTY_ENABLED", "true").lower() == "true":
-    safe_include_router("bridge_core.sovereignty.routes", prefix="/api/bridge")
+    safe_include_router("bridge_backend.bridge_core.sovereignty.routes", prefix="/api/bridge")
     logger.info("[SOVEREIGNTY] Readiness gate enabled - bridge sovereignty active")
 
 # Blueprint engine: enabled by default for production mode
@@ -430,7 +430,7 @@ async def startup_event():
     # Initialize sovereignty readiness gate if enabled
     if os.getenv("SOVEREIGNTY_ENABLED", "true").lower() == "true":
         try:
-            from bridge_core.sovereignty.readiness_gate import get_sovereignty_guard
+            from bridge_backend.bridge_core.sovereignty.readiness_gate import get_sovereignty_guard
             
             logger.info("🛡️ [Sovereignty] Initializing Bridge Sovereignty Guard...")
             guard = await get_sovereignty_guard()
