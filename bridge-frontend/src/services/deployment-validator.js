@@ -70,7 +70,9 @@ class SystemValidator {
       // Don't check for static keys - they don't exist!
       // Instead: Verify Bridge can generate session keys dynamically
       
-      // Lazy import to avoid circular dependency
+      // Dynamic import to avoid circular dependency
+      // (BRHService imports DeploymentValidator for validation, 
+      //  DeploymentValidator imports BRHService for testing)
       const { BRHService } = await import('./brh-api');
       
       // Test dynamic key generation capability
@@ -315,7 +317,8 @@ class KeylessAuthHandler {
    */
   static async establishEphemeralSession() {
     try {
-      // Lazy import to avoid circular dependency
+      // Dynamic import to avoid circular dependency
+      // (DeploymentValidator imports BRHService, BRHService imports DeploymentValidator)
       const { BRHService } = await import('./brh-api');
       
       const session = await BRHService.establishSession();

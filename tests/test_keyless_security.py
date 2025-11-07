@@ -3,13 +3,14 @@ Integration Test for Keyless Security Architecture
 Tests the complete keyless authentication flow
 """
 
-import sys
-import os
-
-# Add parent directory to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
-from bridge_backend.src.keyless_auth import KeylessAuthHandler, establish_session, verify_capability
+try:
+    from bridge_backend.src.keyless_auth import KeylessAuthHandler, establish_session, verify_capability
+except ImportError:
+    # Try alternative import paths
+    import sys
+    import os
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+    from bridge_backend.src.keyless_auth import KeylessAuthHandler, establish_session, verify_capability
 
 
 def test_ephemeral_session_establishment():
@@ -122,14 +123,12 @@ def test_session_cleanup():
     status_before = handler.get_status()
     active_before = status_before['active_sessions']
     
-    # Cleanup
-    handler._cleanup_expired_sessions()
-    
+    # Get status again which internally triggers cleanup
     status_after = handler.get_status()
     active_after = status_after['active_sessions']
     
-    print(f"✅ Sessions before cleanup: {active_before}")
-    print(f"✅ Sessions after cleanup: {active_after}")
+    print(f"✅ Sessions before: {active_before}")
+    print(f"✅ Sessions after: {active_after}")
     print(f"✅ Total sessions created: {status_after['total_sessions_created']}")
     print()
 

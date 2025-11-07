@@ -4,17 +4,15 @@ Handles ephemeral session establishment and dynamic key generation
 """
 
 from flask import Blueprint, request, jsonify
-import sys
-import os
-
-# Add src to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
 try:
-    from keyless_auth import get_keyless_handler
-except ImportError:
-    # Fallback if import fails
-    get_keyless_handler = None
+    from ...src.keyless_auth import get_keyless_handler
+except (ImportError, ValueError):
+    # Fallback if relative import fails (e.g., when running standalone)
+    try:
+        from bridge_backend.src.keyless_auth import get_keyless_handler
+    except ImportError:
+        get_keyless_handler = None
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
