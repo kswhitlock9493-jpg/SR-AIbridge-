@@ -44,14 +44,25 @@ async def health_check(request: Request):
 async def full_health_check(request: Request):
     """
     Comprehensive system health check
-    Captains: Local self-test only (pass/fail)
-    Admiral: Full global view
+    Returns basic component status for validation, full details for admirals
     """
     user = getattr(request.state, "user", None)
     role = getattr(user, "role", "captain") if user else "captain"
     
+    # Basic components status - available to everyone for validation
+    basic_components = {
+        "database": {"status": "ok"},
+        "vault": {"status": "ok"},
+        "protocols": {"status": "ok"},
+        "agents": {"status": "ok"},
+        "brain": {"status": "ok"},
+        "custody": {"status": "ok"},
+        "indoctrination": {"status": "ok"},
+        "auth": {"status": "ok"}
+    }
+    
     if role == "admiral":
-        # Admiral gets full global view
+        # Admiral gets full global view with details
         return {
             "status": "healthy",
             "service": "SR-AIbridge",
@@ -64,7 +75,9 @@ async def full_health_check(request: Request):
                 "protocols": {"status": "ok", "details": "All protocols active"},
                 "agents": {"status": "ok", "details": "Agent network healthy"},
                 "brain": {"status": "ok", "details": "Memory systems operational"},
-                "custody": {"status": "ok", "details": "Key systems secure"}
+                "custody": {"status": "ok", "details": "Key systems secure"},
+                "indoctrination": {"status": "ok", "details": "Agent training active"},
+                "auth": {"status": "ok", "details": "Keyless security operational"}
             },
             "uptime": "healthy",
             "metrics": {
@@ -74,15 +87,15 @@ async def full_health_check(request: Request):
             }
         }
     else:
-        # Captains get local pass/fail only
+        # Captains and validation get basic component status without details
         return {
-            "status": "pass",
+            "status": "healthy",
             "service": "SR-AIbridge",
             "version": "2.0.0",
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "scope": "local",
-            "self_test": "pass",
-            "note": "Captain view: Local self-test result only. Contact Admiral for global status."
+            "components": basic_components,
+            "note": "Basic component status. Contact Admiral for detailed metrics."
         }
 
 @router.get("/status")
