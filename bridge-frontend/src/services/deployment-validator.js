@@ -4,10 +4,7 @@
  * Part of the paranoid security unlock sequence
  */
 
-import config from '../config';
 import { APIGuardian } from './healing-net';
-
-const API_BASE = config.API_BASE_URL;
 
 /**
  * Validation status for individual systems
@@ -19,7 +16,7 @@ class SystemValidator {
    */
   static async validateBRH() {
     try {
-      const response = await APIGuardian.safeFetch(`${API_BASE}/api/health/status`, {
+      const response = await APIGuardian.safeFetch('/api/health/status', {
         timeout: 5000,
         retries: 1,
         fallbackOnError: false
@@ -42,7 +39,7 @@ class SystemValidator {
    */
   static async validateHealingNet() {
     try {
-      const response = await APIGuardian.safeFetch(`${API_BASE}/api/health/health`, {
+      const response = await APIGuardian.safeFetch('/api/health/health', {
         timeout: 5000,
         retries: 1,
         fallbackOnError: false
@@ -84,7 +81,7 @@ class SystemValidator {
       
       // Fallback: Check if custody system is at least responsive
       // This validates the system exists, even if not fully implemented
-      const response = await APIGuardian.safeFetch(`${API_BASE}/custody/status`, {
+      const response = await APIGuardian.safeFetch('/custody/status', {
         timeout: 5000,
         retries: 1,
         fallbackOnError: false
@@ -116,7 +113,7 @@ class SystemValidator {
     try {
       // Umbra lattice is part of the healing net system
       // Check if fallback mechanisms are working
-      const response = await APIGuardian.safeFetch(`${API_BASE}/api/health/health/full`, {
+      const response = await APIGuardian.safeFetch('/api/health/health/full', {
         timeout: 5000,
         retries: 1,
         fallbackOnError: false
@@ -139,7 +136,7 @@ class SystemValidator {
    */
   static async validateIndoctrination() {
     try {
-      const response = await APIGuardian.safeFetch(`${API_BASE}/engines/indoctrination/status`, {
+      const response = await APIGuardian.safeFetch('/engines/indoctrination/status', {
         timeout: 5000,
         retries: 1,
         fallbackOnError: false
