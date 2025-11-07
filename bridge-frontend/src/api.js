@@ -168,6 +168,10 @@ export async function updateMissionStatus(missionId, status, extraData = {}) {
   return apiClient.patch(`/missions/${missionId}`, updates);
 }
 
+export async function updateMissionProgress(missionId, progress) {
+  return apiClient.patch(`/missions/${missionId}`, { progress });
+}
+
 // === Vault Logs / Doctrine ===
 export async function getVaultLogs() {
   return apiClient.get('/vault/logs');

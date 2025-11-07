@@ -25,7 +25,7 @@ def get_custody_status():
         "status": "operational",
         "admiral_keys_initialized": ADMIRAL_SIGNING_KEY is not None,
         "key_creation_time": KEY_CREATION_TIME,
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
 @router.get("/keys")
@@ -67,7 +67,7 @@ def rotate_admiral_keys():
     global ADMIRAL_SIGNING_KEY, ADMIRAL_VERIFY_KEY, KEY_CREATION_TIME
     ADMIRAL_SIGNING_KEY = SigningKey.generate()
     ADMIRAL_VERIFY_KEY = ADMIRAL_SIGNING_KEY.verify_key
-    KEY_CREATION_TIME = datetime.utcnow().isoformat()
+    KEY_CREATION_TIME = datetime.now(timezone.utc).isoformat()
     
     return {
         "status": "rotated",
@@ -81,7 +81,7 @@ def init_keys():
     global ADMIRAL_SIGNING_KEY, ADMIRAL_VERIFY_KEY, KEY_CREATION_TIME
     ADMIRAL_SIGNING_KEY = SigningKey.generate()
     ADMIRAL_VERIFY_KEY = ADMIRAL_SIGNING_KEY.verify_key
-    KEY_CREATION_TIME = datetime.utcnow().isoformat()
+    KEY_CREATION_TIME = datetime.now(timezone.utc).isoformat()
     
     return {
         "status": "initialized",
@@ -98,7 +98,7 @@ def sign_payload(p: Payload):
     return {
         "data": p.data,
         "signature": base64.b64encode(signed.signature).decode(),
-        "signed_at": datetime.utcnow().isoformat()
+        "signed_at": datetime.now(timezone.utc).isoformat()
     }
 
 @router.post("/verify")
@@ -113,11 +113,11 @@ def verify_signature(p: SignedPayload):
         )
         return {
             "valid": True,
-            "verified_at": datetime.utcnow().isoformat()
+            "verified_at": datetime.now(timezone.utc).isoformat()
         }
     except Exception as e:
         return {
             "valid": False,
             "error": str(e),
-            "verified_at": datetime.utcnow().isoformat()
+            "verified_at": datetime.now(timezone.utc).isoformat()
         }

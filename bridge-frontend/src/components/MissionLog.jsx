@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getMissions, createMission, updateMissionStatus } from '../api';
+import { getMissions, createMission, updateMissionProgress, updateMissionStatus } from '../api';
 
 const MissionLog = () => {
   const [missions, setMissions] = useState([]);
@@ -64,8 +64,8 @@ const MissionLog = () => {
   // Update mission progress
   const handleProgressUpdate = async (missionId, newProgress) => {
     try {
-      // Update via backend if available
-      await updateMissionStatus(missionId, null, { progress: newProgress });
+      // Update mission progress using dedicated function
+      await updateMissionProgress(missionId, newProgress);
       await fetchMissions(); // Refresh missions list
     } catch (err) {
       console.error('Failed to update mission progress:', err);
