@@ -276,19 +276,20 @@ if os.getenv("LINK_ENGINES", "true").lower() == "true":
 else:
     logger.info("[LINKAGE] Engine linkage disabled (set LINK_ENGINES=true to enable)")
 
-# Blueprint engine: gated and import-safe
+# Blueprint engine: enabled by default for production mode
+# Part of core engine trio (Parser, Blueprint, Cascade) for full production readiness
 if os.getenv("BLUEPRINTS_ENABLED", "true").lower() == "true":
     bp_mod = safe_import("bridge_backend.bridge_core.engines.blueprint.routes")
     if bp_mod and hasattr(bp_mod, "router"):
         try:
             app.include_router(bp_mod.router)
-            logger.info("[BLUEPRINTS] Enabled and loaded successfully")
+            logger.info("[BLUEPRINTS] ✅ Enabled and loaded successfully - production mode active")
         except Exception as e:
             logger.exception(f"[BLUEPRINTS] Failed to include router: {e}")
     else:
         logger.warning("[BLUEPRINTS] Enabled but routes not loadable; engine skipped.")
 else:
-    logger.info("[BLUEPRINTS] Disabled by default (set BLUEPRINTS_ENABLED=true to enable).")
+    logger.info("[BLUEPRINTS] Disabled (set BLUEPRINTS_ENABLED=true to enable)")
 
 safe_include_router("bridge_backend.bridge_core.registry.routes")
 safe_include_router("bridge_backend.bridge_core.permissions.routes")

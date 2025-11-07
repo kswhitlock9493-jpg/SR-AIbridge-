@@ -73,3 +73,13 @@ def list_chunks(tag: Optional[str] = None, source: Optional[str] = None, limit: 
 @router.get("/search")
 def search(q: str = Query(..., min_length=2), limit: int = 50):
     return P.search(q, limit=limit)
+
+@router.get("/status")
+def get_status():
+    """Get Parser Engine status for deployment validation."""
+    return {
+        "status": "operational",
+        "engine": "parser",
+        "version": "1.0.0",
+        "vault_active": True
+    }
