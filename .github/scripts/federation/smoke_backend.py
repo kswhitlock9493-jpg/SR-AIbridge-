@@ -21,6 +21,18 @@ def get_json(path):
 def main():
     start = time.time()
     result = {"base": BASE, "ok": True, "checks": [], "started": start}
+    
+    # Check if running in safe placeholder mode
+    safe_mode = os.getenv("SAFE_PLACEHOLDER_MODE", "false").lower() == "true"
+    if safe_mode:
+        print("⚠️  Running in SAFE PLACEHOLDER MODE - skipping external backend checks")
+        result["mode"] = "safe_placeholder"
+        result["message"] = "Safe placeholder mode active - external backend checks skipped"
+        result["duration_s"] = round(time.time()-start, 3)
+        OUT.write_text(json.dumps(result, indent=2))
+        print(f"Wrote {OUT}")
+        sys.exit(0)
+    
     budget_fail = False
 
     # `/api/health` (required, retry)

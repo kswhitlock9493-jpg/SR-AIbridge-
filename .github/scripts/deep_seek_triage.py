@@ -109,6 +109,23 @@ def deepseek_and_repair(name, conf):
 
 def main():
     print("Starting Federation Deep-Seek...")
+    
+    # Check if running in safe placeholder mode (no external connectivity expected)
+    safe_mode = os.getenv("SAFE_PLACEHOLDER_MODE", "false").lower() == "true"
+    if safe_mode:
+        print("⚠️  Running in SAFE PLACEHOLDER MODE - skipping external federation checks")
+        report = {
+            "generated_at": int(time.time()),
+            "mode": "safe_placeholder",
+            "health": {},
+            "details": {},
+            "message": "Safe placeholder mode active - external federation checks skipped"
+        }
+        REPORT.parent.mkdir(parents=True, exist_ok=True)
+        REPORT.write_text(json.dumps(report, indent=2))
+        print("✅ Federation Deep-Seek report (safe mode) →", REPORT)
+        return 0
+    
     fedmap = json.loads(FEDMAP.read_text())
     print(f"Loaded {len(fedmap)} federation nodes")
     summary = {}
@@ -125,6 +142,7 @@ def main():
 
     report = {
         "generated_at": int(time.time()),
+        "mode": "production",
         "health": health,
         "details": summary
     }
