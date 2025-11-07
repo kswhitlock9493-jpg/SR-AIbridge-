@@ -192,12 +192,12 @@ Located in the header of the frontend application.
 
 ### Status Indicators
 
-| Badge | Meaning | Cause |
-|-------|---------|-------|
-| ✅ PRODUCTION | System fully deployed | Both core systems online |
-| ⚠️ DEGRADED | Partial deployment | Some optional systems offline |
-| 🛠️ DEVELOPMENT | Not deployed | Core systems offline |
-| ❌ UNKNOWN | Validation not run | First load |
+| Badge          | Meaning                | Cause                          |
+| -------------- | ---------------------- | ------------------------------ |
+| ✅ PRODUCTION  | System fully deployed  | Both core systems online       |
+| ⚠️ DEGRADED    | Partial deployment     | Some optional systems offline  |
+| 🛠️ DEVELOPMENT | Not deployed           | Core systems offline           |
+| ❌ UNKNOWN     | Validation not run     | First load                     |
 
 ### How to Check
 

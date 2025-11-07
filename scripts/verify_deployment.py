@@ -36,7 +36,7 @@ def test_endpoint(name, url, required=True):
         
         try:
             data = response.json()
-        except:
+        except (requests.exceptions.JSONDecodeError, ValueError):
             data = {"error": "non-json response", "text": response.text[:200]}
         
         # Determine if system is operational
@@ -69,13 +69,16 @@ def test_endpoint(name, url, required=True):
         return operational
         
     except requests.exceptions.ConnectionError:
-        print(f"{Colors.RED}✗{Colors.END} {name:25} | Connection refused - is backend running?{' ':25} | {'REQUIRED' if required else 'optional'}")
+        status_msg = "Connection refused - is backend running?"
+        print(f"{Colors.RED}✗{Colors.END} {name:25} | {status_msg:50} | {'REQUIRED' if required else 'optional'}")
         return False
     except requests.exceptions.Timeout:
-        print(f"{Colors.RED}✗{Colors.END} {name:25} | Timeout after {TIMEOUT}s{' ':45} | {'REQUIRED' if required else 'optional'}")
+        status_msg = f"Timeout after {TIMEOUT}s"
+        print(f"{Colors.RED}✗{Colors.END} {name:25} | {status_msg:50} | {'REQUIRED' if required else 'optional'}")
         return False
     except Exception as e:
-        print(f"{Colors.RED}✗{Colors.END} {name:25} | Exception: {str(e)[:40]:50} | {'REQUIRED' if required else 'optional'}")
+        status_msg = f"Exception: {str(e)[:47]}"
+        print(f"{Colors.RED}✗{Colors.END} {name:25} | {status_msg:50} | {'REQUIRED' if required else 'optional'}")
         return False
 
 def main():
