@@ -46,10 +46,17 @@ async def health_check(request: Request):
                 "score": f"{sovereignty_report.sovereignty_score:.2%}",
             }
             
-            # Update status based on sovereignty
-            if not sovereignty_report.is_sovereign:
+            # Update status based on sovereignty readiness
+            # is_ready = system is operational and meets thresholds
+            # is_sovereign = system meets aspirational 99% perfection (optional)
+            if not sovereignty_report.is_ready:
                 response["status"] = "waiting"
                 response["message"] = "Bridge waiting for perfection, harmony, and resonance"
+            else:
+                response["status"] = "ok"
+                response["message"] = "Bridge link established and operational" + (
+                    " - Sovereign excellence achieved" if sovereignty_report.is_sovereign else ""
+                )
                 
         except Exception as e:
             response["sovereignty"] = {"error": str(e)}
