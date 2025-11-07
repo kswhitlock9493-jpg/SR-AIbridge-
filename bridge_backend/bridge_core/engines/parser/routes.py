@@ -82,8 +82,9 @@ def get_status():
     try:
         from .service import PARSER_ROOT
         vault_active = PARSER_ROOT.exists()
-    except (ImportError, AttributeError):
-        # Import or attribute errors are expected if vault not configured
+    except (ImportError, AttributeError, OSError):
+        # Import/attribute errors if vault not configured
+        # OSError for filesystem permission issues
         pass
     
     return {

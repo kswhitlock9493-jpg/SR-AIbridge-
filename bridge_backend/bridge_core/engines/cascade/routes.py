@@ -20,8 +20,9 @@ def get_status():
     try:
         from .service import VAULT_CASCADE
         vault_active = VAULT_CASCADE.exists()
-    except (ImportError, AttributeError):
-        # Import or attribute errors are expected if vault not configured
+    except (ImportError, AttributeError, OSError):
+        # Import/attribute errors if vault not configured
+        # OSError for filesystem permission issues
         pass
     
     return {
