@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 // Configure BRH API endpoint via environment variable or prop
 const DEFAULT_BRH_URL = import.meta.env.VITE_BRH_API_URL || "http://localhost:7878";
@@ -8,7 +8,7 @@ export default function BridgeRuntimePanel({ apiUrl = DEFAULT_BRH_URL }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchStatus = async () => {
+  const fetchStatus = useCallback(async () => {
     try {
       const res = await fetch(`${apiUrl}/status`);
       const json = await res.json();
@@ -19,7 +19,7 @@ export default function BridgeRuntimePanel({ apiUrl = DEFAULT_BRH_URL }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [apiUrl]);
 
   const sendCommand = async (name, action) => {
     try {
@@ -34,7 +34,7 @@ export default function BridgeRuntimePanel({ apiUrl = DEFAULT_BRH_URL }) {
     fetchStatus();
     const timer = setInterval(fetchStatus, 10000);
     return () => clearInterval(timer);
-  }, []);
+  }, [fetchStatus]);
 
   if (loading) {
     return <div className="text-center text-gray-400">Loading runtime status...</div>;
