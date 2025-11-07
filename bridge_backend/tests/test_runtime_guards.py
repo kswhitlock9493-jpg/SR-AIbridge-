@@ -289,6 +289,27 @@ class TestFederationScripts:
         content = script_file.read_text()
         assert "SPDX-License-Identifier" in content
         assert "triage_matrix.ndjson" in content
+    
+    def test_scripts_support_safe_placeholder_mode(self):
+        """Test that federation scripts support SAFE_PLACEHOLDER_MODE"""
+        smoke_script = pathlib.Path(__file__).parent.parent.parent / ".github" / "scripts" / "federation" / "smoke_backend.py"
+        triage_script = pathlib.Path(__file__).parent.parent.parent / ".github" / "scripts" / "federation" / "triage_matrix.py"
+        deep_seek_script = pathlib.Path(__file__).parent.parent.parent / ".github" / "scripts" / "deep_seek_triage.py"
+        
+        # Check that all scripts check for SAFE_PLACEHOLDER_MODE
+        for script in [smoke_script, triage_script, deep_seek_script]:
+            content = script.read_text()
+            assert "SAFE_PLACEHOLDER_MODE" in content, f"{script.name} should check SAFE_PLACEHOLDER_MODE"
+            assert "safe_placeholder" in content.lower(), f"{script.name} should handle safe placeholder mode"
+    
+    def test_workflows_pass_safe_placeholder_mode(self):
+        """Test that workflows pass SAFE_PLACEHOLDER_MODE to scripts"""
+        federation_guard = pathlib.Path(__file__).parent.parent.parent / ".github" / "workflows" / "federation_runtime_guard.yml"
+        deep_seek = pathlib.Path(__file__).parent.parent.parent / ".github" / "workflows" / "federation_deepseek.yml"
+        
+        for workflow in [federation_guard, deep_seek]:
+            content = workflow.read_text()
+            assert "SAFE_PLACEHOLDER_MODE" in content, f"{workflow.name} should set SAFE_PLACEHOLDER_MODE"
 
 
 if __name__ == "__main__":
