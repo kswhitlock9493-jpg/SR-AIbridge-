@@ -14,6 +14,7 @@ class IndoctrinationEngine:
         self.vault_dir = Path(vault_dir)
         self.vault_dir.mkdir(parents=True, exist_ok=True)
         self.registry: Dict[str, Dict[str, Any]] = {}
+        self._load_from_vault()
 
     def onboard(self, name: str, role: str, specialties: List[str]) -> Dict[str, Any]:
         aid = str(uuid.uuid4())
@@ -81,3 +82,19 @@ class IndoctrinationEngine:
     def _write_vault(self, aid: str, rec: Dict[str, Any]):
         out = self.vault_dir / f"{aid}.json"
         out.write_text(json.dumps(rec, indent=2))
+
+    def _load_from_vault(self):
+        """Load all agents from vault directory into registry on startup."""
+        try:
+            for agent_file in self.vault_dir.glob("*.json"):
+                try:
+                    data = json.loads(agent_file.read_text(encoding="utf-8"))
+                    if "id" in data:
+                        self.registry[data["id"]] = data
+                except Exception as e:
+                    # Log but don't crash if a single file is corrupted
+                    print(f"Warning: Failed to load {agent_file}: {e}")
+            if self.registry:
+                print(f"[IndoctrinationEngine] Loaded {len(self.registry)} agents from vault")
+        except Exception as e:
+            print(f"[IndoctrinationEngine] Failed to load vault: {e}")
