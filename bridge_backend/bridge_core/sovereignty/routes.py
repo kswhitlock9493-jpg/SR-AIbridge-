@@ -25,11 +25,16 @@ async def get_sovereignty_status():
         return health_report
         
     except Exception as e:
+        # Log the full error for debugging, but don't expose details to user
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Sovereignty status check failed: {e}", exc_info=True)
+        
         return {
             "status": "error",
             "state": "unknown",
             "is_ready": False,
-            "error": str(e),
+            "message": "Failed to retrieve sovereignty status",
             "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 

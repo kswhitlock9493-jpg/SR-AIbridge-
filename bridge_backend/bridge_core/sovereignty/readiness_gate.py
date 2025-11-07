@@ -132,9 +132,11 @@ class BridgeSovereigntyGuard:
         # Import the bridge harmony orchestrator for engine discovery
         try:
             try:
-                from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
-            except ImportError:
+                # Try the primary import path used in the backend
                 from bridge_backend.bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
+            except ImportError:
+                # Fall back to root-level import if backend not in path
+                from bridge_core.lattice.bridge_harmony import BridgeHarmonyOrchestrator
             
             orchestrator = BridgeHarmonyOrchestrator()
             engines = orchestrator.discover_engines()
@@ -182,7 +184,8 @@ class BridgeSovereigntyGuard:
             
             health.last_checked = datetime.now(timezone.utc)
         
-        avg_harmony = total_harmony / len(self.engine_health) if self.engine_health else 0.0
+        # Calculate average harmony only from operational engines
+        avg_harmony = total_harmony / operational_count if operational_count > 0 else 0.0
         
         logger.info(
             f"🎻 [Sovereignty] Harmony: {avg_harmony:.2%} "
@@ -254,11 +257,11 @@ class BridgeSovereigntyGuard:
         resonance_factors.append(operational_factor)
         
         # Factor 2: Critical engines all operational
-        critical_operational = all(
-            self.engine_health.get(name, EngineHealth(name, False, 0.0, datetime.now(timezone.utc))).operational
-            for name in self.CRITICAL_ENGINES
-            if name in self.engine_health
-        )
+        critical_operational = True
+        for name in self.CRITICAL_ENGINES:
+            if name in self.engine_health and not self.engine_health[name].operational:
+                critical_operational = False
+                break
         resonance_factors.append(1.0 if critical_operational else 0.5)
         
         # Factor 3: Average harmony score
@@ -300,6 +303,14 @@ class BridgeSovereigntyGuard:
                 f"   Waiting for: {', '.join(report.waiting_for)}"
             )
     
+    def _calculate_harmony_score(self) -> float:
+        """
+        Calculate the overall harmony score based on operational engines.
+        Shared helper to ensure consistency across methods.
+        """
+        harmony_scores = [h.harmony_score for h in self.engine_health.values() if h.operational]
+        return sum(harmony_scores) / len(harmony_scores) if harmony_scores else 0.0
+    
     async def get_sovereignty_report(self) -> SovereigntyReport:
         """Get comprehensive sovereignty status report"""
         operational = sum(1 for h in self.engine_health.values() if h.operational)
@@ -309,16 +320,15 @@ class BridgeSovereigntyGuard:
         perfection_score = operational / total if total > 0 else 0.0
         
         # Calculate harmony score (inter-engine coordination)
-        harmony_scores = [h.harmony_score for h in self.engine_health.values() if h.operational]
-        harmony_score = sum(harmony_scores) / len(harmony_scores) if harmony_scores else 0.0
+        harmony_score = self._calculate_harmony_score()
         
         # Calculate resonance score (system-wide coherence)
         # Resonance requires ALL critical engines operational
-        critical_operational = all(
-            self.engine_health.get(name, EngineHealth(name, False, 0.0, datetime.now(timezone.utc))).operational
-            for name in self.CRITICAL_ENGINES
-            if name in self.engine_health
-        )
+        critical_operational = True
+        for name in self.CRITICAL_ENGINES:
+            if name in self.engine_health and not self.engine_health[name].operational:
+                critical_operational = False
+                break
         
         # Base resonance on operational ratio with critical engine multiplier
         base_resonance = operational / total if total > 0 else 0.0
