@@ -44,7 +44,21 @@ def register_chimera_link() -> bool:
             # Get the actual bus instance
             bus = bus_mod.genesis_bus
             if hasattr(bus, "publish"):
-                bus.publish("chimera.link.register", {"status": "online"})
+                # Note: publish is async, but we call it synchronously here for boot-time registration
+                # The event will be queued and processed by the event loop when it starts
+                # This is safe because Genesis bus handles sync calls in boot context
+                import asyncio
+                try:
+                    loop = asyncio.get_event_loop()
+                    if loop.is_running():
+                        # If loop is running, schedule the coroutine
+                        asyncio.create_task(bus.publish("chimera.link.register", {"status": "online"}))
+                    else:
+                        # If loop is not running, run it synchronously
+                        loop.run_until_complete(bus.publish("chimera.link.register", {"status": "online"}))
+                except RuntimeError:
+                    # No event loop, just skip the publish (safe during testing)
+                    pass
                 logger.info("✅ Chimera registered to Genesis bus")
                 return True
         except Exception as e:

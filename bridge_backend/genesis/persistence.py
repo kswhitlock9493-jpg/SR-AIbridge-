@@ -50,7 +50,8 @@ class GenesisPersistence:
                 return
             
             try:
-                conn = sqlite3.connect(self._db_path)
+                conn = sqlite3.connect(self._db_path, timeout=10.0, check_same_thread=False)
+                conn.execute("PRAGMA journal_mode=WAL")  # Enable Write-Ahead Logging for better concurrency
                 cursor = conn.cursor()
                 
                 # Event store table
@@ -126,7 +127,8 @@ class GenesisPersistence:
         await self.initialize()
         
         try:
-            conn = sqlite3.connect(self._db_path)
+            conn = sqlite3.connect(self._db_path, timeout=10.0, check_same_thread=False)
+            conn.execute("PRAGMA journal_mode=WAL")
             cursor = conn.cursor()
             
             # Clean up expired entries first
@@ -175,7 +177,8 @@ class GenesisPersistence:
             return False
         
         try:
-            conn = sqlite3.connect(self._db_path)
+            conn = sqlite3.connect(self._db_path, timeout=10.0, check_same_thread=False)
+            conn.execute("PRAGMA journal_mode=WAL")
             cursor = conn.cursor()
             
             # Get next watermark
@@ -243,7 +246,8 @@ class GenesisPersistence:
         await self.initialize()
         
         try:
-            conn = sqlite3.connect(self._db_path)
+            conn = sqlite3.connect(self._db_path, timeout=10.0, check_same_thread=False)
+            conn.execute("PRAGMA journal_mode=WAL")
             cursor = conn.cursor()
             
             query = "SELECT id, ts, topic, source, kind, payload, watermark FROM genesis_events WHERE 1=1"
@@ -292,7 +296,8 @@ class GenesisPersistence:
         await self.initialize()
         
         try:
-            conn = sqlite3.connect(self._db_path)
+            conn = sqlite3.connect(self._db_path, timeout=10.0, check_same_thread=False)
+            conn.execute("PRAGMA journal_mode=WAL")
             cursor = conn.cursor()
             
             cursor.execute(
@@ -316,7 +321,8 @@ class GenesisPersistence:
         await self.initialize()
         
         try:
-            conn = sqlite3.connect(self._db_path)
+            conn = sqlite3.connect(self._db_path, timeout=10.0, check_same_thread=False)
+            conn.execute("PRAGMA journal_mode=WAL")
             cursor = conn.cursor()
             
             cursor.execute("SELECT COALESCE(MAX(watermark), 0) FROM genesis_events")
