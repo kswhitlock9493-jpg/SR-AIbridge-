@@ -170,7 +170,7 @@ bridge_backend/.queue/*
 !bridge_backend/.queue/.gitkeep
 
 bridge_backend/.genesis/tde_state.json
-bridge_backend/bridge_backend/.genesis/
+bridge_backend/bridge_backend/
 .bridge/
 
 # v1.9.6x GitHub Environment Hook state (auto-generated)
