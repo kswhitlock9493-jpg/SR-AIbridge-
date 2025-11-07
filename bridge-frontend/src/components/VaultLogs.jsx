@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getVaultLogs, addVaultLog } from '../api';
+import { addVaultLog } from '../api';
 import { SovereignRevealGate } from './DeploymentGate.jsx';
 import { RealVaultService } from '../services/true-data-revealer.js';
 import { SilentFailureCapture } from '../services/silent-failure-capture.js';

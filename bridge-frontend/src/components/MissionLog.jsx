@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getMissions, createMission, updateMissionProgress, updateMissionStatus } from '../api';
+import { createMission, updateMissionProgress, updateMissionStatus } from '../api';
 import { SovereignRevealGate } from './DeploymentGate.jsx';
 import { RealMissionService } from '../services/true-data-revealer.js';
 import { SilentFailureCapture } from '../services/silent-failure-capture.js';
@@ -530,5 +530,4 @@ const MissionLog = () => {
   );
 };
 
-export default MissionLog;
 export default MissionLog;

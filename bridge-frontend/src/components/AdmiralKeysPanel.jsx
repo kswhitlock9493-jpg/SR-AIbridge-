@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import config from '../config';
 import { SovereignRevealGate } from './DeploymentGate.jsx';
-import { RealAdmiralKeysService } from '../services/true-data-revealer.js';
 import { SilentFailureCapture } from '../services/silent-failure-capture.js';
 
 const AdmiralKeysPanelCore = () => {
