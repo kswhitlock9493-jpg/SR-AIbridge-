@@ -1,10 +1,16 @@
-"""BCSE Command Line Interface"""
+"""BCSE Command Line Interface
+
+Bridge Code Super-Engine - Always Enabled Quality Gate
+- Sovereign Git integration is always active
+- Placeholder mode reveals all quality gates
+- Pulls policies from Forge Dominion at runtime
+"""
 import argparse
 import sys
 import glob
 from typing import List, Tuple
 
-from .config import DEFAULT_POLICY, Policy
+from .config import DEFAULT_POLICY, Policy, BCSE_ALWAYS_ENABLED, PLACEHOLDER_MODE
 from .forge import fetch_policies
 from .runners import python_linters as py, security as sec, deps, tests, structure
 from .reporters import pr_summary
@@ -51,6 +57,9 @@ def cmd_analyze() -> int:
 
     print("\n" + "=" * 60)
     print("🜂 Bridge Code Super-Engine (BCSE) - Quality Gate")
+    print("=" * 60)
+    print(f"🔒 Sovereign Git: {'ENABLED' if BCSE_ALWAYS_ENABLED else 'DISABLED'}")
+    print(f"👁️  Placeholder Mode: {'ACTIVE' if PLACEHOLDER_MODE else 'INACTIVE'} (all gates revealed)")
     print("=" * 60 + "\n")
 
     print("▶ Style: black/ruff")
@@ -131,19 +140,67 @@ def cmd_fix() -> int:
     return 0
 
 
+def cmd_gates() -> int:
+    """
+    Show all quality gates (placeholder mode)
+    
+    Returns:
+        Exit code
+    """
+    print("\n" + "=" * 60)
+    print("👁️  BCSE Quality Gates - Placeholder Mode")
+    print("=" * 60 + "\n")
+    
+    pol = load_policy()
+    
+    print("📊 Current Policy Configuration:\n")
+    print(f"  • Coverage Minimum:      {pol.coverage_min:.0%}")
+    print(f"  • MyPy Strict Mode:      {pol.mypy_strict}")
+    print(f"  • Ruff Severity:         {pol.ruff_severity}")
+    print(f"  • Bandit Min Severity:   {pol.bandit_min_severity}")
+    print(f"  • Max Cyclomatic:        {pol.max_cyclomatic}")
+    print(f"  • Fail on Vulnerabilities: {pol.fail_on_vuln}")
+    print(f"  • Allowed Licenses:      {', '.join(pol.allowed_licenses)}")
+    
+    print("\n🔒 Sovereign Features:\n")
+    print(f"  • Always Enabled:        {BCSE_ALWAYS_ENABLED}")
+    print(f"  • Placeholder Mode:      {PLACEHOLDER_MODE}")
+    print(f"  • Forge Integration:     {'Configured' if fetch_policies() else 'Using defaults'}")
+    
+    print("\n🛠️  Available Quality Checks:\n")
+    gates = [
+        ("Style", "black, ruff"),
+        ("Typing", "mypy"),
+        ("Complexity", "radon"),
+        ("Structure", "import-linter"),
+        ("Security", "bandit, semgrep"),
+        ("Dependencies", "pip-audit, npm audit"),
+        ("Tests", "pytest + coverage"),
+    ]
+    
+    for gate, tools in gates:
+        print(f"  ✓ {gate:15} - {tools}")
+    
+    print("\n" + "=" * 60 + "\n")
+    return 0
+
+
 def main() -> None:
     """Main CLI entry point"""
     ap = argparse.ArgumentParser(
         "bcse",
-        description="🜂 Bridge Code Super-Engine - Comprehensive Quality Gate"
+        description="🜂 Bridge Code Super-Engine - Comprehensive Quality Gate (Always Enabled)"
     )
-    ap.add_argument("cmd", choices=["analyze", "fix"], help="Command to run")
+    ap.add_argument("cmd", choices=["analyze", "fix", "gates"], 
+                    help="Command to run: analyze (run quality checks), fix (auto-fix issues), gates (show all gates)")
     args = ap.parse_args()
     
     if args.cmd == "analyze":
         sys.exit(cmd_analyze())
-    else:
+    elif args.cmd == "fix":
         sys.exit(cmd_fix())
+    else:  # gates
+        sys.exit(cmd_gates())
 
 
 if __name__ == "__main__":

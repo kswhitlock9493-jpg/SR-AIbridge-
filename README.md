@@ -265,6 +265,9 @@ The BCSE provides comprehensive quality analysis and enforcement with Sovereign 
 # One-time setup
 make init
 
+# Show all quality gates (placeholder mode)
+make gates
+
 # Run quality analysis
 make analyze
 
@@ -290,6 +293,7 @@ make test
 - 📊 **SARIF Reports** - Uploads to GitHub Security tab
 - 💬 **PR Comments** - Auto-posts quality summary on pull requests
 - ⚡ **Always Enabled** - Quality gate runs on every PR
+- 👁️ **Placeholder Mode** - All gates revealed for inspection and configuration
 
 **CI Integration:**
 The BCSE runs automatically on all pull requests via the `bridge-quality.yml` workflow, ensuring code quality before merge.
