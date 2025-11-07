@@ -1,7 +1,9 @@
 from pathlib import Path
-import json, uuid
+import json, uuid, logging
 from datetime import datetime, timezone
 from typing import Dict, Any, List
+
+logger = logging.getLogger(__name__)
 
 VAULT = Path("vault") / "indoctrination"
 VAULT.mkdir(parents=True, exist_ok=True)
@@ -93,8 +95,8 @@ class IndoctrinationEngine:
                         self.registry[data["id"]] = data
                 except Exception as e:
                     # Log but don't crash if a single file is corrupted
-                    print(f"Warning: Failed to load {agent_file}: {e}")
+                    logger.warning(f"Failed to load {agent_file}: {e}")
             if self.registry:
-                print(f"[IndoctrinationEngine] Loaded {len(self.registry)} agents from vault")
+                logger.info(f"Loaded {len(self.registry)} agents from vault")
         except Exception as e:
-            print(f"[IndoctrinationEngine] Failed to load vault: {e}")
+            logger.error(f"Failed to load vault: {e}")
