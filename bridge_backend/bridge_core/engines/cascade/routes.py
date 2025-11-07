@@ -15,9 +15,17 @@ def get_history():
 @router.get("/status")
 def get_status():
     """Get Cascade Engine status for deployment validation."""
+    # Check if vault is accessible
+    vault_active = False
+    try:
+        from .service import VAULT_CASCADE
+        vault_active = VAULT_CASCADE.exists()
+    except Exception:
+        pass
+    
     return {
         "status": "operational",
         "engine": "cascade",
         "version": "1.0.0",
-        "vault_active": True
+        "vault_active": vault_active
     }

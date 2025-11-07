@@ -77,9 +77,17 @@ def search(q: str = Query(..., min_length=2), limit: int = 50):
 @router.get("/status")
 def get_status():
     """Get Parser Engine status for deployment validation."""
+    # Check if vault is accessible
+    vault_active = False
+    try:
+        from .service import PARSER_ROOT
+        vault_active = PARSER_ROOT.exists()
+    except Exception:
+        pass
+    
     return {
         "status": "operational",
         "engine": "parser",
         "version": "1.0.0",
-        "vault_active": True
+        "vault_active": vault_active
     }
