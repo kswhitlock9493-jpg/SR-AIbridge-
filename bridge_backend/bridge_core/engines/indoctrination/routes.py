@@ -38,3 +38,16 @@ def revoke(aid: str, data: RevokeIn):
 @router.get("/agents")
 def list_agents():
     return E.list_agents()
+
+@router.get("/status")
+def get_status():
+    """Get Indoctrination Engine status for deployment validation."""
+    agents = E.list_agents()
+    return {
+        "status": "operational",
+        "engine": "indoctrination",
+        "version": "1.0.0",
+        "agents_count": len(agents),
+        "agents_certified": len([a for a in agents if a.get("certified")]),
+        "vault_active": True
+    }
