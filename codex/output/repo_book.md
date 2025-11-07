@@ -1,6 +1,6 @@
 # 📘 The Book of the Repo
 
-_Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
+_Generated automatically on 2025-11-07T05:39:27.377112+00:00 UTC_
 
 ---
 
@@ -1229,6 +1229,36 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - # 3. Deploy
 
 
+### ./DEEP_DIVE_AUDIT_REPORT.md
+
+- # SR-AIbridge Deep Dive Audit & Repair Report
+- ## Executive Summary
+- ## Issues Identified
+- ### 1. Missing BRIDGE_RESONANCE Environment Variable
+- ### 2. Auth Routes Not Registered
+- ### 3. Health Endpoints Missing Components
+- ### 4. BRH Integration Incomplete
+- ## Repairs Completed
+- ### ✅ 1. Added BRIDGE_RESONANCE Environment Variable
+- ### ✅ 2. Converted Auth Routes to FastAPI
+- ### ✅ 3. Fixed Health Endpoints
+- ### ✅ 4. Verified All Integration Points
+- ## Integration Test Results
+- ## Production Readiness Checklist
+- ## System Status: OPERATIONAL
+- ## Technical Details
+- ### Environment Variables Added
+- # Bridge Resonance - System Harmony Metric
+- ### API Endpoints Fixed/Added
+- ### Component Architecture
+- ## Security Model
+- ## Build & Test Results
+- ### Frontend Build
+- ### Backend Startup
+- ## Recommendations
+- ## Conclusion
+
+
 ### ./WALKTHROUGH_SUMMARY.md
 
 - # 🎯 Repository Walkthrough Complete - Executive Summary
@@ -1464,6 +1494,28 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ## Architecture
 - ## References
 - ## Support
+
+
+### ./SYSTEM_AUDIT_REPORT.md
+
+- # SR-AIbridge System Audit Report
+- ## Executive Summary
+- ## Issues Identified and Resolved
+- ### 1. Test Infrastructure Issues ✅ FIXED
+- ### 2. Frontend Code Quality Issues ✅ FIXED
+- ### 3. Build System Verification ✅ VERIFIED
+- ## Test Suite Status
+- ### Collection: ✅ OPERATIONAL
+- ### Core Tests: ✅ PASSING
+- ### Known Test Issues (Non-Critical):
+- ## System Components Health
+- ### Backend Engines (21 Total)
+- ### Frontend Components
+- ### Infrastructure
+- ## Recommendations
+- ### Immediate (Optional)
+- ### Long-term  
+- ## Conclusion
 
 
 ### ./HEALING_NET_SUMMARY.md
@@ -15522,10 +15574,32 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - # 📘 The Book of the Repo
 - ## 🧠 Truth Engine Summary
 - ## 📄 Documentation Index
+- ### ./FIREWALL_FIX_SUMMARY.md
 - ### ./CHANGELOG.md
+- ### ./REPO_MAP.md
+- ### ./BRIDGE_HARMONY_SUMMARY.md
+- ### ./SOVEREIGN_AUDIT_SUMMARY.md
+- ### ./FIREWALL_ENGINE_AUDIT_SUMMARY.md
+- ### ./DIAGNOSTIC_REPORT.md
+- ### ./DEPLOYMENT_IMPLEMENTATION_SUMMARY.md
+- ### ./NAVIGATION_GUIDE.md
+- ### ./IMPLEMENTATION_SUMMARY.md
+- ### ./SECURITY_AUDIT_SUMMARY.md
+- ### ./HEALING_NET_IMPLEMENTATION.md
+- ### ./KEYLESS_SECURITY_IMPLEMENTATION.md
 - ### ./START_HERE.md
 - ### ./README.md
+- ### ./DEEP_DIVE_AUDIT_REPORT.md
+- ### ./WALKTHROUGH_SUMMARY.md
+- ### ./SOVEREIGN_ENGINES_DEPLOYMENT.md
+- ### ./BRIDGE_HARMONY_REPORT.md
+- ### ./DEPLOYMENT_VISUAL_GUIDE.md
+- ### ./SOVEREIGN_DEPLOYMENT.md
+- ### ./SYSTEM_AUDIT_REPORT.md
+- ### ./HEALING_NET_SUMMARY.md
+- ### ./FRONTEND_INTEGRATION_COMPLETE.md
 - ### ./SECURITY.md
+- ### ./SOVEREIGNTY_IMPLEMENTATION_SUMMARY.md
 - ### ./scripts/README.md
 - ### ./docs/ETHICS_IMPACT_TEMPLATE.md
 - ### ./docs/HXO_ENGINE_MATRIX.md
@@ -15561,6 +15635,8 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./docs/BRH_CONSENSUS_ARCHITECTURE.md
 - ### ./docs/HOOKS_TRIAGE.md
 - ### ./docs/TOTAL_STACK_TRIAGE.md
+- ### ./docs/SECURITY_PATCH_SUMMARY.md
+- ### ./docs/WORKFLOW_OPTIMIZATION.md
 - ### ./docs/GENESIS_V2_0_1_QUICK_REF.md
 - ### ./docs/COMPLIANCE_INTEGRATION_GUIDE.md
 - ### ./docs/PR_HEALTH_SUMMARY.md
@@ -15572,6 +15648,7 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./docs/GITHUB_ENV_SYNC_GUIDE.md
 - ### ./docs/BRIDGE_NOTIFICATIONS_ROLLBACK.md
 - ### ./docs/PREDICTIVE_DEPLOY_PIPELINE.md
+- ### ./docs/NETLIFY_SECRETS_SCANNING_FIX.md
 - ### ./docs/AUTONOMY_DEPLOYMENT_README.md
 - ### ./docs/FORGE_MANIFEST_RESOLVER_GUIDE.md
 - ### ./docs/GENESIS_ARCHITECTURE.md
@@ -15621,6 +15698,7 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./docs/TRIAGE_BOOTSTRAP_BANNER_USAGE.md
 - ### ./docs/UMBRA_LATTICE_OVERVIEW.md
 - ### ./docs/CHIMERA_QUICK_START.md
+- ### ./docs/KEYLESS_SECURITY.md
 - ### ./docs/ENV_SYNC_AUTONOMOUS_PIPELINE.md
 - ### ./docs/HXO_OVERVIEW.md
 - ### ./docs/CAPTAIN_AGENT_SEPARATION.md
@@ -15629,11 +15707,13 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./docs/BRIDGE_PARITY_ENGINE.md
 - ### ./docs/AUTONOMY_INTEGRATION_DIAGRAM.md
 - ### ./docs/UMBRA_OPERATIONS.md
+- ### ./docs/BRIDGE_HARMONY_GUIDE.md
 - ### ./docs/ARIE_TOPICS.md
 - ### ./docs/SELFTEST_HEALING_AUTOTRIGGER.md
 - ### ./docs/BUILD_SECURITY_FIX.md
 - ### ./docs/ETHICS_GUIDE.md
 - ### ./docs/LOC_COUNTER_README.md
+- ### ./docs/BRIDGE_HARMONY_QUICK_REF.md
 - ### ./docs/endpoint_test_examples.md
 - ### ./docs/GITHUB_MINI_BRIDGE_OVERVIEW.md
 - ### ./docs/TRIAGE_SYSTEMS.md
@@ -15653,12 +15733,14 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./docs/NETLIFY_RENDER_ENV_SETUP.md
 - ### ./docs/HXO_GENESIS_TOPICS.md
 - ### ./docs/GENESIS_LINKAGE_GUIDE.md
+- ### ./docs/TOKEN_METADATA_VALIDATION.md
 - ### ./docs/AUTONOMY_OPERATIONS.md
 - ### ./docs/FIREWALL_HARDENING.md
 - ### ./docs/GENESIS_V2_0_2_ENVRECON_GUIDE.md
 - ### ./docs/endpoint_test_full.md
 - ### ./docs/AUTONOMY_DEPLOYMENT_ARCHITECTURE.md
 - ### ./docs/REFLEX_LOOP_PROTOCOL.md
+- ### ./docs/SOVEREIGN_AUDIT_QUICK_REF.md
 - ### ./docs/BUILD_TRIAGE_ENGINE.md
 - ### ./docs/FIREWALL_WATCHDOG.md
 - ### ./docs/OFFLINE_QUEUE_HANDLING.md
@@ -15680,6 +15762,7 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./docs/HXO_DEPLOY_GUIDE.md
 - ### ./docs/SANCTUM_OVERVIEW.md
 - ### ./docs/AUTONOMY_PR_VERIFICATION.md
+- ### ./docs/SOVEREIGN_AUDIT_GUIDE.md
 - ### ./docs/DEPLOY_DIAGNOSE_GUIDE.md
 - ### ./docs/AUTONOMY_ORIGINALITY_INTEGRATION.md
 - ### ./docs/ENVSCRIBE_QUICK_REF.md
@@ -15691,6 +15774,7 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./docs/FEDERATION_TRIAGE_ENGINE.md
 - ### ./docs/NODE_FAILSAFE_GUIDE.md
 - ### ./docs/AUTONOMY_INTEGRATION_QUICK_REF.md
+- ### ./docs/RENDER_INTEGRATION.md
 - ### ./docs/ENGINE_CATALOG.md
 - ### ./docs/TDE_X_DEPLOYMENT_GUIDE.md
 - ### ./docs/ARIE_QUICK_REF.md
@@ -15837,6 +15921,9 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./docs/archive/SCAN_REPORT_RENDER_REMOVAL.md
 - ### ./docs/archive/V198_ENVSYNC_IMPLEMENTATION.md
 - ### ./docs/archive/TDE_X_IMPLEMENTATION_SUMMARY.md
+- ### ./docs/sovereignty/README.md
+- ### ./docs/sovereignty/SOVEREIGNTY_QUICK_REFERENCE.md
+- ### ./docs/sovereignty/FIREWALL_SOVEREIGNTY.md
 - ### ./docs/versions/V197I_IMPLEMENTATION_SUMMARY.md
 - ### ./docs/versions/HXO_V196P_IMPLEMENTATION.md
 - ### ./docs/versions/DEPLOYMENT_READY_v1.9.4.md
@@ -15872,35 +15959,34 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./docs/versions/V197J_QUICK_REF.md
 - ### ./docs/badges/README.md
 - ### ./docs/badges/bridge_health.md
-- ### ./.pytest_cache/README.md
 - ### ./bridge_backend/dock_day_exports/test_export/README.md
 - ### ./bridge_backend/dock_day_exports/final_demo/README.md
 - ### ./bridge_backend/examples/README.md
 - ### ./bridge_backend/bridge_core/engines/recovery/lore.md
 - ### ./bridge_backend/bridge_core/engines/leviathan/SOLVER_README.md
 - ### ./bridge_backend/bridge_core/payments/README.md
+- ### ./bridge_backend/bridge_engines/README.md
+- ### ./bridge_backend/bridge_engines/SOVEREIGN_LICENSE.md
+- ### ./.archive/render_legacy/README.md
 - ### ./DOCTRINE/teaching-doctrine-the-test-of-chains.md
 - ### ./DOCTRINE/indoctrination/lore.md
 - ### ./codex/README.md
 - ### ./codex/output/repo_book.md
+- ### ./vault/README.md
+- ### ./vault/archived_scripts/LOC_REPORT.md
 - ### ./bridge-frontend/README.md
+- ### ./bridge-frontend/DEPLOYMENT_VALIDATION.md
 - ### ./bridge-frontend/src/api/auto_generated/README.md
 - ### ./brh/README.md
 - ### ./brh/examples/README.md
 - ### ./phoenix/README.md
 - ### ./phoenix/backend/README.md
 - ## 🧬 Blueprint Overview
-- ### ./get_env_drift.py
-- ### ./verify_hxo_nexus.py
-- ### ./validate_genesis_unified.py
-- ### ./count_loc.py
-- ### ./smoke_test_engines.py
 - ### ./activate_autonomy.py
-- ### ./study_repo_with_engines.py
-- ### ./test_endpoints_full.py
 - ### ./__init__.py
 - ### ./bridge_core/update_forge_banner_from_events.js
 - ### ./bridge_core/__init__.py
+- ### ./bridge_core/lattice/bridge_harmony.py
 - ### ./bridge_core/lattice/heartbeat.py
 - ### ./bridge_core/lattice/pathcheck.py
 - ### ./bridge_core/lattice/__init__.py
@@ -15919,8 +16005,11 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./scripts/scan_manual_env_vars.py
 - ### ./scripts/synthesize_netlify_artifacts.py
 - ### ./scripts/validate_scanner_output.py
+- ### ./scripts/verify_frontend_deployment.py
+- ### ./scripts/smoke_test_sovereign_engines.py
 - ### ./scripts/firewall_watchdog.py
 - ### ./scripts/verify_umbra_lattice.py
+- ### ./scripts/verify_sovereign_engines.py
 - ### ./scripts/prune_diagnostics.py
 - ### ./scripts/stub_scanner.py
 - ### ./scripts/report_bridge_event.py
@@ -15929,8 +16018,11 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./scripts/validate_envsync_manifest.py
 - ### ./scripts/validate_copilot_env.py
 - ### ./scripts/verify_netlify_build.py
+- ### ./scripts/master_sovereign_audit.py
 - ### ./scripts/check_env_parity.py
 - ### ./scripts/run_full_scan.py
+- ### ./scripts/sovereign_audit_orchestrator.py
+- ### ./scripts/demonstrate_metadata_validation.py
 - ### ./scripts/seed_bootstrap.py
 - ### ./scripts/comprehensive_repo_scan.py
 - ### ./scripts/clean_stub_todos.py
@@ -16076,7 +16168,6 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./bridge_backend/bridge_core/engines/envsync/discovery/sources.py
 - ### ./bridge_backend/bridge_core/engines/envsync/discovery/chain.py
 - ### ./bridge_backend/bridge_core/engines/envsync/discovery/__init__.py
-- ### ./bridge_backend/bridge_core/engines/envsync/providers/render.py
 - ### ./bridge_backend/bridge_core/engines/envsync/providers/__init__.py
 - ### ./bridge_backend/bridge_core/engines/envsync/providers/netlify.py
 - ### ./bridge_backend/bridge_core/engines/envsync/providers/base.py
@@ -16129,6 +16220,8 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./bridge_backend/bridge_core/registry/agents_registry.py
 - ### ./bridge_backend/bridge_core/registry/__init__.py
 - ### ./bridge_backend/bridge_core/registry/routes.py
+- ### ./bridge_backend/bridge_core/auth/__init__.py
+- ### ./bridge_backend/bridge_core/auth/routes.py
 - ### ./bridge_backend/bridge_core/guards/netlify_guard.py
 - ### ./bridge_backend/bridge_core/guards/__init__.py
 - ### ./bridge_backend/bridge_core/guards/routes.py
@@ -16178,6 +16271,7 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./bridge_backend/bridge_core/activity/__init__.py
 - ### ./bridge_backend/bridge_core/activity/routes.py
 - ### ./bridge_backend/bridge_core/token_forge_dominion/bootstrap.py
+- ### ./bridge_backend/bridge_core/token_forge_dominion/secret_forge.py
 - ### ./bridge_backend/bridge_core/token_forge_dominion/sovereign_integration.py
 - ### ./bridge_backend/bridge_core/token_forge_dominion/quantum_scanner.py
 - ### ./bridge_backend/bridge_core/token_forge_dominion/scan_envs.py
@@ -16220,7 +16314,6 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./bridge_backend/engines/chimera/adapters/github_forge_adapter.py
 - ### ./bridge_backend/engines/chimera/adapters/netlify_guard_adapter.py
 - ### ./bridge_backend/engines/chimera/adapters/env_adapter.py
-- ### ./bridge_backend/engines/chimera/adapters/render_fallback_adapter.py
 - ### ./bridge_backend/engines/chimera/adapters/arie_adapter.py
 - ### ./bridge_backend/engines/chimera/adapters/truth_adapter.py
 - ### ./bridge_backend/engines/leviathan/simulator.py
@@ -16272,7 +16365,6 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./bridge_backend/engines/steward/routes.py
 - ### ./bridge_backend/engines/steward/adapters/github_adapter.py
 - ### ./bridge_backend/engines/steward/adapters/netlify_adapter.py
-- ### ./bridge_backend/engines/steward/adapters/render_adapter.py
 - ### ./bridge_backend/engines/steward/adapters/__init__.py
 - ### ./bridge_backend/engines/autonomy/__init__.py
 - ### ./bridge_backend/engines/autonomy/models.py
@@ -16345,6 +16437,12 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./bridge_backend/tools/autonomy/pr_generator.py
 - ### ./bridge_backend/tools/autonomy/test_autonomy_tools.py
 - ### ./bridge_backend/tools/autonomy/__init__.py
+- ### ./bridge_backend/tools/firewall_sovereignty/network_resilience.py
+- ### ./bridge_backend/tools/firewall_sovereignty/sovereign_orchestrator.py
+- ### ./bridge_backend/tools/firewall_sovereignty/validation_sovereignty.py
+- ### ./bridge_backend/tools/firewall_sovereignty/script_execution.py
+- ### ./bridge_backend/tools/firewall_sovereignty/firewall_config_manager.py
+- ### ./bridge_backend/tools/firewall_sovereignty/__init__.py
 - ### ./bridge_backend/runtime/retry.py
 - ### ./bridge_backend/runtime/health_probe.py
 - ### ./bridge_backend/runtime/startup_watchdog.py
@@ -16382,6 +16480,7 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./bridge_backend/runtime/tde_x/stages/index_assets.py
 - ### ./bridge_backend/runtime/tde_x/stages/warm_caches.py
 - ### ./bridge_backend/runtime/tde_x/stages/__init__.py
+- ### ./bridge_backend/routes/sovereign_engines.py
 - ### ./bridge_backend/routes/health.py
 - ### ./bridge_backend/routes/diagnostics_timeline.py
 - ### ./bridge_backend/routes/control.py
@@ -16391,6 +16490,7 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./bridge_backend/integrations/__init__.py
 - ### ./bridge_backend/tests/test_chimera_oracle.py
 - ### ./bridge_backend/tests/test_autonomy_governor.py
+- ### ./bridge_backend/tests/test_micro_logician.py
 - ### ./bridge_backend/tests/test_agents_registry.py
 - ### ./bridge_backend/tests/test_protocols_registry.py
 - ### ./bridge_backend/tests/test_protocols_routes.py
@@ -16422,6 +16522,7 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./bridge_backend/tests/test_genesis_topics.py
 - ### ./bridge_backend/tests/test_github_forge.py
 - ### ./bridge_backend/tests/test_db_manager.py
+- ### ./bridge_backend/tests/test_micro_scribe.py
 - ### ./bridge_backend/tests/test_hxo_v196p.py
 - ### ./bridge_backend/tests/test_indoctrination_engine.py
 - ### ./bridge_backend/tests/test_protocols_routes_lore_policy.py
@@ -16432,11 +16533,11 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./bridge_backend/tests/test_envsync_pipeline.py
 - ### ./bridge_backend/tests/test_integrity_audit.py
 - ### ./bridge_backend/tests/test_github_envhook.py
+- ### ./bridge_backend/tests/test_sovereign_guard.py
 - ### ./bridge_backend/tests/test_fault_injection.py
 - ### ./bridge_backend/tests/test_leviathan_solver.py
 - ### ./bridge_backend/tests/smoke_test_solver.py
 - ### ./bridge_backend/tests/test_signing_roundtrip.py
-- ### ./bridge_backend/tests/test_render_fallback.py
 - ### ./bridge_backend/tests/test_autonomy_routes.py
 - ### ./bridge_backend/tests/test_reflex_loop.py
 - ### ./bridge_backend/tests/test_leviathan.py
@@ -16455,6 +16556,7 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./bridge_backend/tests/test_envscribe.py
 - ### ./bridge_backend/tests/test_envrecon.py
 - ### ./bridge_backend/tests/test_truth_engine.py
+- ### ./bridge_backend/tests/test_firewall_sovereignty.py
 - ### ./bridge_backend/tests/test_pr_summary.py
 - ### ./bridge_backend/tests/test_runtime_guards.py
 - ### ./bridge_backend/tests/test_total_stack_triage.py
@@ -16497,18 +16599,29 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./bridge_backend/tests/test_badgegen.py
 - ### ./bridge_backend/tests/test_health_record.py
 - ### ./bridge_backend/tests/test_custody_routes.py
-- ### ./bridge_backend/webhooks/render.py
 - ### ./bridge_backend/webhooks/deployment_webhooks.py
 - ### ./bridge_backend/webhooks/__init__.py
 - ### ./bridge_backend/webhooks/netlify.py
 - ### ./bridge_backend/webhooks/github.py
+- ### ./bridge_backend/bridge_engines/sovereign_guard.py
+- ### ./bridge_backend/bridge_engines/micro_logician.py
+- ### ./bridge_backend/bridge_engines/EXAMPLE.py
+- ### ./bridge_backend/bridge_engines/micro_scribe.py
+- ### ./bridge_backend/bridge_engines/__init__.py
 - ### ./bridge_backend/src/keys.py
+- ### ./bridge_backend/src/keyless_auth.py
 - ### ./bridge_backend/src/brain.py
 - ### ./bridge_backend/src/brain_cli.py
 - ### ./bridge_backend/src/export_and_sign.py
 - ### ./bridge_backend/src/__init__.py
 - ### ./bridge_backend/src/signer.py
+- ### ./.archive/render_legacy/render_webhook.py
+- ### ./.archive/render_legacy/render_envsync_provider.py
+- ### ./.archive/render_legacy/test_render_fallback.py
+- ### ./.archive/render_legacy/render_fallback_adapter.py
+- ### ./.archive/render_legacy/render_adapter.py
 - ### ./tests/test_captain_agent_separation.py
+- ### ./tests/test_secret_forge.py
 - ### ./tests/integration_test_genesis_linkage.py
 - ### ./tests/test_umbra_routes.py
 - ### ./tests/test_forge_dominion_v197s.py
@@ -16522,6 +16635,7 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./tests/test_codex_engine.py
 - ### ./tests/deployment_readiness_v197c.py
 - ### ./tests/test_genesis_v2_0_1.py
+- ### ./tests/test_keyless_security.py
 - ### ./tests/test_forge_cascade_synchrony.py
 - ### ./tests/test_selftest_v197j.py
 - ### ./tests/test_forge_manifest_resolver.py
@@ -16535,10 +16649,13 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./tests/validate_sanctum_cascade.py
 - ### ./tests/test_v196b_features.py
 - ### ./tests/test_v196f_features.py
+- ### ./tests/test_sovereign_audit.py
 - ### ./tests/test_v200_genesis.py
 - ### ./tests/test_runtime_handler.py
 - ### ./tests/test_autonomy_node.py
+- ### ./tests/test_bridge_harmony.py
 - ### ./tests/test_git_sovereign_agent.py
+- ### ./tests/conftest.py
 - ### ./tests/test_v196h_features.py
 - ### ./tests/test_quantum_dominion.py
 - ### ./codex/html_compiler.py
@@ -16548,10 +16665,24 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./codex/__init__.py
 - ### ./codex/parser_engine.py
 - ### ./codex/truth_engine.py
+- ### ./vault/archived_scripts/get_env_drift.py
+- ### ./vault/archived_scripts/verify_hxo_nexus.py
+- ### ./vault/archived_scripts/validate_genesis_unified.py
+- ### ./vault/archived_scripts/count_loc.py
+- ### ./vault/archived_scripts/smoke_test_engines.py
+- ### ./vault/archived_scripts/study_repo_with_engines.py
+- ### ./vault/archived_scripts/test_endpoints_full.py
 - ### ./bridge-frontend/vite.config.js
 - ### ./bridge-frontend/scripts/update-badge.js
 - ### ./bridge-frontend/scripts/build_triage.py
+- ### ./bridge-frontend/netlify/functions/api-armada-status.js
+- ### ./bridge-frontend/netlify/functions/api-agents.js
+- ### ./bridge-frontend/netlify/functions/api-activity.js
+- ### ./bridge-frontend/netlify/functions/api-vault-logs.js
+- ### ./bridge-frontend/netlify/functions/api-status.js
+- ### ./bridge-frontend/netlify/functions/api-missions.js
 - ### ./bridge-frontend/netlify/functions/diagnostic.js
+- ### ./bridge-frontend/netlify/functions/api-system-health.js
 - ### ./bridge-frontend/src/api.js
 - ### ./bridge-frontend/src/config.js
 - ### ./bridge-frontend/src/api/scans.js
@@ -16645,6 +16776,13 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 - ### ./bridge-frontend/src/api/auto_generated/engines_truth_cite.js
 - ### ./bridge-frontend/src/api/auto_generated/brain_memories_entry_id.js
 - ### ./bridge-frontend/src/utils/endpointBootstrap.js
+- ### ./bridge-frontend/src/services/brh-api.js
+- ### ./bridge-frontend/src/services/websocket-service.js
+- ### ./bridge-frontend/src/services/healing-net.js
+- ### ./bridge-frontend/src/services/deployment-validator.js
+- ### ./bridge-frontend/src/services/silent-failure-capture.js
+- ### ./bridge-frontend/src/services/true-data-revealer.js
+- ### ./bridge-frontend/src/hooks/useBRHConnection.js
 - ### ./bridge-frontend/src/hooks/useBridgeStream.js
 - ### ./brh/heartbeat_daemon.py
 - ### ./brh/role.py
@@ -19008,14 +19146,17 @@ _Generated automatically on 2025-11-07T03:41:36.489670+00:00 UTC_
 
 
 ### ./bridge_backend/bridge_core/auth/__init__.py
-  - from .routes import auth_bp, init_auth_routes
+  - from .routes import router
 
 
 ### ./bridge_backend/bridge_core/auth/routes.py
-  - from flask import Blueprint, request, jsonify
-  - from ...src.keyless_auth import get_keyless_handler
-  - # Fallback if relative import fails (e.g., when running standalone)
-  - from bridge_backend.src.keyless_auth import get_keyless_handler
+  - from fastapi import APIRouter, HTTPException
+  - from pydantic import BaseModel
+  - from typing import Optional
+  - import uuid
+  - import os
+  - from datetime import datetime, timezone
+  - from threading import Lock
 
 
 ### ./bridge_backend/bridge_core/guards/netlify_guard.py
