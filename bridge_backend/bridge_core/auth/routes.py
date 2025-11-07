@@ -7,12 +7,18 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional
 import uuid
+import os
 from datetime import datetime, timezone
+from threading import Lock
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-# Simple in-memory session store for keyless auth
+# Thread-safe in-memory session store for keyless auth
 _active_sessions = {}
+_sessions_lock = Lock()
+
+# Configuration
+SESSION_EXPIRY_SECONDS = int(os.getenv("AUTH_SESSION_EXPIRY_SECONDS", "3600"))  # Default 1 hour
 
 class SessionRequest(BaseModel):
     requestType: str = "ephemeral_session"
@@ -45,11 +51,12 @@ def establish_session(request: SessionRequest):
             "session_id": session_id,
             "created_at": datetime.now(timezone.utc).isoformat(),
             "key_type": "ephemeral",
-            "expires_in": 3600  # 1 hour
+            "expires_in": SESSION_EXPIRY_SECONDS
         }
         
-        # Store session
-        _active_sessions[session_id] = session
+        # Store session (thread-safe)
+        with _sessions_lock:
+            _active_sessions[session_id] = session
         
         # Format response for frontend
         return {
@@ -67,12 +74,15 @@ def establish_session(request: SessionRequest):
         }
         
     except Exception as e:
-        return {
-            "authenticated": False,
-            "error": str(e),
-            "capability": "testing",
-            "staticKeysUsed": False
-        }
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "authenticated": False,
+                "error": str(e),
+                "capability": "testing",
+                "staticKeysUsed": False
+            }
+        )
 
 
 @router.get("/capability")
@@ -90,11 +100,15 @@ def check_capability():
     }
     """
     try:
+        with _sessions_lock:
+            active_count = len(_active_sessions)
+        
         return {
             "capable": True,
             "authModel": "keyless_ephemeral_sessions",
             "staticKeysExist": False,
-            "activeSessions": len(_active_sessions),
+            "activeSessions": active_count,
+            "sessionExpiry": SESSION_EXPIRY_SECONDS,
             "securityAdvantages": [
                 "No static keys to leak",
                 "Dynamic session generation",
@@ -104,11 +118,14 @@ def check_capability():
         }
         
     except Exception as e:
-        return {
-            "capable": False,
-            "error": str(e),
-            "staticKeysExist": False
-        }
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "capable": False,
+                "error": str(e),
+                "staticKeysExist": False
+            }
+        )
 
 
 @router.get("/status")
@@ -121,11 +138,15 @@ def auth_status():
     Returns complete status of keyless auth system
     """
     try:
+        with _sessions_lock:
+            active_count = len(_active_sessions)
+        
         return {
             "status": "operational",
             "authModel": "keyless_ephemeral_sessions",
             "staticKeysExist": False,
-            "activeSessions": len(_active_sessions),
+            "activeSessions": active_count,
+            "sessionExpiry": SESSION_EXPIRY_SECONDS,
             "securityAdvantages": [
                 "No static keys in repository",
                 "Dynamic key generation",
@@ -136,9 +157,12 @@ def auth_status():
         }
         
     except Exception as e:
-        return {
-            "error": str(e),
-            "authModel": "error",
-            "staticKeysExist": False,
-            "status": "degraded"
-        }
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": str(e),
+                "authModel": "error",
+                "staticKeysExist": False,
+                "status": "degraded"
+            }
+        )
