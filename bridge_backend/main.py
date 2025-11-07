@@ -276,6 +276,11 @@ if os.getenv("LINK_ENGINES", "true").lower() == "true":
 else:
     logger.info("[LINKAGE] Engine linkage disabled (set LINK_ENGINES=true to enable)")
 
+# Bridge Sovereignty: readiness gate system for perfection, harmony, resonance
+if os.getenv("SOVEREIGNTY_ENABLED", "true").lower() == "true":
+    safe_include_router("bridge_backend.bridge_core.sovereignty.routes", prefix="/api/bridge")
+    logger.info("[SOVEREIGNTY] Readiness gate enabled - bridge sovereignty active")
+
 # Blueprint engine: enabled by default for production mode
 # Part of core engine trio (Parser, Blueprint, Cascade) for full production readiness
 if os.getenv("BLUEPRINTS_ENABLED", "true").lower() == "true":
@@ -420,6 +425,32 @@ async def startup_event():
             logger.info("✅ TDE-X v2 orchestrator initialized")
         except Exception as e:
             logger.warning(f"⚠️ TDE-X v2 initialization failed (continuing): {e}")
+    
+    # === Bridge Sovereignty Guard ===
+    # Initialize sovereignty readiness gate if enabled
+    if os.getenv("SOVEREIGNTY_ENABLED", "true").lower() == "true":
+        try:
+            from bridge_backend.bridge_core.sovereignty.readiness_gate import get_sovereignty_guard
+            
+            logger.info("🛡️ [Sovereignty] Initializing Bridge Sovereignty Guard...")
+            guard = await get_sovereignty_guard()
+            
+            # Wait for sovereignty to be achieved (gracefully)
+            sovereignty_timeout = float(os.getenv("SOVEREIGNTY_TIMEOUT", "30.0"))
+            if not guard.is_ready():
+                logger.info(f"⏳ [Sovereignty] Gracefully waiting for perfection (timeout: {sovereignty_timeout}s)")
+                achieved = await guard.wait_for_sovereignty(timeout=sovereignty_timeout)
+                
+                if achieved:
+                    logger.info("👑 [Sovereignty] Bridge has achieved sovereignty - ready to serve")
+                else:
+                    logger.warning(
+                        "⚠️ [Sovereignty] Timeout reached - bridge will serve in degraded mode\n"
+                        "   Set SOVEREIGNTY_TIMEOUT to a higher value for slower systems"
+                    )
+            
+        except Exception as e:
+            logger.warning(f"⚠️ [Sovereignty] Initialization failed (continuing): {e}")
     
     # === STAGE 1: Minimal Health Check (Immediate Render Detection) ===
     if TDB_ENABLED:
