@@ -23,6 +23,7 @@ jobs:
           BRIDGE_BASE: ${{ secrets.BRIDGE_BASE || secrets.BACKEND_URL || 'https://bridge.sr-aibridge.com' }}
           # Enable safe placeholder mode when no backend URL is configured in secrets
           # This prevents workflow failures when external services aren't yet deployed
+          # Logic: If BACKEND_URL exists (not empty), disable safe mode (false), else enable (true)
           SAFE_PLACEHOLDER_MODE: ${{ secrets.BACKEND_URL != '' && 'false' || 'true' }}
 
       - name: Triage matrix with pass/fail budget
@@ -30,6 +31,7 @@ jobs:
         env:
           BRIDGE_BASE: ${{ secrets.BRIDGE_BASE || secrets.BACKEND_URL || 'https://bridge.sr-aibridge.com' }}
           # Enable safe placeholder mode when no backend URL is configured in secrets
+          # Logic: If BACKEND_URL exists (not empty), disable safe mode (false), else enable (true)
           SAFE_PLACEHOLDER_MODE: ${{ secrets.BACKEND_URL != '' && 'false' || 'true' }}
 
       - name: Upload triage artifacts
