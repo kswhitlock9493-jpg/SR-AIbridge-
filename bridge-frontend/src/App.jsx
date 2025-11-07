@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink, Navigate } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
 import CommandDeck from './components/CommandDeck.jsx';
@@ -14,6 +15,8 @@ import IndoctrinationPanel from './components/IndoctrinationPanel.jsx';
 import AgentFoundry from './components/AgentFoundry.jsx';
 import TierPanel from './components/dashboard/TierPanel.jsx';
 import PermissionsConsole from './components/PermissionsConsole.jsx';
+import { DeploymentStatusBadge } from './components/DeploymentGate.jsx';
+import { SilentFailureCapture } from './services/silent-failure-capture.js';
 import './styles.css';
 
 const App = () => {
@@ -34,6 +37,13 @@ const App = () => {
     { path: '/system-health', label: '🔍 System Health' }
   ];
 
+  // Initialize Silent Failure Capture on app mount
+  useEffect(() => {
+    SilentFailureCapture.initialize().catch(err => {
+      console.error('Failed to initialize Silent Failure Capture:', err);
+    });
+  }, []);
+
   return (
     <Router>
       <div className="sr-aibridge-app">
@@ -44,6 +54,7 @@ const App = () => {
               SR-AIbridge Command Center
             </h1>
             <div className="connection-status">
+              <DeploymentStatusBadge />
               <span className="status-indicator online">●</span>
               <span className="status-text">Connected</span>
             </div>

@@ -1,12 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { apiClient } from '../api';
+import { SovereignRevealGate } from './DeploymentGate.jsx';
+import { RealAgentService } from '../services/true-data-revealer.js';
+import { SilentFailureCapture } from '../services/silent-failure-capture.js';
 
 /**
  * Agent Foundry - Comprehensive Agent Creation and Management
  * Features invisible Indoctrination Engine integration
  * No separate tab needed - indoctrination is seamlessly integrated
+ * 
+ * DEPLOYMENT GATE: Only reveals real functionality when backend is deployed
  */
-const AgentFoundry = () => {
+const AgentFoundryCore = () => {
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -34,8 +39,9 @@ const AgentFoundry = () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await apiClient.get('/engines/indoctrination/agents');
-      const agentList = Array.isArray(data) ? data : [];
+      
+      // Use RealAgentService for deployment-aware data fetching
+      const agentList = await RealAgentService.getAgents();
       setAgents(agentList);
       
       // Calculate QA metrics
@@ -46,8 +52,15 @@ const AgentFoundry = () => {
         revoked: agentList.filter(a => a.status === 'revoked').length
       };
       setQaMetrics(metrics);
+      
+      // Record successful health check
+      SilentFailureCapture.recordHealthCheck('agent-foundry-indoctrination', true);
     } catch (err) {
       console.error('Failed to fetch agents:', err);
+      setError('Failed to load agents: ' + err.message);
+      
+      // Record failure
+      SilentFailureCapture.recordHealthCheck('agent-foundry-indoctrination', false, err);
       setError('Failed to load agents: ' + err.message);
     } finally {
       setLoading(false);
@@ -474,6 +487,21 @@ const AgentFoundry = () => {
         )}
       </div>
     </div>
+  );
+};
+
+/**
+ * AgentFoundry - Wrapped with Deployment Gate
+ * Only reveals when backend systems are deployed
+ */
+const AgentFoundry = () => {
+  return (
+    <SovereignRevealGate
+      componentName="Agent Foundry"
+      requiredSystems={['BRH Integration', 'Indoctrination Engine', 'Crypto System']}
+    >
+      <AgentFoundryCore />
+    </SovereignRevealGate>
   );
 };
 

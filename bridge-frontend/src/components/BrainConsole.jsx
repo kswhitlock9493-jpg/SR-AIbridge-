@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import config from '../config';
+import { SovereignRevealGate } from './DeploymentGate.jsx';
+import { SilentFailureCapture } from '../services/silent-failure-capture.js';
 
-const BrainConsole = () => {
+const BrainConsoleCore = () => {
   const [brainState, setBrainState] = useState({
     memories: [],
     stats: null,
@@ -49,6 +51,9 @@ const BrainConsole = () => {
         categories: categoriesData.categories || [],
         loading: false
       }));
+      
+      // Record successful health check
+      SilentFailureCapture.recordHealthCheck('brain-console', true);
     } catch (error) {
       console.error('Brain data fetch error:', error);
       setBrainState(prev => ({
@@ -56,6 +61,9 @@ const BrainConsole = () => {
         error: error.message,
         loading: false
       }));
+      
+      // Record failure
+      SilentFailureCapture.recordHealthCheck('brain-console', false, error);
     }
   }, [API_BASE]);
 
@@ -392,6 +400,21 @@ const BrainConsole = () => {
         </div>
       )}
     </div>
+  );
+};
+
+/**
+ * BrainConsole - Wrapped with Deployment Gate
+ * Only reveals when backend systems are deployed
+ */
+const BrainConsole = () => {
+  return (
+    <SovereignRevealGate
+      componentName="Brain Console"
+      requiredSystems={['BRH Integration', 'Brain Memory System', 'Healing Net']}
+    >
+      <BrainConsoleCore />
+    </SovereignRevealGate>
   );
 };
 

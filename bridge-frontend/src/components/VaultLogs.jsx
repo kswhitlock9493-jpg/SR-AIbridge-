@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { getVaultLogs, addVaultLog } from '../api';
+import { SovereignRevealGate } from './DeploymentGate.jsx';
+import { RealVaultService } from '../services/true-data-revealer.js';
+import { SilentFailureCapture } from '../services/silent-failure-capture.js';
 
-const VaultLogs = () => {
+const VaultLogsCore = () => {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -24,12 +27,20 @@ const VaultLogs = () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await getVaultLogs();
+      
+      // Use RealVaultService for deployment-aware data fetching
+      const data = await RealVaultService.getVaultLogs();
       setLogs(Array.isArray(data) ? data : []);
       setLastUpdate(new Date());
+      
+      // Record successful health check
+      SilentFailureCapture.recordHealthCheck('vault-logs', true);
     } catch (err) {
       console.error('Failed to fetch vault logs:', err);
       setError('Failed to load vault logs: ' + err.message);
+      
+      // Record failure
+      SilentFailureCapture.recordHealthCheck('vault-logs', false, err);
     } finally {
       setLoading(false);
     }
@@ -358,6 +369,21 @@ const VaultLogs = () => {
         </div>
       )}
     </div>
+  );
+};
+
+/**
+ * VaultLogs - Wrapped with Deployment Gate
+ * Only reveals when backend systems are deployed
+ */
+const VaultLogs = () => {
+  return (
+    <SovereignRevealGate
+      componentName="Vault Logs"
+      requiredSystems={['BRH Integration', 'Vault System', 'Healing Net']}
+    >
+      <VaultLogsCore />
+    </SovereignRevealGate>
   );
 };
 

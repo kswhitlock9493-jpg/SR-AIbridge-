@@ -1,7 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getMissions, createMission, updateMissionProgress, updateMissionStatus } from '../api';
+import { SovereignRevealGate } from './DeploymentGate.jsx';
+import { RealMissionService } from '../services/true-data-revealer.js';
+import { SilentFailureCapture } from '../services/silent-failure-capture.js';
 
-const MissionLog = () => {
+const MissionLogCore = () => {
   const [missions, setMissions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -26,13 +29,20 @@ const MissionLog = () => {
     try {
       setLoading(true);
       setError(null);
-      // Fetch only captain-owned missions
-      const data = await getMissions(currentCaptain, 'captain');
+      
+      // Use RealMissionService for deployment-aware data fetching
+      const data = await RealMissionService.getMissions({ captain: currentCaptain, role: 'captain' });
       setMissions(Array.isArray(data) ? data : []);
       setLastUpdate(new Date());
+      
+      // Record successful health check
+      SilentFailureCapture.recordHealthCheck('mission-log', true);
     } catch (err) {
       console.error('Failed to fetch missions:', err);
       setError('Failed to load missions: ' + err.message);
+      
+      // Record failure
+      SilentFailureCapture.recordHealthCheck('mission-log', false, err);
     } finally {
       setLoading(false);
     }
@@ -505,4 +515,20 @@ const MissionLog = () => {
   );
 };
 
+/**
+ * MissionLog - Wrapped with Deployment Gate
+ * Only reveals when backend systems are deployed
+ */
+const MissionLog = () => {
+  return (
+    <SovereignRevealGate
+      componentName="Mission Log"
+      requiredSystems={['BRH Integration', 'Healing Net', 'Mission System']}
+    >
+      <MissionLogCore />
+    </SovereignRevealGate>
+  );
+};
+
+export default MissionLog;
 export default MissionLog;
