@@ -36,6 +36,7 @@ export function isNetlifyFunctions() {
  * @returns {string} Transformed endpoint path
  */
 export function transformEndpoint(endpoint) {
+  // Only transform if using Netlify Functions
   if (!isNetlifyFunctions()) {
     return endpoint;
   }
@@ -92,6 +93,11 @@ export function buildURL(endpoint, baseURL = null) {
   
   // If endpoint is already a full URL, return as-is
   if (transformed.startsWith('http://') || transformed.startsWith('https://')) {
+    return transformed;
+  }
+  
+  // If base is empty or just "/", return the transformed endpoint directly
+  if (!base || base === '/' || base === '') {
     return transformed;
   }
   

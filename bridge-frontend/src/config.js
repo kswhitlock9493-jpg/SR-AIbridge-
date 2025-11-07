@@ -2,9 +2,9 @@
 // Production-first configuration with development fallback
 
 // Determine API base URL with proper precedence:
-// 1. VITE_API_BASE (Vite standard)
+// 1. VITE_API_BASE (Vite standard) - highest priority
 // 2. REACT_APP_API_URL (React standard, supported via vite.config.js)
-// 3. Production default (Netlify Functions) for deployed builds
+// 3. Production default based on deployment type
 // 4. Localhost for development mode
 const getApiBase = () => {
   // Check for explicit environment variables
@@ -20,9 +20,12 @@ const getApiBase = () => {
     return "http://localhost:8000";
   }
   
-  // Production default - Use Netlify Functions (relative paths)
-  // When deployed, /.netlify/functions/* will be available
-  return "/.netlify/functions";
+  // Production default:
+  // If backend is deployed separately (e.g., Render, BRH), API calls should go directly to it
+  // The backend URL should be set via VITE_API_BASE environment variable in Netlify
+  // For now, default to empty string (relative paths) which will work if backend is proxied
+  // via _redirects or if backend is on same domain
+  return "";
 };
 
 export const API_BASE = getApiBase();
