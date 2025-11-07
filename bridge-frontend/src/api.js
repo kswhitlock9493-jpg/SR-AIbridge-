@@ -1,6 +1,16 @@
 import config from './config';
+import { APIGuardian, CircuitBreaker } from './services/healing-net';
 
 const API_BASE_URL = config.API_BASE_URL;
+
+// Circuit breakers for different service categories
+const circuitBreakers = {
+  missions: new CircuitBreaker('missions', { failureThreshold: 5, resetTimeout: 60000 }),
+  brain: new CircuitBreaker('brain', { failureThreshold: 5, resetTimeout: 60000 }),
+  custody: new CircuitBreaker('custody', { failureThreshold: 5, resetTimeout: 60000 }),
+  vault: new CircuitBreaker('vault', { failureThreshold: 5, resetTimeout: 60000 }),
+  engines: new CircuitBreaker('engines', { failureThreshold: 5, resetTimeout: 60000 })
+};
 
 // Map endpoint paths to Netlify Function names (when using Netlify Functions)
 const NETLIFY_ENDPOINT_MAP = {
@@ -50,74 +60,48 @@ class APIClient {
   async request(endpoint, options = {}) {
     // Transform endpoint if using Netlify Functions
     const transformedEndpoint = this.transformEndpoint(endpoint);
-    const {
-      method = 'GET',
-      headers = {},
-      body,
-      timeout = this.defaultTimeout,
-      retries = this.maxRetries
-    } = options;
+    
+    // Determine which circuit breaker to use based on endpoint
+    let circuitBreaker = null;
+    if (transformedEndpoint.includes('/missions')) {
+      circuitBreaker = circuitBreakers.missions;
+    } else if (transformedEndpoint.includes('/brain')) {
+      circuitBreaker = circuitBreakers.brain;
+    } else if (transformedEndpoint.includes('/custody')) {
+      circuitBreaker = circuitBreakers.custody;
+    } else if (transformedEndpoint.includes('/vault')) {
+      circuitBreaker = circuitBreakers.vault;
+    } else if (transformedEndpoint.includes('/engines')) {
+      circuitBreaker = circuitBreakers.engines;
+    }
 
-    const url = `${this.baseURL}${transformedEndpoint}`;
-    const requestHeaders = {
-      'Content-Type': 'application/json',
-      ...headers
+    const executeRequest = async () => {
+      return await APIGuardian.safeFetch(transformedEndpoint, {
+        ...options,
+        baseURL: this.baseURL,
+        timeout: options.timeout || this.defaultTimeout,
+        retries: options.retries || this.maxRetries,
+        fallbackOnError: options.fallbackOnError !== false
+      });
     };
 
-    for (let attempt = 0; attempt <= retries; attempt++) {
+    // Execute with circuit breaker if available
+    if (circuitBreaker) {
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), timeout);
-
-        const response = await fetch(url, {
-          method,
-          headers: requestHeaders,
-          body: body ? JSON.stringify(body) : undefined,
-          signal: controller.signal
-        });
-
-        clearTimeout(timeoutId);
-
-        if (!response.ok) {
-          // Don't retry client errors (4xx)
-          if (response.status >= 400 && response.status < 500) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-          }
-          
-          // Retry server errors (5xx) and network errors
-          if (attempt === retries) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-          }
-          
-          // Wait before retrying with exponential backoff
-          await this.sleep(this.baseRetryDelay * Math.pow(2, attempt));
-          continue;
-        }
-
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          return await response.json();
-        }
-        
-        return await response.text();
-
+        return await circuitBreaker.execute(executeRequest);
       } catch (error) {
-        if (error.name === 'AbortError') {
-          if (attempt === retries) {
-            throw new Error(`Request timeout after ${timeout}ms`);
-          }
-        } else if (attempt === retries) {
-          throw new Error(`Network error: ${error.message}`);
+        // Circuit breaker is open, use fallback
+        if (error.name === 'HealingNetException' && error.message.includes('Circuit breaker')) {
+          console.warn('[API] Circuit breaker triggered, using fallback');
+          const { UmbraLattice } = await import('./services/healing-net');
+          return UmbraLattice.getFallbackData(transformedEndpoint);
         }
-
-        // Wait before retrying with exponential backoff
-        await this.sleep(this.baseRetryDelay * Math.pow(2, attempt));
+        throw error;
       }
     }
-  }
 
-  sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    // No circuit breaker, execute directly
+    return executeRequest();
   }
 
   // HTTP method helpers

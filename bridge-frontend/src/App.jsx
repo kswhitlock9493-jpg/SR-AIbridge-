@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, NavLink, Navigate } from 'react-router-dom';
+import ErrorBoundary from './components/ErrorBoundary.jsx';
 import CommandDeck from './components/CommandDeck.jsx';
 import CommandDeckV1 from './pages/CommandDeckV1.jsx';
 import CaptainsChat from './components/CaptainsChat.jsx';
@@ -10,6 +11,7 @@ import SystemSelfTest from './components/SystemSelfTest.jsx';
 import BrainConsole from './components/BrainConsole.jsx';
 import AdmiralKeysPanel from './components/AdmiralKeysPanel.jsx';
 import IndoctrinationPanel from './components/IndoctrinationPanel.jsx';
+import AgentFoundry from './components/AgentFoundry.jsx';
 import TierPanel from './components/dashboard/TierPanel.jsx';
 import PermissionsConsole from './components/PermissionsConsole.jsx';
 import './styles.css';
@@ -25,6 +27,7 @@ const App = () => {
     { path: '/armada-map', label: '🗺️ Armada Map' },
     { path: '/brain', label: '🧠 Brain' },
     { path: '/custody', label: '🔑 Custody' },
+    { path: '/agent-foundry', label: '🛠️ Agent Foundry' },
     { path: '/tier-dashboard', label: '⭐ Tier Dashboard' },
     { path: '/indoctrination', label: '⚔️ Indoctrination' },
     { path: '/permissions', label: '🔒 Permissions' },
@@ -82,19 +85,91 @@ const App = () => {
           <main className="app-content">
             <div className="content-wrapper">
               <Routes>
-                <Route path="/" element={<CommandDeck />} />
-                <Route path="/deck" element={<CommandDeckV1 />} />
-                <Route path="/captains-chat" element={<CaptainsChat />} />
-                <Route path="/captain-to-captain" element={<CaptainToCaptain />} />
-                <Route path="/vault-logs" element={<VaultLogs />} />
-                <Route path="/mission-log" element={<MissionLog />} />
-                <Route path="/armada-map" element={<ArmadaMap />} />
-                <Route path="/brain" element={<BrainConsole />} />
-                <Route path="/custody" element={<AdmiralKeysPanel />} />
-                <Route path="/tier-dashboard" element={<TierPanel />} />
-                <Route path="/indoctrination" element={<IndoctrinationPanel />} />
-                <Route path="/permissions" element={<PermissionsConsole />} />
-                <Route path="/system-health" element={<SystemSelfTest />} />
+                <Route path="/" element={
+                  <ErrorBoundary name="CommandDeck">
+                    <CommandDeck />
+                  </ErrorBoundary>
+                } />
+                <Route path="/deck" element={
+                  <ErrorBoundary name="HeritageDeck">
+                    <CommandDeckV1 />
+                  </ErrorBoundary>
+                } />
+                <Route path="/captains-chat" element={
+                  <ErrorBoundary name="CaptainsChat">
+                    <CaptainsChat />
+                  </ErrorBoundary>
+                } />
+                <Route path="/captain-to-captain" element={
+                  <ErrorBoundary name="CaptainToCaptain">
+                    <CaptainToCaptain />
+                  </ErrorBoundary>
+                } />
+                <Route path="/vault-logs" element={
+                  <ErrorBoundary name="VaultLogs">
+                    <VaultLogs />
+                  </ErrorBoundary>
+                } />
+                <Route path="/mission-log" element={
+                  <ErrorBoundary 
+                    name="MissionLog"
+                    errorMessage="Mission Log is temporarily unavailable. The system is recovering."
+                  >
+                    <MissionLog />
+                  </ErrorBoundary>
+                } />
+                <Route path="/armada-map" element={
+                  <ErrorBoundary name="ArmadaMap">
+                    <ArmadaMap />
+                  </ErrorBoundary>
+                } />
+                <Route path="/brain" element={
+                  <ErrorBoundary 
+                    name="BrainConsole"
+                    errorMessage="Brain Console is temporarily unavailable. Memory systems are stabilizing."
+                  >
+                    <BrainConsole />
+                  </ErrorBoundary>
+                } />
+                <Route path="/custody" element={
+                  <ErrorBoundary 
+                    name="AdmiralKeys"
+                    errorMessage="Admiral Keys panel is temporarily unavailable. Cryptographic systems are recovering."
+                  >
+                    <AdmiralKeysPanel />
+                  </ErrorBoundary>
+                } />
+                <Route path="/agent-foundry" element={
+                  <ErrorBoundary 
+                    name="AgentFoundry"
+                    errorMessage="Agent Foundry is temporarily unavailable. Agent creation systems are recovering."
+                  >
+                    <AgentFoundry />
+                  </ErrorBoundary>
+                } />
+                <Route path="/tier-dashboard" element={
+                  <ErrorBoundary name="TierDashboard">
+                    <TierPanel />
+                  </ErrorBoundary>
+                } />
+                <Route path="/indoctrination" element={
+                  <ErrorBoundary 
+                    name="Indoctrination"
+                    errorMessage="Indoctrination Engine is temporarily unavailable."
+                  >
+                    <IndoctrinationPanel />
+                  </ErrorBoundary>
+                } />
+                <Route path="/permissions" element={
+                  <ErrorBoundary name="Permissions">
+                    <PermissionsConsole />
+                  </ErrorBoundary>
+                } />
+                <Route path="/system-health" element={
+                  <ErrorBoundary name="SystemHealth">
+                    <SystemSelfTest />
+                  </ErrorBoundary>
+                } />
                 {/* Redirect any unknown paths to command deck */}
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>

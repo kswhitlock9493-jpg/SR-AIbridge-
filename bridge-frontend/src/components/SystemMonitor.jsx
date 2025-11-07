@@ -3,7 +3,7 @@
  * Real-time endpoint health monitoring and system diagnostics
  */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRealtimeData } from '../hooks/useBRHConnection';
 import BRHService from '../services/brh-api';
 
