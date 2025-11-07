@@ -97,7 +97,11 @@ class SystemValidator {
       
       return isResponsive;
     } catch (error) {
-      console.warn('[DeploymentValidator] Keyless crypto validation failed:', error.message);
+      // NOTE: Crypto validation failure is EXPECTED and OK!
+      // Crypto is an OPTIONAL system - it doesn't block deployment
+      // The custody endpoint requires admiral authentication, which causes a 403
+      // This is by design and doesn't prevent true deployment
+      console.log('[DeploymentValidator] ℹ️ Crypto validation failed (expected - optional system):', error.message);
       return false;
     }
   }
@@ -223,12 +227,21 @@ class DeploymentValidator {
     
     if (trueDeployment) {
       console.log('🎉 TRUE BRIDGE OPERATIONAL: Core systems online!');
+      console.log(`   ✅ BRH: ${brh ? 'PASS' : 'FAIL'}`);
+      console.log(`   ✅ Healing Net: ${healingNet ? 'PASS' : 'FAIL'}`);
+      console.log(`   ℹ️ Crypto: ${crypto ? 'PASS' : 'FAIL (optional - OK)'}`);
+      console.log(`   ℹ️ Umbra: ${umbra ? 'PASS' : 'FAIL (optional - OK)'}`);
+      console.log(`   ℹ️ Indoctrination: ${indoctrination ? 'PASS' : 'FAIL (optional - OK)'}`);
+      console.log('   🔓 Frontend will exit placeholder mode and reveal components');
     } else {
       const failedSystems = Object.entries(validationChecks)
         .filter(([_, v]) => !v)
         .map(([k]) => k)
         .join(', ');
+      const failedCoreSystem = !brh ? 'BRH' : !healingNet ? 'Healing Net' : 'Unknown';
       console.log(`🕵️ Bridge in placeholder mode: Core deployment not yet achieved. Failed systems: ${failedSystems}`);
+      console.log(`   ❌ Critical: ${failedCoreSystem} is not responding`);
+      console.log('   🔒 Frontend will remain in placeholder mode');
     }
 
     return result;
