@@ -184,6 +184,7 @@ safe_include_router("bridge_backend.bridge_core.activity.routes")
 safe_include_router("bridge_backend.bridge_core.vault.routes")
 safe_include_router("bridge_backend.bridge_core.fleet.routes")
 safe_include_router("bridge_backend.bridge_core.custody.routes")
+safe_include_router("bridge_backend.bridge_core.auth.routes")  # Keyless security auth endpoints
 safe_include_router("bridge_backend.bridge_core.console.routes")
 safe_include_router("bridge_backend.bridge_core.captains.routes")
 safe_include_router("bridge_backend.bridge_core.guardians.routes")
