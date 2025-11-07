@@ -102,10 +102,40 @@ class BridgeSovereigntyGuard:
         # Load thresholds from environment with production-ready defaults
         # These defaults allow deployment while still maintaining quality
         # For aspirational "perfect sovereignty", set to 0.99 via environment
-        self.MIN_PERFECTION = float(os.getenv("SOVEREIGNTY_MIN_PERFECTION", "0.75"))
-        self.MIN_HARMONY = float(os.getenv("SOVEREIGNTY_MIN_HARMONY", "0.85"))
-        self.MIN_RESONANCE = float(os.getenv("SOVEREIGNTY_MIN_RESONANCE", "0.70"))
-        self.MIN_SOVEREIGNTY = float(os.getenv("SOVEREIGNTY_MIN_OVERALL", "0.75"))
+        try:
+            self.MIN_PERFECTION = float(os.getenv("SOVEREIGNTY_MIN_PERFECTION", "0.75"))
+            self.MIN_HARMONY = float(os.getenv("SOVEREIGNTY_MIN_HARMONY", "0.85"))
+            self.MIN_RESONANCE = float(os.getenv("SOVEREIGNTY_MIN_RESONANCE", "0.70"))
+            self.MIN_SOVEREIGNTY = float(os.getenv("SOVEREIGNTY_MIN_OVERALL", "0.75"))
+            
+            # Validate thresholds are within acceptable range (0.0 - 1.0)
+            for name, value in [
+                ("SOVEREIGNTY_MIN_PERFECTION", self.MIN_PERFECTION),
+                ("SOVEREIGNTY_MIN_HARMONY", self.MIN_HARMONY),
+                ("SOVEREIGNTY_MIN_RESONANCE", self.MIN_RESONANCE),
+                ("SOVEREIGNTY_MIN_OVERALL", self.MIN_SOVEREIGNTY),
+            ]:
+                if not 0.0 <= value <= 1.0:
+                    logger.warning(
+                        f"⚠️ [Sovereignty] Invalid threshold {name}={value}, "
+                        f"must be between 0.0 and 1.0. Using default 0.75."
+                    )
+                    # Reset to safe default
+                    if name == "SOVEREIGNTY_MIN_PERFECTION":
+                        self.MIN_PERFECTION = 0.75
+                    elif name == "SOVEREIGNTY_MIN_HARMONY":
+                        self.MIN_HARMONY = 0.85
+                    elif name == "SOVEREIGNTY_MIN_RESONANCE":
+                        self.MIN_RESONANCE = 0.70
+                    elif name == "SOVEREIGNTY_MIN_OVERALL":
+                        self.MIN_SOVEREIGNTY = 0.75
+        except ValueError as e:
+            logger.error(f"⚠️ [Sovereignty] Invalid threshold configuration: {e}. Using defaults.")
+            # Fallback to safe defaults
+            self.MIN_PERFECTION = 0.75
+            self.MIN_HARMONY = 0.85
+            self.MIN_RESONANCE = 0.70
+            self.MIN_SOVEREIGNTY = 0.75
         
         # Log configured thresholds
         logger.info(
@@ -360,7 +390,8 @@ class BridgeSovereigntyGuard:
                 break
         
         # Base resonance on operational ratio with critical engine multiplier
-        # Reduced penalty from 0.8 to 0.9 to allow deployment with one critical engine down
+        # Reduced penalty from 0.8 to 0.9 when critical engines are not all operational
+        # Allows deployment with high engine availability even if one critical engine is down
         base_resonance = operational / total if total > 0 else 0.0
         resonance_score = base_resonance * (1.0 if critical_operational else 0.9)
         
