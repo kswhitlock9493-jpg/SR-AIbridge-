@@ -80,6 +80,10 @@ services:
     env:
       - "ENVIRONMENT=production"
       - "LOG_LEVEL=INFO"
+      - "ENGINES_ENABLE_TRUE=true"
+      - "GENESIS_MODE=enabled"
+      - "LINK_ENGINES=true"
+      - "BLUEPRINTS_ENABLED=true"
     health:
       http: "http://localhost:8000/health/live"
       interval: 10s

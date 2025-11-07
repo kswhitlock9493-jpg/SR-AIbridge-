@@ -73,3 +73,23 @@ def list_chunks(tag: Optional[str] = None, source: Optional[str] = None, limit: 
 @router.get("/search")
 def search(q: str = Query(..., min_length=2), limit: int = 50):
     return P.search(q, limit=limit)
+
+@router.get("/status")
+def get_status():
+    """Get Parser Engine status for deployment validation."""
+    # Check if vault is accessible
+    vault_active = False
+    try:
+        from .service import PARSER_ROOT
+        vault_active = PARSER_ROOT.exists()
+    except (ImportError, AttributeError, OSError):
+        # Import/attribute errors if vault not configured
+        # OSError for filesystem permission issues
+        pass
+    
+    return {
+        "status": "operational",
+        "engine": "parser",
+        "version": "1.0.0",
+        "vault_active": vault_active
+    }
