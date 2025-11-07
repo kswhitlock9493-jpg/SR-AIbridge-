@@ -2,7 +2,11 @@ name: 🧪 Bridge Quality Gate
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
+    paths-ignore: 
+      - "**/dist/**"
+      - "**/*.md"
+      - "docs/**"
 
 jobs:
   bcse:
@@ -14,7 +18,8 @@ jobs:
     env:
       FORGE_DOMINION_ROOT: ${{ secrets.FORGE_DOMINION_ROOT }}
       DOMINION_SEAL: ${{ secrets.DOMINION_SEAL }}
-      FORGE_POLICY_URL: ${{ secrets.FORGE_POLICY_URL }} # optional
+      # Branch-aware policy URL - BCSE will use local policy if this is not set
+      # FORGE_POLICY_URL: https://sovereign.bridge/api/forge/policy/quality?branch=${{ github.ref_name }}
 
     steps:
       - uses: actions/checkout@v4
@@ -38,7 +43,7 @@ jobs:
           pip install -r requirements-dev.txt
           npm --prefix bridge-frontend ci
 
-      - name: Run BCSE
+      - name: Run BCSE (Sovereign Quality Gate)
         id: bcse
         run: |
           python -m bridge_tools.bcse.cli analyze

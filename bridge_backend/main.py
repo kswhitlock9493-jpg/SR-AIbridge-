@@ -313,6 +313,10 @@ if os.getenv("FORGE_MODE", "disabled").lower() == "enabled":
 else:
     logger.info("[FORGE] Disabled (set FORGE_MODE=enabled to enable)")
 
+# Forge Policy API - Always enabled for BCSE integration
+safe_include_router("bridge_backend.forge.policy_api")
+logger.info("[FORGE POLICY] BCSE policy API enabled - sovereign quality enforcement active")
+
 # Deployment webhook routes for autonomy engine integration
 safe_include_router("bridge_backend.webhooks.deployment_webhooks")
 logger.info("[WEBHOOKS] Deployment webhook routes enabled for autonomy integration")
