@@ -1,11 +1,5 @@
 [
   {
-    "startup_latency": 15.041016101837158,
-    "port": 8000,
-    "port_resolution_time": 15.040904998779297,
-    "timestamp": "2025-11-07T10:58:34.373586+00:00"
-  },
-  {
     "startup_latency": 15.048869132995605,
     "port": 8000,
     "port_resolution_time": 15.04878044128418,
@@ -58,5 +52,11 @@
     "port": 8000,
     "port_resolution_time": 33.61119627952576,
     "timestamp": "2025-11-07T11:59:10.434898+00:00"
+  },
+  {
+    "startup_latency": 49.98540425300598,
+    "port": 8000,
+    "port_resolution_time": 49.98533320426941,
+    "timestamp": "2025-11-07T12:03:55.304051+00:00"
   }
 ]

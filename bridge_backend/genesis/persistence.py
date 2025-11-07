@@ -51,7 +51,9 @@ class GenesisPersistence:
             
             try:
                 conn = sqlite3.connect(self._db_path, timeout=10.0, check_same_thread=False)
-                conn.execute("PRAGMA journal_mode=WAL")  # Enable Write-Ahead Logging for better concurrency
+                wal_result = conn.execute("PRAGMA journal_mode=WAL").fetchone()
+                if wal_result and wal_result[0] != 'wal':
+                    logger.warning(f"⚠️ Failed to enable WAL mode, got: {wal_result}")
                 cursor = conn.cursor()
                 
                 # Event store table
