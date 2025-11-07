@@ -17,7 +17,7 @@ export const BRHService = {
    */
   async connect() {
     try {
-      const response = await fetch(`${API_BASE}/status`, {
+      const response = await fetch(`${API_BASE}/api/health/status`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -28,7 +28,14 @@ export const BRHService = {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       
-      return await response.json();
+      const data = await response.json();
+      // Transform to expected format
+      return {
+        status: data.status === 'OK' ? 'operational' : 'degraded',
+        agents: 0, // Will be fetched separately
+        uptime: data.uptime,
+        timestamp: data.timestamp
+      };
     } catch (error) {
       console.error('BRH Connection Failed:', error);
       return { 
@@ -45,7 +52,7 @@ export const BRHService = {
    */
   async getHealth() {
     try {
-      const response = await fetch(`${API_BASE}/health`, {
+      const response = await fetch(`${API_BASE}/api/health/health`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -72,7 +79,7 @@ export const BRHService = {
    */
   async getFullHealth() {
     try {
-      const response = await fetch(`${API_BASE}/health/full`, {
+      const response = await fetch(`${API_BASE}/api/health/health/full`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -142,7 +149,17 @@ export const BRHService = {
       }
       
       const data = await response.json();
-      return Array.isArray(data) ? data : (data.agents || []);
+      const agents = Array.isArray(data) ? data : (data.agents || []);
+      
+      // Transform agents to include status mapping (state -> status)
+      // Ensure every agent has a valid unique identifier
+      return agents.map((agent, index) => ({
+        ...agent,
+        // Fallback: use name, or generate ID from index if neither id nor name exists
+        id: agent.id || agent.name || `agent-${index}`,
+        status: agent.status || agent.state || 'offline',
+        capabilities: agent.capabilities || (agent.details ? [agent.details.description] : [])
+      }));
     } catch (error) {
       console.error('Failed to fetch agents:', error);
       return [];
@@ -159,7 +176,7 @@ export const BRHService = {
       const params = new URLSearchParams(filters);
       const query = params.toString() ? `?${params.toString()}` : '';
       
-      const response = await fetch(`${API_BASE}/missions${query}`, {
+      const response = await fetch(`${API_BASE}/api/missions/missions${query}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -200,12 +217,24 @@ export const BRHService = {
         throw new Error(`Failed to fetch fleet status: ${response.status}`);
       }
       
-      return await response.json();
+      const data = await response.json();
+      
+      // Transform fleet data to ensure consistent agent format
+      if (data.agents) {
+        data.agents = data.agents.map(agent => ({
+          ...agent,
+          status: agent.status || 'offline',
+          capabilities: agent.capabilities || []
+        }));
+      }
+      
+      return data;
     } catch (error) {
       console.error('Failed to fetch fleet status:', error);
       return {
         status: 'unknown',
         ships: [],
+        agents: [],
         error: error.message
       };
     }
