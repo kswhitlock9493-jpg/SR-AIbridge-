@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import config from '../config';
+import { SovereignRevealGate } from './DeploymentGate.jsx';
+import { SilentFailureCapture } from '../services/silent-failure-capture.js';
 
-const AdmiralKeysPanel = () => {
+const AdmiralKeysPanelCore = () => {
   const [custodyState, setCustodyState] = useState({
     keys: [],
     admiralInfo: null,
@@ -44,6 +46,9 @@ const AdmiralKeysPanel = () => {
         admiralInfo: admiralInfo?.admiral_info || null,
         loading: false
       }));
+      
+      // Record successful health check
+      SilentFailureCapture.recordHealthCheck('admiral-keys-crypto', true);
     } catch (error) {
       console.error('Custody data fetch error:', error);
       setCustodyState(prev => ({
@@ -51,6 +56,9 @@ const AdmiralKeysPanel = () => {
         error: error.message,
         loading: false
       }));
+      
+      // Record failure
+      SilentFailureCapture.recordHealthCheck('admiral-keys-crypto', false, error);
     }
   }, [API_BASE]);
 
@@ -524,6 +532,21 @@ const AdmiralKeysPanel = () => {
         </div>
       )}
     </div>
+  );
+};
+
+/**
+ * AdmiralKeysPanel - Wrapped with Deployment Gate
+ * Only reveals when backend systems are deployed
+ */
+const AdmiralKeysPanel = () => {
+  return (
+    <SovereignRevealGate
+      componentName="Admiral Keys"
+      requiredSystems={['BRH Integration', 'Crypto System', 'Custody Service']}
+    >
+      <AdmiralKeysPanelCore />
+    </SovereignRevealGate>
   );
 };
 
