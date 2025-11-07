@@ -17,6 +17,8 @@ async def health_check(request: Request):
     Basic health check for load balancers and monitoring
     Universal OK from either host with environment awareness
     Role-based: Captains see local only, Admiral sees global
+    
+    Now includes sovereignty status when sovereignty guard is enabled.
     """
     user = getattr(request.state, "user", None)
     role = getattr(user, "role", "captain") if user else "captain"
@@ -29,6 +31,28 @@ async def health_check(request: Request):
         "version": "1.9.7",
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
+    
+    # Add sovereignty status if enabled
+    if os.getenv("SOVEREIGNTY_ENABLED", "true").lower() == "true":
+        try:
+            from bridge_core.sovereignty.readiness_gate import get_sovereignty_guard
+            guard = await get_sovereignty_guard()
+            sovereignty_report = await guard.get_sovereignty_report()
+            
+            response["sovereignty"] = {
+                "state": sovereignty_report.state.value,
+                "is_ready": sovereignty_report.is_ready,
+                "is_sovereign": sovereignty_report.is_sovereign,
+                "score": f"{sovereignty_report.sovereignty_score:.2%}",
+            }
+            
+            # Update status based on sovereignty
+            if not sovereignty_report.is_sovereign:
+                response["status"] = "waiting"
+                response["message"] = "Bridge waiting for perfection, harmony, and resonance"
+                
+        except Exception as e:
+            response["sovereignty"] = {"error": str(e)}
     
     # Add role context
     if role == "admiral":
