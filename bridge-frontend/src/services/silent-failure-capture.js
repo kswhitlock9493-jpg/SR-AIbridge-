@@ -104,7 +104,7 @@ class CrashForensics {
       },
       context,
       timestamp: new Date().toISOString(),
-      id: `crash-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+      id: `crash-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
     };
 
     this.crashes.push(crash);

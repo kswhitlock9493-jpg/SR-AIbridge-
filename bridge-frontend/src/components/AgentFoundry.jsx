@@ -61,7 +61,6 @@ const AgentFoundryCore = () => {
       
       // Record failure
       SilentFailureCapture.recordHealthCheck('agent-foundry-indoctrination', false, err);
-      setError('Failed to load agents: ' + err.message);
     } finally {
       setLoading(false);
     }

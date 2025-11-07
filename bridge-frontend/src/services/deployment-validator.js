@@ -188,11 +188,11 @@ class DeploymentValidator {
     if (trueDeployment) {
       console.log('🎉 TRUE BRIDGE REVEALED: All paranoid conditions met!');
     } else {
-      console.log('🕵️ Bridge in placeholder mode: True deployment not yet achieved');
-      console.log('Failed systems:', Object.entries(validationChecks)
+      const failedSystems = Object.entries(validationChecks)
         .filter(([_, v]) => !v)
         .map(([k]) => k)
-        .join(', '));
+        .join(', ');
+      console.log(`🕵️ Bridge in placeholder mode: True deployment not yet achieved. Failed systems: ${failedSystems}`);
     }
 
     return result;
