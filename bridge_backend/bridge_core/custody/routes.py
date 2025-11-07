@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from nacl.signing import SigningKey, VerifyKey
 import base64
-from datetime import datetime
+from datetime import datetime, timezone
 
 router = APIRouter(prefix="/custody", tags=["custody"])
 
