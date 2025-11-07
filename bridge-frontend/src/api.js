@@ -149,15 +149,15 @@ export async function getMissions(captain = null, role = null) {
   if (captain) params.append('captain', captain);
   if (role) params.append('role', role);
   const query = params.toString() ? `?${params.toString()}` : '';
-  return apiClient.get(`/missions${query}`);
+  return apiClient.get(`/api/missions/missions${query}`);
 }
 
 export async function createMission(mission) {
-  return apiClient.post('/missions', mission);
+  return apiClient.post('/api/missions/missions', mission);
 }
 
 export async function assignAgentToMission(missionId, agentId) {
-  return apiClient.post(`/missions/${missionId}/assign`, { agent_id: agentId });
+  return apiClient.post(`/api/missions/missions/${missionId}/assign`, { agent_id: agentId });
 }
 
 export async function updateMissionStatus(missionId, status, extraData = {}) {
@@ -165,11 +165,11 @@ export async function updateMissionStatus(missionId, status, extraData = {}) {
   if (status !== null && status !== undefined) {
     updates.status = status;
   }
-  return apiClient.patch(`/missions/${missionId}`, updates);
+  return apiClient.patch(`/api/missions/missions/${missionId}`, updates);
 }
 
 export async function updateMissionProgress(missionId, progress) {
-  return apiClient.patch(`/missions/${missionId}`, { progress });
+  return apiClient.patch(`/api/missions/missions/${missionId}`, { progress });
 }
 
 // === Vault Logs / Doctrine ===
@@ -222,11 +222,11 @@ export async function getLogs() {
 }
 
 export async function getSystemHealth() {
-  return apiClient.get('/health');
+  return apiClient.get('/api/health/health');
 }
 
 export async function getSystemHealthFull() {
-  return apiClient.get('/health/full');
+  return apiClient.get('/api/health/health/full');
 }
 
 // === System Health & Self-Heal (Enhanced) ===
