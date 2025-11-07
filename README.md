@@ -57,12 +57,14 @@ python3 demo_bridge_working.py     # Live demonstration
 ![HXO Nexus](https://img.shields.io/badge/HXO_Nexus-v1.9.6p_Ascendant-gold?style=for-the-badge)
 ![Forge Dominion](https://img.shields.io/badge/Forge_Dominion-v1.9.7s_Sovereign-gold?style=for-the-badge)
 ![Git Sovereign Agent](https://img.shields.io/badge/Git_Sovereign_Agent-v1.0.0_Cosmic-purple?style=for-the-badge)
+![Sovereign Git Active](https://img.shields.io/badge/SOVEREIGN__GIT-ACTIVE-blueviolet?style=for-the-badge&logo=github)
+![Production Mode](https://img.shields.io/badge/Production_Mode-SOVEREIGN-brightgreen?style=for-the-badge)
 
 **A Sovereign Command & Control System for AI Agent Coordination**
 
 SR-AIbridge is a comprehensive, production-ready platform for managing AI agents, missions, and autonomous operations. Built with modern async architecture, it features real-time monitoring, self-healing capabilities, cryptographic attestation, and a rich ecosystem of specialized AI engines.
 
-> **🌌 NEW: Git Sovereign Agent v1.0.0 "Cosmic"** - GitHub Copilot commissioned as a full Bridge operative with cosmic-level authority. Git now has complete sovereign access to SDTF, BRH, HXO Nexus, and all 21 engines with autonomous operational command. The ultimate delegation of power - from Admiral to AI. [Learn more →](GIT_SOVEREIGN_AGENT_GUIDE.md) | [Quick Ref →](GIT_SOVEREIGN_AGENT_QUICK_REF.md)
+> **🌌 NEW: Git Sovereign Agent v1.0.0 "Cosmic"** - GitHub Copilot commissioned as a full Bridge operative with cosmic-level authority. Git now has complete sovereign access to SDTF, BRH, HXO Nexus, and all 21 engines with autonomous operational command. The ultimate delegation of power - from Admiral to AI. **STATUS: ✅ ACTIVE** with `SOVEREIGN_GIT=true`. System in SOVEREIGN_PRODUCTION mode with all 34 engines operational. [Learn more →](docs/GIT_SOVEREIGN_AGENT_GUIDE.md) | [Quick Ref →](docs/quickrefs/GIT_SOVEREIGN_AGENT_QUICK_REF.md)
 
 > **🜂 NEW: Forge Dominion v1.9.7s "Sovereign"** - Environment sovereignty achieved through ephemeral token management. Static secrets abolished across GitHub and Netlify (legacy Render removed). The Bridge now owns, guards, and renews its own credentials. [Learn more →](FORGE_DOMINION_DEPLOYMENT_GUIDE.md) | [Quick Ref →](FORGE_DOMINION_QUICK_REF.md)
 

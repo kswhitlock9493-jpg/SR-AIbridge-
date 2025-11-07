@@ -84,6 +84,11 @@ services:
       - "GENESIS_MODE=enabled"
       - "LINK_ENGINES=true"
       - "BLUEPRINTS_ENABLED=true"
+      - "SOVEREIGN_GIT=true"
+      - "GIT_SOVEREIGN_ENABLED=true"
+      - "GIT_SOVEREIGN_AUTHORITY=COSMIC_SOVEREIGNTY"
+      - "PRODUCTION_MODE=true"
+      - "PLACEHOLDER_MODE=false"
     health:
       http: "http://localhost:8000/health/live"
       interval: 10s
