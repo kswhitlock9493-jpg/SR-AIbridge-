@@ -17,7 +17,24 @@ export default defineConfig({
         target: process.env.VITE_BRH_BACKEND_URL || 'http://localhost:8000',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        // Don't rewrite - backend expects /api prefix
+        // rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      // Proxy root-level endpoints (agents, fleet, etc.)
+      '/agents': {
+        target: process.env.VITE_BRH_BACKEND_URL || 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/fleet': {
+        target: process.env.VITE_BRH_BACKEND_URL || 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/armada': {
+        target: process.env.VITE_BRH_BACKEND_URL || 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
       },
       // WebSocket proxy for real-time updates
       '/ws': {
@@ -68,7 +85,8 @@ export default defineConfig({
         target: process.env.VITE_BRH_BACKEND_URL || 'http://localhost:8000',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        // Don't rewrite - backend expects /api prefix
+        // rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },

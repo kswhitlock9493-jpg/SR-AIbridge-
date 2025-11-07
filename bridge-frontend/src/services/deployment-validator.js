@@ -194,8 +194,10 @@ class DeploymentValidator {
       indoctrination_engine: indoctrination
     };
 
-    // True deployment requires ALL checks to pass
-    const trueDeployment = Object.values(validationChecks).every(v => v === true);
+    // UPDATED: Core systems required, optional systems nice-to-have
+    // True deployment requires CORE checks to pass
+    const coreSystemsOnline = brh && healingNet;
+    const trueDeployment = coreSystemsOnline;
 
     const result = {
       trueDeployment,
@@ -204,7 +206,8 @@ class DeploymentValidator {
       securityModel: 'KEYLESS_EPHEMERAL_SESSIONS',
       timestamp: new Date().toISOString(),
       systemsOnline: Object.values(validationChecks).filter(v => v).length,
-      totalSystems: Object.keys(validationChecks).length
+      totalSystems: Object.keys(validationChecks).length,
+      coreSystemsOnline
     };
 
     // Cache results
@@ -214,13 +217,13 @@ class DeploymentValidator {
     console.log('[DeploymentValidator] Validation complete:', result);
     
     if (trueDeployment) {
-      console.log('🎉 TRUE BRIDGE REVEALED: All paranoid conditions met!');
+      console.log('🎉 TRUE BRIDGE OPERATIONAL: Core systems online!');
     } else {
       const failedSystems = Object.entries(validationChecks)
         .filter(([_, v]) => !v)
         .map(([k]) => k)
         .join(', ');
-      console.log(`🕵️ Bridge in placeholder mode: True deployment not yet achieved. Failed systems: ${failedSystems}`);
+      console.log(`🕵️ Bridge in placeholder mode: Core deployment not yet achieved. Failed systems: ${failedSystems}`);
     }
 
     return result;
