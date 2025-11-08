@@ -1,5 +1,5 @@
-# Netlify Python function wrapper for FastAPI via Mangum (ASGI→Lambda)
 from mangum import Mangum
 from brh.app import app
 
+# Wrap FastAPI app for Netlify (AWS Lambda)
 handler = Mangum(app)
