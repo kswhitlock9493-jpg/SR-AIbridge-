@@ -25,11 +25,12 @@ async def health():
 @app.post("/workflows/execute")
 async def execute(wf: Workflow, bg: BackgroundTasks):
     # hand off long work to background so the lambda returns quickly
-    async def run():
+    def run_workflow():
         # simulate your bridge runtime work (replace with real engines)
-        await asyncio.sleep(0.1)
+        import time
+        time.sleep(0.1)
         # TODO: call engines / parity / autonomy here
-    bg.add_task(asyncio.run, run())
+    bg.add_task(run_workflow)
     return {"accepted": True, "workflow": wf.name}
 
 @app.post("/genesis/heartbeat")
