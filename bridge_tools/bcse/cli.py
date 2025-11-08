@@ -8,6 +8,7 @@ Bridge Code Super-Engine - Always Enabled Quality Gate
 import argparse
 import sys
 import glob
+import os
 from typing import List, Tuple
 
 from .config import DEFAULT_POLICY, Policy, BCSE_ALWAYS_ENABLED, PLACEHOLDER_MODE, policy_from_dict
@@ -219,7 +220,11 @@ def cmd_rewrite() -> int:
     print("\n" + "=" * 60)
     print("🔁 BCSE Localhost Rewriter")
     print("=" * 60 + "\n")
-    changed = rewrite_localhost_to_forge(PY_TARGETS + [JS_PATH])
+    
+    # Check if BCSE_REWRITE_APPLY is set to actually apply changes
+    apply_changes = os.getenv("BCSE_REWRITE_APPLY", "false").lower() == "true"
+    
+    changed = rewrite_localhost_to_forge(PY_TARGETS + [JS_PATH], dry_run=not apply_changes)
     return 0 if changed >= 0 else 1
 
 
