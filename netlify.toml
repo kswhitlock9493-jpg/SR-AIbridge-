@@ -1,14 +1,29 @@
 [build]
-  # Build is handled by GitHub Actions (deploy.yml)
-  # Netlify automatic builds are disabled - deployments only via GitHub Actions
-  ignore = "git diff --quiet HEAD^ HEAD"  # Always skip Netlify auto-builds
-  base = "."
-  command = "bash scripts/netlify_build.sh"
+  base = "bridge-frontend"
+  command = "npm run build"
   publish = "bridge-frontend/dist"
-  environment = { FORGE_DOMINION_ROOT = "", REVIEW_ID = "", SECRETS_SCAN_OMIT_KEYS = "FORGE_DOMINION_ROOT", SECRETS_SCAN_OMIT_PATHS = "brh/*,docs/*,codex/*,netlify/functions/forge-resolver.js,infra/*,netlify.toml" }
 
 [functions]
-  directory = "bridge-frontend/netlify/functions"
+  directory = "netlify/functions"
+  # Python requirements.txt inside netlify/functions will be auto-installed
+
+# Redirect API calls to BRH function
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/brh/:splat"
+  status = 200
+
+# Optional: nice path to the codex book
+[[redirects]]
+  from = "/book"
+  to = "/codex/output/repo_book.html"
+  status = 200
+
+# SPA fallback (must be last)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
 # Security headers
 [[headers]]
@@ -39,8 +54,3 @@
   SECRETS_SCAN_OMIT_KEYS = "FORGE_DOMINION_ROOT"
   SECRETS_SCAN_OMIT_PATHS = "brh/*,docs/*,codex/*,netlify/functions/forge-resolver.js,infra/*,netlify.toml"
 
-# SPA fallback (safe for static + React/Vite/etc.)
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
