@@ -66,10 +66,10 @@ def _apply_federation_modifiers(
 
 @router.get("/quality")
 def get_quality_policy(
-    branch: str = Query(default="main", description="Git branch name"),
-    environment: Optional[str] = Query(default=None, description="Environment (development/staging/production)"),
-    federation_role: Optional[str] = Query(default=None, description="BRH federation role (leader/witness)"),
-    authorization: str = Header(default="")
+    branch: str = "main",
+    environment: Optional[str] = None,
+    federation_role: Optional[str] = None,
+    authorization: str = ""
 ):
     """
     Get quality policy for a specific branch, environment, and federation role
@@ -99,25 +99,22 @@ def get_quality_policy(
     defaults = base.get("defaults", {})
     result = defaults.copy()
     
-    # Apply environment overrides if specified
-    if environment:
-        env_config = base.get("env", {})
-        if environment in env_config:
-            result = _merge_policies(result, env_config[environment])
-    else:
-        # Infer environment from branch if not specified
+    # Infer environment from branch if not specified
+    inferred_environment = environment
+    if not inferred_environment:
         if branch.startswith("feature/") or branch == "develop":
-            environment = "development"
+            inferred_environment = "development"
         elif branch.startswith("staging/"):
-            environment = "staging"
+            inferred_environment = "staging"
         elif branch in ("main", "master") or branch.startswith("release/"):
-            environment = "production"
+            inferred_environment = "production"
         else:
-            environment = "development"
-        
-        env_config = base.get("env", {})
-        if environment in env_config:
-            result = _merge_policies(result, env_config[environment])
+            inferred_environment = "development"
+    
+    # Apply environment overrides
+    env_config = base.get("env", {})
+    if inferred_environment in env_config:
+        result = _merge_policies(result, env_config[inferred_environment])
     
     # Apply branch-specific overrides
     branches = base.get("branches", {})
@@ -143,7 +140,7 @@ def get_quality_policy(
     # Include metadata
     result["_context"] = {
         "branch": branch,
-        "environment": environment,
+        "environment": inferred_environment,
         "federation_role": federation_role,
         "version": base.get("version", "unknown")
     }
