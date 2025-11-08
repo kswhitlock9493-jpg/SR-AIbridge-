@@ -8,6 +8,11 @@
 </p>
 
 <p align="center">
+  <img src="https://img.shields.io/badge/Quality%20Policy-Sovereign-00ffaa?style=for-the-badge" alt="Sovereign Quality Policy" />
+  <sub><br/>Branch-aware quality gates enforced by <a href="docs/BCSE_POLICY_SYSTEM.md">BCSE Sovereign Policy System</a></sub>
+</p>
+
+<p align="center">
   <em>🌉 Sovereign Runtime v5.5.3 — Self-Authoring, Self-Deploying, Self-Documenting</em>
 </p>
 
