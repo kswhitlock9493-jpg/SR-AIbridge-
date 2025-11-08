@@ -1,6 +1,10 @@
 import config from './config';
 import { APIGuardian, CircuitBreaker } from './services/healing-net';
 import { transformEndpoint, isNetlifyFunctions } from './utils/endpoint-transformer';
+// Import BRH API functions
+import { ensureLiveBackend, genesisHeartbeat, triggerSelfHeal, executeWorkflow } from './api/brh';
+// Re-export BRH functions for convenience
+export { ensureLiveBackend, genesisHeartbeat, triggerSelfHeal, executeWorkflow };
 
 const API_BASE_URL = config.API_BASE_URL;
 
