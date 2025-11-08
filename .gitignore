@@ -226,3 +226,7 @@ htmlcov/
 .ruff_cache/
 .mypy_cache/
 .pytest_cache/
+
+# BCSE v2 - Patch directories
+bcse_autofixes/
+bcse_patches/

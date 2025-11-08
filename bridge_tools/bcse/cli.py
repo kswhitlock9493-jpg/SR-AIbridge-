@@ -8,12 +8,15 @@ Bridge Code Super-Engine - Always Enabled Quality Gate
 import argparse
 import sys
 import glob
+import os
 from typing import List, Tuple
 
 from .config import DEFAULT_POLICY, Policy, BCSE_ALWAYS_ENABLED, PLACEHOLDER_MODE, policy_from_dict
 from .forge import fetch_policies
 from .runners import python_linters as py, security as sec, deps, tests, structure
 from .reporters import pr_summary
+from . import refactor, prodsim
+from .rewriters import rewrite_localhost_to_forge
 
 
 # Target directories for Python analysis
@@ -184,22 +187,71 @@ def cmd_gates() -> int:
     return 0
 
 
+def cmd_improve() -> int:
+    """
+    Auto-improve code with safe AST transforms
+    
+    Returns:
+        Exit code
+    """
+    print("\n" + "=" * 60)
+    print("🔧 BCSE Code Improvement")
+    print("=" * 60 + "\n")
+    return refactor.improve(PY_TARGETS)
+
+
+def cmd_prove() -> int:
+    """
+    Run full production readiness proof
+    
+    Returns:
+        Exit code
+    """
+    return prodsim.prove()
+
+
+def cmd_rewrite() -> int:
+    """
+    Rewrite localhost URLs to Forge Dominion root
+    
+    Returns:
+        Exit code (number of files changed)
+    """
+    print("\n" + "=" * 60)
+    print("🔁 BCSE Localhost Rewriter")
+    print("=" * 60 + "\n")
+    
+    # Check if BCSE_REWRITE_APPLY is set to actually apply changes
+    apply_changes = os.getenv("BCSE_REWRITE_APPLY", "false").lower() == "true"
+    
+    changed = rewrite_localhost_to_forge(PY_TARGETS + [JS_PATH], dry_run=not apply_changes)
+    return 0 if changed >= 0 else 1
+
+
 def main() -> None:
     """Main CLI entry point"""
     ap = argparse.ArgumentParser(
         "bcse",
         description="🜂 Bridge Code Super-Engine - Comprehensive Quality Gate (Always Enabled)"
     )
-    ap.add_argument("cmd", choices=["analyze", "fix", "gates"], 
-                    help="Command to run: analyze (run quality checks), fix (auto-fix issues), gates (show all gates)")
+    ap.add_argument("cmd", choices=["analyze", "fix", "gates", "improve", "prove", "rewrite"], 
+                    help="Command to run: analyze (run quality checks), fix (auto-fix issues), "
+                         "gates (show all gates), improve (AST transforms), prove (production readiness), "
+                         "rewrite (localhost to Forge)")
     args = ap.parse_args()
     
     if args.cmd == "analyze":
         sys.exit(cmd_analyze())
     elif args.cmd == "fix":
         sys.exit(cmd_fix())
-    else:  # gates
+    elif args.cmd == "gates":
         sys.exit(cmd_gates())
+    elif args.cmd == "improve":
+        sys.exit(cmd_improve())
+    elif args.cmd == "prove":
+        sys.exit(cmd_prove())
+    else:  # rewrite
+        sys.exit(cmd_rewrite())
 
 
 if __name__ == "__main__":
