@@ -10,7 +10,7 @@ import sys
 import glob
 from typing import List, Tuple
 
-from .config import DEFAULT_POLICY, Policy, BCSE_ALWAYS_ENABLED, PLACEHOLDER_MODE
+from .config import DEFAULT_POLICY, Policy, BCSE_ALWAYS_ENABLED, PLACEHOLDER_MODE, policy_from_dict
 from .forge import fetch_policies
 from .runners import python_linters as py, security as sec, deps, tests, structure
 from .reporters import pr_summary
@@ -33,16 +33,15 @@ def load_policy() -> Policy:
         print("ℹ️  Using default policy")
         return DEFAULT_POLICY
     
+    # Display context information if available
+    context = p.get("_context", {})
+    if context:
+        print(f"📍 Context: branch={context.get('branch', 'unknown')}, "
+              f"env={context.get('environment', 'unknown')}, "
+              f"role={context.get('federation_role', 'standalone')}")
+    
     print("✅ Loaded policy from Forge Dominion")
-    return Policy(
-        coverage_min=p.get("coverage_min", DEFAULT_POLICY.coverage_min),
-        mypy_strict=p.get("mypy_strict", DEFAULT_POLICY.mypy_strict),
-        ruff_severity=p.get("ruff_severity", DEFAULT_POLICY.ruff_severity),
-        bandit_min_severity=p.get("bandit_min_severity", DEFAULT_POLICY.bandit_min_severity),
-        max_cyclomatic=p.get("max_cyclomatic", DEFAULT_POLICY.max_cyclomatic),
-        fail_on_vuln=p.get("fail_on_vuln", DEFAULT_POLICY.fail_on_vuln),
-        allowed_licenses=p.get("allowed_licenses", DEFAULT_POLICY.allowed_licenses),
-    )
+    return policy_from_dict(p)
 
 
 def cmd_analyze() -> int:
