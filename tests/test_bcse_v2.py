@@ -163,7 +163,8 @@ class TestRewriters:
             
             # Set FORGE_DOMINION_ROOT for the test
             old_forge = os.environ.get("FORGE_DOMINION_ROOT")
-            os.environ["FORGE_DOMINION_ROOT"] = "https://forge.example.com"
+            forge_url = "https://forge.example.com"
+            os.environ["FORGE_DOMINION_ROOT"] = forge_url
             
             try:
                 # Test with dry_run=False to actually make changes
@@ -171,7 +172,9 @@ class TestRewriters:
                 
                 # Check if file was changed
                 new_content = test_file.read_text()
-                assert "forge.example.com" in new_content, "Should replace localhost with Forge"
+                # Verify the forge URL is in the content
+                assert forge_url in new_content, "Should replace localhost with Forge"
+                assert "localhost" not in new_content, "Should remove localhost"
             finally:
                 if old_forge:
                     os.environ["FORGE_DOMINION_ROOT"] = old_forge
