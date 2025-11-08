@@ -101,6 +101,25 @@ class TestWorkflowExecution:
         assert response.status_code == 422  # Validation error
 
 
+class TestStatusEndpoints:
+    """Test cases for status endpoints required by Agent Foundry"""
+    
+    def test_brh_status_returns_online(self, client):
+        """Test that /status returns brh online"""
+        response = client.get("/status")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["brh"] == "online"
+    
+    def test_indoctrination_status_returns_active(self, client):
+        """Test that /indoctrination/status returns engine active"""
+        response = client.get("/indoctrination/status")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["engine"] == "active"
+        assert data["doctrine"] == "loaded"
+
+
 class TestOpenAPIDocumentation:
     """Test cases for API documentation"""
     

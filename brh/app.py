@@ -42,3 +42,13 @@ async def heartbeat():
 async def self_heal():
     # place your autofix hooks (env parity, registry heal, etc.)
     return {"status": "queued", "op": "self_heal"}
+
+@app.get("/status")
+async def brh_status():
+    # BRH system status check - used by frontend to unlock Agent Foundry
+    return {"brh": "online"}
+
+@app.get("/indoctrination/status")
+async def indoctrination_status():
+    # Indoctrination engine status check - used by frontend to unlock Agent Foundry
+    return {"engine": "active", "doctrine": "loaded"}
