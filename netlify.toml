@@ -1,7 +1,6 @@
 [build]
-  base = "bridge-frontend"
-  command = "npm run build"
-  publish = "dist"
+  command = "cd bridge-frontend && npm run build"
+  publish = "bridge-frontend/dist"
 
 [functions]
   directory = "netlify/functions"
