@@ -42,3 +42,11 @@ async def heartbeat():
 async def self_heal():
     # place your autofix hooks (env parity, registry heal, etc.)
     return {"status": "queued", "op": "self_heal"}
+
+@app.get("/status")
+async def status():
+    return {"brh": "online"}
+
+@app.get("/indoctrination/status")
+async def indoctrination_status():
+    return {"engine": "active", "doctrine": "loaded"}
