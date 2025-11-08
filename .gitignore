@@ -18,7 +18,7 @@ bridge-frontend/netlify/functions/*
 !bridge-frontend/netlify/functions/health.ts
 !bridge-frontend/netlify/functions/telemetry.ts
 !bridge-frontend/netlify/functions/hello.ts
-!bridge-frontend/netlify/functions/brh.js
+!bridge-frontend/netlify/functions/brh.cjs
 # Include API endpoint functions
 !bridge-frontend/netlify/functions/api-*.js
 
