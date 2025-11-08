@@ -1,28 +1,53 @@
-from fastapi import APIRouter, Depends, HTTPException
-from .service import IndoctrinationEngine, AgentProfile
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, Field
+from typing import Dict, Optional
+
+from .service import IndoctrinationEngine
 
 router = APIRouter(prefix="/indoctrination", tags=["indoctrination"])
+_engine: Optional[IndoctrinationEngine] = None
 
-# Lazy singleton (replace with DI container if you have one)
-_engine: IndoctrinationEngine | None = None
 def get_engine() -> IndoctrinationEngine:
     global _engine
     if _engine is None:
-        _engine = IndoctrinationEngine()
+        # Optionally point to a vault file via env: INDOCTRINATION_DOCTRINE
+        import os
+        _engine = IndoctrinationEngine(doctrine_path=os.getenv("INDOCTRINATION_DOCTRINE"))
     return _engine
 
+class IndoctrinateRequest(BaseModel):
+    agent_id: str = Field(..., min_length=1)
+    answers: Dict[str, str] = Field(default_factory=dict)
+
+class IndoctrinateResponse(BaseModel):
+    agent_id: str
+    passed: bool
+    score: int
+    details: Dict[str, str]
+
 @router.get("/status")
-def status(engine: IndoctrinationEngine = Depends(get_engine)):
-    return engine.status()
+def status():
+    eng = get_engine()
+    return eng.status()
 
 @router.get("/doctrine")
-def doctrine(engine: IndoctrinationEngine = Depends(get_engine)):
-    return engine.doctrine_summary()
+def doctrine():
+    return get_engine().doctrine()
 
-@router.post("/indoctrinate")
-def indoctrinate(agent: AgentProfile, engine: IndoctrinationEngine = Depends(get_engine)):
-    rep = engine.indoctrinate(agent)
-    if not rep.passed:
-        # 409 makes the UI show a guard-rail rather than a hard 500
-        raise HTTPException(status_code=409, detail=rep.model_dump(mode='json'))
-    return rep
+@router.post("/run", response_model=IndoctrinateResponse)
+def run(req: IndoctrinateRequest):
+    eng = get_engine()
+    rec = eng.indoctrinate(req.agent_id, req.answers)
+    return IndoctrinateResponse(
+        agent_id=rec.agent_id, passed=rec.passed, score=rec.score, details=rec.details
+    )
+
+@router.get("/result/{agent_id}", response_model=IndoctrinateResponse)
+def result(agent_id: str):
+    eng = get_engine()
+    rec = eng.get(agent_id)
+    if not rec:
+        raise HTTPException(status_code=404, detail="No record for agent")
+    return IndoctrinateResponse(
+        agent_id=rec.agent_id, passed=rec.passed, score=rec.score, details=rec.details
+    )

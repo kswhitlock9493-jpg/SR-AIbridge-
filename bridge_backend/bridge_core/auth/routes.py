@@ -5,17 +5,25 @@ Handles ephemeral session establishment and dynamic key generation
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Dict, Any
 import uuid
 import os
 from datetime import datetime, timezone
-from threading import Lock
+
+# Import keyless auth handler
+import sys
+from pathlib import Path
+# Add bridge_backend to path if not already there
+bridge_backend_path = Path(__file__).resolve().parent.parent.parent
+if str(bridge_backend_path) not in sys.path:
+    sys.path.insert(0, str(bridge_backend_path))
+
+try:
+    from src.keyless_auth import get_keyless_handler, KeylessAuthHandler
+except ImportError:
+    from bridge_backend.src.keyless_auth import get_keyless_handler, KeylessAuthHandler
 
 router = APIRouter(prefix="/auth", tags=["auth"])
-
-# Thread-safe in-memory session store for keyless auth
-_active_sessions = {}
-_sessions_lock = Lock()
 
 # Configuration
 SESSION_EXPIRY_SECONDS = int(os.getenv("AUTH_SESSION_EXPIRY_SECONDS", "3600"))  # Default 1 hour
@@ -23,6 +31,41 @@ SESSION_EXPIRY_SECONDS = int(os.getenv("AUTH_SESSION_EXPIRY_SECONDS", "3600"))  
 class SessionRequest(BaseModel):
     requestType: str = "ephemeral_session"
     keyGenerationType: str = "dynamic"
+
+class HandshakeRequest(BaseModel):
+    """Request for keyless handshake"""
+    pass
+
+@router.post("/handshake")
+def perform_keyless_handshake(request: Optional[HandshakeRequest] = None):
+    """
+    Perform cryptographic handshake without static secrets
+    Generates all material dynamically
+    
+    POST /auth/handshake
+    
+    Returns:
+    {
+        "handshake_complete": true,
+        "handshake_type": "keyless_ephemeral",
+        "session_id": "...",
+        "static_keys_involved": 0,
+        "dynamic_keys_generated": 1
+    }
+    """
+    try:
+        handler = get_keyless_handler()
+        result = handler.perform_keyless_handshake()
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "handshake_complete": False,
+                "error": str(e),
+                "static_keys_involved": 0
+            }
+        )
 
 @router.post("/session")
 def establish_session(request: SessionRequest):
@@ -38,49 +81,20 @@ def establish_session(request: SessionRequest):
     Returns:
     {
         "authenticated": true,
-        "sessionId": "...",
-        "keyType": "ephemeral",
-        "staticKeysUsed": false,
         "session": {...}
     }
     """
     try:
-        # Generate ephemeral session
-        session_id = str(uuid.uuid4())
-        session = {
-            "session_id": session_id,
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "key_type": "ephemeral",
-            "expires_in": SESSION_EXPIRY_SECONDS
-        }
-        
-        # Store session (thread-safe)
-        with _sessions_lock:
-            _active_sessions[session_id] = session
-        
-        # Format response for frontend
-        return {
-            "authenticated": True,
-            "sessionId": session_id,
-            "keyType": "ephemeral",
-            "staticKeysUsed": False,
-            "session": session,
-            "securityModel": "keyless_ephemeral_sessions",
-            "advantages": [
-                "No static keys to leak",
-                "Session-based authentication",
-                "Automatic expiration"
-            ]
-        }
-        
+        handler = get_keyless_handler()
+        result = handler.establish_ephemeral_session()
+        return result
     except Exception as e:
         raise HTTPException(
             status_code=500,
             detail={
                 "authenticated": False,
                 "error": str(e),
-                "capability": "testing",
-                "staticKeysUsed": False
+                "static_keys_used": False
             }
         )
 
@@ -100,14 +114,13 @@ def check_capability():
     }
     """
     try:
-        with _sessions_lock:
-            active_count = len(_active_sessions)
+        handler = get_keyless_handler()
+        capable = handler.verify_dynamic_key_generation()
         
         return {
-            "capable": True,
+            "capable": capable,
             "authModel": "keyless_ephemeral_sessions",
             "staticKeysExist": False,
-            "activeSessions": active_count,
             "sessionExpiry": SESSION_EXPIRY_SECONDS,
             "securityAdvantages": [
                 "No static keys to leak",
@@ -135,34 +148,20 @@ def auth_status():
     
     GET /auth/status
     
-    Returns complete status of keyless auth system
+    Returns complete status of keyless auth system including security advantages
     """
     try:
-        with _sessions_lock:
-            active_count = len(_active_sessions)
-        
-        return {
-            "status": "operational",
-            "authModel": "keyless_ephemeral_sessions",
-            "staticKeysExist": False,
-            "activeSessions": active_count,
-            "sessionExpiry": SESSION_EXPIRY_SECONDS,
-            "securityAdvantages": [
-                "No static keys in repository",
-                "Dynamic key generation",
-                "Session-based authentication",
-                "Zero-trust security"
-            ],
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        }
-        
+        handler = get_keyless_handler()
+        status = handler.get_status()
+        status["timestamp"] = datetime.now(timezone.utc).isoformat()
+        return status
     except Exception as e:
         raise HTTPException(
             status_code=500,
             detail={
                 "error": str(e),
-                "authModel": "error",
-                "staticKeysExist": False,
+                "auth_model": "error",
+                "static_keys_exist": False,
                 "status": "degraded"
             }
         )

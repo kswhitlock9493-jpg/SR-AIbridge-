@@ -7,13 +7,14 @@ Security Advantages:
 - No key storage vulnerabilities
 - No key rotation complexity
 - Perfect forward secrecy
-- Quantum resistance (ephemeral keys)
+- Short-lived keys (reduced blast radius)
 - Zero theft vector (no static keys to steal)
 """
 
 import os
 import secrets
 import hashlib
+import base64
 from datetime import datetime, timezone, timedelta
 from typing import Optional, Dict, Any
 from nacl.signing import SigningKey, VerifyKey
@@ -56,17 +57,19 @@ class EphemeralSession:
         """Check if session has expired"""
         return datetime.now(timezone.utc) > self.expires_at
     
-    def sign_data(self, data: bytes) -> bytes:
-        """Sign data with ephemeral key"""
+    def sign_data(self, data: bytes) -> str:
+        """Sign data with ephemeral key and return base64-encoded signature for HTTP transport"""
         if not self.signing_key:
             raise ValueError("No ephemeral key generated for this session")
-        return self.signing_key.sign(data)
+        signed = self.signing_key.sign(data)  # bytes
+        return base64.b64encode(signed).decode("utf-8")
     
-    def verify_signature(self, signed_data: bytes) -> bytes:
-        """Verify signature with ephemeral public key"""
+    def verify_signature(self, signed_b64: str) -> bytes:
+        """Verify base64-encoded signature with ephemeral public key"""
         if not self.verify_key:
             raise ValueError("No ephemeral key generated for this session")
-        return self.verify_key.verify(signed_data)
+        signed = base64.b64decode(signed_b64.encode("utf-8"))
+        return self.verify_key.verify(signed)
 
 
 class KeylessAuthHandler:
@@ -105,7 +108,7 @@ class KeylessAuthHandler:
                 'no_key_storage',
                 'no_key_rotation', 
                 'perfect_forward_secrecy',
-                'quantum_resistance'
+                'short_lived_keys'
             ]
         }
     
@@ -178,7 +181,7 @@ class KeylessAuthHandler:
                 'key_theft_risk': 'eliminated',
                 'key_rotation_required': False,
                 'storage_vulnerability': 'none',
-                'quantum_computing_threat': 'minimal'
+                'quantum_computing_threat': 'not_mitigated_by_ed25519'  # honesty > marketing
             }
         }
 
