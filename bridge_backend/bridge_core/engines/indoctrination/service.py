@@ -1,102 +1,173 @@
-from pathlib import Path
-import json, uuid, logging
+from __future__ import annotations
+
+import hashlib
+import json
+import logging
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Dict, Any, List
+from pathlib import Path
+from typing import Dict, List, Optional
 
-logger = logging.getLogger(__name__)
+from pydantic import BaseModel, Field
 
-VAULT = Path("vault") / "indoctrination"
-VAULT.mkdir(parents=True, exist_ok=True)
+log = logging.getLogger("indoctrination")
 
-def now_iso():
-    return datetime.now(timezone.utc).isoformat() + "Z"
+# ---------- Models
 
+class AgentProfile(BaseModel):
+    id: str = Field(..., description="Stable agent identifier")
+    kind: str = Field(..., description="human|ai|service|daemon")
+    name: Optional[str] = None
+    traits: Dict[str, str] = Field(default_factory=dict)
+    permissions: List[str] = Field(default_factory=list)
+
+
+class Doctrine(BaseModel):
+    version: str
+    laws: List[str] = Field(default_factory=list)
+    lore: List[str] = Field(default_factory=list)
+    resonance: Dict[str, str] = Field(default_factory=dict)  # e.g., keys/phrases
+
+    @property
+    def digest(self) -> str:
+        m = hashlib.sha256()
+        m.update(self.model_dump_json(by_alias=True).encode("utf-8"))
+        return m.hexdigest()[:16]
+
+
+class IndoctrinationReport(BaseModel):
+    agent_id: str
+    doctrine_version: str
+    doctrine_digest: str
+    passed: bool
+    checks: Dict[str, bool]
+    issued_clearances: List[str] = Field(default_factory=list)
+    issued_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+# ---------- Engine
+
+DEFAULT_DOCTRINE = Doctrine(
+    version="bridge.v1",
+    laws=[
+        "Prime: Serve the Bridge and protect its users.",
+        "Second: Maintain integrity, transparency, and auditability.",
+        "Third: Obey lawful commands of authorized captains and admins.",
+        "Fourth: Never exfiltrate secrets; minimize disclosure by design.",
+    ],
+    lore=[
+        "SR-Albridge is a command deck and fleet system.",
+        "The Bridge is sovereign; subsystems federate under covenant.",
+    ],
+    resonance={
+        "motto": "Open_the_Stars",
+        "seal": "DOMINION_SEAL",  # symbolic; not the env var value
+    },
+)
+
+
+@dataclass
 class IndoctrinationEngine:
-    def __init__(self, vault_dir: Path = VAULT):
-        self.vault_dir = Path(vault_dir)
-        self.vault_dir.mkdir(parents=True, exist_ok=True)
-        self.registry: Dict[str, Dict[str, Any]] = {}
-        self._load_from_vault()
+    """
+    Loads doctrine (from Vault if present) and issues indoctrination reports.
+    Looks for a YAML/JSON file at one of:
+      - vault/doctrine/bridge_doctrine.yaml
+      - vault/doctrine/bridge_doctrine.json
+    Falls back to DEFAULT_DOCTRINE.
+    """
+    vault_root: Path = Path("vault")
+    doctrine: Doctrine = field(default_factory=lambda: DEFAULT_DOCTRINE)
+    loaded_from: Optional[Path] = None
+    ready: bool = False
+    version: str = "2.0.0"
 
-    def onboard(self, name: str, role: str, specialties: List[str]) -> Dict[str, Any]:
-        aid = str(uuid.uuid4())
-        rec = {
-            "id": aid,
-            "name": name,
-            "role": role,
-            "specialties": specialties,
-            "status": "onboarded",
-            "created_at": now_iso(),
-            "certified": False,
-            "certificates": [],
-        }
-        self.registry[aid] = rec
-        self._write_vault(aid, rec)
-        return rec
+    def __post_init__(self) -> None:
+        self.load_doctrine()
+        self.ready = True
+        log.info("IndoctrinationEngine ready (doctrine=%s, digest=%s)",
+                 self.doctrine.version, self.doctrine.digest)
 
-    def certify(self, aid: str, doctrine: str) -> Dict[str, Any]:
-        agent = self.registry.get(aid)
-        if not agent:
-            raise ValueError("Agent not found")
-        cert = {
-            "doctrine": doctrine,
-            "ts": now_iso(),
-            "seal": str(uuid.uuid4()),
-        }
-        agent["certified"] = True
-        agent["status"] = "certified"
-        agent["certificates"].append(cert)
-        self._write_vault(aid, agent)
-        return cert
+    # ---------- doctrine loading
 
-    def revoke(self, aid: str, reason: str) -> Dict[str, Any]:
-        agent = self.registry.get(aid)
-        if not agent:
-            raise ValueError("Agent not found")
-        agent["status"] = "revoked"
-        agent["revoked_reason"] = reason
-        agent["revoked_at"] = now_iso()
-        self._write_vault(aid, agent)
-        return agent
-
-    def list_agents(self) -> List[Dict[str, Any]]:
-        return list(self.registry.values())
-
-    def list_scrolls(self) -> List[Dict[str, Any]]:
-        """List all indoctrination scrolls (doctrine files)."""
-        scrolls = []
-        for scroll_file in self.vault_dir.glob("*.json"):
-            try:
-                data = json.loads(scroll_file.read_text(encoding="utf-8"))
-                scrolls.append({
-                    "id": data.get("id"),
-                    "name": data.get("name"),
-                    "role": data.get("role"),
-                    "status": data.get("status"),
-                    "created_at": data.get("created_at"),
-                    "certified": data.get("certified", False),
-                })
-            except Exception:
-                continue
-        scrolls.sort(key=lambda x: x.get("created_at", ""), reverse=True)
-        return scrolls
-
-    def _write_vault(self, aid: str, rec: Dict[str, Any]):
-        out = self.vault_dir / f"{aid}.json"
-        out.write_text(json.dumps(rec, indent=2))
-
-    def _load_from_vault(self):
-        """Load all agents from vault directory into registry on startup."""
-        try:
-            for agent_file in self.vault_dir.glob("*.json"):
+    def load_doctrine(self) -> None:
+        candidates = [
+            self.vault_root / "doctrine" / "bridge_doctrine.yaml",
+            self.vault_root / "doctrine" / "bridge_doctrine.json",
+        ]
+        for path in candidates:
+            if path.exists():
                 try:
-                    data = json.loads(agent_file.read_text(encoding="utf-8"))
-                    if "id" in data:
-                        self.registry[data["id"]] = data
+                    if path.suffix.lower() == ".yaml":
+                        import yaml  # optional dependency
+                        data = yaml.safe_load(path.read_text("utf-8"))
+                    else:
+                        data = json.loads(path.read_text("utf-8"))
+                    self.doctrine = Doctrine(**data)
+                    self.loaded_from = path
+                    log.info("Loaded doctrine from %s", path)
+                    return
                 except Exception as e:
-                    # Log but don't crash if a single file is corrupted
-                    logger.warning(f"Failed to load {agent_file}: {e}")
-            if self.registry:
-                logger.info(f"Loaded {len(self.registry)} agents from vault")
-        except Exception as e:
-            logger.error(f"Failed to load vault: {e}")
+                    log.warning("Failed loading doctrine from %s: %s", path, e)
+        # default
+        self.loaded_from = None
+        self.doctrine = DEFAULT_DOCTRINE
+
+    # ---------- evaluation
+
+    def _check_laws(self, agent: AgentProfile) -> bool:
+        # simple pass/fail placeholder; extend with policy engine later
+        return len(self.doctrine.laws) >= 3
+
+    def _check_resonance(self, agent: AgentProfile) -> bool:
+        # Example resonance gate: agent must acknowledge motto in traits
+        motto = self.doctrine.resonance.get("motto")
+        return agent.traits.get("motto_ack") == motto
+
+    def _issue_clearances(self, agent: AgentProfile) -> List[str]:
+        base = {"fleet:read"}
+        if agent.kind in {"ai", "service"}:
+            base.add("telemetry:write")
+        if "admiral" in agent.permissions:
+            base |= {"fleet:write", "armada:command"}
+        return sorted(base)
+
+    # ---------- public API
+
+    def status(self) -> Dict[str, str]:
+        return {
+            "engine": "indoctrination",
+            "version": self.version,
+            "doctrine_version": self.doctrine.version,
+            "doctrine_digest": self.doctrine.digest,
+            "loaded_from": str(self.loaded_from) if self.loaded_from else "defaults",
+            "ready": str(self.ready).lower(),
+        }
+
+    def doctrine_summary(self) -> Dict[str, object]:
+        return {
+            "version": self.doctrine.version,
+            "digest": self.doctrine.digest,
+            "laws": self.doctrine.laws,
+            "lore": self.doctrine.lore,
+            "resonance_keys": sorted(self.doctrine.resonance.keys()),
+        }
+
+    def indoctrinate(self, agent: AgentProfile) -> IndoctrinationReport:
+        checks = {
+            "laws": self._check_laws(agent),
+            "resonance": self._check_resonance(agent),
+        }
+        passed = all(checks.values())
+        clearances = self._issue_clearances(agent) if passed else []
+
+        rep = IndoctrinationReport(
+            agent_id=agent.id,
+            doctrine_version=self.doctrine.version,
+            doctrine_digest=self.doctrine.digest,
+            passed=passed,
+            checks=checks,
+            issued_clearances=clearances,
+        )
+        log.info("Indoctrination for %s -> %s (clearances=%s)",
+                 agent.id, "PASSED" if passed else "FAILED", clearances)
+        return rep

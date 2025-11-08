@@ -1,53 +1,28 @@
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from typing import List
-from .service import IndoctrinationEngine
+from fastapi import APIRouter, Depends, HTTPException
+from .service import IndoctrinationEngine, AgentProfile
 
-router = APIRouter(prefix="/engines/indoctrination", tags=["indoctrination"])
-E = IndoctrinationEngine()
+router = APIRouter(prefix="/indoctrination", tags=["indoctrination"])
 
-class OnboardIn(BaseModel):
-    name: str
-    role: str
-    specialties: List[str]
-
-class CertifyIn(BaseModel):
-    doctrine: str
-
-class RevokeIn(BaseModel):
-    reason: str
-
-@router.post("/onboard")
-def onboard(data: OnboardIn):
-    return E.onboard(data.name, data.role, data.specialties)
-
-@router.post("/{aid}/certify")
-def certify(aid: str, data: CertifyIn):
-    try:
-        return E.certify(aid, data.doctrine)
-    except Exception as e:
-        raise HTTPException(status_code=404, detail=str(e))
-
-@router.post("/{aid}/revoke")
-def revoke(aid: str, data: RevokeIn):
-    try:
-        return E.revoke(aid, data.reason)
-    except Exception as e:
-        raise HTTPException(status_code=404, detail=str(e))
-
-@router.get("/agents")
-def list_agents():
-    return E.list_agents()
+# Lazy singleton (replace with DI container if you have one)
+_engine: IndoctrinationEngine | None = None
+def get_engine() -> IndoctrinationEngine:
+    global _engine
+    if _engine is None:
+        _engine = IndoctrinationEngine()
+    return _engine
 
 @router.get("/status")
-def get_status():
-    """Get Indoctrination Engine status for deployment validation."""
-    agents = E.list_agents()
-    return {
-        "status": "operational",
-        "engine": "indoctrination",
-        "version": "1.0.0",
-        "agents_count": len(agents),
-        "agents_certified": len([a for a in agents if a.get("certified")]),
-        "vault_active": True
-    }
+def status(engine: IndoctrinationEngine = Depends(get_engine)):
+    return engine.status()
+
+@router.get("/doctrine")
+def doctrine(engine: IndoctrinationEngine = Depends(get_engine)):
+    return engine.doctrine_summary()
+
+@router.post("/indoctrinate")
+def indoctrinate(agent: AgentProfile, engine: IndoctrinationEngine = Depends(get_engine)):
+    rep = engine.indoctrinate(agent)
+    if not rep.passed:
+        # 409 makes the UI show a guard-rail rather than a hard 500
+        raise HTTPException(status_code=409, detail=rep.model_dump(mode='json'))
+    return rep
