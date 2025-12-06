@@ -9,6 +9,7 @@ License: AGPL-3.0 + Dominion Resonance Clause
 
 import hashlib, json, subprocess, datetime, click, os
 from pathlib import Path
+from typing import List, Optional
 from nacl.signing import SigningKey
 from nacl.encoding import HexEncoder
 
@@ -40,7 +41,7 @@ def compute_merkle_root(file_list: List[str]) -> Optional[str]:
     combined = ''.join(hashes)
     return hashlib.sha256(combined.encode()).hexdigest()
 
-def sovereignty_seal(merkle_root: str) -> Dict:
+def sovereignty_seal(merkle_root: str) -> dict:
     """Dominion Law 11 – ed25519 Harmony Seal."""
     sk = SigningKey.generate()
     vk = sk.verify_key
@@ -61,7 +62,6 @@ def sovereignty_seal(merkle_root: str) -> Dict:
 
 def resonance_check() -> float:
     """Dominion Law 2 – µ ≥ 0.9995 before any write."""
-    # Delegate to BRH runtime (local, zero-cloud)
     try:
         raw = subprocess.check_output(['brh', 'resonance', '--current'], text=True).strip()
         return float(raw)
