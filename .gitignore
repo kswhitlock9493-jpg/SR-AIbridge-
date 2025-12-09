@@ -233,3 +233,7 @@ htmlcov/
 # BCSE v2 - Patch directories
 bcse_autofixes/
 bcse_patches/
+# Local dev droppings
+*.pdt
+*_temp*
+vault/verify_*.jsonl
