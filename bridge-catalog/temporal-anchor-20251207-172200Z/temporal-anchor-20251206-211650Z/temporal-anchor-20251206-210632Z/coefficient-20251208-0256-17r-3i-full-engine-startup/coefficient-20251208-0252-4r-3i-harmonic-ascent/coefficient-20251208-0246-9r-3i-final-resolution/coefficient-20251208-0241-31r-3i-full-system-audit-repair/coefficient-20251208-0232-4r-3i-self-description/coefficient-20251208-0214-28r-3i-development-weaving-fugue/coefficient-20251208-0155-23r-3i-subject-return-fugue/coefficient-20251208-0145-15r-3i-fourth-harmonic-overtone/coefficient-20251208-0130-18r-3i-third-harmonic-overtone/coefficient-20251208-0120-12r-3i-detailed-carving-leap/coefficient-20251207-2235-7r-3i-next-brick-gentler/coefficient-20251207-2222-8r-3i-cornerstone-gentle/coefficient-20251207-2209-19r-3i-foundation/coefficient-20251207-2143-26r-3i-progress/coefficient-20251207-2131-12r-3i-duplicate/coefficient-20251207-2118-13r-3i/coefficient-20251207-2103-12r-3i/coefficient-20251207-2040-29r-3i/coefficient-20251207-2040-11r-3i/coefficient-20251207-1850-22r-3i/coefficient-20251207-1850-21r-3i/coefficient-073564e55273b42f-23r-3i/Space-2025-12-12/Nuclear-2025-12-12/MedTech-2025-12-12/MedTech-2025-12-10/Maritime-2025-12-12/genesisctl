@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-# GenesisCtl wrapper script
-# Provides easy access to Genesis environment reconciliation commands
-
-cd "$(dirname "$0")/bridge_backend" || exit 1
-python3 cli/genesisctl.py "$@"

@@ -1,9 +1,0 @@
-# v1.8.3 canonical SPA rule (Netlify will also apply from netlify.toml)
-# If both exist, they must agree.
-# Keep API passthroughs above the catch-all if you proxy to Render.
-
-# Example API passthroughs (uncomment if you proxy at Netlify)
-# /api/*  https://sr-aibridge.onrender.com/:splat  200
-
-# SPA fallback
-/*  /index.html  200!

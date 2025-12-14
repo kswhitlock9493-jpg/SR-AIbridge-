@@ -1,2 +1,0 @@
-chmod +x lock_temporal_anchor.sh verify_temporal_anchor.sh
-./lock_temporal_anchor.sh

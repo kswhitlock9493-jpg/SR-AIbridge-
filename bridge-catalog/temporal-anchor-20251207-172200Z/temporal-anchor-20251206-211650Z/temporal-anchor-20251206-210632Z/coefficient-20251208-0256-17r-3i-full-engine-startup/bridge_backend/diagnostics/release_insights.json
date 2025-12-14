@@ -1,7 +1,0 @@
-{
-  "stability_score": 68.5,
-  "most_active_modules": [
-    ["bridge_backend/models/core.py", 0.41],
-    ["bridge_backend/runtime/predictive_stabilizer.py", 0.33]
-  ]
-}

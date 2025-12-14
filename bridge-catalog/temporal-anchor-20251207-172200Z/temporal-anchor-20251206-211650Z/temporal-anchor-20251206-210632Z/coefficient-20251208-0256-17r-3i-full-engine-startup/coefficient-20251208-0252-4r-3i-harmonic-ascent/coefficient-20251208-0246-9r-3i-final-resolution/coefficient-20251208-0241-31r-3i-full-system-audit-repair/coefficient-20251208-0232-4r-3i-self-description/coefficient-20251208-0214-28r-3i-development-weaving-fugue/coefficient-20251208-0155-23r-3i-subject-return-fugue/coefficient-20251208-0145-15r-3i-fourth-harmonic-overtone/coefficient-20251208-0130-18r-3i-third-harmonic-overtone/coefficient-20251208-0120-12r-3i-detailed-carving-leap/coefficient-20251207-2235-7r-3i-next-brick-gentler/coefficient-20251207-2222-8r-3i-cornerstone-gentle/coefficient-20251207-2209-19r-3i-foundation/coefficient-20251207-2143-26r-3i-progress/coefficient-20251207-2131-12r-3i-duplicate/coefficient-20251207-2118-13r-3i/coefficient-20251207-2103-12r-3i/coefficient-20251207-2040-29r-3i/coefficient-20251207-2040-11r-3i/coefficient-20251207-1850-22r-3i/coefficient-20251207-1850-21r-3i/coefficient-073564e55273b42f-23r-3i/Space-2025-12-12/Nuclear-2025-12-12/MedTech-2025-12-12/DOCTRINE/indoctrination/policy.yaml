@@ -1,6 +1,0 @@
-version: v1
-constraints:
-  certification_required: true
-checks:
-  - id: doctrine_alignment
-    description: "Verify agent training against doctrine scrolls"

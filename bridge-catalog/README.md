@@ -1,3 +1,3 @@
-# Bridge Catalogue – μ/CH Resonance Kits
-Domain kits are immutable snapshots stored as git tags; this folder
-is only a convenience view—nothing here is version-controlled.
+# μ/CH Resonance Kit Catalogue  
+Immutable snapshots extracted from git tags.  
+To add a new kit: tag it `«domain»-YYYY-MM-DD`, re-run the loop, commit.
