@@ -13,7 +13,7 @@ load_dotenv()
 logging.basicConfig(level=os.getenv("LOG_LEVEL","INFO").upper())
 logger = logging.getLogger(__name__)
 
-# === Environment Detection ===
+from datetime import datetime# === Environment Detection ===
 # Detect runtime environment for platform-specific configuration
 HOST_PLATFORM = os.getenv("HOST_PLATFORM") or (
     "brh" if os.getenv("BRH_ENABLED") else  # BRH sovereign deployment
@@ -731,7 +731,14 @@ def telemetry_snapshot():
             return {"error": "Telemetry not available"}
     return TELEMETRY.snapshot()
 
+
+# ---------------------------------------------------------------------
+# Diagnostics Routes Registration
+# ---------------------------------------------------------------------
+from bridge_backend.routes import diagnostics_timeline
+diagnostics_timeline.register(app)
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", "8000"))
-    uvicorn.run("bridge_backend.main:app", host="0.0.0.0", port=port, reload=False)
+    uvicorn.run("bridge_backend.main:app", host="0.0.0.0", port=port)

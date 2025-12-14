@@ -1,0 +1,37 @@
+2025-11-09 01:52:08.869 CST [17211] LOG:  starting PostgreSQL 17.0 on aarch64-unknown-linux-android, compiled by Android (13624864, +pgo, +bolt, +lto, +mlgo, based on r530567e) clang version 19.0.1 (https://android.googlesource.com/toolchain/llvm-project 97a699bf4812a18fb657c2779f5296a4ab2694d2), 64-bit
+2025-11-09 01:52:08.870 CST [17211] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-11-09 01:52:08.872 CST [17211] LOG:  listening on Unix socket "/data/data/com.termux/files/usr/tmp/.s.PGSQL.5432"
+2025-11-09 01:52:08.877 CST [17216] LOG:  database system was shut down at 2025-11-09 01:52:08 CST
+2025-11-09 01:52:08.885 CST [17211] LOG:  database system is ready to accept connections
+2025-11-09 01:52:20.450 CST [17312] FATAL:  role "postgres" does not exist
+2025-11-09 01:57:08.921 CST [17214] LOG:  checkpoint starting: time
+2025-11-09 01:58:23.700 CST [18039] ERROR:  permission denied to create role
+2025-11-09 01:58:23.700 CST [18039] DETAIL:  Only roles with the CREATEROLE attribute may create roles.
+2025-11-09 01:58:23.700 CST [18039] STATEMENT:  CREATE USER bridge WITH PASSWORD 'bridgepass';
+2025-11-09 01:58:47.767 CST [17214] LOG:  checkpoint complete: wrote 986 buffers (6.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=98.721 s, sync=0.110 s, total=98.847 s; sync files=317, longest=0.004 s, average=0.001 s; distance=4591 kB, estimate=4591 kB; lsn=0/196A430, redo lsn=0/1969F18
+2025-11-09 01:59:36.699 CST [20177] FATAL:  database "u0_a477" does not exist
+2025-11-09 01:59:47.440 CST [20337] FATAL:  database "u0_a477" does not exist
+2025-11-09 02:01:07.997 CST [20610] FATAL:  lock file "postmaster.pid" already exists
+2025-11-09 02:01:07.997 CST [20610] HINT:  Is another postmaster (PID 17211) running in data directory "/data/data/com.termux/files/usr/var/lib/postgresql"?
+2025-11-09 02:02:08.159 CST [17211] LOG:  received fast shutdown request
+2025-11-09 02:02:08.161 CST [17211] LOG:  aborting any active transactions
+2025-11-09 02:02:08.164 CST [17211] LOG:  background worker "logical replication launcher" (PID 17220) exited with exit code 1
+2025-11-09 02:02:08.168 CST [17214] LOG:  shutting down
+2025-11-09 02:02:08.169 CST [17214] LOG:  checkpoint starting: shutdown immediate
+2025-11-09 02:02:08.183 CST [17214] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.015 s; sync files=2, longest=0.001 s, average=0.001 s; distance=1 kB, estimate=4132 kB; lsn=0/196A4E0, redo lsn=0/196A4E0
+2025-11-09 02:02:08.194 CST [17211] LOG:  database system is shut down
+2025-11-09 02:02:24.932 CST [21034] LOG:  starting PostgreSQL 17.0 on aarch64-unknown-linux-android, compiled by Android (13624864, +pgo, +bolt, +lto, +mlgo, based on r530567e) clang version 19.0.1 (https://android.googlesource.com/toolchain/llvm-project 97a699bf4812a18fb657c2779f5296a4ab2694d2), 64-bit
+2025-11-09 02:02:24.933 CST [21034] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-11-09 02:02:24.936 CST [21034] LOG:  listening on Unix socket "/data/data/com.termux/files/usr/tmp/.s.PGSQL.5432"
+2025-11-09 02:02:24.941 CST [21039] LOG:  database system was shut down at 2025-11-09 02:02:08 CST
+2025-11-09 02:02:24.948 CST [21034] LOG:  database system is ready to accept connections
+2025-11-09 02:03:42.338 CST [21126] ERROR:  role "postgres" already exists
+2025-11-09 02:03:42.338 CST [21126] STATEMENT:  CREATE USER postgres WITH SUPERUSER CREATEDB CREATEROLE PASSWORD 'postgres';
+2025-11-09 02:03:42.338 CST [21126] ERROR:  role "bridge" already exists
+2025-11-09 02:03:42.338 CST [21126] STATEMENT:  CREATE USER bridge WITH PASSWORD 'bridgepass';
+2025-11-09 02:03:42.339 CST [21126] ERROR:  database "bridge_events" already exists
+2025-11-09 02:03:42.339 CST [21126] STATEMENT:  CREATE DATABASE bridge_events OWNER bridge;
+2025-11-09 02:07:24.977 CST [21037] LOG:  checkpoint starting: time
+2025-11-09 02:07:25.115 CST [21037] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.108 s, sync=0.009 s, total=0.138 s; sync files=3, longest=0.007 s, average=0.003 s; distance=1 kB, estimate=1 kB; lsn=0/196AB28, redo lsn=0/196AAD0
+2025-11-09 02:12:24.215 CST [21037] LOG:  checkpoint starting: time
+2025-11-09 02:12:29.664 CST [21037] LOG:  checkpoint complete: wrote 54 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=5.393 s, sync=0.037 s, total=5.449 s; sync files=44, longest=0.005 s, average=0.001 s; distance=154 kB, estimate=154 kB; lsn=0/19915C0, redo lsn=0/1991568

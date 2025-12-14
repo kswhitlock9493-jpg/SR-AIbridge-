@@ -1,145 +1,73 @@
 """
-Genesis Introspection System
-Live telemetry and self-mapping for the Genesis organism
+Genesis Introspection
+Provides system heartbeat, snapshot, and health status reporting for orchestration.
 """
 
-from typing import Dict, Any, List, Optional
+import asyncio
 import logging
-import os
-from datetime import datetime, UTC
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
 
 class GenesisIntrospection:
     """
-    Genesis introspection and telemetry system.
-    Provides real-time visibility into the state and health of the entire organism.
+    The Introspection subsystem tracks system health, metrics, and status snapshots
+    used by the Genesis Orchestrator.
     """
-    
+
     def __init__(self):
-        self._metrics: Dict[str, Any] = {}
-        self._health_checks: Dict[str, bool] = {}
-        self._heartbeat_interval = int(os.getenv("GENESIS_HEARTBEAT_INTERVAL", "15"))
-        self._last_heartbeat: Optional[str] = None
-        
+        self._healthy_components = {}
+        self._last_heartbeat = None
+        self._heartbeat_interval = 5.0  # seconds
+        self._running = False
+
+    async def start(self):
+        """Begin periodic heartbeat monitoring."""
+        if self._running:
+            return
+        self._running = True
+        asyncio.create_task(self._heartbeat_loop())
         logger.info("🔍 Genesis Introspection initialized")
-    
-    def record_metric(self, name: str, value: Any, metadata: Optional[Dict[str, Any]] = None):
-        """
-        Record a metric for introspection
-        
-        Args:
-            name: Metric name
-            value: Metric value
-            metadata: Optional metadata about the metric
-        """
-        self._metrics[name] = {
-            "value": value,
-            "timestamp": self._get_timestamp(),
-            "metadata": metadata or {},
-        }
-    
-    def get_metric(self, name: str) -> Optional[Dict[str, Any]]:
-        """Get a specific metric"""
-        return self._metrics.get(name)
-    
-    def get_all_metrics(self) -> Dict[str, Any]:
-        """Get all recorded metrics"""
-        return self._metrics.copy()
-    
-    def update_health(self, component: str, healthy: bool):
-        """
-        Update health status for a component
-        
-        Args:
-            component: Component name
-            healthy: Health status (True = healthy, False = unhealthy)
-        """
-        self._health_checks[component] = healthy
-        logger.debug(f"Health update: {component} = {'✅' if healthy else '❌'}")
-    
-    def get_health_status(self) -> Dict[str, Any]:
-        """Get overall health status"""
-        total = len(self._health_checks)
-        healthy = sum(1 for h in self._health_checks.values() if h)
-        
-        return {
-            "overall_healthy": healthy == total if total > 0 else True,
-            "components": self._health_checks.copy(),
-            "healthy_count": healthy,
-            "total_count": total,
-            "health_percentage": (healthy / total * 100) if total > 0 else 100.0,
-        }
-    
+
+    async def _heartbeat_loop(self):
+        """Continuously update heartbeat timestamp and simulate component checks."""
+        while self._running:
+            self.heartbeat()
+            await asyncio.sleep(self._heartbeat_interval)
+
     def heartbeat(self):
-        """Record a heartbeat pulse"""
-        self._last_heartbeat = self._get_timestamp()
-        self.record_metric("last_heartbeat", self._last_heartbeat)
-    
-    def get_heartbeat_status(self) -> Dict[str, Any]:
-        """Get heartbeat status"""
+        """Mark the system as alive."""
+        self._last_heartbeat = datetime.utcnow()
+        logger.debug(f"💓 Genesis heartbeat at {self._last_heartbeat.isoformat()}")
+
+    def snapshot(self):
+        """Return a snapshot of current introspection state."""
         return {
-            "last_heartbeat": self._last_heartbeat,
-            "interval_seconds": self._heartbeat_interval,
+            "timestamp": datetime.utcnow().isoformat(),
+            "last_heartbeat": self._last_heartbeat.isoformat() if self._last_heartbeat else None,
+            "healthy_components": self._healthy_components,
         }
-    
-    def generate_echo_report(self) -> Dict[str, Any]:
-        """
-        Generate a comprehensive echo report for genesis.echo topic
-        
-        Returns:
-            Complete introspection report
-        """
+
+    def health_status(self):
+        """Return an aggregated system health report."""
+        overall_healthy = all(self._healthy_components.values()) if self._healthy_components else True
         return {
-            "type": "genesis.echo.report",
-            "timestamp": self._get_timestamp(),
-            "health": self.get_health_status(),
-            "heartbeat": self.get_heartbeat_status(),
-            "metrics": self.get_all_metrics(),
+            "overall_healthy": overall_healthy,
+            "components": self._healthy_components,
         }
-    
-    def get_system_map(self) -> Dict[str, Any]:
-        """
-        Generate a system map showing all components and their relationships
-        
-        Returns:
-            System topology map
-        """
-        try:
-            from .manifest import genesis_manifest
-            
-            manifest = genesis_manifest.get_manifest()
-            engines = manifest.get("engines", {})
-            
-            # Build dependency graph
-            graph = {}
-            for engine_name in engines.keys():
-                deps = genesis_manifest.get_dependencies(engine_name)
-                topics = genesis_manifest.get_topics(engine_name)
-                role = genesis_manifest.get_engine_role(engine_name)
-                
-                graph[engine_name] = {
-                    "dependencies": deps,
-                    "topics": topics,
-                    "role": role,
-                    "health": self._health_checks.get(engine_name, None),
-                }
-            
-            return {
-                "total_engines": len(engines),
-                "graph": graph,
-                "timestamp": self._get_timestamp(),
-            }
-            
-        except Exception as e:
-            logger.error(f"Failed to generate system map: {e}")
-            return {"error": str(e)}
-    
-    def _get_timestamp(self) -> str:
-        """Get ISO timestamp"""
-        return datetime.now(UTC).isoformat().replace('+00:00', 'Z')
+
+    def update_component(self, name: str, healthy: bool):
+        """Mark an individual component as healthy/unhealthy."""
+        self._healthy_components[name] = healthy
+        state = "✅ healthy" if healthy else "❌ unhealthy"
+        logger.info(f"📊 Component '{name}' marked as {state}")
+
+    async def stop(self):
+        """Stop introspection loop."""
+        self._running = False
+        logger.info("🧩 Genesis Introspection stopped")
 
 
-# Global singleton introspection instance
+# Global singleton instance
 genesis_introspection = GenesisIntrospection()
