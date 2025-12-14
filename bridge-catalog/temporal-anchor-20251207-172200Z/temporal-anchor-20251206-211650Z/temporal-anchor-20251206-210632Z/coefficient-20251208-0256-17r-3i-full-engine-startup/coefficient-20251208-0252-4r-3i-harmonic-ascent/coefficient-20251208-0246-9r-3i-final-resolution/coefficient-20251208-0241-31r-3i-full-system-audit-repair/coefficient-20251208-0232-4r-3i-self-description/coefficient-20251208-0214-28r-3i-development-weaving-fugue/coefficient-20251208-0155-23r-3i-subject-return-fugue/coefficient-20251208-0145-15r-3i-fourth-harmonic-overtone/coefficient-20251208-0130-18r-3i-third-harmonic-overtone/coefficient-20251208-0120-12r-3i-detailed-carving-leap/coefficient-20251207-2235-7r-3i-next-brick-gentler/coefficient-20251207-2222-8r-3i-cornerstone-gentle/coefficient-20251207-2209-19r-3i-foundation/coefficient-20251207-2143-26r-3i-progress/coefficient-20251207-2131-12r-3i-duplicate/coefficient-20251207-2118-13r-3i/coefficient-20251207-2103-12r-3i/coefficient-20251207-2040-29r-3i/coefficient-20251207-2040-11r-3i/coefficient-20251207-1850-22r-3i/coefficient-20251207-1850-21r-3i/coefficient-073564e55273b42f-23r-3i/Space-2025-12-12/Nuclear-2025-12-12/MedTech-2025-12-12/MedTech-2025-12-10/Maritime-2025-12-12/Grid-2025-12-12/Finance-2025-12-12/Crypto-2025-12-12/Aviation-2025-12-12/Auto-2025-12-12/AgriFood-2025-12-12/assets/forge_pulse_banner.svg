@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" width="800" height="200">
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FFA500;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFD700;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="silverGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#C0C0C0;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#E8E8E8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#C0C0C0;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="200" fill="#0d1117" rx="10"/>
+  
+  <!-- Border -->
+  <rect x="2" y="2" width="796" height="196" fill="none" stroke="url(#goldGradient)" stroke-width="2" rx="8"/>
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="monospace" font-size="24" font-weight="bold" 
+        fill="url(#goldGradient)" text-anchor="middle" filter="url(#glow)">
+    🜂 FORGE DOMINION — TOKEN PULSE
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="400" y="65" font-family="monospace" font-size="12" 
+        fill="#8b949e" text-anchor="middle">
+    Environment Sovereignty v1.9.7s
+  </text>
+  
+  <!-- Active Providers Section -->
+  <text x="50" y="100" font-family="monospace" font-size="14" font-weight="bold" fill="#58a6ff">
+    Active Providers:
+  </text>
+  
+  <!-- Provider Status Indicators -->
+  <g id="providers">
+    <!-- GitHub -->
+    <circle cx="70" cy="120" r="8" fill="#3fb950"/>
+    <text x="85" y="125" font-family="monospace" font-size="12" fill="#e6edf3">GitHub</text>
+    
+    <!-- Netlify -->
+    <circle cx="170" cy="120" r="8" fill="#3fb950"/>
+    <text x="185" y="125" font-family="monospace" font-size="12" fill="#e6edf3">Netlify</text>
+    
+    <!-- Render -->
+    <circle cx="270" cy="120" r="8" fill="#3fb950"/>
+    <text x="285" y="125" font-family="monospace" font-size="12" fill="#e6edf3">Render</text>
+  </g>
+  
+  <!-- Last Event Section -->
+  <text x="400" y="100" font-family="monospace" font-size="14" font-weight="bold" fill="#58a6ff">
+    Last Event:
+  </text>
+  <text x="400" y="125" font-family="monospace" font-size="12" fill="#e6edf3" text-anchor="middle">
+    <tspan id="lastEvent">mint • github • 2s ago</tspan>
+  </text>
+  
+  <!-- Pulse Strength Section -->
+  <text x="650" y="100" font-family="monospace" font-size="14" font-weight="bold" fill="#58a6ff">
+    Pulse:
+  </text>
+  
+  <!-- Pulse Indicator -->
+  <g id="pulseIndicator">
+    <circle cx="700" cy="120" r="15" fill="url(#goldGradient)" filter="url(#glow)">
+      <animate attributeName="r" values="15;18;15" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.7;1" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <text x="730" y="125" font-family="monospace" font-size="12" font-weight="bold" 
+          fill="url(#goldGradient)" id="pulseText">HEALTHY</text>
+  </g>
+  
+  <!-- Resonance Bar -->
+  <text x="50" y="160" font-family="monospace" font-size="12" fill="#8b949e">
+    Resonance:
+  </text>
+  <rect x="140" y="150" width="600" height="12" fill="#21262d" rx="6"/>
+  <rect x="140" y="150" width="480" height="12" fill="url(#goldGradient)" rx="6">
+    <animate attributeName="width" values="480;500;480" dur="3s" repeatCount="indefinite"/>
+  </rect>
+  <text x="750" y="160" font-family="monospace" font-size="12" fill="#e6edf3">
+    100.0
+  </text>
+  
+  <!-- Footer -->
+  <text x="400" y="185" font-family="monospace" font-size="10" fill="#6e7681" text-anchor="middle">
+    Volatility: 0.032 • Auto-refresh: 6h • Sovereignty: ACHIEVED
+  </text>
+</svg>

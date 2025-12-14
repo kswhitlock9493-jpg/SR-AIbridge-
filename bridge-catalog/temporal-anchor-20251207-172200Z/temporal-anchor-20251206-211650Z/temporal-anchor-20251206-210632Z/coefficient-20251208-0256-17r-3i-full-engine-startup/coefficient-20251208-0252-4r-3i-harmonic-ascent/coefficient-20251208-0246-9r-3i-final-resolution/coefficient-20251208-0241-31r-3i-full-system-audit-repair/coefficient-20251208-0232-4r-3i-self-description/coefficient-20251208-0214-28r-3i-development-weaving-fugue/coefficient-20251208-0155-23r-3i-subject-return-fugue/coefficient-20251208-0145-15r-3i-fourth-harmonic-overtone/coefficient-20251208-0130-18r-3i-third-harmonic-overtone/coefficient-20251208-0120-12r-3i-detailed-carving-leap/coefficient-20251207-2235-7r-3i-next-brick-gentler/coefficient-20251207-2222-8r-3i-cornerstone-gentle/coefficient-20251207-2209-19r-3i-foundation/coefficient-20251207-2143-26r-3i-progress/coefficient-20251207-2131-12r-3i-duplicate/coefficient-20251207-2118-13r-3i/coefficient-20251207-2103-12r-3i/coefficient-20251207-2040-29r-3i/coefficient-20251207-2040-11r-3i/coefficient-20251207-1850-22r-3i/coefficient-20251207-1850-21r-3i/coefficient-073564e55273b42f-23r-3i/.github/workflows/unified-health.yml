@@ -1,0 +1,46 @@
+name: Unified Health Timeline
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Endpoint Triage", "API Triage", "🔁 Build & Deploy Triage"]
+    types:
+      - completed
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      
+      - name: Install Dependencies
+        run: pip install requests
+      
+      - name: Rebuild Unified Timeline
+        working-directory: bridge_backend
+        run: |
+          python3 scripts/synchrony_collector.py
+      
+      - name: Upload Unified Timeline Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: unified-timeline
+          path: bridge_backend/unified_timeline.json
+          retention-days: 30
+      
+      - name: Upload Timeline to Bridge
+        if: env.BRIDGE_URL != ''
+        env:
+          BRIDGE_URL: ${{ secrets.BRIDGE_URL }}
+        working-directory: bridge_backend
+        run: |
+          if [ -f unified_timeline.json ]; then
+            curl -X POST "$BRIDGE_URL/api/diagnostics" \
+              -H "Content-Type: application/json" \
+              -d @unified_timeline.json || echo "⚠️ Failed to upload to Bridge"
+          fi

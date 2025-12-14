@@ -1,0 +1,110 @@
+name: Firewall Intelligence and Autonomy Engine
+
+on:
+  schedule:
+    # Run daily at 3 AM UTC (after nightly intelligence scan)
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      force_run:
+        description: 'Force run even if no issues detected'
+        required: false
+        default: 'false'
+
+jobs:
+  firewall-autonomy:
+    name: Firewall Intelligence + Autonomy
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+      
+      - name: Create Necessary Directories
+        run: |
+          mkdir -p bridge_backend/diagnostics
+          mkdir -p vault/autonomy
+          mkdir -p network_policies
+      
+      - name: Run Firewall Intelligence and Autonomy Engine
+        run: |
+          echo "🤖 Starting Firewall Intelligence and Autonomy Engine..."
+          python3 bridge_backend/tools/firewall_intel/firewall_autonomy_engine.py
+      
+      - name: Display Autonomy Log
+        run: |
+          echo "📊 Autonomy Engine Execution Log"
+          echo "================================="
+          if [ -f bridge_backend/diagnostics/firewall_autonomy_log.json ]; then
+            cat bridge_backend/diagnostics/firewall_autonomy_log.json
+          else
+            echo "⚠️  No autonomy log generated"
+          fi
+      
+      - name: Check for High Severity Issues
+        id: check_severity
+        run: |
+          if [ -f bridge_backend/diagnostics/firewall_report.json ]; then
+            SEVERITY=$(python3 -c "import json; print(json.load(open('bridge_backend/diagnostics/firewall_report.json'))['summary']['severity'])")
+            echo "severity=$SEVERITY" >> $GITHUB_OUTPUT
+            echo "🔍 Detected severity: $SEVERITY"
+          else
+            echo "severity=unknown" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Upload Firewall Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: firewall-autonomy-report
+          path: |
+            bridge_backend/diagnostics/firewall_report.json
+            bridge_backend/diagnostics/firewall_autonomy_log.json
+            bridge_backend/diagnostics/firewall_incidents.json
+          retention-days: 90
+      
+      - name: Upload Generated Policies
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-network-policies
+          path: network_policies/generated_allowlist.yaml
+          retention-days: 90
+      
+      - name: Upload Autonomy Vault Records
+        uses: actions/upload-artifact@v4
+        with:
+          name: autonomy-vault-records
+          path: vault/autonomy/firewall_*
+          retention-days: 90
+      
+      - name: Alert on High Severity
+        if: steps.check_severity.outputs.severity == 'high'
+        run: |
+          echo "🚨 HIGH SEVERITY FIREWALL ISSUES DETECTED"
+          echo "=========================================="
+          echo "The Autonomy Engine has detected high-severity firewall issues."
+          echo "Human review and approval is required before applying policies."
+          echo ""
+          echo "📄 Review artifacts:"
+          echo "  - firewall-autonomy-report"
+          echo "  - generated-network-policies"
+          echo "  - autonomy-vault-records"
+          echo ""
+          echo "🛡️ Next steps:"
+          echo "  1. Review the firewall_report.json for issue details"
+          echo "  2. Review the generated_allowlist.yaml for policy recommendations"
+          echo "  3. Approve and apply policies if appropriate"
+      
+      - name: Complete
+        run: |
+          echo "✅ Firewall Intelligence and Autonomy Engine execution complete"
+          echo "📊 Check artifacts for detailed reports and logs"

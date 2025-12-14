@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+import argparse, sys, pathlib, json
+sys.path.insert(0, str(pathlib.Path(__file__).parent))
+
+from modules.quantum_intention_calibrator.resonance_mapper import ResonanceMapper
+from modules.quantum_intention_calibrator.probability_collapser import ProbabilityCollapser
+
+parser = argparse.ArgumentParser(description="Bridge Quantum Intention Calibrator")
+sub = parser.add_subparsers(dest="cmd", required=True)
+
+intention = sub.add_parser("intention")
+intention.add_argument("text", help="natural-language intention")
+
+def handle_intention(args):
+    mapper    = ResonanceMapper()
+    collapser = ProbabilityCollapser(pathlib.Path("."))
+    params    = mapper.intention_to_params(args.text)
+    collapse  = collapser.collapse(params)
+    out = {
+        "intention": args.text,
+        "resonance_params": params,
+        "collapsed_pathway": collapse["optimal_path"],
+        "verification_tests": collapse["verification_tests"]
+    }
+    print(json.dumps(out, indent=2))
+
+if __name__ == "__main__":
+    args = parser.parse_args()
+    if args.cmd == "intention":
+        handle_intention(args)

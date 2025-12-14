@@ -1,0 +1,26 @@
+# Bridge Runtime Handler systemd service template
+# 
+# Installation:
+# 1. Copy this file to /etc/systemd/system/brh@.service
+# 2. Create /etc/brh/dominion.env with:
+#    DOMINION_SEAL=your-secret-seal-here
+# 3. Enable and start the service:
+#    sudo systemctl enable brh@"dominion://sovereign.bridge?env=prod&epoch=$(date +%s)&sig=<sig>"
+#    sudo systemctl start brh@"dominion://..."
+
+[Unit]
+Description=Bridge Runtime Handler (%i)
+After=docker.service
+Requires=docker.service
+
+[Service]
+Environment=FORGE_DOMINION_ROOT=%i
+EnvironmentFile=/etc/brh/dominion.env
+Environment=PYTHONUNBUFFERED=1
+WorkingDirectory=/opt/bridge-repo
+ExecStart=/usr/bin/python3 -m brh.run
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

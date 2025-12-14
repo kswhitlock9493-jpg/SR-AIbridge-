@@ -1,0 +1,181 @@
+from fastapi import Request
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import JSONResponse
+
+# Import CascadeEngine for tier management
+try:
+    from bridge_core.engines.cascade.service import CascadeEngine
+except ImportError:
+    from bridge_backend.bridge_core.engines.cascade.service import CascadeEngine
+
+# Import permission store to check push notification permissions
+try:
+    from bridge_core.permissions.store import load_settings
+except ImportError:
+    from bridge_backend.bridge_core.permissions.store import load_settings
+
+# Simple RBAC matrix
+ROLE_MATRIX = {
+    "admiral": {
+        "all": True,  # Full access to everything
+        "custody": True,  # Admiral-only custody/keys
+        "system_health": "global",  # Global system health view
+        "brain": "24/7",  # 24/7 memory autonomy
+        "vault": "master",  # Master vault access
+        "blueprint:create": True,
+        "blueprint:commit": True,
+        "blueprint:delete": True,
+        "steward.read": True,  # Can read steward status
+        "steward.cap.issue": True,  # Can issue capability tokens
+        "steward.write": True,  # Can apply environment changes
+        "autonomy:operate": True,  # Can operate autonomy engine
+        "autonomy:configure": True,  # Can configure autonomy settings
+    },
+    "captain": {
+        "admin": False,
+        "agents": True,  # Can manage their own agents
+        "vault": True,  # Own vault access
+        "screen": False,
+        "view_own_missions": True,
+        "view_agent_jobs": False,
+        "custody": False,  # No custody access
+        "system_health": "local",  # Local self-test only
+        "brain": "14hr",  # 14hr memory autonomy
+        "blueprint:create": True,
+        "blueprint:commit": True,
+        "blueprint:delete": False,
+    },
+    "agent": {
+        "self": True,
+        "vault": False,
+        "view_own_missions": False,
+        "execute_jobs": True,
+        "custody": False,  # No custody access
+        "system_health": False,  # No health access
+        "brain": "7hr",  # 7hr memory autonomy
+        "blueprint:create": False,
+        "blueprint:commit": False,
+        "blueprint:delete": False,
+    },
+}
+
+class PermissionMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        # For now, allow unauthenticated requests to pass through
+        # In production, this would be stricter with proper authentication
+        user = getattr(request.state, "user", None)
+        
+        # If no user, check if this is a protected endpoint
+        if not user:
+            # Get user_id from query params as a fallback (mock auth pattern)
+            user_id = request.query_params.get("user_id", "test_captain")
+            
+            # Create a mock user object for now
+            class MockUser:
+                def __init__(self, uid):
+                    self.id = uid
+                    # Determine role from user_id for testing
+                    if "admiral" in uid.lower():
+                        self.role = "admiral"
+                    elif "captain" in uid.lower():
+                        self.role = "captain"
+                    else:
+                        self.role = "captain"  # default role
+                    self.project = None
+            
+            user = MockUser(user_id)
+            request.state.user = user
+
+        # Cascade decides effective tier
+        cascade_state = CascadeEngine().get_state(user.id)
+        tier = cascade_state.get("tier", "free")
+        role = getattr(user, "role", "captain")
+
+        # Global tier gate
+        if tier == "free" and request.url.path.startswith("/engines/leviathan"):
+            return JSONResponse(
+                status_code=403,
+                content={"detail": "leviathan_locked_free"}
+            )
+
+        if tier == "free" and request.url.path.startswith("/engines/agents"):
+            return JSONResponse(
+                status_code=403,
+                content={"detail": "agents_locked_free"}
+            )
+
+        # Steward is Admiral-only
+        if request.url.path.startswith("/api/steward"):
+            if role != "admiral":
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "steward_admiral_only"}
+                )
+        
+        # Autonomy is Admiral-only
+        if request.url.path.startswith("/api/autonomy"):
+            if role != "admiral":
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "autonomy_admiral_only"}
+                )
+        
+        # Umbra Echo write operations are Admiral-only (v1.9.7d)
+        if request.url.path.startswith("/api/umbra/echo") and request.method in ["POST", "PUT", "DELETE"]:
+            if role != "admiral":
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "umbra_echo_admiral_only"}
+                )
+        
+        # Umbra repair/preventive operations are Admiral-only (v1.9.7d)
+        if request.url.path.startswith("/api/umbra/repair") or request.url.path.startswith("/api/umbra/predict/prevent"):
+            if role != "admiral":
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "umbra_repair_admiral_only"}
+                )
+
+        # Role-based gate
+        perms = ROLE_MATRIX.get(role, {})
+        if not perms.get("all", False):
+            if "admin" in request.url.path and not perms.get("admin", False):
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "role_restricted"}
+                )
+            
+            # Custody is Admiral-only
+            if "/custody" in request.url.path and not perms.get("custody", False):
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "custody_admiral_only"}
+                )
+
+        # Push notification permission gate
+        if request.url.path.startswith("/push/"):
+            # Load user's permission settings
+            settings = load_settings(user.id)
+            if settings and not settings.push.enabled:
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "push_notifications_disabled"}
+                )
+            
+            # Check specific push notification types
+            if request.url.path == "/push/send" and request.method == "POST":
+                if settings:
+                    # Extract notification type from request body if needed
+                    # For now, just check if push is enabled
+                    pass
+
+        # Project-specific gate (if autonomy task has restrictions)
+        if hasattr(user, "project") and user.project and request.url.path.startswith("/vault/"):
+            if user.project not in request.url.path:
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "project_scope_violation"}
+                )
+
+        response = await call_next(request)
+        return response

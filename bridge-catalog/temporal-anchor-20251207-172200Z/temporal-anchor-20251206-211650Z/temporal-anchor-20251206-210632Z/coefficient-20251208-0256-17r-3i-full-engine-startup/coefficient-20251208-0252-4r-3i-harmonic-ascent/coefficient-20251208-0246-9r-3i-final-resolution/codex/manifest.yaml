@@ -1,0 +1,10 @@
+name: SR-AIbridge
+version: 5.5.3
+description: Self-documenting repository with automated codex compilation
+engines:
+  truth: Validates facts and metadata from YAML files
+  parser: Extracts documentation from markdown files
+  blueprint: Maps code dependencies and imports
+outputs:
+  - codex/output/repo_book.json
+  - codex/output/repo_book.md

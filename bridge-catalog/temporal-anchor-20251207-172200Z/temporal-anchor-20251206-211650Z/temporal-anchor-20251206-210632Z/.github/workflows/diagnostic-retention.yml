@@ -1,0 +1,18 @@
+name: 🧹 Bridge Diagnostic Retention
+on:
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+jobs:
+  retention:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.x' }
+      - run: pip install requests
+      - env:
+          BRIDGE_URL: ${{ secrets.BRIDGE_URL }}
+          BRIDGE_SLACK_WEBHOOK: ${{ secrets.BRIDGE_SLACK_WEBHOOK }}
+        run: python3 scripts/prune_diagnostics.py

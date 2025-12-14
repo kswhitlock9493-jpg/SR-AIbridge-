@@ -1,0 +1,29 @@
+rules:
+  - id: python.danger.eval
+    patterns:
+      - pattern: eval($X)
+    message: "Avoid eval(); use ast.literal_eval or safer alternatives."
+    severity: ERROR
+    languages: [python]
+
+  - id: python.subprocess.shell-true
+    pattern: subprocess.run(..., shell=True, ...)
+    message: "shell=True can be dangerous; prefer list argv and shell=False."
+    severity: WARNING
+    languages: [python]
+
+  - id: python.hardcoded-password
+    patterns:
+      - pattern: password = "..."
+      - pattern: PASSWORD = "..."
+    message: "Hardcoded passwords detected. Use environment variables or secrets manager."
+    severity: ERROR
+    languages: [python]
+
+  - id: python.sql-injection
+    patterns:
+      - pattern: execute("... " + $VAR)
+      - pattern: execute(f"... {$VAR}")
+    message: "Possible SQL injection. Use parameterized queries."
+    severity: ERROR
+    languages: [python]

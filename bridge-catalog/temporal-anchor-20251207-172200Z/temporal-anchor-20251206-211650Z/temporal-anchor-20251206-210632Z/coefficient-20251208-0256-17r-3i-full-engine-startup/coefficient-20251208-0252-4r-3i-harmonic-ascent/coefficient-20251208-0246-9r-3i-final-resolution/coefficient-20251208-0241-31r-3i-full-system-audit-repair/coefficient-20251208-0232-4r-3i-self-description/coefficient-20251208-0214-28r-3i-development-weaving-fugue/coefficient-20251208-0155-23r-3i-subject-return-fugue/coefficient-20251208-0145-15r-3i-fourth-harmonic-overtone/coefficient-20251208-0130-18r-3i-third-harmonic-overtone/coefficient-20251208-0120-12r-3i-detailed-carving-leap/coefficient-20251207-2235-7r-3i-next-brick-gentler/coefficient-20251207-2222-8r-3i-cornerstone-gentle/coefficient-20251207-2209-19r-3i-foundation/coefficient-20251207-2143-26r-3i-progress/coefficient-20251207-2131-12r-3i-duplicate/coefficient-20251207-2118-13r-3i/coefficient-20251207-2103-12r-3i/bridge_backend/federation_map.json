@@ -1,0 +1,35 @@
+{
+  "diagnostics_federation": {
+    "endpoint": "https://diagnostics.sr-aibridge.com/api/federate",
+    "heartbeat": "https://diagnostics.sr-aibridge.com/api/heartbeat",
+    "schema_version": "3.2",
+    "schema_probe": "GET:/api/schema",
+    "patch_targets": {
+      "backend_env": ["FEDERATION_SCHEMA_VERSION_DIAGNOSTICS"],
+      "cache_files": ["bridge_backend/.cache/diag_schema.json"]
+    },
+    "expected_methods": ["GET", "POST"]
+  },
+  "bridge_auto_deploy": {
+    "endpoint": "https://bridge.sr-aibridge.com/api/deploy",
+    "heartbeat": "https://bridge.sr-aibridge.com/api/deploy/status",
+    "schema_version": "2.9",
+    "schema_probe": "GET:/api/deploy/schema",
+    "patch_targets": {
+      "backend_env": ["FEDERATION_SCHEMA_VERSION_DEPLOY"],
+      "cache_files": ["bridge_backend/.cache/deploy_schema.json"]
+    },
+    "expected_methods": ["POST"]
+  },
+  "triage_federation": {
+    "endpoint": "https://triage.sr-aibridge.com/api/relay",
+    "heartbeat": "https://triage.sr-aibridge.com/api/heartbeat",
+    "schema_version": "1.7",
+    "schema_probe": "GET:/api/schema",
+    "patch_targets": {
+      "backend_env": ["FEDERATION_SCHEMA_VERSION_TRIAGE"],
+      "cache_files": ["bridge_backend/.cache/triage_schema.json"]
+    },
+    "expected_methods": ["POST", "PUT"]
+  }
+}

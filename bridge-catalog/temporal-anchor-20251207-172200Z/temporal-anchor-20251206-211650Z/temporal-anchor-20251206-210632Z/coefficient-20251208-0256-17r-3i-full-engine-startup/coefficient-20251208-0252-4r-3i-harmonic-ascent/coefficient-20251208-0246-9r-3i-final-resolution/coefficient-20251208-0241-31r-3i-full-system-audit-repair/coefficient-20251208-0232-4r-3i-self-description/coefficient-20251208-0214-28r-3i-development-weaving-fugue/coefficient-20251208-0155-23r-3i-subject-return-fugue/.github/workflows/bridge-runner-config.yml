@@ -1,0 +1,72 @@
+name: Bridge Native Runner Configuration
+
+# This workflow helps setup and utilize self-hosted runners for cost optimization
+# Self-hosted runners allow running heavy compute on your own infrastructure
+# reducing GitHub Actions minutes consumption
+
+on:
+  workflow_dispatch:
+    inputs:
+      setup_runner:
+        description: 'Setup new self-hosted runner'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  runner-info:
+    name: Display Runner Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Runner Setup Instructions
+        run: |
+          cat <<'EOF'
+          ════════════════════════════════════════════════════════════════════
+          🏃 Bridge Native Self-Hosted Runner Setup Guide
+          ════════════════════════════════════════════════════════════════════
+          
+          BENEFITS:
+          • Reduce GitHub Actions costs by running on your own infrastructure
+          • Use Render.com free tier or local machines for heavy compute
+          • Keep lightweight coordination on GitHub-hosted runners
+          
+          SETUP STEPS:
+          
+          1. Navigate to: Settings > Actions > Runners > New self-hosted runner
+          
+          2. Choose your platform (Linux, macOS, Windows)
+          
+          3. Follow the installation commands provided by GitHub
+          
+          4. Label your runner as 'bridge-native' for identification
+          
+          5. Update workflows to use: runs-on: [self-hosted, bridge-native]
+          
+          RECOMMENDED WORKLOADS FOR SELF-HOSTED RUNNERS:
+          • Quantum security checks (quantum_dominion.yml)
+          • Token rotation (forge_dominion.yml)
+          • Heavy build processes
+          • Long-running tests
+          
+          WORKFLOWS TO KEEP ON GITHUB RUNNERS:
+          • Simple CI checks
+          • Lightweight validation
+          • Quick linting tasks
+          
+          RENDER.COM INTEGRATION:
+          You can run a self-hosted runner on Render's free tier:
+          • Create a new Web Service on Render
+          • Use Docker with GitHub Actions runner
+          • Connect to your repository
+          • Configure webhook triggers
+          
+          ════════════════════════════════════════════════════════════════════
+          EOF
+          
+      - name: Check for active runners
+        run: |
+          echo "To check active runners, visit:"
+          echo "https://github.com/${{ github.repository }}/settings/actions/runners"

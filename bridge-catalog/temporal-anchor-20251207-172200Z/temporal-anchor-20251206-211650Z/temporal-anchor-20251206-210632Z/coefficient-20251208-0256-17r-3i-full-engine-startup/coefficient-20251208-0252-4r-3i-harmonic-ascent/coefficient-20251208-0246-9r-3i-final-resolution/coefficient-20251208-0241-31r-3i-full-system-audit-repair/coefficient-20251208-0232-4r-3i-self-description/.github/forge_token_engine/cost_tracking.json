@@ -1,0 +1,25 @@
+{
+  "start_date": "2025-11-05T13:39:56.916947",
+  "baseline_monthly_cost": 75.0,
+  "baseline_monthly_minutes": 3010,
+  "monthly_records": [
+    {
+      "date": "2025-11-05T13:39:56.916961",
+      "month": "2025-11",
+      "minutes": {
+        "github_actions": 100,
+        "self_hosted": 2500,
+        "render_free": 300,
+        "netlify_free": 100,
+        "vercel_free": 0,
+        "total": 3000
+      },
+      "costs": {
+        "actual_github_cost": 0.8,
+        "hypothetical_github_cost": 24.0,
+        "savings": 23.2,
+        "savings_percentage": 96.7
+      }
+    }
+  ]
+}

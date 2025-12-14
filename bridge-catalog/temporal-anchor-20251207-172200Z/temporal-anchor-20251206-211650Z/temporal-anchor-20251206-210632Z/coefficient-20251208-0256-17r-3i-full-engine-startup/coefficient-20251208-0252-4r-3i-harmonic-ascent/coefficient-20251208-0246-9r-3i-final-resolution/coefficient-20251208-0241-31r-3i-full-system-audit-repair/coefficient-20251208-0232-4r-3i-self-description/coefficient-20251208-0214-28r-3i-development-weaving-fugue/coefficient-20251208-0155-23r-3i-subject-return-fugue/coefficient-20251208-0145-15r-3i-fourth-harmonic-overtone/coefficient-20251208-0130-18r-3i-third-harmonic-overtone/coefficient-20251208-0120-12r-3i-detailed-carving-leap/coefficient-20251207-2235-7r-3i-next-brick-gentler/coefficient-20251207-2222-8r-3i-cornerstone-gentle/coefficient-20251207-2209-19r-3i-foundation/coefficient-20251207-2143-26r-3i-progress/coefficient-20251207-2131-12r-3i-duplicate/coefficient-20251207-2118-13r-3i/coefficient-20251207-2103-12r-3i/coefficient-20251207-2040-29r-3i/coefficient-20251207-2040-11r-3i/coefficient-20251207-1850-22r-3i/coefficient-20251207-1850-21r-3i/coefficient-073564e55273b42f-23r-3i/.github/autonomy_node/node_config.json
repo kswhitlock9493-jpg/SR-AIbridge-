@@ -1,0 +1,7 @@
+{
+  "autonomy_interval_hours": 6,
+  "max_report_backups": 10,
+  "truth_certification": true,
+  "self_heal_enabled": true,
+  "genesis_registration": true
+}

@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Guardian Verses Editor</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    textarea { width: 100%; height: 160px; }
+    input, button { padding: 8px; margin: 6px 0; }
+  </style>
+</head>
+<body>
+  <h2>Guardian Verses — Submit / Ratify</h2>
+
+  <h3>Submit Proposal</h3>
+  <input id="proposer" placeholder="proposer id (e.g. prim)" /><br>
+  <textarea id="body" placeholder="Write your verse / proposal here"></textarea><br>
+  <button onclick="submitProposal()">Submit Proposal</button>
+  <pre id="submitResp"></pre>
+
+  <h3>Ratify Proposal</h3>
+  <input id="proposal_id" placeholder="proposal id" /><br>
+  <input id="ratifier_pub_hex" placeholder="ratifier pub hex" /><br>
+  <input id="signature_b64" placeholder="signature (base64)" /><br>
+  <button onclick="ratify()">Ratify</button>
+  <pre id="ratifyResp"></pre>
+
+<script>
+async function submitProposal(){
+  const body = document.getElementById("body").value;
+  const proposer = document.getElementById("proposer").value || "local";
+  const r = await fetch("/api/verses/submit", {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({body, proposer})
+  });
+  const j = await r.json();
+  document.getElementById("submitResp").innerText = JSON.stringify(j,null,2);
+}
+
+async function ratify(){
+  const proposal_id = document.getElementById("proposal_id").value;
+  const ratifier_pub_hex = document.getElementById("ratifier_pub_hex").value;
+  const signature_b64 = document.getElementById("signature_b64").value;
+  const r = await fetch("/api/verses/ratify", {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({proposal_id, ratifier_pub_hex, signature_b64})
+  });
+  const j = await r.json();
+  document.getElementById("ratifyResp").innerText = JSON.stringify(j,null,2);
+}
+</script>
+</body>
+</html>

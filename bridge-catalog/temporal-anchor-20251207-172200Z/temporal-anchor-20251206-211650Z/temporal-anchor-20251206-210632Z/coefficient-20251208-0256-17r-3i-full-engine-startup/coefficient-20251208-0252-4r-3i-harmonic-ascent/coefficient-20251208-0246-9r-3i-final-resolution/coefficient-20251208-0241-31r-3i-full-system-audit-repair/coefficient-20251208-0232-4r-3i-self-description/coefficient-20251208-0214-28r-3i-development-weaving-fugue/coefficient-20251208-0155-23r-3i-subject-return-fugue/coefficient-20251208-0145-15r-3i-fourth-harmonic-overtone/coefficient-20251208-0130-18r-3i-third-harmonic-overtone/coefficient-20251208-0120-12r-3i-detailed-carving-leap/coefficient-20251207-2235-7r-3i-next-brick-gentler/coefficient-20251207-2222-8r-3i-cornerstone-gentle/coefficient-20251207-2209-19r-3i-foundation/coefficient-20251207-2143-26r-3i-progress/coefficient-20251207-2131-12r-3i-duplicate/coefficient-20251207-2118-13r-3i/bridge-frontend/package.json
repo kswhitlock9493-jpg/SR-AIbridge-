@@ -1,0 +1,105 @@
+{
+  "name": "bridge-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20 <=22",
+    "npm": ">=10"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.9.1"
+  },
+  "devDependencies": {
+    "@netlify/functions": "^2.8.2",
+    "@playwright/test": "^1.47.2",
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "terser": "^5.44.0",
+    "vite": "^5.2.0",
+    "vitest": "^1.4.0"
+  },
+  "optionalDependencies": {
+    "puppeteer": "^24.28.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "start": "vite",
+    "prebuild": "python3 scripts/build_triage.py",
+    "build": "vite build",
+    "postbuild": "node -e \"console.log('✅ Build complete')\"",
+    "postbuild:badge": "node ./scripts/update-badge.js || true",
+    "postinstall:chromium": "node -e \"try{require('puppeteer');}catch(e){}; try{require('@playwright/test');}catch(e){}\"",
+    "chromium:guard": "node scripts/chromium-guard.mjs",
+    "chrome:which": "node scripts/which-chrome.mjs",
+    "preview": "vite preview",
+    "test": "vitest",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 5",
+    "repair": "python3 ../scripts/repair_netlify_env.py",
+    "ci:install": "cross-env NPM_CONFIG_PRODUCTION=false PUPPETEER_SKIP_DOWNLOAD=true PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true npm ci --no-audit --prefer-offline"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "browser": true,
+      "es2020": true,
+      "node": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:react/jsx-runtime",
+      "plugin:react-hooks/recommended"
+    ],
+    "ignorePatterns": [
+      "dist",
+      "build",
+      "src/api/auto_generated/**"
+    ],
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "settings": {
+      "react": {
+        "version": "18.2"
+      }
+    },
+    "plugins": [
+      "react-refresh"
+    ],
+    "rules": {
+      "react-refresh/only-export-components": [
+        "warn",
+        {
+          "allowConstantExport": true
+        }
+      ],
+      "react/prop-types": "off",
+      "no-unused-vars": ["error", { "varsIgnorePattern": "^React$", "argsIgnorePattern": "^_" }]
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

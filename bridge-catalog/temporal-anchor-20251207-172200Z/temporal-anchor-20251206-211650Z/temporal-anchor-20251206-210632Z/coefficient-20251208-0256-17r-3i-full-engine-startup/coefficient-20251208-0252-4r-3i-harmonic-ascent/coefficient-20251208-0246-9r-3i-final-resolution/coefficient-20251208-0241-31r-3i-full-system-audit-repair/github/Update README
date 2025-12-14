@@ -1,0 +1,32 @@
+<!-- LOC-START -->
+<!-- LOC-END -->
+with LOC Stats
+on:
+  push:
+    branches: [main]
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install cloc
+        run: sudo apt-get install -y cloc
+
+      - name: Run cloc and save stats
+        run: cloc . --exclude-dir=node_modules,dist,build,.venv,.git,vault/exports --md > loc-stats.md
+
+      - name: Update README with LOC stats
+        run: |
+          awk '/<!-- LOC-START -->/{print;system("cat loc-stats.md");next}1' README.md > README.tmp
+          mv README.tmp README.md
+
+      - name: Commit and push if README changed
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Action"
+          git add README.md
+          git diff --cached --quiet || git commit -m "Update README with latest LOC stats"
+          git push

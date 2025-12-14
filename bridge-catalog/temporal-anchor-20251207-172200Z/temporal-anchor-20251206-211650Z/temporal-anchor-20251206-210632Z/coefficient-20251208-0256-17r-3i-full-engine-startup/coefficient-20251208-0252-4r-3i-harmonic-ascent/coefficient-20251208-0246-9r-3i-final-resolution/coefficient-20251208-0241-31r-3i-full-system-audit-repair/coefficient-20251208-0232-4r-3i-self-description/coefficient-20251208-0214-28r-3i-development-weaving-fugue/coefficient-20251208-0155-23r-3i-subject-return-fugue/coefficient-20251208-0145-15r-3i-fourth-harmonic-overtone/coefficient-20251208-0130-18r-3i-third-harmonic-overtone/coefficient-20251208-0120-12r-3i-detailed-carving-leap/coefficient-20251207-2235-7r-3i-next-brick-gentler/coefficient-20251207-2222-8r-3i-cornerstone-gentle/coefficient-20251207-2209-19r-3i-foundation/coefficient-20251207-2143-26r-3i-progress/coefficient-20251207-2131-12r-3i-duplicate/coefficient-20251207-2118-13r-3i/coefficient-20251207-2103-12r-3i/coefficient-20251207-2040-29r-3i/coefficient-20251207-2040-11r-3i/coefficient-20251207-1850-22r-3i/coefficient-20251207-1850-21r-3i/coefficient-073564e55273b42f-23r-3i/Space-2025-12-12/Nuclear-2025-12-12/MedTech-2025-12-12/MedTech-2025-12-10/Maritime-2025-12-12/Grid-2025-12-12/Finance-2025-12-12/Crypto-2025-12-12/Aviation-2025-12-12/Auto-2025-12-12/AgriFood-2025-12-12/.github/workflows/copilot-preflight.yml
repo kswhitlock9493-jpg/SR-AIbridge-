@@ -1,0 +1,82 @@
+name: Copilot PreFlight Environment Setup
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  preflight:
+    name: Prepare Copilot Environment & Watchdog
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+      security-events: write
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Configure Base Environment
+        run: |
+          echo "🔧 Configuring base environment..."
+          sudo apt-get update -y
+          sudo apt-get install -y dnsutils curl python3 python3-pip
+
+      - name: Install Python Dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install requests toml rich
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Chrome Dependencies
+        run: |
+          # Install system dependencies for Playwright only (skip browser downloads)
+          npx playwright install-deps
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+
+      - name: Install Node Dependencies
+        run: |
+          cd bridge-frontend && (npm ci || npm install)
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+
+      - name: Pre-Firewall Environment Variables
+        run: |
+          echo "🔥 Setting Copilot pre-firewall variables..."
+          echo "BRIDGE_URL=${{ secrets.BRIDGE_URL }}" >> $GITHUB_ENV
+          echo "NETLIFY_SITE_ID=${{ secrets.NETLIFY_SITE_ID }}" >> $GITHUB_ENV
+          echo "NETLIFY_AUTH_TOKEN=${{ secrets.NETLIFY_AUTH_TOKEN }}" >> $GITHUB_ENV
+          echo "NODE_ENV=production" >> $GITHUB_ENV
+          echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
+
+      - name: Add Custom Firewall Allowlist
+        run: |
+          echo "🌐 Configuring temporary allowlist..."
+          mkdir -p .github/allowlist
+          echo "bridge.sr-aibridge.com" >> .github/allowlist/hosts.txt
+          echo "diagnostics.sr-aibridge.com" >> .github/allowlist/hosts.txt
+          echo "api.netlify.com" >> .github/allowlist/hosts.txt
+          echo "registry.npmjs.org" >> .github/allowlist/hosts.txt
+          echo "pypi.org" >> .github/allowlist/hosts.txt
+          echo "✅ Added default allowlist hosts (sovereign mode - no vendor dependencies)."
+
+      - name: Preflight Sanity Check
+        run: |
+          echo "🚀 Running DeepScan preflight..."
+          python3 bridge_backend/scripts/deepscan_reporter.py || echo "⚠️ DeepScan preflight skipped (safe mode)"
+          echo "✅ Preflight sequence complete."
+
+      - name: Run Firewall Watchdog
+        run: |
+          python3 scripts/firewall_watchdog.py

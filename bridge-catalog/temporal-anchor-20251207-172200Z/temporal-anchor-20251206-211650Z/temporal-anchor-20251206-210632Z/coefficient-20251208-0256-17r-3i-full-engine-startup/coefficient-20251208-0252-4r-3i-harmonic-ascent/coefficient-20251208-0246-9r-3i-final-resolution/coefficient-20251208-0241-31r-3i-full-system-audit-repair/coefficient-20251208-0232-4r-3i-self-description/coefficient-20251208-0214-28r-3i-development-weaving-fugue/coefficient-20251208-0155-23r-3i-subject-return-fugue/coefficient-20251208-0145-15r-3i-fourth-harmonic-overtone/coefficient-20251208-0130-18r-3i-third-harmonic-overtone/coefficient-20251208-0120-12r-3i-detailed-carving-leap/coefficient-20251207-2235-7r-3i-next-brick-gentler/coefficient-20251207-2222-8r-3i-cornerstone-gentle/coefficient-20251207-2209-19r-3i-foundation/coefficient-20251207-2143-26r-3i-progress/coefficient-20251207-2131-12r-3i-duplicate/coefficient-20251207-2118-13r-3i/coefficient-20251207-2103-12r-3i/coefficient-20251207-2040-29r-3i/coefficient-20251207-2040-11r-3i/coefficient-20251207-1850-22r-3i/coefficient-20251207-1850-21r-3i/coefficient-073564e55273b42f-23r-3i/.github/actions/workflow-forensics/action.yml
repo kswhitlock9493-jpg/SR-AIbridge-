@@ -1,0 +1,81 @@
+name: 'Workflow Forensics Analyzer'
+description: 'Analyzes workflow failures and generates diagnostic reports'
+inputs:
+  scan_depth:
+    description: 'Scan depth (all_failures, recent_only)'
+    required: false
+    default: 'recent_only'
+  include_skipped:
+    description: 'Include skipped workflows in analysis'
+    required: false
+    default: 'false'
+  forge_integration:
+    description: 'Integration level (full, partial, none)'
+    required: false
+    default: 'partial'
+
+outputs:
+  failure_count:
+    description: 'Number of failures detected'
+    value: ${{ steps.analyze.outputs.failure_count }}
+  has_critical:
+    description: 'Whether critical issues were found'
+    value: ${{ steps.analyze.outputs.has_critical }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Python for Analysis
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install Analysis Dependencies
+      shell: bash
+      run: |
+        pip install PyYAML tabulate || echo "⚠️ Failed to install dependencies"
+    
+    - name: Run Workflow Forensics
+      id: analyze
+      shell: bash
+      run: |
+        echo "🔍 Running workflow forensics analysis..."
+        echo "  Scan depth: ${{ inputs.scan_depth }}"
+        echo "  Include skipped: ${{ inputs.include_skipped }}"
+        
+        # Run failure analyzer
+        python3 bridge_backend/tools/autonomy/failure_analyzer.py \
+          --input .github/workflows \
+          --output bridge_backend/diagnostics/forensics_report.json || true
+        
+        # Check if report was generated
+        if [ -f bridge_backend/diagnostics/forensics_report.json ]; then
+          FAILURE_COUNT=$(python3 -c "import json; data=json.load(open('bridge_backend/diagnostics/forensics_report.json')); print(data['stats']['total_issues'])")
+          CRITICAL_COUNT=$(python3 -c "import json; data=json.load(open('bridge_backend/diagnostics/forensics_report.json')); print(data['stats'].get('critical_issues', 0))")
+          
+          echo "failure_count=$FAILURE_COUNT" >> $GITHUB_OUTPUT
+          echo "has_critical=$( [ $CRITICAL_COUNT -gt 0 ] && echo 'true' || echo 'false' )" >> $GITHUB_OUTPUT
+          
+          echo "✅ Forensics analysis complete"
+          echo "  Failures found: $FAILURE_COUNT"
+          echo "  Critical issues: $CRITICAL_COUNT"
+        else
+          echo "⚠️ Forensics report not generated"
+          echo "failure_count=0" >> $GITHUB_OUTPUT
+          echo "has_critical=false" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Generate Forensics Summary
+      shell: bash
+      run: |
+        if [ -f bridge_backend/diagnostics/forensics_report.json ]; then
+          echo "📊 Forensics Summary:"
+          python3 <<'PYTHON'
+        import json
+        report = json.load(open('bridge_backend/diagnostics/forensics_report.json'))
+        print(f"  Total workflows: {report['stats']['total_workflows']}")
+        print(f"  Workflows with issues: {report['stats']['workflows_with_issues']}")
+        print(f"  Total issues: {report['stats']['total_issues']}")
+        print(f"  Auto-fixable: {report['stats'].get('auto_fixable', 0)}")
+        PYTHON
+        fi

@@ -1,0 +1,93 @@
+name: Browser Dependency Resolution (Firewall Bypass)
+
+on:
+  workflow_call:
+    inputs:
+      skip-chromium:
+        description: 'Skip Chromium installation'
+        required: false
+        type: boolean
+        default: false
+      node-version:
+        description: 'Node.js version to use'
+        required: false
+        type: string
+        default: '20'
+
+jobs:
+  resolve-browser-deps:
+    name: Resolve Browser Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Configure Alternative Browser Sources
+        if: ${{ !inputs.skip-chromium }}
+        run: |
+          echo "🌐 Configuring browser dependencies for firewall-restricted environment..."
+          
+          # Install Playwright system dependencies only (skip browser downloads)
+          echo "📦 Installing Playwright browser dependencies..."
+          npx playwright install-deps || echo "⚠️ Playwright deps install failed, continuing..."
+          
+          # Note: Skipping browser download to avoid firewall blocks
+          # System browsers or pre-cached browsers will be used instead
+          echo "✅ Browser dependencies configured (using system browsers)"
+          
+          # Set browser executable path for tools that need it
+          CHROMIUM_PATH=$(which chromium 2>/dev/null || which chromium-browser 2>/dev/null || echo "")
+          if [ -n "$CHROMIUM_PATH" ]; then
+            echo "BROWSER_EXECUTABLE_PATH=$CHROMIUM_PATH" >> $GITHUB_ENV
+            echo "✅ Browser executable found at: $CHROMIUM_PATH"
+          else
+            echo "⚠️ Chromium not found in PATH, tools may use system default"
+          fi
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+      
+      - name: Set Puppeteer Environment Variables
+        run: |
+          echo "🔧 Configuring Puppeteer to skip download..."
+          echo "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true" >> $GITHUB_ENV
+          echo "PUPPETEER_SKIP_DOWNLOAD=true" >> $GITHUB_ENV
+          
+          # Try to find Chrome/Chromium for Puppeteer
+          CHROME_PATH=$(which chromium 2>/dev/null || which chromium-browser 2>/dev/null || which google-chrome 2>/dev/null || echo "")
+          if [ -n "$CHROME_PATH" ]; then
+            echo "CHROME_BIN=$CHROME_PATH" >> $GITHUB_ENV
+            echo "PUPPETEER_EXECUTABLE_PATH=$CHROME_PATH" >> $GITHUB_ENV
+            echo "✅ Chrome/Chromium configured for Puppeteer: $CHROME_PATH"
+          else
+            echo "⚠️ Chrome/Chromium not found, Puppeteer may fail if required"
+          fi
+      
+      - name: Set Playwright Environment Variables
+        run: |
+          echo "🔧 Configuring Playwright..."
+          echo "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=false" >> $GITHUB_ENV
+          echo "PLAYWRIGHT_BROWSERS_PATH=0" >> $GITHUB_ENV
+          echo "✅ Playwright configured to use system browsers"
+      
+      - name: Verify Browser Installation
+        if: ${{ !inputs.skip-chromium }}
+        run: |
+          echo "🔍 Verifying browser installation..."
+          
+          # Check if Chromium is available
+          if command -v chromium &> /dev/null || command -v chromium-browser &> /dev/null; then
+            CHROMIUM_VERSION=$(chromium --version 2>/dev/null || chromium-browser --version 2>/dev/null || echo "Unknown")
+            echo "✅ Chromium installed: $CHROMIUM_VERSION"
+          else
+            echo "⚠️ Chromium not found in system PATH"
+          fi
+          
+          # Check Playwright browsers
+          if npx playwright --version &> /dev/null; then
+            PLAYWRIGHT_VERSION=$(npx playwright --version 2>/dev/null || echo "Unknown")
+            echo "✅ Playwright available: $PLAYWRIGHT_VERSION"
+          else
+            echo "⚠️ Playwright not available"
+          fi
+          
+          echo "✅ Browser dependency resolution complete"

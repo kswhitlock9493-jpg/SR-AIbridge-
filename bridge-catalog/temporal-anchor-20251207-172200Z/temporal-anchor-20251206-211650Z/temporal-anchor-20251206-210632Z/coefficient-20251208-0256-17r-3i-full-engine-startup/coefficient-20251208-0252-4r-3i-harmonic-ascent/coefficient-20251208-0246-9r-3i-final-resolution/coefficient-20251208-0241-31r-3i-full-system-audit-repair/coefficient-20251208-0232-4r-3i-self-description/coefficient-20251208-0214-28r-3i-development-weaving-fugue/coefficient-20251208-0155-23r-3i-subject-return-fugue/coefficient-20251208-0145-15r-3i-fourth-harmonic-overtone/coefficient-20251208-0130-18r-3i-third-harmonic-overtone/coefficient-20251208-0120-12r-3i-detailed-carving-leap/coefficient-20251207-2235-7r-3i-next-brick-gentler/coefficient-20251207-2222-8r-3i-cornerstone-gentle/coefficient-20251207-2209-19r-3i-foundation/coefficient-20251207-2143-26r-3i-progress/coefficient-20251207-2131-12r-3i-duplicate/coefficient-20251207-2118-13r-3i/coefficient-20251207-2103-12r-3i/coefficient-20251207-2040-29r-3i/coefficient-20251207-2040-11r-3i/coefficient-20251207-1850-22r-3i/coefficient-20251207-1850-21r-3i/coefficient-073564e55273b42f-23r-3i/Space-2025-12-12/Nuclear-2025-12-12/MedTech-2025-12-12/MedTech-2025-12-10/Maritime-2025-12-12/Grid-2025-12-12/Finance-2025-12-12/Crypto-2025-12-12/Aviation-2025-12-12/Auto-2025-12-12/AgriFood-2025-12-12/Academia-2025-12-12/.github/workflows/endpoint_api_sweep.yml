@@ -1,0 +1,18 @@
+name: Endpoints & Hooks Sweep
+on:
+  workflow_dispatch:
+  schedule: [ { cron: "5 */12 * * *" } ]
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python
+        uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install requests
+      - run: python3 .github/scripts/endpoint_api_sweep.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: endpoint_api_sweep
+          path: bridge_backend/diagnostics/endpoint_api_sweep.json

@@ -1,0 +1,52 @@
+# SR-AIbridge NPM Safety List
+# Ensures npm packages exclude all secrets, configs, and caches
+
+# Environment files (secrets)
+.env*
+*.env
+
+# Development files
+.git/
+.github/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test and CI files
+tests/
+*.test.js
+*.spec.js
+.github/
+
+# Documentation (optional, uncomment if needed)
+# docs/
+# *.md
+
+# Build artifacts
+dist/
+build/
+node_modules/
+*.log
+*.cache
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+bridge_backend/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Scan and verification reports
+bridge_backend/scan_reports/
+netlify_build_verification.json
+
+# Netlify functions (deployment-specific, keep only diagnostic.js)
+bridge-frontend/netlify/functions/*
+!bridge-frontend/netlify/functions/.keep
+!bridge-frontend/netlify/functions/diagnostic.js

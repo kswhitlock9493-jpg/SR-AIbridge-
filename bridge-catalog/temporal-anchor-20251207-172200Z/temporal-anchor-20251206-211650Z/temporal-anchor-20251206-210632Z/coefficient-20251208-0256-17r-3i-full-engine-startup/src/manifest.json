@@ -1,0 +1,309 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Bridge Runtime Handler Manifest",
+  "description": "Runtime schema signature for Bridge Runtime Handler nodes",
+  "type": "object",
+  "required": ["version", "runtime", "security"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "description": "Manifest version"
+    },
+    "runtime": {
+      "type": "object",
+      "required": ["name", "type", "auth"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Runtime instance name"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["sovereign", "federated", "replica"],
+          "description": "Runtime deployment type"
+        },
+        "auth": {
+          "type": "object",
+          "required": ["provider", "token_mode"],
+          "properties": {
+            "provider": {
+              "type": "string",
+              "enum": ["forge_dominion"],
+              "description": "Authentication provider"
+            },
+            "token_mode": {
+              "type": "string",
+              "enum": ["ephemeral", "static"],
+              "description": "Token lifecycle mode"
+            },
+            "token_ttl": {
+              "type": "integer",
+              "minimum": 60,
+              "maximum": 86400,
+              "description": "Token time-to-live in seconds"
+            },
+            "auto_renew": {
+              "type": "boolean",
+              "description": "Automatic token renewal"
+            }
+          }
+        },
+        "containers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "image", "command"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Container name"
+              },
+              "image": {
+                "type": "string",
+                "description": "Container image"
+              },
+              "command": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Container command"
+              },
+              "environment": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Environment variables"
+              },
+              "ports": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[0-9]+:[0-9]+$"
+                },
+                "description": "Port mappings"
+              },
+              "health_check": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "interval": {
+                    "type": "integer"
+                  },
+                  "timeout": {
+                    "type": "integer"
+                  },
+                  "retries": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "resources": {
+                "type": "object",
+                "properties": {
+                  "memory": {
+                    "type": "string",
+                    "pattern": "^[0-9]+(Mi|Gi)$"
+                  },
+                  "cpu": {
+                    "type": "string",
+                    "pattern": "^[0-9]+(\\.[0-9]+)?$"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path", "target"],
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "target": {
+                "type": "string"
+              },
+              "strip_prefix": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "lifecycle": {
+          "type": "object",
+          "properties": {
+            "startup_timeout": {
+              "type": "integer"
+            },
+            "shutdown_timeout": {
+              "type": "integer"
+            },
+            "restart_policy": {
+              "type": "string",
+              "enum": ["always", "on-failure", "never"]
+            },
+            "max_restarts": {
+              "type": "integer"
+            }
+          }
+        },
+        "federation": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "lattice_mode": {
+              "type": "string",
+              "enum": ["harmonic", "mesh", "star"]
+            },
+            "heartbeat_interval": {
+              "type": "integer"
+            },
+            "sync_protocol": {
+              "type": "string"
+            }
+          }
+        },
+        "observability": {
+          "type": "object",
+          "properties": {
+            "logs": {
+              "type": "object",
+              "properties": {
+                "destination": {
+                  "type": "string"
+                },
+                "level": {
+                  "type": "string",
+                  "enum": ["debug", "info", "warning", "error", "critical"]
+                },
+                "format": {
+                  "type": "string",
+                  "enum": ["json", "text"]
+                }
+              }
+            },
+            "metrics": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "destination": {
+                  "type": "string"
+                },
+                "interval": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "deploy": {
+      "type": "object",
+      "properties": {
+        "github": {
+          "type": "object",
+          "properties": {
+            "workflow": {
+              "type": "string"
+            },
+            "trigger": {
+              "type": "string"
+            },
+            "branches": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "provider"],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "region": {
+                "type": "string"
+              },
+              "replicas": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "security": {
+      "type": "object",
+      "required": ["attestation"],
+      "properties": {
+        "attestation": {
+          "type": "object",
+          "required": ["enabled", "seal_algorithm"],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "seal_algorithm": {
+              "type": "string",
+              "enum": ["HMAC-SHA256", "HMAC-SHA512"]
+            }
+          }
+        },
+        "network": {
+          "type": "object",
+          "properties": {
+            "ingress": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "port": {
+                    "type": "integer"
+                  },
+                  "protocol": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "egress": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "destination": {
+                    "type": "string"
+                  },
+                  "protocol": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

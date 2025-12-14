@@ -1,0 +1,82 @@
+name: Reflex Auto-Merge
+
+on:
+  pull_request:
+    types: [labeled, synchronize, reopened]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+  statuses: read
+  checks: read
+
+jobs:
+  reflex:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'reflex:ready')
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1) Truth gate (unit + smoke)
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Truth Gate
+        run: |
+          set -e
+          python3 -m pip install -r bridge_backend/requirements.txt
+          python3 -m unittest discover -s bridge_backend/tests -p "test_*.py" -v
+
+      # 2) Steward gate (no drift / no new criticals)
+      - name: Steward Integrity
+        run: |
+          python3 -m bridge_backend.cli.stewardctl diff --fail-on-critical || \
+          (echo "Steward criticals found"; exit 1)
+        continue-on-error: true
+
+      # 3) Netlify/Render checks must be green (when present)
+      - name: Verify external checks
+        id: verify_external_checks
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request.number;
+            const { data: checks } = await github.rest.checks.listForRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.payload.pull_request.head.sha
+            });
+            const required = ['netlify/sr-aibridge/deploy-preview','Header rules - sr-aibridge','Redirect rules - sr-aibridge','Pages changed - sr-aibridge'];
+            const failures = checks.check_runs
+              .filter(c => required.includes(c.name))
+              .filter(c => c.conclusion && c.conclusion !== 'success');
+            core.setOutput('ok', failures.length === 0);
+            if (failures.length) {
+              core.setFailed('External checks not green');
+            }
+
+      # 4) Merge
+      - name: Merge (squash)
+        if: steps.verify_external_checks.outputs.ok == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request.number;
+            await github.rest.pulls.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr,
+              merge_method: 'squash'
+            });
+
+      # 5) Optional Post-merge Sentinel (rollback on regression)
+      - name: Post-merge Sentinel
+        if: always()
+        run: |
+          # Quick smoke deploy sim; if it fails, open auto-revert PR
+          python3 -m bridge_backend.cli.sentinel smoke || \
+          python3 -m bridge_backend.cli.sentinel autorevert --reason "Reflex regression"
+        continue-on-error: true

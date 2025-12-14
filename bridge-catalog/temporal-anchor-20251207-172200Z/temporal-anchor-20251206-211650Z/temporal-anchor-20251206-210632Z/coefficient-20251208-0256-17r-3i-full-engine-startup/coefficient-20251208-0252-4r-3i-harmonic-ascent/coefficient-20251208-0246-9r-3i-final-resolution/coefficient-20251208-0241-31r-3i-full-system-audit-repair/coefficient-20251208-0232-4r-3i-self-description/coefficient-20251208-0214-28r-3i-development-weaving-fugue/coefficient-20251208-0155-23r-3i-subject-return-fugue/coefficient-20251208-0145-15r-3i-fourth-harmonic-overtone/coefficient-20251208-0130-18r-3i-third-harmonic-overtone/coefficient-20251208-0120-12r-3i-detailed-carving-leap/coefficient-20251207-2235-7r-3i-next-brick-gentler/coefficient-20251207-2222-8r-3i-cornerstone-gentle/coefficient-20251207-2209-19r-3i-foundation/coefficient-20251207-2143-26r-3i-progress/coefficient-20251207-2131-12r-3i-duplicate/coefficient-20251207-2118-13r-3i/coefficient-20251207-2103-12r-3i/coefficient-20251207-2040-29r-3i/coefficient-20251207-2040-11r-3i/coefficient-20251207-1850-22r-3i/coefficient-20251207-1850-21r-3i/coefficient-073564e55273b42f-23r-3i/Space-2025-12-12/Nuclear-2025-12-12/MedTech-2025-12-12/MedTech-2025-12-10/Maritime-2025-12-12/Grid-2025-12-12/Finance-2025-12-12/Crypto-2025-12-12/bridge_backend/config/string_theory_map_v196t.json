@@ -1,0 +1,190 @@
+{
+  "version": "1.9.6t",
+  "title": "SR-AIbridge Living Bridge Architecture",
+  "Genesis": {
+    "description": "Event routing and orchestration hub",
+    "events": [
+      "deploy.failed",
+      "deploy.netlify.preview_failed",
+      "deploy.render.failed",
+      "env.drift",
+      "envrecon.drift",
+      "code.deprecated",
+      "arie.deprecated.detected",
+      "github.secret.missing",
+      "config.outdated",
+      "deploy.failure"
+    ],
+    "routes": {
+      "Autonomy": [
+        "ARIE",
+        "Chimera",
+        "EnvRecon",
+        "Truth",
+        "GitHubEnvSync",
+        "Blueprint",
+        "Leviathan"
+      ]
+    },
+    "published_events": [
+      "autonomy.heal.applied",
+      "autonomy.heal.error",
+      "autonomy.circuit.open",
+      "autonomy.circuit.closed"
+    ]
+  },
+  "Autonomy": {
+    "description": "Autonomous decision-making and healing orchestrator",
+    "decision_process": "Governed with reinforcement scoring",
+    "actions": [
+      "REPAIR_CODE",
+      "REPAIR_CONFIG",
+      "REGENERATE_CONFIG",
+      "SYNC_ENVS",
+      "RETRY",
+      "ROLLBACK",
+      "CREATE_SECRET",
+      "SYNC_AND_CERTIFY",
+      "NOOP",
+      "ESCALATE"
+    ],
+    "safety_guardrails": {
+      "rate_limiting": "6 actions per hour",
+      "cooldown": "5 minutes between actions",
+      "circuit_breaker": "trips after 3 consecutive failures"
+    },
+    "certified_by": "Truth",
+    "predicted_by": "Leviathan",
+    "policy_evolved_by": "Blueprint"
+  },
+  "Engines": {
+    "ARIE": {
+      "purpose": "code self-healing",
+      "actions": ["REPAIR_CODE"],
+      "success_rate_tracked": true
+    },
+    "Chimera": {
+      "purpose": "deployment repair and configuration management",
+      "actions": ["REPAIR_CONFIG", "REGENERATE_CONFIG", "RETRY", "ROLLBACK"],
+      "success_rate_tracked": true
+    },
+    "EnvRecon": {
+      "purpose": "environment synchronization and drift detection",
+      "actions": ["SYNC_ENVS"],
+      "success_rate_tracked": true
+    },
+    "Steward": {
+      "purpose": "audit layer and compliance",
+      "integration": "works with EnvRecon"
+    },
+    "Truth": {
+      "purpose": "certification and validation",
+      "generates": "cryptographic certificates",
+      "success_rate_tracked": true
+    },
+    "GitHubEnvSync": {
+      "purpose": "repository secret and variable synchronization",
+      "integration": "HubSync layer",
+      "actions": ["CREATE_SECRET"]
+    },
+    "Blueprint": {
+      "purpose": "policy evolution and adaptive learning",
+      "learns_from": "success/failure feedback",
+      "updates": "decision weights in autonomy.json"
+    },
+    "Leviathan": {
+      "purpose": "temporal prediction and simulation",
+      "predicts": "deployment success probability",
+      "threshold": "0.3 for override warnings"
+    }
+  },
+  "Reinforcement_Learning": {
+    "description": "Dynamic policy optimization",
+    "components": {
+      "success_rate_tracking": {
+        "method": "exponential moving average",
+        "formula": "new_rate = current * 0.9 + outcome * 0.1",
+        "engines_tracked": ["ARIE", "Chimera", "EnvRecon", "Truth"]
+      },
+      "scoring": {
+        "formula": "success_rate(engine) - cooldown_penalty()",
+        "range": "0.0 to 1.0"
+      },
+      "policy_updates": {
+        "trigger": "after each healing action",
+        "storage": "bridge_backend/config/policy/autonomy.json"
+      }
+    }
+  },
+  "Outputs": {
+    "Certificates": {
+      "description": "Proof-of-heal logs",
+      "location": ".bridge/logs/certificates/",
+      "format": "JSON with SHA256 hashes",
+      "contains": [
+        "timestamp",
+        "action",
+        "reason",
+        "targets",
+        "certified",
+        "report_hash",
+        "certificate_hash"
+      ]
+    },
+    "Policies": {
+      "description": "Adaptive tuning and decision weights",
+      "updated_by": "Blueprint engine",
+      "location": "bridge_backend/config/policy/autonomy.json"
+    },
+    "Environment": {
+      "description": "Environment variable configuration",
+      "location": ".github/environment.json",
+      "synced": "hourly via GitHub Actions"
+    },
+    "Secrets": {
+      "description": "GitHub Actions secrets",
+      "managed_by": "GitHubEnvSync/HubSync",
+      "encrypted": true
+    },
+    "Predictions": {
+      "description": "Success probability forecasts",
+      "location": "bridge_backend/blueprint/cache/predictions.json",
+      "generated_by": "Leviathan"
+    }
+  },
+  "Workflows": {
+    "bridge_autonomy.yml": {
+      "trigger": "deployment failure or manual dispatch",
+      "action": "post incident to Autonomy API",
+      "incidents": ["deploy.failure"]
+    },
+    "env_sync.yml": {
+      "schedule": "hourly (cron: 0 * * * *)",
+      "steps": [
+        "audit environment drift",
+        "sync missing variables to GitHub",
+        "update .github/environment.json",
+        "commit changes"
+      ]
+    }
+  },
+  "Integration_Flow": {
+    "1_Detection": "Incident detected by Genesis or GitHub Actions",
+    "2_Decision": "Autonomy Governor evaluates with reinforcement scoring",
+    "3_Prediction": "Leviathan forecasts success probability",
+    "4_Execution": "Appropriate engine executes healing action",
+    "5_Certification": "Truth Engine validates and generates certificate",
+    "6_Learning": "Blueprint updates policy weights",
+    "7_Tracking": "Engine success rates updated",
+    "8_Events": "Genesis Bus publishes completion events"
+  },
+  "System_Capabilities": {
+    "self_healing": true,
+    "self_deploying": true,
+    "self_learning": true,
+    "self_certifying": true,
+    "self_synchronizing": true,
+    "future_adaptive": true,
+    "proof_of_integrity": true
+  }
+}

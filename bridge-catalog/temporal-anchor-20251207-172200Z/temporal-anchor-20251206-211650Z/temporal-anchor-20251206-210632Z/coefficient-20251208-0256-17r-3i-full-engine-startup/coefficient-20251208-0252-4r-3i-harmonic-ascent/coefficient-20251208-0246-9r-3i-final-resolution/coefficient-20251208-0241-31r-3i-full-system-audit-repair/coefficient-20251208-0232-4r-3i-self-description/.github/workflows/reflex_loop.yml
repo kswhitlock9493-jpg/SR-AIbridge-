@@ -1,0 +1,28 @@
+name: EAN Reflex Loop
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */12 * * *"   # every 12 hours
+  push:
+    branches: [main]
+
+jobs:
+  reflex:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          
+      - name: Run Reflex Loop
+        run: python3 .github/autonomy_node/reflex.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}

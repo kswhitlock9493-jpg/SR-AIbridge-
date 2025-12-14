@@ -1,0 +1,144 @@
+name: Budget Monitor
+
+# Monitors GitHub Actions spending and enforces budget protection
+# Runs daily to ensure spending stays within the $75/month limit
+
+on:
+  schedule:
+    # Run daily at noon UTC
+    - cron: '0 12 * * *'
+  
+  # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      force_check:
+        description: 'Force budget check even if recently run'
+        required: false
+        default: 'false'
+
+jobs:
+  monitor-budget:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Run budget monitor
+        id: monitor
+        run: |
+          python .github/forge_token_engine/budget_monitor.py
+        continue-on-error: true
+      
+      - name: Check financial rescue status
+        id: rescue
+        run: |
+          python .github/forge_token_engine/financial_rescue.py
+      
+      - name: Upload monitoring logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: budget-monitoring-logs
+          path: |
+            .github/forge_token_engine/monitor_log.json
+            .github/forge_token_engine/cost_log.json
+            .github/forge_token_engine/financial_rescue_config.json
+          retention-days: 30
+      
+      - name: Create issue on budget alert
+        if: steps.monitor.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            // Read monitoring log to get alert details
+            let alertMessage = 'Budget monitoring detected an issue. Please check the logs.';
+            
+            try {
+              const monitorLog = JSON.parse(fs.readFileSync('.github/forge_token_engine/monitor_log.json', 'utf8'));
+              const lastAlert = monitorLog.alerts_sent[monitorLog.alerts_sent.length - 1];
+              
+              if (lastAlert) {
+                alertMessage = `**Alert Type:** ${lastAlert.type}\n\n`;
+                alertMessage += `**Details:**\n\`\`\`json\n${JSON.stringify(lastAlert.details, null, 2)}\n\`\`\`\n\n`;
+                alertMessage += `**Timestamp:** ${lastAlert.timestamp}`;
+              }
+            } catch (e) {
+              console.log('Could not read monitoring log:', e);
+            }
+            
+            // Check if an issue already exists for this month
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'budget-alert',
+              state: 'open'
+            });
+            
+            const today = new Date();
+            const monthYear = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+            const existingIssue = issues.data.find(issue => 
+              issue.title.includes(monthYear)
+            );
+            
+            if (!existingIssue) {
+              // Create new issue
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `🚨 Budget Alert - ${monthYear}`,
+                body: `# Budget Monitoring Alert\n\n${alertMessage}\n\n## Actions Taken\n\nThe financial rescue system has automatically activated protection mechanisms.\n\n## Next Steps\n\n1. Review current spending in [Actions usage](../../actions)\n2. Check financial rescue status: \`python .github/forge_token_engine/financial_rescue.py\`\n3. Run emergency containment if needed: \`python .github/emergency_cost_containment.py\`\n\n## Documentation\n\nSee [Financial Rescue README](.github/forge_token_engine/FINANCIAL_RESCUE_README.md) for details.`,
+                labels: ['budget-alert', 'automated']
+              });
+            } else {
+              // Update existing issue with new alert
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: `## New Budget Alert\n\n${alertMessage}`
+              });
+            }
+      
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Budget Monitoring Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Try to extract key metrics
+          if [ -f .github/forge_token_engine/financial_rescue_config.json ]; then
+            SPEND=$(python -c "import json; print(json.load(open('.github/forge_token_engine/financial_rescue_config.json'))['current_month_spend'])")
+            LIMIT=$(python -c "import json; print(json.load(open('.github/forge_token_engine/financial_rescue_config.json'))['budget_limit'])")
+            REMAINING=$(python -c "import json; config = json.load(open('.github/forge_token_engine/financial_rescue_config.json')); print(config['budget_limit'] - config['current_month_spend'])")
+            
+            echo "- **Current Spend:** \$$SPEND" >> $GITHUB_STEP_SUMMARY
+            echo "- **Budget Limit:** \$$LIMIT" >> $GITHUB_STEP_SUMMARY
+            echo "- **Remaining:** \$$REMAINING" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "Budget monitoring completed. Check logs for details." >> $GITHUB_STEP_SUMMARY
+
+  # Optional: Send notifications to external systems
+  notify:
+    runs-on: ubuntu-latest
+    needs: monitor-budget
+    if: failure()
+    
+    steps:
+      - name: Notification placeholder
+        run: |
+          echo "Budget alert triggered. Configure notifications here."
+          # Examples:
+          # - Send to Slack
+          # - Send email
+          # - Post to Discord
+          # - Create PagerDuty incident

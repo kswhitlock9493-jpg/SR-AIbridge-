@@ -1,0 +1,129 @@
+# Bridge Runtime Handler Configuration - Example
+# Copy this file to bridge.runtime.yaml and customize for your deployment
+
+version: "1.0"
+runtime:
+  name: "my-bridge-runtime"
+  type: "sovereign"  # Options: sovereign, federated, replica
+  
+  # Forge Dominion Integration
+  auth:
+    provider: "forge_dominion"
+    token_mode: "ephemeral"  # Recommended: ephemeral (never use static)
+    token_ttl: 3600  # Token lifetime in seconds (1 hour)
+    auto_renew: true  # Auto-renew 5 minutes before expiry
+    
+  # Container/Process Configuration
+  containers:
+    # Backend API Server
+    - name: "backend-api"
+      image: "python:3.12-slim"
+      command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+      environment:
+        - FORGE_DOMINION_MODE=sovereign
+        - DATABASE_TYPE=sqlite
+        - LOG_LEVEL=info
+      ports:
+        - "8000:8000"
+      health_check:
+        path: "/health"
+        interval: 30
+        timeout: 5
+        retries: 3
+      resources:
+        memory: "512Mi"
+        cpu: "0.5"
+    
+    # Frontend Static Server (Optional)
+    # - name: "frontend-static"
+    #   image: "nginx:alpine"
+    #   command: ["nginx", "-g", "daemon off;"]
+    #   ports:
+    #     - "3000:80"
+    #   health_check:
+    #     path: "/"
+    #     interval: 30
+    #   resources:
+    #     memory: "256Mi"
+    #     cpu: "0.25"
+  
+  # Service Routes (if using multiple containers)
+  routes:
+    - path: "/api/*"
+      target: "backend-api:8000"
+      strip_prefix: "/api"
+    # - path: "/*"
+    #   target: "frontend-static:80"
+  
+  # Lifecycle Management
+  lifecycle:
+    startup_timeout: 120  # seconds
+    shutdown_timeout: 30
+    restart_policy: "on-failure"  # Options: always, on-failure, never
+    max_restarts: 3
+    
+  # Federation Configuration (for multi-node deployments)
+  federation:
+    enabled: false  # Set to true for multi-node sync
+    lattice_mode: "harmonic"  # Options: harmonic, mesh, star
+    heartbeat_interval: 10  # seconds
+    sync_protocol: "μ-state-replication"
+    
+  # Logging and Metrics
+  observability:
+    logs:
+      destination: "forge://sovereign-ledger/runtime"
+      level: "info"  # Options: debug, info, warning, error, critical
+      format: "json"  # Options: json, text
+    metrics:
+      enabled: true
+      destination: "forge://metrics/runtime"
+      interval: 60  # seconds
+    
+# Deployment Configuration
+deploy:
+  # GitHub Actions Integration
+  github:
+    workflow: "bridge_deploy.yml"
+    trigger: "push"
+    branches: ["main", "staging"]
+    
+  # Deployment Targets
+  targets:
+    - name: "production"
+      provider: "bridge_runtime_handler"
+      region: "auto"
+      replicas: 2
+    
+    # Uncomment for staging environment
+    # - name: "staging"
+    #   provider: "bridge_runtime_handler"
+    #   region: "auto"
+    #   replicas: 1
+
+# Security Configuration
+security:
+  # Cryptographic Attestation (Forge Dominion Seal)
+  attestation:
+    enabled: true
+    seal_algorithm: "HMAC-SHA256"  # Options: HMAC-SHA256, HMAC-SHA512
+    
+  # Network Policies
+  network:
+    # Allowed inbound ports
+    ingress:
+      - port: 8000
+        protocol: "HTTP"
+      # - port: 3000
+      #   protocol: "HTTP"
+    
+    # Allowed outbound destinations
+    egress:
+      - destination: "forge://dominion"
+        protocol: "HTTPS"
+      - destination: "*.github.com"
+        protocol: "HTTPS"
+      - destination: "api.render.com"
+        protocol: "HTTPS"
+      - destination: "api.netlify.com"
+        protocol: "HTTPS"

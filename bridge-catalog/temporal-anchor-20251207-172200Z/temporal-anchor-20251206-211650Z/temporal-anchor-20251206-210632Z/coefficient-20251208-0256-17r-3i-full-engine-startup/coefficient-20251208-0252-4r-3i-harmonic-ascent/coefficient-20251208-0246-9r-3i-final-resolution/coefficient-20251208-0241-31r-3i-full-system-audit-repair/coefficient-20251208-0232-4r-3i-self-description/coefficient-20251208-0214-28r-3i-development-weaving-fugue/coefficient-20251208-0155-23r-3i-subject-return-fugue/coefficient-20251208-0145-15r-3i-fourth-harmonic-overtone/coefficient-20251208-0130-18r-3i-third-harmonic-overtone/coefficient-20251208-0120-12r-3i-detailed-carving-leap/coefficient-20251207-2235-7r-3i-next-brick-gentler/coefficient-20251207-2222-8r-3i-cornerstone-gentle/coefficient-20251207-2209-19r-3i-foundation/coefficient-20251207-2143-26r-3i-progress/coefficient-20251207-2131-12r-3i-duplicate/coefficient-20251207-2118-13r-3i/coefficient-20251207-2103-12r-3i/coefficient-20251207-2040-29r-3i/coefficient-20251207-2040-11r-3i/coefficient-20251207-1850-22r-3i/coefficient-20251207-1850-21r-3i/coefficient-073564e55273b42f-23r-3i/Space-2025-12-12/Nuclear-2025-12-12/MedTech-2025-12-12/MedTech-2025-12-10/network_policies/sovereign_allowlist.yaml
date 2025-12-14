@@ -1,0 +1,27 @@
+version: 1.0.0
+last_updated: '2025-11-06T12:48:35.243572+00:00'
+domains:
+  critical:
+  - api.netlify.com
+  - bridge.sr-aibridge.com
+  - diagnostics.sr-aibridge.com
+  infrastructure:
+  - github.com
+  - api.github.com
+  - registry.npmjs.org
+  - pypi.org
+  monitoring:
+  - sentry.io
+  browser_downloads:
+  - googlechromelabs.github.io
+  - storage.googleapis.com
+  - edgedl.me.gvt1.com
+  - playwright.azureedge.net
+  - cdn.playwright.dev
+ip_ranges:
+  netlify:
+  - 44.211.0.0/16
+  - 52.2.0.0/15
+  github:
+  - 140.82.112.0/20
+  - 143.55.64.0/20

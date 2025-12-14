@@ -1,0 +1,231 @@
+---
+name: Self-Test SR-AIbridge
+
+"on":
+  # Run after successful deployments (can be triggered by deploy.yml completion)
+  workflow_run:
+    workflows: ["Deploy SR-AIbridge"]
+    types:
+      - completed
+  # Manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      backend_url:
+        description: 'Backend URL to test against'
+        required: false
+        default: 'https://bridge.sr-aibridge.com'
+        type: string
+      test_timeout:
+        description: 'Test timeout in minutes'
+        required: false
+        default: '10'
+        type: string
+  # Scheduled health checks (every 4 hours)
+  schedule:
+    - cron: '0 */4 * * *'
+
+jobs:
+  # Wait for deployment to be ready before testing
+  wait-for-deployment:
+    name: Wait for Deployment Ready
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.workflow_run.conclusion == 'success' ||
+      github.event_name != 'workflow_run'
+
+    outputs:
+      backend_url: ${{ steps.determine-url.outputs.backend_url }}
+
+    steps:
+      - name: Determine backend URL
+        id: determine-url
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "backend_url=${{ github.event.inputs.backend_url }}" >> $GITHUB_OUTPUT
+          else
+            echo "backend_url=${{ secrets.BACKEND_URL || secrets.BRIDGE_URL || 'https://bridge.sr-aibridge.com' }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Wait for backend to be responsive
+        run: |
+          BACKEND_URL="${{ steps.determine-url.outputs.backend_url }}"
+          echo "Waiting for backend at: $BACKEND_URL"
+
+          # Wait up to 5 minutes for the backend to respond
+          for i in {1..30}; do
+            if curl -f -s "$BACKEND_URL/health" > /dev/null; then
+              echo "✅ Backend is responsive"
+              exit 0
+            fi
+            echo "⏳ Attempt $i/30: Backend not ready, waiting 10s..."
+            sleep 10
+          done
+
+          echo "❌ Backend failed to respond after 5 minutes"
+          exit 1
+
+  # Comprehensive backend health tests
+  backend-health-tests:
+    name: Backend Health Tests
+    runs-on: ubuntu-latest
+    needs: wait-for-deployment
+    timeout-minutes: ${{ fromJSON(github.event.inputs.test_timeout || '10') }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          cd bridge_backend
+          pip install -r requirements.txt
+
+      - name: Run comprehensive self-test
+        id: self-test
+        run: |
+          cd bridge_backend
+          BACKEND_URL="${{ needs.wait-for-deployment.outputs.backend_url }}"
+          echo "Running self-test against: $BACKEND_URL"
+
+          # Run self-test with JSON output for better parsing
+          python3 self_test.py --url "$BACKEND_URL" --json > self_test_results.json
+
+          # Check if self-test passed
+          if [ $? -eq 0 ]; then
+            echo "✅ Self-test completed successfully"
+            echo "test_status=success" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Self-test failed"
+            echo "test_status=failure" >> $GITHUB_OUTPUT
+          fi
+
+          # Display results
+          cat self_test_results.json
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: self-test-results
+          path: bridge_backend/self_test_results.json
+          retention-days: 30
+
+      - name: Parse and display test summary
+        if: always()
+        run: |
+          cd bridge_backend
+          if [ -f self_test_results.json ]; then
+            echo "## 🧪 Self-Test Results" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+
+            # Extract summary using Python
+            python3 -c "
+          import json
+          try:
+              with open('self_test_results.json', 'r') as f:
+                  results = json.load(f)
+
+              summary = results.get('summary', {})
+              total = summary.get('total', 0)
+              passed = summary.get('passed', 0)
+              failed = summary.get('failed', 0)
+              errors = summary.get('errors', 0)
+
+              success_rate = (passed / total * 100) if total > 0 else 0
+
+              print(f'**Total Tests:** {total}')
+              print(f'**✅ Passed:** {passed}')
+              print(f'**❌ Failed:** {failed}')
+              print(f'**🚨 Errors:** {errors}')
+              print(f'**📈 Success Rate:** {success_rate:.1f}%')
+              print()
+
+              if failed > 0 or errors > 0:
+                  print('### Failed Tests:')
+                  for test in results.get('tests', []):
+                      if not test.get('passed', True):
+                          name = test.get('name', 'Unknown')
+                          error = test.get('error', 'No error details')
+                          print(f'- **{name}**: {error}')
+          except Exception as e:
+              print(f'Could not parse results: {e}')
+            " >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ No test results file found" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # Frontend connectivity test
+  frontend-connectivity-test:
+    name: Frontend Connectivity Test
+    runs-on: ubuntu-latest
+    needs: wait-for-deployment
+
+    steps:
+      - name: Test frontend accessibility
+        run: |
+          FRONTEND_URL="${{ secrets.FRONTEND_URL || 'https://sr-aibridge.netlify.app' }}"
+          echo "Testing frontend at: $FRONTEND_URL"
+
+          # Test frontend loads
+          if curl -f -s "$FRONTEND_URL" > /dev/null; then
+            echo "✅ Frontend is accessible"
+          else
+            echo "❌ Frontend is not accessible"
+            exit 1
+          fi
+
+      - name: Test API configuration
+        run: |
+          FRONTEND_URL="${{ secrets.FRONTEND_URL || 'https://sr-aibridge.netlify.app' }}"
+          BACKEND_URL="${{ needs.wait-for-deployment.outputs.backend_url }}"
+
+          echo "Verifying frontend can reach backend..."
+          echo "Frontend: $FRONTEND_URL"
+          echo "Backend: $BACKEND_URL"
+
+          # This is a basic connectivity test
+          # In a real scenario, you might want to use a headless browser
+          # to test the actual frontend-backend communication
+
+          if curl -f -s "$BACKEND_URL/health" > /dev/null; then
+            echo "✅ Backend is reachable from CI"
+          else
+            echo "⚠️ Backend not reachable from CI (may still work from frontend)"
+          fi
+
+  # Notification job
+  notify-results:
+    name: Notify Test Results
+    runs-on: ubuntu-latest
+    needs: [backend-health-tests, frontend-connectivity-test]
+    if: always()
+
+    steps:
+      - name: Determine overall status
+        id: status
+        run: |
+          if [ "${{ needs.backend-health-tests.result }}" = "success" ] && \
+             [ "${{ needs.frontend-connectivity-test.result }}" = "success" ]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "message=All self-tests passed ✅" >> $GITHUB_OUTPUT
+          else
+            echo "status=failure" >> $GITHUB_OUTPUT
+            echo "message=Some self-tests failed ❌" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create status summary
+        run: |
+          echo "## 🚀 SR-AIbridge Self-Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Overall Status:** ${{ steps.status.outputs.message }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Results:" >> $GITHUB_STEP_SUMMARY
+          echo "- **Backend Health Tests:** ${{ needs.backend-health-tests.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Frontend Connectivity:** ${{ needs.frontend-connectivity-test.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Tested at:** $(date -u)" >> $GITHUB_STEP_SUMMARY

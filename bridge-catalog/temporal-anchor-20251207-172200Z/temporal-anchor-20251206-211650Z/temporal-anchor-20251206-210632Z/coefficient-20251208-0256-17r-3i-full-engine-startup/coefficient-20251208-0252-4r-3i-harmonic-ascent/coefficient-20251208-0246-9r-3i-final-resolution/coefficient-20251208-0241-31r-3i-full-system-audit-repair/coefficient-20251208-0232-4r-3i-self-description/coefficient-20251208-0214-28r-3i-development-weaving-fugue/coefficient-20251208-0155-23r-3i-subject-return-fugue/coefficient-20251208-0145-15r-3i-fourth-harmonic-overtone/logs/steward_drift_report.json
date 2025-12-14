@@ -1,0 +1,187 @@
+{
+  "has_drift": true,
+  "providers": [
+    "render",
+    "netlify",
+    "github"
+  ],
+  "changes": [
+    {
+      "key": "BRIDGE_API_URL",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": false
+    },
+    {
+      "key": "VAULT_URL",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": false
+    },
+    {
+      "key": "LOG_LEVEL",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": false
+    },
+    {
+      "key": "FEDERATION_SYNC_KEY",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": true
+    },
+    {
+      "key": "AUTO_DIAGNOSE",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": false
+    },
+    {
+      "key": "DATABASE_TYPE",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": false
+    },
+    {
+      "key": "CORS_ALLOW_ALL",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": false
+    },
+    {
+      "key": "CASCADE_MODE",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": false
+    },
+    {
+      "key": "VITE_API_BASE",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": false
+    },
+    {
+      "key": "REACT_APP_API_URL",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": false
+    },
+    {
+      "key": "DATABASE_URL",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": false
+    },
+    {
+      "key": "PUBLIC_API_BASE",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": false
+    },
+    {
+      "key": "SECRET_KEY",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": true
+    },
+    {
+      "key": "ALLOWED_ORIGINS",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": false
+    },
+    {
+      "key": "DEBUG",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": false
+    },
+    {
+      "key": "PORT",
+      "old_value": null,
+      "new_value": "<from_local>",
+      "action": "create",
+      "is_secret": false
+    }
+  ],
+  "missing_in_render": [
+    "BRIDGE_API_URL",
+    "VAULT_URL",
+    "LOG_LEVEL",
+    "FEDERATION_SYNC_KEY",
+    "AUTO_DIAGNOSE",
+    "DATABASE_TYPE",
+    "CORS_ALLOW_ALL",
+    "CASCADE_MODE",
+    "VITE_API_BASE",
+    "REACT_APP_API_URL",
+    "DATABASE_URL",
+    "PUBLIC_API_BASE",
+    "SECRET_KEY",
+    "ALLOWED_ORIGINS",
+    "DEBUG",
+    "PORT"
+  ],
+  "missing_in_netlify": [
+    "BRIDGE_API_URL",
+    "VAULT_URL",
+    "LOG_LEVEL",
+    "FEDERATION_SYNC_KEY",
+    "AUTO_DIAGNOSE",
+    "DATABASE_TYPE",
+    "CORS_ALLOW_ALL",
+    "CASCADE_MODE",
+    "VITE_API_BASE",
+    "REACT_APP_API_URL",
+    "DATABASE_URL",
+    "PUBLIC_API_BASE",
+    "SECRET_KEY",
+    "ALLOWED_ORIGINS",
+    "DEBUG",
+    "PORT"
+  ],
+  "missing_in_github": [
+    "BRIDGE_API_URL",
+    "VAULT_URL",
+    "LOG_LEVEL",
+    "FEDERATION_SYNC_KEY",
+    "AUTO_DIAGNOSE",
+    "DATABASE_TYPE",
+    "CORS_ALLOW_ALL",
+    "CASCADE_MODE",
+    "VITE_API_BASE",
+    "REACT_APP_API_URL",
+    "DATABASE_URL",
+    "PUBLIC_API_BASE",
+    "SECRET_KEY",
+    "ALLOWED_ORIGINS",
+    "DEBUG",
+    "PORT"
+  ],
+  "extra_in_render": [],
+  "extra_in_netlify": [],
+  "conflicts": {},
+  "summary": {
+    "total_keys": 16,
+    "local_count": 16,
+    "render_count": 0,
+    "netlify_count": 0,
+    "github_count": 0
+  },
+  "timestamp": "2025-10-11T18:26:46.658525"
+}

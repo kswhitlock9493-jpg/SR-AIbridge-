@@ -1,0 +1,17 @@
+name: Environment Parity Guard
+on:
+  workflow_dispatch:
+  schedule: [ { cron: "0 2 * * *" } ]   # daily
+jobs:
+  env-parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python
+        uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: python3 .github/scripts/env_parity_guard.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: env_parity_guard
+          path: bridge_backend/diagnostics/env_parity_report.json

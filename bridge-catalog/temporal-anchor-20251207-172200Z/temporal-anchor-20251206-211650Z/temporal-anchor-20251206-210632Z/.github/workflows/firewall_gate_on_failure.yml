@@ -1,0 +1,75 @@
+name: Firewall Gate - Deploy Failure Analysis
+
+on:
+  workflow_run:
+    workflows: ["Deploy", "Bridge Auto Deploy"]
+    types:
+      - completed
+
+jobs:
+  firewall-gate:
+    name: Analyze Deploy Failure
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+      
+      - name: Detect Deploy Failure
+        run: |
+          echo "⚠️  Deploy failure detected in workflow: ${{ github.event.workflow_run.name }}"
+          echo "🔍 Running firewall intelligence analysis..."
+      
+      - name: Fetch Firewall Incidents
+        run: |
+          python3 bridge_backend/tools/firewall_intel/fetch_firewall_incidents.py
+      
+      - name: Analyze Firewall Findings
+        run: |
+          python3 bridge_backend/tools/firewall_intel/analyze_firewall_findings.py
+      
+      - name: Check for Firewall Issues
+        id: check_firewall
+        run: |
+          if [ -f bridge_backend/diagnostics/firewall_report.json ]; then
+            SEVERITY=$(cat bridge_backend/diagnostics/firewall_report.json | grep -o '"severity": "[^"]*"' | cut -d'"' -f4)
+            echo "severity=$SEVERITY" >> $GITHUB_OUTPUT
+            echo "🔥 Firewall issue severity: $SEVERITY"
+            
+            SIGNATURES=$(cat bridge_backend/diagnostics/firewall_report.json | grep -o '"firewall_signatures": \[[^\]]*\]' || echo "none")
+            echo "📋 Signatures detected: $SIGNATURES"
+          else
+            echo "severity=unknown" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Upload Firewall Analysis Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: firewall-gate-analysis
+          path: |
+            bridge_backend/diagnostics/firewall_report.json
+            network_policies/generated_allowlist.yaml
+          retention-days: 90
+      
+      - name: Comment on Failure (High Severity)
+        if: steps.check_firewall.outputs.severity == 'high'
+        run: |
+          echo "🚨 HIGH SEVERITY firewall issues detected"
+          echo "📄 Review the firewall-gate-analysis artifact for details"
+          echo "🛡️ Apply the generated allowlist from network_policies/generated_allowlist.yaml"
+      
+      - name: Firewall Gate Complete
+        run: |
+          echo "✅ Firewall gate analysis complete"
+          echo "📊 Severity: ${{ steps.check_firewall.outputs.severity }}"

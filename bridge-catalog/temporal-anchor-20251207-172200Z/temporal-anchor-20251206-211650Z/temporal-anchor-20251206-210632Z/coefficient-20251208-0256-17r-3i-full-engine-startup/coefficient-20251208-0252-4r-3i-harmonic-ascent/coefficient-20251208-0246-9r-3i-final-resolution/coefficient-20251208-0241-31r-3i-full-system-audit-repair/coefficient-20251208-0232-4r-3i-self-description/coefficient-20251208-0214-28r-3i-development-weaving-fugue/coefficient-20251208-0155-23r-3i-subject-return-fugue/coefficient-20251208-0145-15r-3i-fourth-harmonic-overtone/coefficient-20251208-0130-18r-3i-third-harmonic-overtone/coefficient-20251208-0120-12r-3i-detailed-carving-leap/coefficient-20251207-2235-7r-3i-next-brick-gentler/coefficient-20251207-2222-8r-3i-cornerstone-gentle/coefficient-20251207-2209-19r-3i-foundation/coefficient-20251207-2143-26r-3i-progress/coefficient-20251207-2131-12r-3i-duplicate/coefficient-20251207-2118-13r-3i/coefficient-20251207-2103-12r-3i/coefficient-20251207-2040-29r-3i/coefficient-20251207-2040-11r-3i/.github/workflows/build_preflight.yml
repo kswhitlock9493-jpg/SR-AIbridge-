@@ -1,0 +1,44 @@
+name: Build Preflight (Triage)
+on:
+  pull_request:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: bridge-frontend/package-lock.json
+
+      - name: Install Chrome Dependencies
+        run: |
+          # Install system dependencies for Playwright only (skip browser downloads)
+          npx playwright install-deps
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run Build Triage
+        working-directory: bridge-frontend
+        run: |
+          python3 scripts/build_triage.py
+
+      - name: Upload Triage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: build_triage_report
+          path: bridge_backend/diagnostics/build_triage_report.json

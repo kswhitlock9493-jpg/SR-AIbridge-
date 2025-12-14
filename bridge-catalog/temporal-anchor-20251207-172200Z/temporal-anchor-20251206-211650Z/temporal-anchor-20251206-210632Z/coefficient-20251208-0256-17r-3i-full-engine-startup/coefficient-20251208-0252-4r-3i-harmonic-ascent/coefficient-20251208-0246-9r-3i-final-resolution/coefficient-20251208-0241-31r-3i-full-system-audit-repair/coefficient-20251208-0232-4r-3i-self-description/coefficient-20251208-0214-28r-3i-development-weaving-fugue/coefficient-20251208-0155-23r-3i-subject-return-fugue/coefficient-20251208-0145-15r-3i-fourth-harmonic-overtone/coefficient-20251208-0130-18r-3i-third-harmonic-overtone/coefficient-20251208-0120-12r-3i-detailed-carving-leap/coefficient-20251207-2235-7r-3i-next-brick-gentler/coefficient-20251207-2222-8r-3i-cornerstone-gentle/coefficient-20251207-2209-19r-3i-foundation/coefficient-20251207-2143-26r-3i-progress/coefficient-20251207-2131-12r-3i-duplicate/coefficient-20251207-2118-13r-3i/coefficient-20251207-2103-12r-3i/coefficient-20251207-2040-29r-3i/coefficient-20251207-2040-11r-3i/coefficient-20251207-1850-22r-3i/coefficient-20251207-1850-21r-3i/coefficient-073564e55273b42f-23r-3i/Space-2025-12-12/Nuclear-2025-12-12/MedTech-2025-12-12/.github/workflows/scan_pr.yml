@@ -1,0 +1,45 @@
+name: Compliance Scan (Licenses & Counterfeit)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [ main ]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Install deps
+        run: |
+          python -m pip install -r bridge_backend/requirements.txt || true
+          python -m pip install pyyaml
+      - name: Determine changed files
+        id: diff
+        run: |
+          BEFORE="${{ github.event.before }}"
+          SHA="${{ github.sha }}"
+          if [ -z "$BEFORE" ]; then BEFORE="$(git rev-parse HEAD^ || echo '')"; fi
+          CHANGED=$(git diff --name-only "$BEFORE" "$SHA" | tr '\n' ' ')
+          echo "changed=$CHANGED" >> $GITHUB_OUTPUT
+      - name: Run scan
+        id: scan
+        env:
+          SCAN_SIGNING_KEY: ${{ secrets.SCAN_SIGNING_KEY }}
+        run: |
+          python bridge_backend/scripts/run_scan.py \
+            --root . \
+            --changed "${{ steps.diff.outputs.changed }}" \
+            --pr "${{ github.event.number }}" \
+            --commit "${{ github.sha }}"
+      - name: Upload scan artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: compliance-scan-${{ github.sha }}
+          path: bridge_backend/scan_reports

@@ -1,0 +1,344 @@
+/**
+ * Heritage Command Deck - CRT/Retro Styling
+ */
+
+/* Deck Root */
+.deck-root {
+  background: #0b0f14;
+  color: #e6f3ff;
+  min-height: 100vh;
+  padding: 16px;
+  font-family: 'Courier New', monospace;
+}
+
+.crt {
+  text-shadow: 0 0 0.8px #93e5ff;
+}
+
+/* Deck Header */
+.deck-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #18304d;
+}
+
+.deck-header h1 {
+  font-size: 28px;
+  margin: 0;
+  color: #93e5ff;
+}
+
+.badges {
+  display: flex;
+  gap: 8px;
+}
+
+.badge {
+  border-radius: 14px;
+  padding: 4px 10px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.badge-blue {
+  background: #1b3b6f;
+  color: #93e5ff;
+}
+
+.badge-gold {
+  background: #6f5b1b;
+  color: #ffd700;
+}
+
+.badge-green {
+  background: #1b6f3c;
+  color: #90ee90;
+}
+
+.badge-red {
+  background: #6f1b1b;
+  color: #ff6b6b;
+}
+
+/* Deck Grid */
+.deck-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-auto-rows: minmax(180px, auto);
+}
+
+/* Card */
+.card {
+  background: linear-gradient(180deg, #10151d, #0b0f14);
+  border: 1px solid #18304d;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 0 14px rgba(0, 255, 255, 0.08) inset;
+}
+
+.card h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: #93e5ff;
+  border-bottom: 1px solid #18304d;
+  padding-bottom: 8px;
+}
+
+.empty-state {
+  color: #666;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Metrics */
+.metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #18304d;
+}
+
+.metric-row .label {
+  color: #93e5ff;
+}
+
+.metric-row .value {
+  color: #90ee90;
+  font-weight: bold;
+}
+
+/* Metrics Table */
+.metrics-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.metrics-table th {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #18304d;
+  color: #93e5ff;
+  font-weight: 600;
+}
+
+.metrics-table td {
+  padding: 8px;
+  border-bottom: 1px solid #18304d;
+}
+
+.health-indicator {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.health-indicator.good {
+  background: #1b6f3c;
+  color: #90ee90;
+}
+
+.health-indicator.fair {
+  background: #6f5b1b;
+  color: #ffd700;
+}
+
+.health-indicator.poor {
+  background: #6f1b1b;
+  color: #ff6b6b;
+}
+
+.health-indicator.unknown {
+  background: #333;
+  color: #999;
+}
+
+/* Event Feed */
+.anomaly-feed .event-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.event-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  border-radius: 4px;
+  border-left: 3px solid #18304d;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.event-item.fault {
+  border-left-color: #ff6b6b;
+}
+
+.event-item.heal {
+  border-left-color: #90ee90;
+}
+
+.event-item.demo {
+  border-left-color: #ffd700;
+}
+
+.event-item.heritage {
+  border-left-color: #93e5ff;
+}
+
+.event-item.federation {
+  border-left-color: #9b59b6;
+}
+
+.event-kind {
+  font-size: 11px;
+  color: #93e5ff;
+  font-weight: 600;
+}
+
+.event-time {
+  font-size: 11px;
+  color: #666;
+}
+
+/* Fault Controls */
+.fault-controls .control-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fault-btn {
+  flex: 1;
+  min-width: 80px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.fault-btn.corrupt {
+  background: #6f1b1b;
+  color: #ff6b6b;
+}
+
+.fault-btn.drop {
+  background: #5a1b6f;
+  color: #da70d6;
+}
+
+.fault-btn.delay {
+  background: #6f5b1b;
+  color: #ffd700;
+}
+
+.fault-btn:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+/* Demo Launchpad */
+.demo-launchpad .demo-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.demo-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  background: linear-gradient(135deg, #1b3b6f, #18304d);
+  color: #93e5ff;
+}
+
+.demo-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2a5a9f, #18304d);
+  transform: translateY(-2px);
+}
+
+.demo-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.demo-btn.shakedown {
+  border-left: 3px solid #93e5ff;
+}
+
+.demo-btn.mas {
+  border-left: 3px solid #90ee90;
+}
+
+.demo-btn.federation {
+  border-left: 3px solid #9b59b6;
+}
+
+/* Event Stream */
+.event-stream .stream-list {
+  max-height: 250px;
+  overflow-y: auto;
+  font-size: 11px;
+}
+
+.stream-item {
+  display: flex;
+  gap: 8px;
+  padding: 4px 8px;
+  margin-bottom: 2px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.stream-kind {
+  flex-shrink: 0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: #18304d;
+  color: #93e5ff;
+  font-size: 10px;
+}
+
+.stream-data {
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Scrollbar styling */
+.anomaly-feed .event-list::-webkit-scrollbar,
+.event-stream .stream-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.anomaly-feed .event-list::-webkit-scrollbar-track,
+.event-stream .stream-list::-webkit-scrollbar-track {
+  background: #0b0f14;
+}
+
+.anomaly-feed .event-list::-webkit-scrollbar-thumb,
+.event-stream .stream-list::-webkit-scrollbar-thumb {
+  background: #18304d;
+  border-radius: 3px;
+}
+
+.anomaly-feed .event-list::-webkit-scrollbar-thumb:hover,
+.event-stream .stream-list::-webkit-scrollbar-thumb:hover {
+  background: #2a5a9f;
+}

@@ -1,0 +1,44 @@
+{
+  "audit_id": "deep-audit-20251107_223012",
+  "timestamp": "2025-11-07T22:30:12.224031+00:00",
+  "sovereign_git_active": false,
+  "engines_audited": [
+    {
+      "engine": "Sovereignty Guard",
+      "operational": true,
+      "state": "waiting",
+      "is_ready": false,
+      "perfection": 0.8235294117647058,
+      "harmony": 0.8,
+      "resonance": 0.7411764705882353,
+      "sovereignty": 0.788235294117647,
+      "engines_operational": 28,
+      "engines_total": 34
+    },
+    {
+      "engine": "Git Sovereign Agent",
+      "operational": false,
+      "error": "'HXOGitIntegration' object has no attribute 'total_engines'"
+    },
+    {
+      "engine": "Genesis Bus",
+      "operational": true,
+      "type": "Core Infrastructure"
+    },
+    {
+      "engine": "HXO Nexus",
+      "operational": true,
+      "type": "Core Infrastructure"
+    }
+  ],
+  "engines_operational": 3,
+  "engines_total": 34,
+  "system_status": "PLACEHOLDER_MODE",
+  "placeholder_mode": true,
+  "production_mode": false,
+  "issues": [],
+  "recommendations": [
+    "System still in placeholder mode. Verify sovereignty thresholds and engine health.",
+    "Git Sovereign Agent not active. Verify SOVEREIGN_GIT=true in environment."
+  ]
+}

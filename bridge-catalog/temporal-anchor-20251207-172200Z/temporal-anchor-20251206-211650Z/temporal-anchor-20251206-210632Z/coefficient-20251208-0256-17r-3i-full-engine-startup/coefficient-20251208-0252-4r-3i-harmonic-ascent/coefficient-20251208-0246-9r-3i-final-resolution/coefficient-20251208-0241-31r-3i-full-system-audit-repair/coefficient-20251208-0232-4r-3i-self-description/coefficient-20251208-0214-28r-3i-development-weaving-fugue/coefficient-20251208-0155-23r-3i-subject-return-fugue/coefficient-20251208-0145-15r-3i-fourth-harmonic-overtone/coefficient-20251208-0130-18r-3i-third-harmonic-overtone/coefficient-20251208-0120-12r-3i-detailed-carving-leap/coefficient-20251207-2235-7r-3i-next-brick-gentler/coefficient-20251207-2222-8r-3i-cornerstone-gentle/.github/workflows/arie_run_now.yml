@@ -1,0 +1,34 @@
+name: Run ARIE Integrity Check Now
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+
+jobs:
+  arie_run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Execute ARIE full run
+        env:
+          ARIE_ENABLED: "true"
+          ARIE_POLICY: "SAFE_EDIT"
+          ARIE_TRUTH_MANDATORY: "true"
+          GENESIS_ACTIVE: "true"
+        run: |
+          echo "🚀 Initiating full ARIE integrity run..."
+          python3 -m bridge_backend.cli.ariectl scan --policy SAFE_EDIT --verbose
+          python3 -m bridge_backend.cli.ariectl apply --policy SAFE_EDIT --yes
+          python3 -m bridge_backend.cli.ariectl report
+          echo "✅ ARIE full run complete."
