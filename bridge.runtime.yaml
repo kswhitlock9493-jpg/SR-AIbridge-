@@ -1,0 +1,93 @@
+version: "1.0"
+
+# Who owns/runs this runtime
+dominion:
+  root_env_var: FORGE_DOMINION_ROOT     # one-variable-to-rule-them-all
+  service_ttl_minutes: 180              # lifetime for minted tokens
+  allow_unsigned: false                 # block runs if sig invalid
+
+# Runtime configuration for Forge integration
+runtime:
+  name: sr-aibridge
+  forge:
+    mode: dominion
+    handshake: forge://resolve
+    targets:
+      - name: sovereign-ledger
+        type: log
+        scope: deploy
+        verify: true
+  # Federation heartbeat configuration
+  federation:
+    heartbeat:
+      enabled: true
+      interval: 60
+      endpoint: forge://federation/heartbeat
+      ledger_forward: true
+      ttl: 300
+    consensus:
+      enabled: true
+      interval: 180
+      election_method: highest_epoch
+      ledger_forward: true
+  # Health and chaos configuration
+  health:
+    recovery: true
+    chaos:
+      enabled: false
+      interval: 600
+      probability: 0.15
+  # Ledger forwarding configuration
+  ledger:
+    forward:
+      - federation/heartbeat
+      - federation/consensus
+      - recovery
+
+# Forge configuration schema
+forge:
+  dominion: sovereign.bridge
+  resolver: forge://resolve
+  schema:
+    - target: ledger
+      purpose: runtime logging
+      return:
+        - ledger_url
+        - ledger_signature
+        - ledger_identity
+    - target: bridge
+      purpose: deployment bridge sync
+      return:
+        - bridge_url
+        - bridge_signature
+        - bridge_identity
+
+# Where to run (Phase-1 = local/host Docker)
+provider:
+  kind: docker
+  network: brh_net
+  autostart: true
+
+# Services to launch (examples)
+services:
+  api:
+    command: python3 ./bridge_backend/api_engine.py
+    env:
+      - "ENVIRONMENT=production"
+      - "LOG_LEVEL=INFO"
+      - "ENGINES_ENABLE_TRUE=true"
+      - "GENESIS_MODE=enabled"
+      - "LINK_ENGINES=true"
+      - "BLUEPRINTS_ENABLED=true"
+      - "SOVEREIGN_GIT=true"
+      - "PRODUCTION_MODE=true"
+      - "PLACEHOLDER_MODE=false"
+    health:
+      http: "http://localhost:8000/health/live"
+
+  ws:
+    command: python3 ./ws_engine.py
+    env:
+      - "BACKEND_URL=http://localhost:8000"
+    health:
+      tcp: "localhost:9001"

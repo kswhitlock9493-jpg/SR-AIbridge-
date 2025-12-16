@@ -1,33 +1,11 @@
 {
   "type": "ENDPOINT_TRIAGE",
-  "status": "CRITICAL",
-  "source": "endpoint_triage.py",
+  "status": "HEALTHY",
+  "source": "PreSeed",
   "meta": {
-    "timestamp": "2025-12-08T04:26:44.526991+00:00",
-    "manual": false,
-    "buildEnvironment": false,
-    "failedEndpoints": [
-      "status",
-      "diagnostics",
-      "agents"
-    ],
-    "results": [
-      {
-        "name": "status",
-        "status": "FAILED",
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=7)"
-      },
-      {
-        "name": "diagnostics",
-        "status": "FAILED",
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=7)"
-      },
-      {
-        "name": "agents",
-        "status": "FAILED",
-        "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=7)"
-      }
-    ],
+    "timestamp": "2025-12-08T04:26:44.179650+00:00",
+    "note": "Baseline initialization seed",
+    "results": [],
     "environment": "backend"
   }
 }
