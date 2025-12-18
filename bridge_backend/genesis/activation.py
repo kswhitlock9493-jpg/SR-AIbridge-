@@ -1,3 +1,4 @@
+from .persistence import genesis_persistence
 """
 Genesis Engine Activation Module
 v1.9.6w - engines_enable_true: Permanent Full Activation Protocol

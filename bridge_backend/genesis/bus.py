@@ -1,3 +1,4 @@
+from .persistence import genesis_persistence
 """
 Genesis Event Bus Multiplexer
 Central event distribution for the entire Genesis organism
@@ -334,7 +335,7 @@ class GenesisEventBus:
             # Persist event
             try:
                 from bridge_backend.genesis.persistence import genesis_persistence
-                await genesis_persistence.record_event(
+                await genesis_persistence.record(
                     event_id=enriched.get("id", f"event-{self._event_count}"),
                     topic=topic,
                     source=enriched.get("source", "unknown"),

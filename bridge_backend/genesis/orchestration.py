@@ -1,3 +1,4 @@
+from .persistence import genesis_persistence
 """
 Genesis Orchestration Loop
 Core coordination loop for the Genesis organism
